@@ -1,0 +1,134 @@
+<html>
+<head>
+  <title>jdbc</title>
+  <basefont face="Tahoma" size="2" />
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <meta name="exporter-version" content="Evernote Windows/272236; Windows/6.1.7601 Service Pack 1;"/>
+  <style>
+    body, td {
+      font-family: Tahoma;
+      font-size: 12pt;
+    }
+  </style>
+</head>
+<body>
+<a name="412"/>
+<h1>jdbc</h1>
+<div>
+<table bgcolor="#D4DDE5" border="0">
+<tr><td><b>创建时间：</b></td><td><i>2014/7/12 8:44</i></td></tr>
+<tr><td><b>更新时间：</b></td><td><i>2014/7/13 8:31</i></td></tr>
+<tr><td><b>标签：</b></td><td><i>CRUD, JDBC</i></td></tr>
+</table>
+</div>
+<br/>
+
+<div>
+<div style="word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space;"><div style="font-size: 24px;"><strong>一.JDBC简介：</strong></div><div>     JDBC全称为：Java Data Base Connectivity（java数据库连接），它主要由接口组成。</div><div>     数据JavaEE开发技术之一</div><div>          相关的API在JDK中：java.sql.*   javax.sql.*</div><div>          作用：编写数据库相关代码有一个统一标准。</div><div>     <span style="font-family: 宋体; font-size: 10.5pt;">JDBC</span><font face="宋体" style="font-family: 宋体; font-size: 10.5pt;">与数据库驱动是什么关系？数据库驱动实现了</font><font face="Times New Roman" style="font-size: 10.5pt;">JDBC</font><font face="宋体" style="font-family: 宋体; font-size: 10.5pt;">规范。</font></div><div><font face="宋体" style="font-family: 宋体; font-size: 10.5pt;"><br/></font></div><div style="font-size: 24px;"><b><font face="宋体" style="font-family: 宋体;">二.</font><font face="Times New Roman">JDBC</font><font face="宋体" style="font-family: 宋体;">的编码步骤</font></b></div><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div><p style="margin-bottom: 0pt; margin-top: 0pt; font-size: 19px;"><span style="font-family: 宋体;"><b>0<font face="宋体">、搭建开发环境：把数据库驱动</font><font face="Times New Roman">jar</font><font face="宋体">包加入到应用的构建路径（</font><font face="Times New Roman">classpath</font><font face="宋体">）</font></b></span></p></div><div style="font-size: 19px;"><span style="font-family: 宋体;"><b>1<font face="宋体">、注册驱动</font></b></span></div><div><font face="宋体"><span style="font-size: 19px;"><b>     </b></span></font></div><div style="font-size: 19px;"><p style="margin-bottom: 0pt; margin-top: 0pt;"><span style="font-family: 宋体;"><b>2<font face="宋体">、获取与数据库的连接</font></b></span></p></div><div style="font-size: 19px;"><p style="margin-bottom: 0pt; margin-top: 0pt;"><span style="font-family: 宋体;"><b>3<font face="宋体">、创建代表</font><font face="Times New Roman">SQL</font><font face="宋体">语句的对象</font></b></span></p></div><div style="font-size: 19px;"><p style="margin-bottom: 0pt; margin-top: 0pt;"><span style="font-family: 宋体;"><b>4<font face="宋体">、执行</font><font face="Times New Roman">SQL</font><font face="宋体">语句</font></b></span></p></div><div style="font-size: 19px;"><p style="margin-bottom: 0pt; margin-top: 0pt;"><span style="font-family: 宋体;"><b>5<font face="宋体">、如果执行的查询语句，返回结果集，遍历结果集</font></b></span></p></div><div><p style="margin-bottom: 0pt; margin-top: 0pt; font-size: 19px;"><span style="font-family: 宋体;"><b>6<font face="宋体">、释放占用的资源</font></b></span></p></div></blockquote><div><br/></div><div><br/></div><h1 style="margin-bottom: 0pt; margin-top: 0pt; font-size: 37px;"><font size="3" style="font-size: 24px;"><font face="宋体">三.</font><font face="Times New Roman" style="font-family: 宋体;">JDBC</font><font face="宋体" style="font-family: 宋体;">中常用接口或类详解</font></font></h1><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><p style="margin-bottom:0pt; margin-top:0pt;"><span style="mso-spacerun:'yes'; font-size:10.5000pt; font-family:'宋体';">1<font face="宋体">、</font><font face="Times New Roman">DriverManager</font><font face="宋体">：</font></span></p><p style="text-indent:21.0000pt; margin-bottom:0pt; margin-top:0pt;"><span style="mso-spacerun:'yes'; font-size:10.5000pt; font-family:'宋体';">1.1<font face="宋体">注册驱动</font></span></p><p style="margin-left:21.0000pt; text-indent:21.0000pt; margin-bottom:0pt; margin-top:0pt;"><span style="mso-spacerun:'yes'; font-size:10.5000pt; font-family:'宋体';">方式一：<font face="Times New Roman">DriverManger.registDriver(new com.mysql.jdbc.Driver());</font></span></p><p style="margin-left:42.0000pt; text-indent:21.0000pt; margin-bottom:0pt; margin-top:0pt;"><span style="mso-spacerun:'yes'; font-size:10.5000pt; font-family:'宋体';">不建议使用：</span></p></blockquote><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">1、查看Driver的源代码可以看到，如果采用此种方式，会导致驱动程序注册两次，也就是在内存中会有两个Driver对象。</blockquote></blockquote></blockquote><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">2、程序依赖mysql的api，脱离mysql的jar包，程序将无法编译，将来程序切换底层数据库将会非常麻烦。</blockquote></blockquote></blockquote></blockquote><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><p style="margin-left:21.0000pt; text-indent:21.0000pt; margin-bottom:0pt; margin-top:0pt;"><span style="mso-spacerun:'yes'; font-size:10.5000pt; font-family:'宋体';">方式二<font face="Times New Roman">(</font><font face="宋体">推荐</font><font face="Times New Roman">)</font><font face="宋体">：</font><font face="Times New Roman">Class.forName(</font></span><span style="mso-spacerun:'yes'; font-size:10.5000pt; font-family:'Times New Roman';">“</span><span style="mso-spacerun:'yes'; font-size:10.5000pt; font-family:'宋体';">com.mysql.jdbc.Driver</span><span style="mso-spacerun:'yes'; font-size:10.5000pt; font-family:'Times New Roman';">”</span><span style="mso-spacerun:'yes'; font-size:10.5000pt; font-family:'宋体';">);</span></p><font face="宋体"><span style="font-size: 14px;">     </span></font><div><font face="宋体"><span style="font-family: 宋体; font-size: 10.5pt;">    1.2</span><span style="font-size: 10.5pt;">获取与数据库的连接</span><br/><span style="font-size: 14px;">     </span></font></div>
+            <img src="jdbc_files/Image.png" type="image/png" style="cursor: default;"/></blockquote><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">               <span style="font-family: 宋体; font-size: 14px;">常用url的写法：</span></blockquote><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">Oracle写法：jdbc:oracle:thin:@localhost:1521:sid</blockquote></blockquote><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">SqlServer写法：jdbc:microsoft:sqlserver://localhost:1433; DatabaseName=sid</blockquote></blockquote><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">MySql写法：jdbc:mysql://localhost:3306/sid</blockquote></blockquote></blockquote><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">     </blockquote>
+                    常用属性：useUnicode=true&amp;characterEncoding=UTF-8</blockquote><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><br/></blockquote><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div><span style="mso-spacerun:'yes'; font-size:10.5000pt; font-family:'宋体';">        方式一：</span></div><p style="margin-left:42.0000pt; text-indent:21.0000pt; margin-bottom:0pt; margin-top:0pt;"><span style="mso-spacerun:'yes'; font-size:10.5000pt; font-family:'宋体';">DriverManager.getConnection(String url,String username,String password);</span></p><p style="margin-left:63.0000pt; text-indent:21.0000pt; margin-bottom:0pt; margin-top:0pt;"><span style="mso-spacerun:'yes'; font-size:10.5000pt; font-family:'宋体';">url:<font face="宋体">数据库厂商和</font><font face="Times New Roman">JDBC</font><font face="宋体">之间的协议</font></span></p><p style="margin-left:63.0000pt; text-indent:21.0000pt; margin-bottom:0pt; margin-top:0pt;"><span style="mso-spacerun:'yes'; font-size:10.5000pt; font-family:'宋体';">具体的<font face="Times New Roman">url</font><font face="宋体">地址参考数据库的说明文档</font></span></p><p style="margin-left:63.0000pt; text-indent:21.0000pt; margin-bottom:0pt; margin-top:0pt;"><span style="mso-spacerun:'yes'; font-size:10.5000pt; font-family:'宋体';">mysql:</span></p><p style="margin-left:84.0000pt; text-indent:21.0000pt; margin-bottom:0pt; margin-top:0pt;"><span style="mso-spacerun:'yes'; font-size:10.5000pt; font-family:'宋体';">jdbc:mysql://localhost:3306/day15</span></p><p style="margin-left:21.0000pt; text-indent:21.0000pt; margin-bottom:0pt; margin-top:0pt;"><span style="mso-spacerun:'yes'; font-size:10.5000pt; font-family:'宋体';">方式二：</span></p><p style="margin-left:42.0000pt; text-indent:21.0000pt; margin-bottom:0pt; margin-top:0pt;"><span style="mso-spacerun:'yes'; font-size:10.5000pt; font-family:'宋体';">DriverManager.getConnection(String url,Properties props);</span></p><p style="margin-left:42.0000pt; text-indent:21.0000pt; margin-bottom:0pt; margin-top:0pt;"><span style="mso-spacerun:'yes'; font-size:10.5000pt; font-family:'宋体';">props:</span></p><p style="margin-left:63.0000pt; text-indent:21.0000pt; margin-bottom:0pt; margin-top:0pt;"><span style="mso-spacerun:'yes'; font-size:10.5000pt; font-family:'宋体';">数据库的一些参数配置</span></p><p style="margin-left:21.0000pt; text-indent:21.0000pt; margin-bottom:0pt; margin-top:0pt;"><span style="mso-spacerun:'yes'; font-size:10.5000pt; font-family:'宋体';">方式三：</span></p><p style="margin-left:42.0000pt; text-indent:21.0000pt; margin-bottom:0pt; margin-top:0pt;"><span style="mso-spacerun:'yes'; font-size:10.5000pt; font-family:'宋体';">DriverManager.getConnection(String url);</span></p></blockquote><div><br/></div><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div><p style="margin-bottom:0pt; margin-top:0pt;"><span style="mso-spacerun:'yes'; font-size:10.5000pt; font-family:'宋体';">2<font face="宋体">、</font><font face="Times New Roman">Connection:</font></span>客户端与数据库所有交互都是通过connection对象完成的</p></div><div><font face="宋体"><span style="font-size: 14px;">      </span></font><span style="mso-spacerun:'yes'; font-size:10.5000pt; font-family:'宋体';">Statement createStatement();<font face="宋体">创建代表</font><font face="Times New Roman">SQL</font><font face="宋体">语句的对象</font></span></div><div><font face="宋体"><span style="font-size: 14px;">      </span></font>createStatement()：创建向数据库发送sql的statement对象。</div></blockquote><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">prepareStatement(sql) ：创建向数据库发送预编译sql的PrepareSatement对象。</blockquote><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">prepareCall(sql)：创建执行存储过程的callableStatement对象。</blockquote><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">setAutoCommit(boolean autoCommit)：设置事务是否自动提交。</blockquote><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">commit() ：在链接上提交事务。</blockquote><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">rollback() ：在此链接上回滚事务。</blockquote></blockquote><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div><p style="margin-bottom:0pt; margin-top:0pt;"><span style="mso-spacerun:'yes'; font-size:10.5000pt; font-family:'宋体';">3<font face="宋体">、</font><font face="Times New Roman">Statement</font></span></p></div><div><p style="text-indent:21.0000pt; margin-bottom:0pt; margin-top:0pt;"><span style="mso-spacerun:'yes'; font-size:10.5000pt; font-family:'宋体';">ResultSet executeQuery(String sql):sql<font face="宋体">一定要用查询语句；专门用来执行查询的</font></span></p></div><div><p style="text-indent:21.0000pt; margin-bottom:0pt; margin-top:0pt;"><span style="mso-spacerun:'yes'; font-size:10.5000pt; font-family:'宋体';">int executeUpdate(String sql):sql<font face="宋体">一般为</font><font face="Times New Roman">DML</font><font face="宋体">（</font><font face="Times New Roman">INSERT DELETE UPDATE</font><font face="宋体">）语句，不能执行查询语句；返回值是该条语句影响到的行数。</font></span></p></div><div><p style="text-indent:21.0000pt; margin-bottom:0pt; margin-top:0pt;"><span style="mso-spacerun:'yes'; font-size:10.5000pt; font-family:'宋体';">boolean execute(String sql):sql<font face="宋体">可以是任意语句。如果是查询语句，有结果集，返回是</font><font face="Times New Roman">true</font><font face="宋体">；否则就是</font><font face="Times New Roman">false</font><font face="宋体">。</font></span><span style="font-size: 10.5pt; color: rgb(255, 0, 0); font-family: 宋体;"> 特别注意：并不是成功与否。</span></p></div><div><p style="text-indent:21.0000pt; margin-bottom:0pt; margin-top:0pt;">addBatch(String sql) ：把多条sql语句放到一个批处理中。<br/>
+       executeBatch()：向数据库发送一批sql语句执行。</p></div><div><p style="margin-bottom:0pt; margin-top:0pt;"><span style="mso-spacerun:'yes'; font-size:10.5000pt; font-family:'宋体';">4<font face="宋体">、</font><font face="Times New Roman">ResultSet：</font></span>代表Sql语句的执行结果。</p></div><div><p style="text-indent:21.0000pt; margin-bottom:0pt; margin-top:0pt;"><img src="jdbc_files/Image [1].png" type="image/png" height="116" style="cursor: default;" width="428"/><span style="mso-spacerun:'yes'; font-size:10.5000pt; font-family:'Times New Roman';"> </span></p></div><div><p style="text-indent:21.0000pt; margin-bottom:0pt; margin-top:0pt;"><span style="mso-spacerun:'yes'; font-size:10.5000pt; font-family:'宋体';">boolean next();</span></p></div><div><p style="text-indent:21.0000pt; margin-bottom:0pt; margin-top:0pt;"><span style="mso-spacerun:'yes'; font-size:10.5000pt; font-family:'宋体';">boolean previous();<font face="宋体">向上移动游标</font></span></p></div><div><p style="text-indent:21.0000pt; margin-bottom:0pt; margin-top:0pt;"><span style="mso-spacerun:'yes'; font-size:10.5000pt; font-family:'宋体';">boolean absolute(int count);//<font face="宋体">第一条记录就是</font><font face="Times New Roman">1</font></span></p></div><div><p style="text-indent:21.0000pt; margin-bottom:0pt; margin-top:0pt;"><span style="mso-spacerun:'yes'; font-size:10.5000pt; font-family:'宋体';">void beforeFirst()<font face="宋体">把游标移动到第一行的前面</font></span></p></div><div><p style="text-indent:21.0000pt; margin-bottom:0pt; margin-top:0pt;"><span style="mso-spacerun:'yes'; font-size:10.5000pt; font-family:'宋体';">void afterLast()<font face="宋体">把游标移动到最后一行的后面</font></span></p></div></blockquote><div><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div>     </div></blockquote></div><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div>          获取任意类型的数据：</div><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div>getObject(int index)</div></blockquote></blockquote><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">getObject(string columnName)</blockquote></blockquote><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div>获取指定类型的数据，(封装数据时方便)例如：</div></blockquote><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div>getString(int index)</div></blockquote></blockquote><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div>getString(String columnName)</div></blockquote></blockquote></blockquote><div><br/></div><div><h1 style="margin-bottom: 0pt; margin-top: 0pt; font-size: 37px;"><span style="font-family: 宋体;"><font size="3" style="font-size: 24px;">四、<font face="Times New Roman">JDBC</font><font face="宋体">中释放资源</font></font></span></h1></div><div>          按打开的反顺序关。</div><div><br/></div><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div>public class JdbcUtil {</div><div>     private static String driverClass;</div><div>     private static String url;</div><div>     private static String user;</div><div>     private static String password;</div><div>     static{</div><div>          try {</div><div>               ClassLoader cl = JdbcUtil.class.getClassLoader();</div><div>               InputStream in = cl.getResourceAsStream(&quot;dbcfg.properties&quot;);</div><div>               Properties props = new Properties();</div><div>               props.load(in);</div><div>               driverClass = props.getProperty(&quot;driverClass&quot;);</div><div>               url = props.getProperty(&quot;url&quot;);</div><div>               user = props.getProperty(&quot;user&quot;);</div><div>               password = props.getProperty(&quot;password&quot;);</div><div>               Class.forName(driverClass);</div><div>          } catch (Exception e) {</div><div>               throw new ExceptionInInitializerError(e);</div><div>          }</div><div>         </div><div>     }</div><div>    </div><div>     public static Connection getConnection() throws Exception{</div><div>          Connection conn = DriverManager.getConnection(url,user,password);</div><div>          return conn;</div><div>     }</div><div>     public static void release(ResultSet rs,Statement stmt,Connection conn){</div><div>          if(rs!=null){</div><div>               try {</div><div>                    rs.close();</div><div>               } catch (SQLException e) {</div><div>                    e.printStackTrace();</div><div>               }</div><div>               rs = null;</div><div>          }</div><div>          if(stmt!=null){</div><div>               try {</div><div>                    stmt.close();</div><div>               } catch (SQLException e) {</div><div>                    e.printStackTrace();</div><div>               }</div><div>               stmt = null;</div><div>          }</div><div>          if(conn!=null){</div><div>               try {</div><div>                    conn.close();</div><div>               } catch (SQLException e) {</div><div>                    e.printStackTrace();</div><div>               }</div><div>               conn = null;</div><div>          }</div><div>     }</div><div>}</div></blockquote><div><br/></div><div style="font-size: 24px;"><b>五.常用数据类型</b></div><div><br/></div><div><img src="jdbc_files/Image [2].png" type="image/png" style="cursor: default;"/></div><div><br/></div><div><br/></div><div style="font-size: 24px;"><b>六.对数据库进行CRUD操作：</b></div><div><span style="font-size: 24px;"><b>     </b></span>public List&lt;Customer&gt; findAll() {</div>
+          Connection conn = null;<br/>
+          PreparedStatement stmt = null;<br/>
+          ResultSet rs = null;<br/>
+          try{<br/>
+               conn = JdbcUtil.getConnection();<br/>
+               stmt = conn.prepareStatement(&quot;select id,name,gender,birthday,phone from customer&quot;);<br/>
+               rs = stmt.executeQuery();<br/>
+               List&lt;Customer&gt; cs = new ArrayList&lt;Customer&gt;();<br/>
+               while(rs.next()){<br/>
+                    Customer c = new Customer();<br/>
+                    c.setId(rs.getString(&quot;id&quot;));<br/>
+                    c.setName(rs.getString(&quot;name&quot;));<br/>
+                    c.setGender(rs.getString(&quot;gender&quot;));<br/>
+                    c.setBirthday(rs.getDate(&quot;birthday&quot;));
+<div><br/>
+                    cs.add(c);<br/>
+               }<br/>
+               return cs;<br/>
+          }catch(Exception e){<br/>
+               throw new DaoException(e);<br/>
+          }finally{<br/>
+               JdbcUtil.release(rs, stmt, conn);<br/>
+          }<br/>
+     }<br/><br/>
+     public void save(Customer c) {<br/>
+          Connection conn = null;<br/>
+          PreparedStatement stmt = null;<br/>
+          ResultSet rs = null;<br/>
+          try{<br/>
+               conn = JdbcUtil.getConnection();<br/>
+               stmt = conn.prepareStatement(&quot;insert into customer (id,name,gender,birthday) values (?,?,?,?)&quot;);<br/>
+               stmt.setString(1, c.getId());<br/>
+               stmt.setString(2, c.getName());<br/>
+               stmt.setString(3, c.getGender());<br/>
+               stmt.setDate(4, new java.sql.Date(c.getBirthday().getTime()));</div><div><br/>
+               stmt.executeUpdate();<br/>
+          }catch(Exception e){<br/>
+               throw new DaoException(e);<br/>
+          }finally{<br/>
+               JdbcUtil.release(rs, stmt, conn);<br/>
+          }<br/>
+     }<br/><br/>
+     public void delete(String customerId) {<br/>
+          Connection conn = null;<br/>
+          PreparedStatement stmt = null;<br/>
+          ResultSet rs = null;<br/>
+          try{<br/>
+               conn = JdbcUtil.getConnection();<br/>
+               stmt = conn.prepareStatement(&quot;delete from customer where id=?&quot;);<br/>
+               stmt.setString(1, customerId);<br/>
+              <br/>
+               stmt.executeUpdate();<br/>
+          }catch(Exception e){<br/>
+               throw new DaoException(e);<br/>
+          }finally{<br/>
+               JdbcUtil.release(rs, stmt, conn);<br/>
+          }<br/>
+     }<br/><br/>
+     public Customer findOne(String customerId) {<br/>
+          Connection conn = null;<br/>
+          PreparedStatement stmt = null;<br/>
+          ResultSet rs = null;<br/>
+          try{<br/>
+               conn = JdbcUtil.getConnection();<br/>
+               stmt = conn.prepareStatement(&quot;select id,name,gender,birthday from customer where id=?&quot;);<br/>
+               stmt.setString(1, customerId);<br/>
+               rs = stmt.executeQuery();<br/>
+               if(rs.next()){<br/>
+                    Customer c = new Customer();<br/>
+                    c.setId(rs.getString(&quot;id&quot;));<br/>
+                    c.setName(rs.getString(&quot;name&quot;));<br/>
+                    c.setGender(rs.getString(&quot;gender&quot;));<br/>
+                    c.setBirthday(rs.getDate(&quot;birthday&quot;));
+<div><br/>
+                    return c;<br/>
+               }<br/>
+               return null;<br/>
+          }catch(Exception e){<br/>
+               throw new DaoException(e);<br/>
+          }finally{<br/>
+               JdbcUtil.release(rs, stmt, conn);<br/>
+          }<br/>
+     }<br/><br/>
+     public void update(Customer c) {<br/>
+          Connection conn = null;<br/>
+          PreparedStatement stmt = null;<br/>
+          ResultSet rs = null;<br/>
+          try{<br/>
+               conn = JdbcUtil.getConnection();<br/>
+               stmt = conn.prepareStatement(&quot;update customer set name=?,gender=?,birthday=? where id=?&quot;);<br/>
+              <br/>
+               stmt.setString(1, c.getName());<br/>
+               stmt.setString(2, c.getGender());<br/>
+               stmt.setDate(3, new java.sql.Date(c.getBirthday().getTime()));
+<div><br/>
+               stmt.executeUpdate();<br/>
+          }catch(Exception e){<br/>
+               throw new DaoException(e);<br/>
+          }finally{<br/>
+               JdbcUtil.release(rs, stmt, conn);<br/>
+          }<br/>
+     }
+<div><br/></div><div><h1 style="margin-bottom: 0pt; margin-top: 0pt; font-size: 37px;"><span style="font-family: 宋体;"><font size="3" style="font-size: 24px;">七、<font face="Times New Roman">PreparedStatement</font><font face="宋体">接口</font></font></span></h1></div><div><font face="宋体"><span style="font-size: 29px;">   </span></font>PreperedStatement可以避免SQL注入的问题。</div></div></div></div><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div>Statement会使数据库频繁编译SQL，可能造成数据库缓冲区溢出。PreparedStatement 可对SQL进行预编译，从而提高数据库的执行效率。</div><div>并且PreperedStatement对于sql中的参数，允许使用占位符的形式进行替换，简化sql语句的编写。</div></blockquote><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div>完成客户信息管理：添加、删除、修改</div><div>分页查询</div><div>大文本clob和大二进制数据blob的存取</div><div>批处理：batch</div><div>如何调用存储过程（用JDBC如何调用）</div><div>事务的入门案例（重点）</div><div>事务的特性（原理）：</div><div>事务的隔离级别（重点）：</div><div><img src="jdbc_files/ScreenClip.png" type="image/png" style="cursor: default;"/></div></div>
+</div></body></html> 

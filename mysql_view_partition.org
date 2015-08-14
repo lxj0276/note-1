@@ -1,0 +1,2 @@
+SELECT * FROM information_schema.PARTITIONS WHERE table_name='table_name'；
+

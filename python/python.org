@@ -1,0 +1,16 @@
+* 字符串转时间
+** one day
+t = time.strptime(date, "%Y-%m-%d")
+date1 = datetime.datetime(* t[:3])
+dateDel = date1 - datetime.timedelta(days=1)
+dateDelStr = str(dateDel.date())
+** span day
+    begin = datetime.date(2015, 04, 04)
+    end = datetime.date(2015, 04, 05)
+    for i in range((end - begin).days+1):
+        day = begin + datetime.timedelta(days=i)
+        dataExport(day)
+* 查看python文档
+命令行: pydoc -p 8000
+* pdb调试
+python -i -m pdb dir/src.py

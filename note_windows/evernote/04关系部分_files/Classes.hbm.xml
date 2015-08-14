@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.itheima10.hibernate.domain.Classes">
+		<!-- 
+			主键
+		 -->
+		<id name="cid" type="java.lang.Long" length="5">
+			<generator class="increment"></generator>
+		</id>
+		<!-- 
+			基础属性
+		 -->
+		<property name="name" length="20"></property>
+		<property name="description" length="50"></property>
+		<!-- 
+			描述set集合
+			   从外键的角度，生成sql语句用
+			  从类与类之间的关联，在客户端写api的时候用
+			  cascade
+			     save-update
+			       	对classes对象进行save或者update操作的时候，对student进行怎么样(insert或者update)的操作
+			    			如果student是一个持久化状态的对象，看副本
+			    			        如果和副本不一样，则执行update操作
+			    			如果student是一个临时状态的对象，则执行insert操作
+			     all
+			     delete
+			                     在删除班级的同时删除学生
+			     null
+			  inverse  维护关系
+			     default/false 
+			     true   不维护关系
+			     false  维护关系
+			     在这里维护关系指的是发出更新外键的update语句
+		 -->
+		<set name="students" cascade="save-update" inverse="false">
+			<!-- 
+				外键
+				   根据外键可以生成sql语句，因为涉及到了两张表，必须给定外键
+			 -->
+			<key>
+				<column name="cid"></column>
+			</key>
+			<!-- 
+				建立类与类之间的关系
+			 -->
+			<one-to-many class="com.itheima10.hibernate.domain.Student"/>
+		</set>
+	</class>
+</hibernate-mapping>

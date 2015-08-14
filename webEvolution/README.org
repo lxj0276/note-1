@@ -1,0 +1,5 @@
+#+OPTIONS: ^:nil
+本目录下的知识来源于google的一个web页面中展示的web革命简史:
+http://www.evolutionoftheweb.com/
+[[[[http://www.evolutionoftheweb.com/]]] 我的]
+[[[[[http://www.evolutionoftheweb.com/]]][我的]]

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+	<bean name="businessService"
+		class="com.itheima.service.impl.BusinessServiceImpl">
+		<property name="dao" ref="customerDao"></property>
+	</bean>
+	<bean name="customerDao" class="com.itheima.dao.impl.CustomerDaoImpl"/>
+	<bean name="customerAction" class="com.itheima.action.CustomerAction" scope="prototype">
+		<property name="businessService" ref="businessService"></property>
+	</bean>
+</beans>

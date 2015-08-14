@@ -1,0 +1,32 @@
+#+OPTIONS: ^:nil
+
+* 列模式
+http://blog.sina.com.cn/s/blog_6bc5571a0101ijgh.html
+** 先选中,在第一个标记点和最后一个标记点之间(行,列都包括)
+然后用下边命令
+C-x r d        delete-rectangle
+删除矩形区域，不留空白，后面的字符前移
+C-x r f        frame-configuration-to-register
+C-x r g        insert-register
+C-x r i        insert-register
+将某个寄存器的内容插入某处
+C-x r j        jump-to-register
+C-x r k        kill-rectangle
+就是剪切某个选定的矩形区域，用C-x r y可以贴上
+C-x r l        bookmark-bmenu-list
+C-x r m        bookmark-set
+C-x r n        number-to-register
+C-x r o        open-rectangle
+在选定的矩形区域插入空白
+C-x r r        copy-rectangle-to-register
+将选定的矩形区域复制到某个寄存器
+C-x r s        copy-to-register
+C-x r w        window-configuration-to-register
+C-x r x        copy-to-register
+C-x r y        yank-rectangle
+类似于矩形区域的粘贴，就是将刚用C-x r k剪切的矩形区域粘贴过来
+C-x r C-SPC    point-to-register
+*** C-x r t        string-rectangle 在选定区域所有列前(注意起始和结束的列的位置)插入同样的字符
+
+* org模式
+http://www.cnblogs.com/holbrook/archive/2012/04/12/2444992.html

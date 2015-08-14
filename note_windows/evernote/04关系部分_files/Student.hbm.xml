@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.itheima10.hibernate.domain.Student">
+		<!-- 
+			主键
+		 -->
+		<id name="sid" type="java.lang.Long" length="5">
+			<generator class="increment"></generator>
+		</id>
+		<!-- 
+			基础属性
+		 -->
+		<property name="name" length="20"></property>
+		<property name="description" length="50"></property>
+		<!-- 
+			多对一
+			   name为属性的名称
+			   columm 外键   可以让Student通过该外键联系到classes
+			   class 为班级的类的全名
+		 -->
+		<many-to-one name="classes" cascade="save-update" column="cid" class="com.itheima10.hibernate.domain.Classes"></many-to-one>
+	</class>
+</hibernate-mapping>

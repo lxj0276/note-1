@@ -1,0 +1,2 @@
+* 如何调用魔法方法
+file:/home/kay/share/note/python/magicMethods.png

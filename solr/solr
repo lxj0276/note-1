@@ -1,0 +1,4 @@
+solr的shard2_replica*放在/var/lib/sol
+solr添加IKTokenizer：把jar包放在/var/lib/solr/tomcat-deployment/webapps/solr/WEB-INF/lib下边
+                                /usr/lib/solr/webapps/solr/WEB-INF/lib
+

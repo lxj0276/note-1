@@ -1,0 +1,22 @@
+#+OPTIONS: ^:nil
+* svg衍生出的知识架构
+** svg
+*** svg简介
+SVG 指可伸缩矢量图形 (Scalable Vector Graphics)
+SVG 用来定义用于网络的基于矢量的图形
+SVG 使用 XML 格式定义图形
+SVG 图像在放大或改变尺寸的情况下其图形质量不会有所损失
+SVG 是万维网联盟的标准
+SVG 与诸如 DOM 和 XSL 之类的 W3C 标准是一个整体
+** xsl可扩展样式表语言 (EXtensible Stylesheet Language) :: XML 样式表
+*** 简介
+XSL 包括三部分：
+1.XSLT - 一种用于转换 XML 文档的语言。
+XPath - 一种用于在 XML 文档中导航的语言。
+XSL-FO - 一种用于格式化 XML 文档的语言。
+
+XSL 之于XML,就像CSS之于HTML。
+
+XSL是一种标记语言，表示如何将XML文档的内容转换成另一种形式的文档。
+
+XSLT 是指 XSL 转换 (XSL Transformation)，它是 XSL 最重要的部分。

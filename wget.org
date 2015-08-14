@@ -1,0 +1,1 @@
+wget -t3 -T90 -c FTP://222.73.182.155/src/src_goods_moves/src_goods_moves2015-05-27.tar.gz --user largedata --password asd3$%sdf!

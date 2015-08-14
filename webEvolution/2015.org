@@ -1,0 +1,2 @@
+* Full Screen API
+HTML5的一个全屏的api

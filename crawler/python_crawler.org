@@ -1,0 +1,11 @@
+* Theory
+[[http://www.cnblogs.com/huxi/archive/2010/07/04/1771073.html][Python正则表达式指南]]
+
+** 分析页面-- 爬虫主要作用就是用来分析页面
+难点：因为现在是web2.0时代，绝大部分网页都会使用javascript处理页面，而且很多网页内容都是通过Ajax技术加载的。因此，只是简单地解析HTML文件会远远不够。
+解决：如何做到这点？编写一个基于webkit的爬虫SuperSpider。下面将详细说明SuperSpider所具有的5个功能强大的爬取能力。
++ 静态页面链接分析
++ javascript动态解析
++ 自动分析表单
++ 自动交互
++ hook所有的网络请求(ajax等)
