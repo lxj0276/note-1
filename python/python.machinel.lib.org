@@ -1,0 +1,2 @@
+[[http://www.52nlp.cn/python-%E7%BD%91%E9%A1%B5%E7%88%AC%E8%99%AB-%E6%96%87%E6%9C%AC%E5%A4%84%E7%90%86-%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98][Python 网页爬虫 & 文本处理 & 科学计算 & 机器学习 & 数据挖掘兵器谱]]
+[[http://qxde01.blog.163.com/blog/static/67335744201368101922991/][Python机器学习库]]

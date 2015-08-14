@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+  	 <!-- 
+  	 	component 组件
+  	 	  把一个类放入到spring容器中，该类就称为组件
+  	 	  在base-package指定的包及子包下扫描
+  	  -->
+  	 <context:component-scan base-package="com.itheima10.spring.scan">
+  	 </context:component-scan>
+</beans>

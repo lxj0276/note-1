@@ -1,0 +1,8 @@
+centos彻底删除mysql  
+
+2012-10-15 11:52:53|  分类： Linux/Unix |举报|字号 订阅
+yum remove mysql mysql-server mysql-libs compat-mysql51
+rm -rf /var/lib/mysql
+rm /etc/my.cnf
+查看是否还有mysql软件：
+rpm -qa|grep mysql

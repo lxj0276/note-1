@@ -1,0 +1,30 @@
+#+STARTUP: indent
+* hive 功能语句
+** 删除分区
+alter table test drop partition (pt='2014-06-01')
+** hql语句，导出到文本
+hive (-S) -e 'select a.col from tab1 a' > a.txt
+insert overwrite local directory '/tmp/output' select * from tablea;
+** in,not in查询
+*** in查询
+如果要查询当天登陆的注册用户，需要用in查询，hive sql如下:
+
+select login.uid from login left outer join regusers on login.uid=regusers.uid where regusers.uid is not null
+如果login表和regusers表按天分区，字段是dt，那么查询2013年1月1号当天登陆的注册用户，hive sql如下:
+
+select login.uid from login day_login left outer join 
+   (select uid from regusers where dt='20130101') day_regusers
+on day_login.uid=day_regusers.uid where day_login.dt='20130101' and day_regusers.uid is not null
+ 
+
+*** not in查询
+如果要查询当天登陆的老用户(这里假设非当天注册用户就是老用户)，需要用not in查询，hive sql如下:
+
+select login.uid from login left outer join regusers on login.uid=regusers.uid where regusers.uid is null;
+如果login表和regusers表按天分区，字段是dt，那么查询2013年1月1号当天登陆的老用户，hive sql如下:
+
+select login.uid from login day_login left outer join
+   (select uid from regusers where dt='20130101') day_regusers
+on day_login.uid=day_regusers.uid where day_login.dt='20130101' and day_regusers.uid is null;
+** hql把None转为0,用于计算
+if(sample='None',0,sample)

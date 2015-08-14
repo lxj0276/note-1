@@ -1,0 +1,8 @@
+rabbitmqctl list_queues
+rabbitmqctl stop_app
+rabbitmqctl reset
+rabbitmqctl start_app
+rabbitmqctl add_user cloudsoft cloudsoft
+rabbitmqctl set_permissions cloudsoft ".*" ".*" ".*"
+rabbitmqctl list_permissions
+

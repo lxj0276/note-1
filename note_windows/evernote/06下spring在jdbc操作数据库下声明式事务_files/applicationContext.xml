@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+           http://www.springframework.org/schema/aop 
+           http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+           http://www.springframework.org/schema/tx 
+           http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+  	<!-- 
+		按照指定的路径加载配置文件
+	 -->
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<value>classpath:jdbc.properties</value>
+		</property>
+	</bean>
+    
+  	<bean id="dataSource" destroy-method="close"
+		class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+	
+	<bean id="classesDao" class="com.itheima10.spring.jdbc.transaction.dao.impl.ClassesDaoImpl">
+		<property name="dataSource">
+			<ref bean="dataSource"/>
+		</property>
+	</bean>
+	<bean id="classesService" class="com.itheima10.spring.jdbc.transaction.service.impl.ClassesServiceImpl">
+		<property name="classesDao">
+			<ref bean="classesDao"/>
+		</property>
+	</bean>
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource">
+			<ref bean="dataSource"/>
+		</property>
+	</bean>
+	<!-- 
+		对目标方法采用什么样的事务策略进行声明
+		id为唯一的标示
+		transaction-manager 事务管理器
+		    告诉spring容器采取什么样的技术处理事务
+	 -->
+	<tx:advice id="tx" transaction-manager="transactionManager">
+		<tx:attributes>
+			<!-- 
+				以save开头的方法
+				propagation 传播属性
+				    事务的嵌套问题
+				    默认的值:REQUIRED
+				    隔离机制和传播属性都可以不用写
+				read-only
+				   true  只读事务   在一个人在读取的时候 ，不允许其他人写
+				   false 读写事务
+			 -->
+			<tx:method name="save*" 
+				isolation="DEFAULT" 
+				propagation="REQUIRED" 
+				read-only="false"/>
+		</tx:attributes>
+	</tx:advice>
+	
+	<aop:config>
+		<aop:pointcut 
+			expression="execution(* com.itheima10.spring.jdbc.transaction.service.impl.*.*(..))" 
+			id="perform"/>
+		<aop:advisor advice-ref="tx" pointcut-ref="perform"/>
+	</aop:config>
+</beans>

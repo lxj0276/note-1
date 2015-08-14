@@ -1,0 +1,76 @@
+<html>
+<head>
+  <title>js基础</title>
+  <basefont face="Tahoma" size="2" />
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <meta name="exporter-version" content="Evernote Windows/272236; Windows/6.1.7601 Service Pack 1;"/>
+  <style>
+    body, td {
+      font-family: Tahoma;
+      font-size: 12pt;
+    }
+  </style>
+</head>
+<body>
+<a name="899"/>
+<h1>js基础</h1>
+<div>
+<table bgcolor="#D4DDE5" border="0">
+<tr><td><b>创建时间：</b></td><td><i>2014/7/17 7:32</i></td></tr>
+<tr><td><b>更新时间：</b></td><td><i>2014/7/18 2:37</i></td></tr>
+<tr><td><b>标签：</b></td><td><i>JS, js_function, 基础语法</i></td></tr>
+<tr><td><b>来源：</b></td><td><a href="http://www.w3schools.com/js/js_datatypes.asp"><i>http://www.w3schools.com/js/js_datatypes.asp</i></a></td></tr>
+</table>
+</div>
+<br/>
+
+<div>
+<div style="word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space;"><span style="font-size: 32px;"><b>一、js基础<br/></b></span><div><span style="font-size: 19px;">      Netscape公司开发的一种基于对象和事件驱动的脚本语言 ，无需编译，可由浏览器直接解释运行，JavaScript 是一种  弱类型语言，由ECMAScript来维护。</span></div><span style="font-size: 19px;">特点：</span><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div style="font-size: 19px;">交互性（它可以做的就是信息的动态交互）</div><div style="font-size: 19px;">安全性（不允许直接访问本地硬盘）</div><div style="font-size: 19px;">跨平台性（只要是可以解释Js的浏览器都可以执行，和平台无关）</div></blockquote><div style="font-size: 32px;"><b>二、JavaScript语言组成</b></div><div><span style="font-size: 21px;">     </span><span style="font-size: 21px;">一个完整 JavaScript实现由以下3个部分组成：</span><br/></div><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div style="font-size: 19px;">核心（ECMAScript）</div></blockquote><blockquote style="margin: 0px 0px 0px 40px; border: none; padding: 0px; font-size: 19px;"><div>文档对象模型（DOM）</div></blockquote><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div style="font-size: 19px;">浏览器对象模型（BOM） </div></blockquote></blockquote><div><img src="js基础_files/Image.png" type="image/png" style="cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;"/></div><div><br/></div><div style="font-size: 32px;"><b>三、JavaScript与Html的结合方式</b></div><div style="font-size: 24px;">编写JavaScript 三种方式：内部JS和外部JS</div><div>  <b>  <span style="font-size: 21px;">1.直接在事件中写</span></b><br/>
+          <span style="font-size: 19px;">onclick=&quot;javascript:alert('Hello World')&quot;</span><br/>
+     <span style="font-size: 21px;"><b>2. 通过&lt;script&gt;标签写</b></span><br/>
+        <span style="font-size: 19px;">  &lt;script type=&quot;text/javascript&quot;&gt;</span><br style="font-size: 19px;"/><span style="font-size: 19px;">               //alert(&quot;Hello World&quot;);弹框</span><br style="font-size: 19px;"/><span style="font-size: 19px;">               document.write(&quot;&lt;h1&gt;Hello World!&lt;/h1&gt;&quot;);</span></div><div><span style="font-size: 19px;">               </span><span style="font-size: 19px;">//在网页上输出//System.out.println(&quot;&quot;);</span></div><div><span style="font-size: 19px;">          &lt;/script&gt;</span><br/>
+        <span style="font-size: 19px;"> </span><br style="font-size: 19px;"/><span style="font-size: 19px;">           &lt;script&gt;可以写在网页的地方</span><br style="font-size: 19px;"/></div><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div style="font-size: 19px;">       一般写在&lt;head&gt;部分</div><div style="font-size: 19px;">         除非咱们要网页的body部分打印输出时，才把它放在body部分</div></blockquote><div>   <span style="font-size: 21px;"><b>  3.引入外部js文件</b></span><br/>
+          &lt;script type=&quot;text/javascript&quot; src=&quot;demo3.js&quot; &gt;  &lt;/script&gt;<br/>
+          注意:<br/>
+               通过这种方式引入外部js文件,在内部所写的js代码是不会执行的。</div><div style="font-size: 32px;"><b>四、JavaScript基本语法</b></div><div><span style="font-size: 24px;">变量、函数、运算符区分大小写</span><br/><b style="font-size: 21px;">1.变量是弱类型的</b><br/></div><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div><span style="font-size: 19px;">var a = 10;</span></div><div><span style="font-size: 19px;">var b = true;</span></div><div><span style="font-size: 19px;">var c = &quot;hello&quot;;</span></div><div><span style="font-size: 19px;">每行结尾的;可有可无，建议编写</span></div></blockquote><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div><span style="font-size: 21px;">两种类型的注释：</span></div></blockquote><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div style="font-size: 19px;">单行注释以双斜杠开头（//）</div></blockquote><blockquote style="margin: 0px 0px 0px 40px; border: none; padding: 0px; font-size: 19px;"><div>多行注释以单斜杠和星号开头（/*），以星号和单斜杠结尾（*/）</div></blockquote></blockquote><div><br/></div><div style="font-size: 21px;"><b>2.数据类型： String, Number, Boolean, Array, Object, Null, Undefined. </b></div><div style="font-size: 21px;">JavaScript和Java一样存在两种数据类型：<br/></div><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div style="font-size: 21px;"><font color="#FF0000">原始值 （存储在栈Stack中简单数据）</font></div><div style="font-size: 21px;"><font color="#FF0000">引用值 （存储在堆heap中对象）</font></div></blockquote><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div style="font-size: 19px;">1.Undefined</div><div style="font-size: 19px;">     1.变量定义了，但是没有赋值</div><div style="font-size: 19px;">     2.通过typeof()测试，结果也是undefined</div><div style="font-size: 19px;">   2.Null</div><div style="font-size: 19px;">     1.通过alert()直接输出，得到一个null结果</div><div style="font-size: 19px;">     2.通过typeof()测试，它的结果是一个Object</div><div style="font-size: 19px;">   3.Boolean</div><div style="font-size: 19px;">     看赋值为true/false</div><div style="font-size: 19px;">     非0都为真</div><div style="font-size: 19px;">     0都为假</div><div style="font-size: 19px;">   4.Number</div><div style="font-size: 19px;">     不区分整数与小数都认为是number</div><div style="font-size: 19px;">   5.String</div><div style="font-size: 19px;">     JavaScript中字符串是原始数据类型</div><div style="font-size: 19px;">     用“”引号引上的</div><div style="font-size: 19px;">     未定义 直接拿变量用,这样使用是语法错</div><div style="font-size: 19px;">     var s=&quot;1&quot;//定义了一个基本类型的字符串</div><div style="font-size: 19px;">     var s = new String(&quot;1&quot;);//定义了一个String对象</div><div style="font-size: 19px;">     基本类型为什么能调方法？</div><div style="font-size: 19px;">            s.toString();//说明了javascript是弱数据类型，它底层已经做了转化</div><div style="font-size: 19px;"><font color="#FF0000">通过instanceof 运算符解决typeof对象类型判断问题</font></div><div style="font-size: 19px;">区分 undefined 和 null</div></blockquote><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div style="font-size: 19px;"><font color="#FF0000">变量定义了未初始化/ 访问对象不存在属性 --- undefined</font></div></blockquote><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div style="font-size: 19px;"><font color="#FF0000">访问的对象不存在 --- null</font></div></blockquote></blockquote><div style="font-size: 21px;"><b>3.运算符</b></div>
+     <span style="font-size: 19px;">==值相等  ===类型和值都要相等</span><br/><b style="font-size: 21px;">4.控制语句</b><br/>
+   <span style="font-size: 19px;">  if/else/else if</span><br style="font-size: 19px;"/><span style="font-size: 19px;">     switch (字符串)</span><br style="font-size: 19px;"/><span style="font-size: 19px;">     三元运算符  条件？值1:值2;   (条件)null,false,0,'',undefined,NaN为假,其它都为真</span><br/>
+ <span style="font-size: 19px;">    for/while/do.while</span><div style="font-size: 32px;"><b> 五、JavaScript 函数的定义</b></div><div><span style="font-size: 21px;"><b>1.第一种方式</b></span><br/>
+   <span style="font-size: 19px;"> </span><img src="js基础_files/Image [1].png" type="image/png" style="cursor: default;cursor: default;cursor: default;"/></div><div><span style="font-size: 21px;"><b>2.第二种方式</b></span><br/>
+   <span style="font-size: 19px;"> </span><img src="js基础_files/Image [2].png" type="image/png" style="cursor: default;cursor: default;cursor: default;"/><br style="font-size: 19px;"/><span style="font-size: 19px;">   </span><b><br style="font-size: 21px;"/><span style="font-size: 21px;">3.第三种方式 参数：前面都是参数，函数体是最后一个参数，</span></b><span style="font-size: 16px;">不推荐使用    </span><br/><font size="4"><br/></font></div><div><span style="font-size: 16px;"> </span><img src="js基础_files/Image [3].png" type="image/png" style="cursor: default;cursor: default;cursor: default;"/></div><div><span style="font-size: 32px;"><b>六、js方法的提升</b></span></div><div style="font-size: 24px;"><b>1、</b></div><div><img src="js基础_files/Image [4].png" type="image/png" style="cursor: default;cursor: default;cursor: default;"/></div><div style="font-size: 24px;"><font size="3" style="font-size: 24px;"><b>2、</b></font></div><div><img src="js基础_files/Image [5].png" type="image/png" style="cursor: default;cursor: default;"/></div><div><img src="js基础_files/Image [6].png" type="image/png" height="389" style="cursor: default;cursor: default;" width="1339"/></div><div style="font-size: 24px;"><font size="3" style="font-size: 24px;"><b><br/></b></font></div><div style="font-size: 24px;"><font size="3" style="font-size: 24px;"><b>3、</b></font></div><div><img src="js基础_files/Image [7].png" type="image/png" style="cursor: default;cursor: default;"/></div><div style="font-size: 24px;"><font size="3" style="font-size: 24px;"><b><br/></b></font></div><div style="font-size: 24px;"><font size="3" style="font-size: 24px;"><b>4、</b></font></div><div><img src="js基础_files/Image [8].png" type="image/png" style="cursor: default;"/></div><div><img src="js基础_files/Image [9].png" type="image/png" style="cursor: default;"/></div><div><img src="js基础_files/Image [10].png" type="image/png" style="cursor: default;"/><span style="font-size: 32px;"><font size="3"><br/></font></span> </div><div style="font-size: 32px;"><b>六、变量：</b></div><div><img src="js基础_files/Image [11].png" type="image/png" style="cursor: default;"/></div><div><img src="js基础_files/Image [12].png" type="image/png" style="cursor: default;"/> </div><div><br/>
+  <img src="js基础_files/Image [13].png" type="image/png" style="cursor: default;"/><br/><b style="font-size: 32px;"><font color="#41AD1C">七、js函数调用的四种方法：</font></b></div><div><p style="font-size: 24px;">JavaScript functions can be invoked in 4 different ways.</p><p style="font-size: 24px;">Each method differs in how <strong>this</strong> is initialized.</p></div><div><span style="font-size: 21px;"><b> 1、</b></span></div><div><img src="js基础_files/Image [14].png" type="image/png" style="cursor: default;"/></div><div><img src="js基础_files/Image [15].png" type="image/png" style="cursor: default;"/></div><div><span style="font-size: 21px;"><b>2.</b></span></div><div><img src="js基础_files/Image [16].png" type="image/png" style="cursor: default;"/></div><div><img src="js基础_files/Image [17].png" type="image/png" style="cursor: default;"/></div><div style="font-size: 21px;"><b>3.</b></div><div><img src="js基础_files/Image [18].png" type="image/png" style="cursor: default;"/></div><div><span style="font-size: 21px;"><b>4.</b></span></div><div><img src="js基础_files/Image [19].png" type="image/png" style="cursor: default;"/></div><div><br/></div><div><br/></div><div><img src="js基础_files/Image [20].png" type="image/png" style="cursor: default;"/></div><div><span style="font-size: 21px;"><b>六、JavaScript 全局函数</b></span></div><div><div>     //parseInt();转整数<br/>
+     //parseFloat();//转小数<br/><br/>
+     //isNaN()//判断是否为数字 为数字返回false 不为数字返回true<br/><br/>
+     //eval() eval() 函数可计算某个字符串，并执行其中的的 JavaScript 代码。<br/><br/>
+     //escape() 函数可对字符串进行编码，这样就可以在所有的计算机上读取该字符串。<br/>
+     //unescape() 函数可对通过 escape() 编码的字符串进行解码。</div>
+七、JavaScript常用对象介绍</div><div>1、BOM:</div><div><img src="js基础_files/Image [21].png" type="image/png" style="cursor: default;"/></div>
+     浏览器对象模型<br/>
+     DOM Window  ：窗口<br/>
+               属性：<br/>
+                    status :状态栏<br/>
+                    self:自己<br/>
+                    top:顶层窗口<br/>
+                    parent:父窗口<br/>
+               方法<br/>
+                    alert();显示带有一段消息和一个确认按钮的警告框。<br/>
+                    confirm();显示带有一段消息以及确认按钮和取消按钮的对话框。弹出确认取消框 点确定会返回true,否则返回false<br/>
+                    prompt();弹出一个带有输入文本的对话框 会返回在文本框中输入的值<br/><br/>
+                    open();用于打开一个指定的窗口<br/>
+                    close();用于关闭当前窗口<br/>
+                    setInterval()<br/>
+                    setTimeout()<br/>
+    <br/><br/>
+              <br/><br/>
+     DOM Navigator<br/>
+          appName  浏览器名称<br/>
+          appVersion 浏览器版本<br/>
+          platform 操作系统<br/>
+     DOM Screen<br/>
+     DOM History<br/>
+          go()//数字<br/>
+          back();//后退  go(-1)<br/>
+          forward()//前进 go(1)<br/>
+     DOM Location<br/>
+          href属性:设置或返回完整的 URL。<br/></div>
+</div></body></html> 

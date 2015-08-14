@@ -1,0 +1,63 @@
+#+OPTIONS: ^:nil
+* 表之间的被依赖关系
+** stage
+*** stage_customer
+**** dw_customer
+
+*** stage_goods_channel_relation
+
+*** stage_merchant_channel
+**** dw_customer
+**** dw_trade
+**** dm_return
+
+*** stage_order
+**** dm_trade
+
+*** stage_trade_created
+**** dw_trade
+
+*** stage_return_info
+**** dw_return
+
+*** stage_return_item
+**** dw_return
+
+*** stage_trade_promotion
+
+*** stage_warehouse_product_channel_relation
+
+** dw
+*** dw_customer
+
+*** dw_return
+**** dm_return
+
+*** dw_trade
+**** dm_trade
+**** report_merchant_channel_business
+**** report_merchant_channel_source_business
+**** report_merchant_channel_zone_business
+** dm
+*** dm_return
+**** report_merchant_channel_business
+
+*** dm_trade
+**** report_merchant_channel_business
+**** report_merchant_channel_source_business
+**** report_merchant_channel_zone_business
+
+
+* 已配置的被依赖表
+** dw
+*** dw_customer
+*** dw_return.py
+*** dw_trade.py
+
+** dm
+*** dm_return.py
+*** dm_trade
+** report
+*** report_merchant_channel_business
+*** report_merchant_channel_source_business
+*** report_merchant_channel_zone_business

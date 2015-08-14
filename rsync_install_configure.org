@@ -1,0 +1,225 @@
+cloudshops-sh-16(222.73.182.39) 进行实践安装
+1、简介Rsync 是一个远程数据同步工具，可通过 LAN/WAN 快速同步多台主机间的文件。 Rsync 本来是用以取代 rcp 的一个工具
+2、核心算法 略
+3、配置的另一种方式(基于xinetd,略 yum -y install xinetd )
+
+准备工作
+
+#cd /home/software
+获取安装包 我查了下最后的release 版本是3.1.1（所有安装采取统一版本）
+wget http://rsync.samba.org/ftp/rsync/src/rsync-3.1.1.tar.gz
+
+一、下载、安装rsync
+
+指定 安装目录为 /usr/local/rsync
+
+tar -zxvf rsync-3.1.1.tar.gz
+cd rsync-3.1.1
+./configure --prefix=/usr/local/rsync
+make
+make install
+ 正常安装RH的时候是带RSYNC的，运行文件放在/usr/bin/rsync （修改软连接指向,采用自己安装源码部署的方式 ,如果不存在直接建立软链）
+ll /usr/bin/rsync(查看是否存在)
+ln -s /usr/local/rsync/bin/rsync /usr/bin/rsync
+
+#查看版本（应该为3.1.1）
+rsync --version
+创建目录
+mkdir -p /home/rsync/backup
+mkdir -p /home/rsync/log
+mkdir -p /home/rsync/security
+mkdir -p /home/rsync/data
+(此部略过)修改backup目录权限#chown -R nobody:nobody /home/rsync/backup
+
+Rsync配置
+/etc/rsyncd.conf  (默认是没有的，可以手工创建)
+
+# vi /etc/rsyncd.conf
+
+#全局选项
+#是否检查口令文件的权限
+strict modes=yes
+#默认端口873
+port=873
+#日志记录文件     原文中有的，我没有使用，日志文件
+#log file=/home/rsync/rsyncd.log
+log file=/usr/local/rsync/rsyncd.log
+#运行进程的ID写到哪里    原文中有的，我没有使用，日志文件
+pid file=/usr/local/rsync/rsyncd.pid
+
+#模块选项
+# 这里是认证的模块名，在client端需要指定
+[backup]
+#客户端最大连接数,默认0(没限制)
+max connections=10
+#指定该模块传输文件时守护进程应该具有的uid
+uid=root
+#指定该模块传输文件时守护进程应该具有的gid
+gid=root
+# 需要做备份的目录
+path=/home/rsync/backup
+# 可以忽略一些无关的IO错误
+ignore errors
+#no客户端可上传文件,yes只读
+read only=no
+#no客户端可下载文件,yes不能下载
+write only=yes
+#充许任何主机连接
+hosts allow=*
+#禁止指定的主机连接
+hosts deny=10.5.3.77
+# 认证的用户名，如果没有这行，则表明是匿名
+auth users=root
+# 指定认证口令文件位置
+secrets file =/home/rsync/security/rsync.pass
+
+
+
+******配置完毕****
+
+
+生成rsync密码文件
+在server端生成一个密码文件/home/rsync/security/rsync.pass
+#vi /home/rsync/security/rsync.pass
+root:cloudshopsrsync
+
+修改密码文件权限
+#chmod 600 /home/rsync/security/rsync.pass
+注意：密码文件的权限，是由rsyncd.conf里的参数
+strict modes =yes/no 来决定
+Rsync 的启动 rsycn 的启动方式有多种，
+采用守护进程方式：
+/usr/bin/rsync --daemon
+
+四：加入rc.local
+在各种操作系统中，rc文件存放位置不尽相同，可以修改使系统启动时把rsync --daemon加载进去。
+#vi /etc/rc.local
+加入两行
+rm -rf /usr/local/rsync/rsyncd.pid
+/usr/bin/rsync --daemon
+
+五．检查rsync
+验证启动是否成功
+#ps -aux |grep rsync
+ root       59120  0.0  0.2  1460   972  ??  Ss    5:20PM   0:00.00  /usr/local/rsync/bin/rsync –daemon
+#netstat -a | grep rsync
+tcp        0      0 *:rsync                     *:*                         LISTEN
+tcp        0      0 *:rsync                     *:*                         LISTEN
+#或者lsof -i:873
+rsync   38648 root    3u  IPv4 7701595      0t0  TCP *:rsync (LISTEN)
+rsync   38648 root    5u  IPv6 7701596      0t0  TCP *:rsync (LISTEN)
+
+查看版本 rsync  --version 应为3.1.1(系统默认自带3.0.6 /usr/bin/rsync)
+删除该文件 rm /usr/bin/rsync
+建立软连接 ln -s  /usr/local/rsync/bin/rsync /usr/bin/rsync
+
+结束进程：kill -9 pid的值
+kill -15 进程名
+
+[客户端访问]:
+cp /home/rsync/security/rsync.pass  /home/rsync/security/rsync_client.pass(服务器密码配置为username:password 客户端为 password)
+vi rsync_client.pass
+客户端也需要安装rsync(安装同前)
+修改权限
+chmod 600 /home/rsync/security/rsync_client.pass
+下载文件：
+rsync  -vzrtopg --progress --delete  root@xxx.xxx.xxx.xxx::backup  /home/admin/getfile
+
+上传文件：
+/usr/bin/rsync -vzrtopg --password-file=/home/rsync/security/rsync_client.pass --progress /home/software/jdk-6u45-linux-amd64.rpm  root@222.73.182.42::backup
+
+实际遇到问题
+测试了几个文件 大概速度为11M每秒 通过公网IP(42上传46 39 19三台11m每秒，但42上传30 只有1m每秒)
+发现30网卡配置有问题
+ethtool em1 发现 配置10m/s  网卡半双工
+ethtool -s em1 speed 100 duplex full autoneg off
+
+
+******额外 暂时未使用*****
+
+3、自动运行（交给MYSQL 服务器的SHELL 运行）
+1）vi /usr/local/rsync/time.sh     //制作脚本文件
+把下边的内容复制进去
+#!/bin/bash
+/usr/bin/rsync -vzrtopg --progress --delete hening@192.168.0.217::backup /home/backup --password-file=/etc/rsync.pas
+2) crontab -e
+加入55 * * * * /usr/local/rsync/time.sh        //每55分运行一次time.sh脚本文件
+五 iptables（策略 暂时未配置）
+iptables -A INPUT -p tcp -s ! 11.22.33.44 --dport 873 -j DROPx
+如此, 只有 11.22.33.44 这个 client IP 能进入这台 rsync server.
+
+
+
+参数附录（略）
+命令介绍：-rvlHpogDtS
+rsync命令参数
+-v表示verbose详细显示
+-z表示压缩
+-r表示recursive递归
+-t表示保持原文件创建时间
+-o表示保持原文件属主
+-p表示保持原文件的参数
+-g表示保持原文件的所属组
+-a存档模式
+-P表示代替-partial和-progress两者的选项功能
+-e ssh建立起加密的连接。
+--partial阻止rsync在传输中断时删除已拷贝的部分(如果在拷贝文件的过程中，传输被中断，rsync的默认操作是撤消前操作，即从目标机上
+删除已拷贝的部分文件。)
+--progress是指显示出详细的进度情况
+--delete是指如果服务器端删除了这一文件，那么客户端也相应把文件删除，保持真正的一致。
+--exclude不包含/ins目录
+--size-only 这个参数用在两个文件夹中的差别仅是源文件夹中有一些新文件，不存在重名且被修改过的文件，因为这种文件有可能会因为内容被修改可大小一样，而被略过。这个参数可以大大地提高同步的效率，因为它不需要检查同名文件的内容是否相同。
+--password-file来指定密码文件，内容包含server端指定认证用户的密码。
+这样就可以在脚本中使用而无需交互式地输入验证密码了，这里需要注意的是这份密码文件权限属性要设得只有属主可读。
+hening@192.168.0.217::backup
+hening是指server端指定认证的用户
+192.168.0.217是指服务器端的ip
+::backup 表示服务器端需要同步的模块名称；
+/home/quack/backup/$DATE是同步后的文件指存放在本机的目录地址。
+/var/log/rsync.$DATE是同步后的日志文件存放在本机的目录地址。
+注意
+不放/  则目录名也包含mirror，放 / 则只有目录里面的东西mirror了
+
+
+
+
+
+####################本地服务器 测试******
+测试局域网传递 1个G的文件 1G内存剩余 跑不了
+[root@test-server ~]# /usr/bin/rsync -vzrtopg --password-file=/home/rsync/securi
+ty/rsync_client.pass --progress /backup2/svnbackup.tar.gz  root@192.168.1.15::ba
+ckup
+
+换成scp方式
+[root@test-server ~]# scp /backup2/svnbackup.tar.gz  root@192.168.1.15:/home/scpback/svnbackup.tar.gz
+
+
+echo "/usr/bin/rsync --daemon  --config=/etc/rsyncd.conf" >>/etc/rc.d/rc.local
+bwlimit
+
+rsync  -vzrtopg --progress --delete --bwlimit=500 -e 'ssh -p 65531'  root@222.73.182.164:65531::imgdata  /home/productdata
+
+rsync  -vzrtopg --progress --delete --bwlimit=500 -e 'ssh -p 65531'  root@222.73.182.164::imgdata  /home/productdata/
+
+
+
+/usr/bin/rsync -vzrtopg --password-file=/home/rsync/security/rsync_client.pass --progress /backup2/svnbackup.tar.gz  root@192.168.1.15::ba
+ckup
+
+
+
+
+rsync  -vzrtopg --progress --delete --bwlimit=500 -e 'ssh -p 65531'  root@222.73.182.155::imgdata  /home/productdata/
+
+
+other
+
+tar zcvf goodschannelrelation.tar.gz goodschannelrelation2015-01-15
+ scp goodschannelrelation.tar.gz  dcplatform@61.151.247.134:/home/dcplatform/tmpdata/
+
+/usr/bin/rsync -vzrtopg --password-file=/home/rsync/security/rsync_client.pass --progress /backup2/svnbackup.tar.gz  root@222.73.182.155::ba
+ckup
+
+UxRIrDPkIP9Fb2m3
+
+nohup rsync -apur --partial -e "ssh -p 22 -c arcfour" goodschannelrelation.tar.gz dcplatform@61.151.247.134:/home/dcplatform/tmpdata/ &

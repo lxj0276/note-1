@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.itheima.domain.Course">
+		<id name="cid" length="5">
+			<generator class="increment"></generator>
+		</id>
+		<property name="name" length="20"></property>
+		<property name="description" length="50"></property>
+		<!-- 
+			set集合
+			table 第三张表
+		 -->
+		<set name="students" cascade="save-update" table="student_course">
+			<!-- 
+				外键
+			 -->
+			<key>
+				<column name="cid"></column>
+			</key>
+			<many-to-many class="com.itheima.domain.Student" column="sid"></many-to-many>
+		</set>
+	</class>
+</hibernate-mapping>

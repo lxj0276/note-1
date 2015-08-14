@@ -1,0 +1,26 @@
+#+OPTIONS: ^:nil
+
+*
+
+
+* 简单应用
+** hive中替换None为0
+要先确定哪些字段需要被替换,然后前边加上if(
+sed "s/\bif(\([^ |^,]*\)/if(\1 = \'None\', 0, \1)/" aaa.txt
+sed "s/\bif(\([^ |^,]*\),2)/if(\1,2) = null, 0, \1,2))/"
+
+** 把最后一个字符╪替换为空
+sed -e 's/\(.*\)╪/\1/' test
+sed -i 's/\(.*\)╪/\1/' test
+
+** 替换╪为制表符号
+sed -i "s/╪/\\t/g" src_goods_channel_relation_his2015-04-28
+
+** vim或sed删除文本文件中所有的中文字符
+vim:
+http://www.douban.com/group/topic/9735267/
+:%s/\v[^\x00-\xff]+//g 
+
+sed：
+http://7056824.blog.51cto.com/69854/178940
+LANG=C sed -r "s/[\x81-\xFE][\x40-\xFE]//

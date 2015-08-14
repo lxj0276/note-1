@@ -1,0 +1,4 @@
+#+OPTIONS: ^:nil
+* awk常用操作
+** 去掉最后一个分割符
+awk -F ╪ '{for(i=1;i<NF;i++) {if(i<NF-1) printf("%s╪",$i); else printf("%s",$i);}printf("\n")}' test.me

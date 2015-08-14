@@ -1,0 +1,7 @@
+#+OPTIONS: ^:nil
+* 注释上下标
+#+OPTIONS: ^:nil
+* 自动换行问题
+M-x auto-fill-mode
+* 缩进
+#+STARTUP: indent

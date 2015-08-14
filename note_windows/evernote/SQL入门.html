@@ -1,0 +1,156 @@
+<html>
+<head>
+  <title>SQL入门</title>
+  <basefont face="Tahoma" size="2" />
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <meta name="exporter-version" content="Evernote Windows/272236; Windows/6.1.7601 Service Pack 1;"/>
+  <style>
+    body, td {
+      font-family: Tahoma;
+      font-size: 12pt;
+    }
+  </style>
+</head>
+<body>
+<a name="1802"/>
+<h1>SQL入门</h1>
+<div>
+<table bgcolor="#D4DDE5" border="0">
+<tr><td><b>创建时间：</b></td><td><i>2014/7/22 10:34</i></td></tr>
+<tr><td><b>更新时间：</b></td><td><i>2014/7/22 13:32</i></td></tr>
+<tr><td><b>标签：</b></td><td><i>mysql</i></td></tr>
+<tr><td><b>来源：</b></td><td><a href="mk:@MSITStore:F:\课件\day14_mysql\资料\MySQL_5.1_zh.chm::/sql-syntax.html"><i>mk:@MSITStore:F:\课件\day14_mysql\资料\MySQL_5.1_zh.chm::/sql-syntax.html</i></a></td></tr>
+</table>
+</div>
+<br/>
+
+<div>
+<div style="word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space;"><span style="font-size: 32px;">一、课程内容：</span><div><img src="SQL入门_files/Image.png" type="image/png" style="cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;"/><br/><span style="font-size: 32px;">二、SQL简介</span></div><div style="font-size: 24px;">1、SQL：Structured Query Language的缩写</div><div style="font-size: 21px;">结构化查询语言的工业标准由ANSI(美国国家标准学会，ISO的成员之一)维护。</div><div style="font-size: 21px;">组成：<br/></div><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div style="font-size: 21px;">DQL：数据查询语言</div><div style="font-size: 21px;">DML：数据操作语言</div><div style="font-size: 21px;">DDL：数据定义语言</div><div style="font-size: 21px;">DCL：数据控制语言</div><div style="font-size: 21px;">TPL：事务处理语言</div><div style="font-size: 21px;">CCL：指针控制语言</div></blockquote><div style="font-size: 24px;">2、数据库服务器、数据库和表的关系</div><div style="font-size: 21px;">数据库服务器是管理数据库的软件程序。</div><div style="font-size: 21px;">数据库是在计算机上的实体，会针对每一个应用创建一个数据库。</div><div style="font-size: 21px;">数据库创建多个表，以保存程序中实体的数据。</div><div style="font-size: 24px;"><img src="SQL入门_files/Image [1].png" type="image/png" style="cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;"/></div><div style="font-size: 32px;"><font color="#FF0000">三、数据完整性：</font></div><div style="font-size: 32px;"><img src="SQL入门_files/Image [2].png" type="image/png" style="cursor: default;cursor: default;cursor: default;"/></div><div style="font-size: 32px;"><img src="SQL入门_files/Image [3].png" type="image/png" style="cursor: default;cursor: default;cursor: default;"/></div><div style="font-size: 32px;"><br/></div><div style="font-size: 32px;"><font color="#FF0000">四、数据库操作：</font></div><div style="font-size: 24px;"><font color="#4DCE1D">1、DDL:Data Definition Language</font></div>
+   <span style="font-size: 21px;">  作用：创建数据库和表的结构等。</span><br style="font-size: 21px;"/><span style="font-size: 21px;">     常用关键字：</span><br style="font-size: 21px;"/><span style="font-size: 21px;">          CREATE ALTER DROP TRUNCATE</span><div><span style="font-size: 21px;"><b>创建数据库</b></span><span style="font-size: 21px;"><br/></span><div><img src="SQL入门_files/Image [4].png" type="image/png" style="cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;"/></div><div style="font-size: 21px;"><b>查看、删除数据库</b></div><div><img src="SQL入门_files/Image [5].png" type="image/png" style="cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;"/>、</div><div style="font-size: 21px;"><b>修改数据库</b></div><div><img src="SQL入门_files/Image [6].png" type="image/png" style="cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;"/></div><div style="font-size: 21px;"><b>创建表</b></div><div><img src="SQL入门_files/Image [7].png" type="image/png" style="cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;"/></div><div style="font-size: 21px;"><b>数据的备份与恢复</b></div><div style="font-size: 21px;"><img src="SQL入门_files/Image [8].png" type="image/png" style="cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;"/></div><div style="font-size: 21px;"><b>修改表</b></div><div><img src="SQL入门_files/Image [9].png" type="image/png" style="cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;"/></div><div style="font-size: 19px;">练习：<br/>
+          创建一个名称为mydb1的数据库。<br/>
+          mysql&gt;CREATE DATABASE mydb1;<br/>
+          查看mydb1使用的字符集是什么？<br/>
+          mysql&gt;SHOW CREATE DATABASE mydb1;<br/>
+          创建一个使用gbk字符集的mydb2数据库。<br/>
+          mysql&gt;CREATE DATABASE mydb2 CHARACTER SET gbk;<br/>
+          创建一个使用gbk字符集，并带校对规则的mydb3数据库<br/>
+          mysql&gt;CREATE DATABASE mydb3 CHARACTER SET gbk COLLATE gbk_chinese_ci;<br/>
+         <br/>
+          查看所有的数据库<br/>
+          mysql&gt;SHOW DATABASES;<br/>
+          删除前面创建的mydb3数据库<br/>
+          mysql&gt;DROP DATABASE mydb3;<br/>
+          查看服务器中的数据库，并把mydb2的字符集修改为utf8;<br/>
+          mysql&gt;ALTER DATABASE mydb2 CHARACTER SET utf8;<br/>
+         <br/>
+          -------------------------------<br/>
+          查看当前选择的数据库<br/>
+          mysql&gt;SELECT DATABASE();<br/>
+          选择数据库<br/>
+          mysql&gt;USE test;<br/>
+          创建一个员工表<br/>
+          mysql&gt;CREATE TABLE employee(<br/>
+          id int(11),<br/>
+          name varchar(100),<br/>
+          gender varchar(100),<br/>
+          birthday date,<br/>
+          entry_date date,<br/>
+          job varchar(100),<br/>
+          salary float(8,2),<br/>
+          resume text<br/>
+          );<br/>
+          查看数据库中的所有表格<br/>
+          mysql&gt;SHOW TABLES;<br/>
+          查看表结构<br/>
+          mysql&gt;DESC employee;<br/>
+          在上面员工表的基本上增加一个image列。<br/>
+          mysql&gt;ALTER TABLE employee ADD image blob;<br/>
+          修改job列，使其长度为60。<br/>
+          mysql&gt;ALTER TABLE employee MODIFY job varchar(60);<br/>
+          删除image列。<br/>
+          mysql&gt;ALTER TABLE employee DROP image;<br/>
+          表名改为user。<br/>
+          mysql&gt;RENAME TABLE employee TO user;<br/>
+          查看表的创建细节<br/>
+          mysql&gt;SHOW CREATE TABLE user;<br/>
+          修改表的字符集为gbk<br/>
+          mysql&gt;ALTER TABLE user CHARACTER SET gbk;<br/>
+          列名name修改为username<br/>
+          mysql&gt;ALTER TABLE user CHANGE name username varchar(100);</div><div style="font-size: 19px;">练习：<br/>
+          创建一个名称为mydb1的数据库。<br/>
+          mysql&gt;CREATE DATABASE mydb1;<br/>
+          查看mydb1使用的字符集是什么？<br/>
+          mysql&gt;SHOW CREATE DATABASE mydb1;<br/>
+          创建一个使用gbk字符集的mydb2数据库。<br/>
+          mysql&gt;CREATE DATABASE mydb2 CHARACTER SET gbk;<br/>
+          创建一个使用gbk字符集，并带校对规则的mydb3数据库<br/>
+          mysql&gt;CREATE DATABASE mydb3 CHARACTER SET gbk COLLATE gbk_chinese_ci;<br/>
+         <br/>
+          查看所有的数据库<br/>
+          mysql&gt;SHOW DATABASES;<br/>
+          删除前面创建的mydb3数据库<br/>
+          mysql&gt;DROP DATABASE mydb3;<br/>
+          查看服务器中的数据库，并把mydb2的字符集修改为utf8;<br/>
+          mysql&gt;ALTER DATABASE mydb2 CHARACTER SET utf8;<br/>
+         <br/>
+          -------------------------------<br/>
+          查看当前选择的数据库<br/>
+          mysql&gt;SELECT DATABASE();<br/>
+          选择数据库<br/>
+          mysql&gt;USE test;<br/>
+          创建一个员工表<br/>
+          mysql&gt;CREATE TABLE employee(<br/>
+          id int(11),<br/>
+          name varchar(100),<br/>
+          gender varchar(100),<br/>
+          birthday date,<br/>
+          entry_date date,<br/>
+          job varchar(100),<br/>
+          salary float(8,2),<br/>
+          resume text<br/>
+          );<br/>
+          查看数据库中的所有表格<br/>
+          mysql&gt;SHOW TABLES;<br/>
+          查看表结构<br/>
+          mysql&gt;DESC employee;<br/>
+          在上面员工表的基本上增加一个image列。<br/>
+          mysql&gt;ALTER TABLE employee ADD image blob;<br/>
+          修改job列，使其长度为60。<br/>
+          mysql&gt;ALTER TABLE employee MODIFY job varchar(60);<br/>
+          删除image列。<br/>
+          mysql&gt;ALTER TABLE employee DROP image;<br/>
+          表名改为user。<br/>
+          mysql&gt;RENAME TABLE employee TO user;<br/>
+          查看表的创建细节<br/>
+          mysql&gt;SHOW CREATE TABLE user;<br/>
+          修改表的字符集为gbk<br/>
+          mysql&gt;ALTER TABLE user CHARACTER SET gbk;<br/>
+          列名name修改为username<br/>
+          mysql&gt;ALTER TABLE user CHANGE name username varchar(100);</div><div><br/></div><div><font color="#4DCE1D"><span style="font-size: 24px;">2、DML：Data Manipulation Language</span></font></div><div><span style="font-size: 19px;">作用：用于向数据库表中插入、删除、修改数据。</span><br style="font-size: 19px;"/><span style="font-size: 19px;">     常用关键字：</span><br style="font-size: 19px;"/><span style="font-size: 19px;">      INSERT UPDATE DELETE</span><br/><div style="font-size: 24px;"><img src="SQL入门_files/Image [10].png" type="image/png" style="cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;"/></div><div style="font-size: 24px;"><img src="SQL入门_files/Image [11].png" type="image/png" style="cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;"/></div><div style="font-size: 24px;"><img src="SQL入门_files/Image [12].png" type="image/png" style="cursor: default;cursor: default;cursor: default;cursor: default;"/></div><div style="font-size: 24px;"><div>TRUNCATE TABLE用于完全清空一个表。</div><div><p>在MySQL 5.1中，TRUNCATE TABLE与DELETE FROM有以下几处不同：</p><p>·         删减操作会取消并重新创建表，这比一行一行的删除行要快很多。</p><p>·         删减操作不能保证对事务是安全的；在进行事务处理和表锁定的过程中尝试进行删减，会发生错误。</p><div>·         被删除的行的数目没有被返回。</div></div><div><br/></div></div><div style="font-size: 19px;">练习：<br/>
+     使用insert语句向表中插入三个员工的信息<br/>
+     mysql&gt;INSERT INTO user (id,username,gender,birthday,entry_date,job,salary,resume) VALUES (1,'LXC','female','2000-08-12','2014-06-20','CEO',20000,'BEAUTY');<br/>
+     mysql&gt;INSERT INTO user VALUES (3,'WJC','female','1990-08-12','2014-06-20','CTO',20000,'GUO');<br/>
+     mysql&gt;INSERT INTO user (id,username,gender,birthday,entry_date,job,salary,resume) VALUES (4,'齐航','female','1995-08-12','2014-06-20','董事长',20000,'小美女');<br/>
+     查询表中的所有记录和字段<br/>
+     mysql&gt;SELECT * FROM user;<br/>
+     查看数据库使用的编码细节：<br/>
+     mysql&gt;SHOW VARIABLES LIKE 'character%';<br/>
+     告知服务器客户端使用的编码<br/>
+     mysql&gt;SET character_set_client=gbk;<br/>
+     告知服务器会送的查询结果的编码<br/>
+     mysql&gt;SET character_set_results=gbk;<br/>
+     将所有员工薪水修改为5000元。<br/>
+     mysql&gt;UPDATE user SET salary=5000;<br/>
+     将姓名为’FXF’的员工薪水修改为4999元。<br/>
+     mysql&gt;UPDATE user SET salary=4999 WHERE username='FXF';<br/>
+     将姓名为’WJC’的员工薪水修改为4999.99元,job改为ccc。<br/>
+     mysql&gt;UPDATE user SET salary=4999.99,job='技术全监' WHERE username='WJC';<br/>
+     将LXC的薪水在原有基础上增加1000元。<br/>
+     mysql&gt;UPDATE user SET salary=salary+1000 WHERE username='LXC';<br/>
+     删除表中名称为’FXF’的记录。<br/>
+     mysql&gt;DELETE FROM user WHERE username='FXF';<br/>
+     删除表中所有记录。（一条条的删除）<br/>
+     msyql&gt;DELETE FROM user;<br/>
+     利用DDL中的TRUNCATE删除整张表(摧毁的表结构，然后重新创建该表)<br/>
+     mysql&gt;TRUNCATE TABLE user;</div><div style="font-size: 19px;"><br/></div><div style="font-size: 19px;"><img src="SQL入门_files/Image [13].png" type="image/png" style="cursor: default;cursor: default;cursor: default;cursor: default;"/></div><div style="font-size: 24px;"><img src="SQL入门_files/Image [14].png" type="image/png" style="cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;"/></div><div style="font-size: 24px;"><font color="#4DCE1D">3、DQL：Data Query Language</font></div><div><span style="font-size: 24px;">作用：查询数据。</span><br/><span style="font-size: 24px;">常用关键字：</span><br/><span style="font-size: 24px;">      SELECT</span><br/></div><div style="font-size: 24px;"><img src="SQL入门_files/Image [15].png" type="image/png" style="cursor: default;cursor: default;cursor: default;"/></div><div style="font-size: 24px;"><img src="SQL入门_files/Image [16].png" type="image/png" style="cursor: default;cursor: default;cursor: default;"/></div><div style="font-size: 24px;"><img src="SQL入门_files/Image [17].png" type="image/png" style="cursor: default;cursor: default;cursor: default;"/></div><div style="font-size: 24px;"><img src="SQL入门_files/Image [18].png" type="image/png" style="cursor: default;cursor: default;cursor: default;"/></div><div style="font-size: 24px;"><img src="SQL入门_files/Image [19].png" type="image/png" style="cursor: default;cursor: default;cursor: default;"/></div><div style="font-size: 24px;"><img src="SQL入门_files/Image [20].png" type="image/png" style="cursor: default;cursor: default;cursor: default;"/></div><div style="font-size: 24px;"><img src="SQL入门_files/Image [21].png" type="image/png" style="cursor: default;cursor: default;cursor: default;"/></div><div style="font-size: 24px;"><img src="SQL入门_files/Image [22].png" type="image/png" style="cursor: default;cursor: default;cursor: default;"/></div><div style="font-size: 24px;"><img src="SQL入门_files/Image [23].png" type="image/png" style="cursor: default;cursor: default;cursor: default;"/></div><div style="font-size: 24px;"><br/></div><div style="font-size: 24px;"><img src="SQL入门_files/Image [24].png" type="image/png" style="cursor: default;cursor: default;cursor: default;"/></div><div style="font-size: 24px;"><img src="SQL入门_files/Image [25].png" type="image/png" style="cursor: default;cursor: default;cursor: default;"/></div><div style="font-size: 24px;"><img src="SQL入门_files/Image [26].png" type="image/png" style="cursor: default;cursor: default;cursor: default;"/></div><div style="font-size: 24px;"><img src="SQL入门_files/Image [27].png" type="image/png" style="cursor: default;cursor: default;cursor: default;"/></div><div style="font-size: 24px;"><br/></div><div style="font-size: 24px;">练习：</div><div><span style="font-size: 24px;">   </span> <span style="font-size: 19px;"> 查询表中所有学生的信息。</span></div><span style="font-size: 19px;">     mysql&gt;SELECT * FROM student;</span><br style="font-size: 19px;"/><span style="font-size: 19px;">     mysql&gt;SELECT id,name,chinese,english,math FROM student;</span><br style="font-size: 19px;"/><span style="font-size: 19px;">     查询表中所有学生的姓名和对应的英语成绩。</span><br style="font-size: 19px;"/><span style="font-size: 19px;">     mysql&gt;SELECT name,english FROM student;</span><br style="font-size: 19px;"/><span style="font-size: 19px;">     过滤表中重复数据。</span><br style="font-size: 19px;"/><span style="font-size: 19px;">     mysql&gt;SELECT DISTINCT english FROM student;</span><br style="font-size: 19px;"/><span style="font-size: 19px;">     在所有学生数学分数上加10分特长分。</span><br style="font-size: 19px;"/><span style="font-size: 19px;">     mysql&gt;SELECT name,math+10 FROM student;</span><br style="font-size: 19px;"/><span style="font-size: 19px;">     统计每个学生的总分。</span><br style="font-size: 19px;"/><span style="font-size: 19px;">     mysql&gt;SELECT name,chinese+english+math FROM student;</span><br style="font-size: 19px;"/><span style="font-size: 19px;">     使用别名表示学生分数。</span><br style="font-size: 19px;"/><span style="font-size: 19px;">     mysql&gt;SELECT name AS 姓名,chinese+english+math 总分 FROM student;</span><br style="font-size: 19px;"/><span style="font-size: 19px;">     查询姓名为wu的学生成绩</span><br style="font-size: 19px;"/><span style="font-size: 19px;">     mysql&gt;SELECT * FROM student WHERE name='王五';</span><br style="font-size: 19px;"/><span style="font-size: 19px;">     查询英语成绩大于90分的同学</span><br style="font-size: 19px;"/><span style="font-size: 19px;">     mysql&gt;SELECT * FROM student WHERE english&gt;90;</span><br style="font-size: 19px;"/><span style="font-size: 19px;">     查询总分大于200分的所有同学</span><br style="font-size: 19px;"/><span style="font-size: 19px;">     mysql&gt;SELECT * FROM student WHERE (chinese+english+math)&gt;200;</span><br style="font-size: 19px;"/><span style="font-size: 19px;">     查询英语分数在 80－90之间的同学。</span><br style="font-size: 19px;"/><span style="font-size: 19px;">     mysql&gt;SELECT * FROM student WHERE english BETWEEN 80 AND 90;</span><br style="font-size: 19px;"/><span style="font-size: 19px;">     查询数学分数为89,90,91的同学。</span><br style="font-size: 19px;"/><span style="font-size: 19px;">     mysql&gt;SELECT * FROM student WHERE math IN (89,90,91);</span><br style="font-size: 19px;"/><span style="font-size: 19px;">     查询所有姓李的学生成绩。</span><br style="font-size: 19px;"/><span style="font-size: 19px;">     mysql&gt;SELECT * FROM student WHERE name LIKE '李%';</span><br style="font-size: 19px;"/><span style="font-size: 19px;">     查询数学分&gt;80，语文分&gt;80的同学。</span><br style="font-size: 19px;"/><span style="font-size: 19px;">     mysql&gt;SELECT * FROM student WHERE math&gt;80 AND chinese&gt;80;</span><br style="font-size: 19px;"/><span style="font-size: 19px;">     对数学成绩排序后输出。</span><br style="font-size: 19px;"/><span style="font-size: 19px;">     mysql&gt;SELECT name,math FROM student ORDER BY math;</span><br style="font-size: 19px;"/><span style="font-size: 19px;">     对总分排序后输出，然后再按从高到低的顺序输出（排序字段可以使用别名）</span><br style="font-size: 19px;"/><span style="font-size: 19px;">     mysql&gt;SELECT name,chinese+english+math 总分 FROM student ORDER BY chinese+english+math DESC;</span><br style="font-size: 19px;"/><span style="font-size: 19px;">     对姓李的学生成绩排序输出</span><br style="font-size: 19px;"/><span style="font-size: 19px;">     mysql&gt;SELECT name,chinese+english+math 总分 FROM student WHERE name LIKE '李%' ORDER BY 总分;</span><br style="font-size: 19px;"/><span style="font-size: 19px;">     分页查询:查询姓李的学生总成绩最高的是谁</span><br style="font-size: 19px;"/><div style="font-size: 19px;">     mysql&gt;SELECT name,chinese+english+math 总分 FROM student WHERE name LIKE '李%' ORDER BY 总分 LIMIT 0,1;  </div><div style="font-size: 19px;"><br/></div><div style="font-size: 19px;">     1、交叉连接：（CROSS JOIN)</div><span style="font-size: 19px;">          返回多张表中的记录的笛卡尔积（数据有不对的）</span><br style="font-size: 19px;"/><span style="font-size: 19px;">     2、内连接：</span><br style="font-size: 19px;"/><span style="font-size: 19px;">          隐式内连接：(不适用连接关键字)</span><br style="font-size: 19px;"/><span style="font-size: 19px;">               SELECT * FROM customer c,orders o WHERE c.id=o.customer_id;</span><br style="font-size: 19px;"/><span style="font-size: 19px;">          显式内连接：（使用连接关键字）</span><br style="font-size: 19px;"/><span style="font-size: 19px;">               SELECT  c.name,c.city,o.order_number,o.price FROM customer c INNER JOIN orders o ON c.id=o.customer_id;</span><br style="font-size: 19px;"/><span style="font-size: 19px;">     3、外连接：（OUTER JOIN）</span><br style="font-size: 19px;"/><span style="font-size: 19px;">          左外连接：（LEFT OUTER JOIN）  返回满足连接条件的所有记录，同时还返回左表中没有满足连接条件的其余记录。</span><br style="font-size: 19px;"/><span style="font-size: 19px;">               查询所有客户信息，如果有订单还要显示订单信息</span><br style="font-size: 19px;"/><span style="font-size: 19px;">               SELECT * FROM customer c LEFT OUTER JOIN orders o ON c.id=o.customer_id;</span><br style="font-size: 19px;"/><span style="font-size: 19px;">          右外连接：（RIGHT OUTER JOIN）</span><br style="font-size: 19px;"/><span style="font-size: 19px;">     4、子查询（简单）</span><br style="font-size: 19px;"/><span style="font-size: 19px;">          又叫做嵌套查询。子查询的语句必须放在小括号之内</span><br style="font-size: 19px;"/><span style="font-size: 19px;">         </span><br style="font-size: 19px;"/><span style="font-size: 19px;">          查询“陈冠希”的订单详细内容：</span><br style="font-size: 19px;"/><span style="font-size: 19px;">          SELECT id FROM customer WHERE name='陈冠希'; //子查询</span><br style="font-size: 19px;"/><span style="font-size: 19px;">         </span><br style="font-size: 19px;"/><span style="font-size: 19px;">          SELECT * FROM orders WHERE customer_id=1; //主查询</span><br style="font-size: 19px;"/><span style="font-size: 19px;">         </span><br style="font-size: 19px;"/><span style="font-size: 19px;">          子查询：</span><br style="font-size: 19px;"/><span style="font-size: 19px;">          SELECT * FROM orders WHERE customer_id=(SELECT id FROM customer WHERE name='陈冠希');</span><br style="font-size: 19px;"/><span style="font-size: 19px;">         </span><br style="font-size: 19px;"/><span style="font-size: 19px;">          查询“陈冠希和李宗瑞” 的订单详细内容：</span><br style="font-size: 19px;"/><span style="font-size: 19px;">          SELECT id FROM customer WHERE name='陈冠希' OR name='李宗瑞';</span><br style="font-size: 19px;"/><span style="font-size: 19px;">         </span><br style="font-size: 19px;"/><span style="font-size: 19px;">          SELECT * FROM orders WHERE customer_id IN(1,2);</span><br style="font-size: 19px;"/><span style="font-size: 19px;">         </span><br style="font-size: 19px;"/><span style="font-size: 19px;">          子查询：</span><br style="font-size: 19px;"/><span style="font-size: 19px;">          SELECT * FROM orders WHERE customer_id IN(SELECT id FROM customer WHERE name='陈冠希' OR name='李宗瑞');</span><div><span style="font-size: 24px;"><br/></span></div><div><span style="font-size: 24px;"><br/></span></div><div style="font-size: 24px;"><br/></div></div></div></div>
+</div></body></html> 

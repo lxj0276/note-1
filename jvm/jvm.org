@@ -1,0 +1,38 @@
+[[http://en.wikipedia.org/wiki/Java_virtual_machine][Java virtual machine]]
+* 简介
+There are three notions of the JVM: specification, implementation, and instance.
+JVM Memory: Method Area, Heap, JVM Language stacks, PCRegisters, Native Method stacks.
+*** JCL
+The Java Class Library (JCL) is a set of dynamically loadable libraries that Java applications can call at run time.
+Instead, the Java Platform provides a comprehensive set of standard class libraries, containing the functions common to modern operating systems.
+JCL serves three purposes within the Java Platform:
+ + Like other standard code libraries, they provide the programmer a well-known set of useful facilities, such as container classes and regular expression processing.
+ + The library provides an abstract interface to tasks that would normally depend heavily on the hardware and operating system, such as network access and file access.
+ + Some underlying platforms may not support all of the features a Java application expects. In these cases, the library implementation can either emulate those features or provide a consistent way to check for the presence of a specific feature.
+
+** classloader
+One of the organizational units of JVM bytecode is a class. A class loader implementation must be able to recognize and load anything that conforms to the Java class file format.  \\
+The class loader performs three basic activities in this strict order:
+1. Loading: finds and imports the binary data for a type
+2. Linking: performs verification, preparation, and (optionally) resolution
+ + Verification: ensures the correctness of the imported type
+ + Preparation: allocates memory for class variables and initializing the memory to default values
+ + Resolution: transforms symbolic references from the type into direct references.
+3. Initialization: invokes Java code that initializes class variables to their proper starting values.
+In general, there are two types of class loader: bootstrap class loader and user defined class loader.  \\
+Every Java virtual machine implementation must have a bootstrap class loader, capable of loading trusted classes.
+
+** bytecode instructions
+The JVM has instructions for the following groups of tasks:
+Load and store Arithmetic Type conversion Object creation and manipulation Operand stack management (push / pop) Control transfer (branching) Method invocation and return Throwing exceptions Monitor-based concurrency
+The aim is binary compatibility. Each particular host operating system needs its own implementation of the JVM and runtime.
+
+** bytecode verifier
+The JVM verifies all bytecode before it is executed. This verification consists primarily of three types of checks:
+Branches are always to valid locations
+Data is always initialized and references are always type-safe
+Access to private or package private data and methods is rigidly controlled
+The first two of these checks take place primarily during the verification step that occurs when a class is loaded and made eligible for use. The third is primarily performed dynamically, when data items or methods of a class are first accessed by another class.
+
+** Bytecode interpreter and just-in-time compiler
+When a computer has a Java bytecode interpreter, it can run any Java bytecode program, and the same program can be run on any computer that has such an interpreter.

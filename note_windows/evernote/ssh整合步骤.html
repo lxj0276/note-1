@@ -1,0 +1,44 @@
+<html>
+<head>
+  <title>ssh整合步骤</title>
+  <basefont face="Tahoma" size="2" />
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <meta name="exporter-version" content="Evernote Windows/272236; Windows/6.1.7601 Service Pack 1;"/>
+  <style>
+    body, td {
+      font-family: Tahoma;
+      font-size: 12pt;
+    }
+  </style>
+</head>
+<body>
+<a name="4786"/>
+<h1>ssh整合步骤</h1>
+<div>
+<table bgcolor="#D4DDE5" border="0">
+<tr><td><b>创建时间：</b></td><td><i>2014/8/15 8:37</i></td></tr>
+<tr><td><b>更新时间：</b></td><td><i>2014/8/19 0:10</i></td></tr>
+<tr><td><b>来源：</b></td><td><a href="mk:@MSITStore:C:\Users\Administrator\AppData\Local\Evernote\Evernote\Databases\Attachments\Spring2.5-中文参考手册.chm::/ch12s02.html"><i>mk:@MSITStore:C:\Users\Administrator\AppData\Local\Evernote\Evernote\Databases\Attachments\Spring2.5-中文参考手册.chm::/ch12s02.html</i></a></td></tr>
+</table>
+</div>
+<br/>
+
+<div>
+<div style="word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space;"><div>1.整合的时候先写什么？</div><div>什么先测试就先写什么</div><div><br/></div><div>2.spring与Hibernate</div><div>     1.持久化类和映射文件</div><div>     2.Hibernate的配置文件</div><div>     3.在spring容器中配置sessionFactory</div><div>     4.dao层和service层</div><div>   步骤：</div><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div>·建立持久化类</div><div>·建立配置映射文件</div><div>·建立配置文件：添加映射文件</div><div>·在spring容器中，引入SessionFactory</div><div>`测试SessionFactory</div><div>·写dao，serveice层</div><div>·在spring容器中引入dao,service层的内容</div></blockquote><div>          ·配置spring的生声明式事务处理</div><div>          ·测试service层有没有生成代理对象</div><div><br/></div><div>3.s2sh整合</div><div>     1.创建一个web project</div><div>     2.编码改成UTF-8</div><div>     3.导入所有的jar包</div><div>          ·数据库的驱动</div><div>          ·struts2的包</div><div>          ·Hibernate的包</div><div>          ·spring的包</div><div>     4.建立三个src folder</div><div>          ·src  存放源代码</div><div>          ·config  配置文件</div><div>          ·test 测试的源代码</div><div>     5.config下创建package:hibernate，hibernate里有hibernate.cfg.xml文件</div><div>     6.在src下创建包及包中的持久化类和映射文件，把映射文件导入到Hibernate.cfg.xml中</div><div>     7.在config下创建一个package：spring</div><div>          ·applicationContext.xml             总的配置文件</div><div>          ·applicationContext-db.xml         spring的声明式事务处理配置</div><div>          ·applicationContext-person.xml   person模块</div><div>     8.在spring容器中引入sessionFactory</div><div>     9.测试sessionFactory</div><div>     10.写dao层和service层</div><div>     11.对service层进行测试</div><div>     12.写spring的声明式事务处理</div><div>     13.测试产生的service层的对象是否是代理对象</div><div>     14.在src下创建一个包，放action</div><div>     15.把actin放入到spring的配置文件中</div><div>     16.写struts2的配置文件</div><div>           struts.xml</div><div>                 struts-person.xml</div><div>     17.web.xml</div><div>     18.url测试</div><div><br/></div><div>4.原理</div><div>     1.tomcat启动时加载配置文件，初始化spring容器的过程</div><div>          <img src="ssh整合步骤_files/Image.png" type="image/png" height="304" style="cursor: default;cursor: default;cursor: default;cursor: default;" width="796"/></div><div>     2.spring的web容器生命周期是整个servlet，应用放了一份在servletContext</div><div><br/></div><div><br/></div><div>     OpenSessionInView</div><div>     </div><div>     filter的链式模式：try catch</div><div><br/></div><div>     web容器和applicationContext(spring容器)的区别：web含有servlet的引用。</div><div>          </div><div>5.整合中的配置中的杂记</div><div>     ·在Spring容器中创建 SessionFactory</div><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div>因为sessionFactoryImpl没有setter方法注入dataSource，不符合spring的特点（需要给spring传入dataSource），所以spring在此基础说那个开发了一个新类LocalSessionFactoryBean</div></blockquote><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div><br/></div></blockquote><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div>&lt;bean id=&quot;mySessionFactory&quot; class=&quot;org.springframework.orm.hibernate3.LocalSessionFactoryBean&quot;&gt;</div></blockquote><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div>    &lt;property name=&quot;dataSource&quot; ref=&quot;myDataSource&quot;/&gt;</div></blockquote><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div><br/></div></blockquote><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div><img src="ssh整合步骤_files/ScreenClip.png" type="image/png" height="181" style="cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;" width="726"/></div></blockquote><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div>    &lt;property name=&quot;hibernateProperties&quot;&gt;</div></blockquote><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div><br/></div></blockquote><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div>      &lt;value&gt;</div></blockquote><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div>        hibernate.dialect=org.hibernate.dialect.HSQLDialect</div></blockquote><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div>      &lt;/value&gt;</div></blockquote><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div>    &lt;/property&gt;</div></blockquote><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div>  &lt;/bean&gt;</div><div><br/></div></blockquote></blockquote><div lang="zh-cn"><div lang="zh-cn"><p><img src="ssh整合步骤_files/Image [1].png" type="image/png" height="152" style="cursor: default;cursor: default;cursor: default;cursor: default;" width="988"/></p></div></div><div><br/></div><div><br/></div><div>     ·典型的dao实现</div><div>          public class ProductDaoImpl extends HibernateDaoSupport implements ProductDao {</div><div lang="zh-cn"><div lang="zh-cn"><pre>
+           public Collection loadProductsByCategory(String category) throws DataAccessException {<br/>                return this.getHibernateTemplate().find(<br/>                      &quot;from test.Product product where product.category=?&quot;, category);<br/>           }
+     }
+
+
+     
+</pre></div></div><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div lang="zh-cn"><div lang="zh-cn"><pre>
+    public Collection loadProductsByCategory(String category) throws DataAccessException {
+</pre></div></div><div lang="zh-cn"><div lang="zh-cn"><pre>
+        return this.getHibernateTemplate().find(
+</pre></div></div><div lang="zh-cn"><div lang="zh-cn"><pre>
+            &quot;from test.Product product where product.category=?&quot;, category);
+</pre></div></div><div lang="zh-cn"><div lang="zh-cn"><pre>
+    }
+</pre></div></div><div lang="zh-cn"><div lang="zh-cn"><pre>
+}
+</pre></div></div></blockquote><div>     sturts的模型驱动，属性驱动的作用：获取页面数据，以及数据回显。不是为了把其数据传到service层的。要传的话用BeanUtils.copyProperties(..)方法。</div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div>6.mysql中主要的存储引擎：数据以什么结构存到磁盘上。</div><div>InnoDB：对事务支持的特别好。（5.5之后默认此存储方式）</div><div>myisam：读的效率快，但是不支持事务。</div><div><br/></div><div>7.</div><div>典型的业务程序经常会被重复的资源管理代码搞得混乱。Spring提倡一种瞩目而又简洁的解决方案：使用模板化的IoC，诸如基础构建类、回调接口以及使用AOP拦截器。</div><div><br/></div><div>在典型的Spring应用程序中，很多重要的对象都是JavaBeans：数据访问template、数据访问对象（使用template）、事务管理器、业务逻辑对象（使用数据访问对象和事务管理器）、web视图解析器、web控制器（使用业务服务）等等</div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div></div>
+</div></body></html> 

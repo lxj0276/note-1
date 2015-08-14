@@ -1,0 +1,54 @@
+<html>
+<head>
+  <title>一级，二级，查询，抓取，延迟</title>
+  <basefont face="Tahoma" size="2" />
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <meta name="exporter-version" content="Evernote Windows/272236; Windows/6.1.7601 Service Pack 1;"/>
+  <style>
+    body, td {
+      font-family: Tahoma;
+      font-size: 12pt;
+    }
+  </style>
+</head>
+<body>
+<a name="5451"/>
+<h1>一级，二级，查询，抓取，延迟</h1>
+<div>
+<table bgcolor="#D4DDE5" border="0">
+<tr><td><b>创建时间：</b></td><td><i>2014/8/8 9:18</i></td></tr>
+<tr><td><b>更新时间：</b></td><td><i>2014/8/19 22:15</i></td></tr>
+<tr><td><b>标签：</b></td><td><i>Hibernate, 查询缓存, 二级缓存, 延迟加载, 一级缓存, 抓取策略</i></td></tr>
+</table>
+</div>
+<br/>
+
+<div>
+<div style="word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space;"><div><b style="font-size: 32px;"><font color="#3665EE" style="background-color: rgb(255, 250, 165);">各种缓存的存储内容以及生命周期：</font></b><img src="一级，二级，查询，抓取，延迟_files/Image.png" type="image/png" height="491" style="cursor: default;cursor: default;" width="1237"/></div><div><span style="font-size: 32px;"><b><span style="font-size: 32px;"><b>上图存在问题：list对于二级缓存只能存，不能取，get和load可以。也就是说，上图右边有问题。</b></span></b></span></div>
+一级缓存，二级缓存，存放的都是<b style="background-color: rgb(255, 250, 165); font-size: 24px;"><font color="#4F009A">对象</font></b><span style="font-size: 24px;">。</span><div>一级存放的私有数据，在sessioncache中。存在的目的减少sql语句的发出，任何save，update，get等，都是在一级缓冲中完成，事务提交的时候，在发出sql语句。 生命周期为一个session</div><div>二级存放的公有数据，在SessionFactory中。包括类的和集合的二级缓存。数据一般不会改变，目的是生命周期为整个hibernate，每一个sessionfactory代表一个数据库的连接，可以有多个数据库连接。</div><div>查询缓存，存放的是<span style="background-color: rgb(255, 250, 165); font-size: 24px;"><font color="#7600D8"><b>数据</b></font></span><span style="font-size: 24px;">。</span>生命周期为数据不变，当数据改变的时候，就会消失。</div><div><br/></div><div><br/></div><div style="font-size: 32px;"><span style="background-color: rgb(255, 250, 165);"><b><font color="#3665EE">各种缓存的开启方式；</font></b></span></div><div><br/></div><div style="font-size: 32px;"><span style="background-color:rgb(255, 250, 165);-evernote-highlight:true;">一级缓存</span></div><div>代码级别开启，就是session。因此，可以通过sessionfactory的getcurrentsession（）或者opensession（)方法来获得该缓存。存放的是对象，用户的任何在一级缓存中的操作，一般不会发出sql语句，在最后事务提交的时候，发出sql语句，这就是一级缓存存在的目的。</div><div style="font-size: 32px;"><span style="background-color:rgb(255, 250, 165);-evernote-highlight:true;">二级缓存</span></div><div>由第三提供，因此需要jar包，总配置，针对类或者集合的配置。可以把类，或者集合放进二级缓存中，集合中存放的也是一些对象。因此，集合的个数为1，对象的个数为集合的size。</div><div>图解开启方式：</div><div><br/></div><div><font color="#010101" face="Times New Roman">  1</font> <font color="#010101" face="宋体">、在</font><font color="#010101" face="Times New Roman">hibernate</font><font color="#010101" face="宋体">的配置文件中指定二级缓存的供应商</font></div><div><br/></div><div align="justify"><font color="#010101" face="Times New Roman">              </font> <img src="一级，二级，查询，抓取，延迟_files/Image [1].png" type="image/png" alt="graphic" border="0" height="50" style="cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;" width="547"/></div><div align="justify"><font color="#010101" face="Times New Roman">   2</font> <font color="#010101" face="宋体">、开启二级缓存</font></div><div align="justify"><font color="#010101" face="Times New Roman">       </font> <img src="一级，二级，查询，抓取，延迟_files/Image [2].png" type="image/png" alt="graphic" border="0" height="67" style="cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;" width="547"/></div><div align="justify"><font color="#010101" face="Times New Roman">   3</font> <font color="#010101" face="宋体">、开启二级缓存的统计机制</font></div><div align="justify"><font color="#010101" face="Times New Roman">       </font> <img src="一级，二级，查询，抓取，延迟_files/Image [3].png" type="image/png" alt="graphic" border="0" height="67" style="cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;" width="547"/></div><div align="justify"><font color="#010101" face="Times New Roman">  4</font> <font color="#010101" face="宋体">、针对某一个类开启二级缓存（二级缓存使用的是read-only，表明二级缓存是只读的。不能修改，这个也是二级缓存存在的目的，）</font></div><div align="justify"><font color="#010101" face="Times New Roman">              </font> <font color="#010101" face="宋体">在</font><font color="#010101" face="Times New Roman">Classes.hbm.xml</font><font color="#010101" face="宋体">文件中</font></div><div align="justify"><font color="#010101" face="Times New Roman">              </font> <img src="一级，二级，查询，抓取，延迟_files/Image [4].png" type="image/png" alt="graphic" border="0" height="39" style="cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;" width="548"/></div><div><br/></div><div style="text-align: -webkit-auto;"><span style="text-align: justify;"><font color="#010101" face="Times New Roman">    5</font> </span><font color="#010101" face="宋体" style="text-align: justify;">、针对某</font><font color="#010101">集合开启二级缓存读写策略为只读或者为读写</font></div><div align="justify"><font color="#010101" face="Times New Roman" size="2"><span style="font-size: 10pt;">       </span></font> <img src="一级，二级，查询，抓取，延迟_files/Image [5].png" type="image/png" alt="graphic" border="0" height="31" style="cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;" width="171"/></div><div align="justify"><img src="一级，二级，查询，抓取，延迟_files/Image [6].png" type="image/png" alt="graphic" border="0" height="34" style="cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;" width="553"/></div><div align="justify"><font color="#FF0000">一级与二级缓冲的区别：</font></div><div align="justify"><font color="#FF0000">1、一级缓存存放的是实体对象的引用（即内存地址），而二级缓存存放的是对象中的数据（散列数据id:1 name:d1name）。</font></div><div align="justify"><font color="#FF0000">2、一级缓存没有关闭的情况下，再次查询同样的实体记录，返回的是对象的引用，因此两次从一级缓存中取出的对象内存地址一致。而一级缓存关闭后，从二级缓存中取出的数据因为是散列数据，需要重新封装到新对象中，所以，内存地址会不同。</font></div><hr/><div align="justify"><br/></div><div><span style="background-color:rgb(255, 250, 165);-evernote-highlight:true;font-size: 32px;">查询缓存</span></div><div><br/></div><div>依赖二级缓存，原因是querycaches在sessionfactory中，因此，必须依赖二级缓存，也就是说，二级缓存要有第三方，但是不一定开启。针对类的或者集合的二级缓存的读写粗略，也不用指定。</div><div>代码中，必须开启查询缓存：query.setCacheable(true);</div><div><br/></div><div>这样，就可以使用查询缓存了。</div><div><hr/><br/></div><div>抓取策略：就是怎样发出sql语句，子查询，连接查询，或者普通查询。</div><div>抓取策略<br/>
+研究对象<br/>
+     研究怎么样提取集合的，该策略应该作用与set元素上<br/>
+研究从一的一方加载多的一方<br/>
+案例<br/>
+查询cid为1的班级的所有的学生<br/>
+     <img src="一级，二级，查询，抓取，延迟_files/Image [7].png" type="image/png" height="236" style="cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;" width="777"/></div><div><img src="一级，二级，查询，抓取，延迟_files/Image [8].png" type="image/png" height="31" style="cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;" width="556"/><img src="一级，二级，查询，抓取，延迟_files/Image [9].png" type="image/png" height="376" style="cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;" width="557"/><br/><br/><img src="一级，二级，查询，抓取，延迟_files/Image [10].png" type="image/png" style="cursor: default;"/><br/><br/><br/>
+说明：通过一条sql语句:左外链接，把classes与student表的数据全部提取出来。<br/><br/>
+如果是如下的策略：<br/><img src="一级，二级，查询，抓取，延迟_files/Image [11].png" type="image/png" height="34" style="cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;" width="565"/><br/>
+先查询classes，再次查询student<br/><img src="一级，二级，查询，抓取，延迟_files/Image [12].png" type="image/png" style="cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;"/><br/>
+先查询classes，再次查询student。<br/><br/>
+查询所有的班级的所有的学生<br/>
+     <img src="一级，二级，查询，抓取，延迟_files/Image [13].png" type="image/png" height="292" style="cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;" width="846"/><br/>
+  该需求翻译过来含有子查询<br/>
+     <img src="一级，二级，查询，抓取，延迟_files/Image [14].png" type="image/png" style="cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;"/><br/>
+   如果含有子查询，必须用subselect<br/>
+     改进：<img src="一级，二级，查询，抓取，延迟_files/Image [15].png" type="image/png" height="26" style="cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;" width="600"/><br/>
+     <img src="一级，二级，查询，抓取，延迟_files/Image [16].png" type="image/png" height="349" style="cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;" width="535"/><br/><br/>
+查询班级为1,2,3,4的所有的学生<br/>
+     <img src="一级，二级，查询，抓取，延迟_files/Image [17].png" type="image/png" height="32" style="cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;" width="593"/><br/><img src="一级，二级，查询，抓取，延迟_files/Image [18].png" type="image/png" height="287" style="cursor: default;cursor: default;cursor: default;cursor: default;cursor: default;" width="1080"/><br/>
+总结<br/>
+1、     研究对象是集合<br/>
+2、     经过分析，如果sql语句中含有了子查询，则用subselect效率比较高<br/>
+3、     如果页面上需要一次性把两张表的数据全部提取出来，用join效率比较高因为采用”join”为左外链接<br/>
+4、     如果用select，先查询班级，后查询学生，如果查询班级的个数超过1个，会导致n+1条sql语句<br/>
+5、     抓取策略是hibernate提供的一种优化方式而已<br/></div><hr/><br/><br/><br/><br/><div><br/></div><div><br/></div><div><br/></div></div>
+</div></body></html> 

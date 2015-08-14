@@ -1,0 +1,2 @@
+* java和js互相调用:Nashorn
+[[http://winterbe.com/posts/2014/04/05/java8-nashorn-tutorial/][Java 8 Nashorn Tutorial]]
