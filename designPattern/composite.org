@@ -1,0 +1,6 @@
+[[http://www.newthinktank.com/2012/10/composite-design-pattern-tutorial/][composite-design-pattern-tutorial]]
+
+* FQA
+
+* 介绍
+  

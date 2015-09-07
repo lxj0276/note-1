@@ -22,3 +22,10 @@
 
 * 机器学习十大算法简介
 [[https://github.com/ty4z2008/Qix/blob/master/dl.md][机器学习(Machine Learning)&深度学习(Deep Learning)资料]]
+* dataesp
+** DATAX-RAY ENSEMBLE
+  图像处理器与机器学习结合，一个新的预测性智能分析领域将会被开启—图像识别。
+  线性回归模型( Logistic Regression)、神经网络( Neural Networks)、限制玻尔兹曼机( Restricted Boltzmann Machines)
+** DataX-ray Screening
+平台运用包括奇异值分解、k最近邻分析、关联规则挖掘在内的多种高级机器学习算法。
+** DataX-ray Periscope

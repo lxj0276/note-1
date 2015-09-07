@@ -1,0 +1,2 @@
+[[http://www.newthinktank.com/wp-content/uploads/2012/11/UML-State-Machine-Diagram-Cheat-Sheet.png][stateUML]]
+[[http://www.newthinktank.com/2012/10/state-design-pattern-tutorial/][state-design-pattern-tutorial]]

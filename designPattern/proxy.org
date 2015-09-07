@@ -1,0 +1,5 @@
+[[http://www.newthinktank.com/2012/10/proxy-design-pattern-tutorial/][proxy-design-pattern-tutorial]]
+
+* 介绍
+   The Proxy design pattern limits access to just the methods you want made accessible in another class.
+   It can be used for security reasons, because an Object is intensive to create, or is accessed from a remote location. You can think of it as a gate keeper that blocks access to another Object.  - See more at: http://www.newthinktank.com/2012/10/proxy-design-pattern-tutorial/#sthash.LaJW2j8j.dpuf

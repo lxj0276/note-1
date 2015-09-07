@@ -1,0 +1,85 @@
+DEFAULT SETTINGS
+*   Shortcuts
+       J      Go to next page
+       K      Go to previous page
+       h      Scroll to the left
+       k      Scroll upwards
+       j      Scroll downwards
+       ^f     Scroll page down
+       ^b     Scroll page up
+       ^d     Scroll half a page down
+       ^u     Scroll half a page up
+       l      Scroll to the right
+      /      Search forwards
+       ?      Search backwards
+       n      Search last keyword forwards
+       N      Search last keyword backwards
+       Tab    Toggle index
+       o      Open a file
+       a      Zoom to fit
+       s      Zoom to width
+       f      Follow a link on the page
+       m      Mark  current  position  and  save it in register specified by a
+              character
+       '      Go to saved position specified by the ensuing character
+     r      Rotate the page
+       R      Reload the document
+       O      Change goto mode (L: search labels, D: default, O:  manual  offâ
+              set)
+       ^i     Recolors the page
+       i      Change to insert mode
+       v      Change to visual mode
+       :      Focus inputbar
+       Backspace
+              Delete last character in the buffer
+       F5     Toggle fullscreen mode
+       ^n     Toggle statusbar visibility
+       ^m     Toggle inputbar visibility
+      +      Zoom in
+       -      Zoom out
+       =      Zoom to the original size
+       Esc | ^c
+              Abort
+       ^q     Quit the program
+   Index commands
+       k      Navigate to one element above the current position
+       j      Navigate to one element below the current position
+       h      Collapse current element
+       l      Expand current element
+       Space | Return
+              Select current element
+   Buffered commands
+       gg     Go to the first page
+       GG     Go to the last page
+       [0-9]+G
+              Go to the specified page
+       zI     Zoom in
+       zO     Zoom out
+       z0     Zoom to the original size
+       [0-9]+Z
+              Zoom to the given level
+       [0-9]+%
+              Move to the given position
+*   Commands
+       blist  List and open bookmark
+       bmark  Bookmark current page
+       close  Close current file
+       coffset
+              Set page offset
+       delbmark
+              Delete given bookmark
+       export Export images or attached files
+       info   Show information about the document
+       map    Map shortcut functions (map <key> <function> <argument> <mode>)
+       open   Open a file
+       print  Print the document
+       quit   Quit the program
+       rotate Rotate the page
+       set    Set an option (set <id> <value>)
+       write  Save the document
+   Inputbar shortcuts
+       Up     Move up in the command history
+       Down   Move down in the command history
+       Tab | Shift + Tab
+              Tab completion
+       ^w     Delete last word

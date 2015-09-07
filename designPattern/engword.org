@@ -1,0 +1,33 @@
+polymorphism
+ultimate
+flexibility
+flaw
+massive
+aside
+encapsulate
+interchangeable
+strategy pattern
+tragic pattern
+loose coupling
+subscriber
+subject
+grabber
+potential 
+centralize
+concrete
+eliminate
+deposit
+DECOUPLE
+COUPLE
+PROGRESSIVELY
+SEPARATE OUT
+CONCRETE
+ENTERTAINMENT
+MUTE
+SCULPTOR
+COMPOSITE
+UNIFORMLY
+FLYWEIght design pattern
+intrinsic
+extrinsic
+INTERPRETER DESIGN PATTERN 

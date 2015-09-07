@@ -1,9 +1,14 @@
 [[http://i.linuxtoy.org/docs/guide/ch31.html][完美工作站 Archlinux]]
 * 安装的软件
-sysstat:  a collection of performance monitoring tools (iostat,isag,mpstat,pidstat,sadf,sar)
-deluge
++ sysstat ::  a collection of performance monitoring tools (iostat,isag,mpstat,pidstat,sadf,sar)
++ deluge
++ zathura :: pdf阅读器，vim操作
++ source-highlight: less输出高亮代码
++ ccat :: cat输出高亮代码
++ smartgit :: Git client with Hg and SVN support.
+
 GTK youtobe viewer
 bcloud 百度云盘(命令行bypy)
 tcpdump:  A tool for network monitoring and data acquisition
 hping: A command-line oriented TCP/IP packet assembler/analyzer.
-fping: A utility to ping multiple hosts at once
+fping: A utility to ping multiple hosts at 

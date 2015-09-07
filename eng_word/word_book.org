@@ -1,0 +1,80 @@
+* programming in scala
+1. immutable 不可变的
+2. hierarchy 
+   等级制度
+3. imperative \\
+   	迫切
+    urgent, pressing, imperative 
+    急迫
+    urgent, pressing, imperative 
+    急切
+    urgent, eager, impatient, imperative
+4. telltale 
+   揭秘
+5. blasphemy 
+   亵渎的话
+6. akin 
+   类似的
+7. philosophy 
+   哲学
+8. approach \\
+   + 名词 ::
+    途径
+    way, approach, canal, channel
+    立意
+    conception, approach
+    门径
+    approach
+    态度
+    attitude, approach, manner, bearing
+   + 动词 ::
+    逼近
+    approach, buzz, close in, draw on, press on
+    薄
+    approach, belittle, near, go near
+    垂
+    approach, bend down, dangle, droop, hang down
+    即
+    approach, reach
+    就
+    approach, enter, move towards, undertake
+    来临
+    approach, arrive, close in, come closer
+    凌
+    approach, insult, rise high, tower
+    助跑
+    approach
+9. justification 理由
+10. hint 暗示
+11. technically 技术上
+12. operand 操作数
+13. semicolon 分号
+14. inference \\
+    + 名词 ::
+    推理
+    reasoning, inference
+    推论
+    inference, deduction
+    论断
+    thesis, judgment, inference, judgement
+    意味
+    meaning, insinuation, allusion, association, connotation   
+15. guru 领袖
+16. illustrated 插图
+17. mutate 变异
+18. superfluous 多余的
+19. explicit 明确的
+20. shortcoming 缺点
+21. infinity 无限
+22. capitalize 利用
+23. rational \\
+    + 形容词 ::
+    有理
+    rational, reasonable
+    合理的
+    conscious, equitable, fair, impartial, intelligent, rational
+    + 名词 ::
+    理性主义者
+    rational
+24. implicit 含蓄，盲从的
+25. 

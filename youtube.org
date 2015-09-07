@@ -1,0 +1,4 @@
+* search tech
+author: derekbanas
+
+youtube-viewer --author=derekbanas --order=date --results=40 design pattern

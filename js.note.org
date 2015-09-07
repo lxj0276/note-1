@@ -1,0 +1,55 @@
+* js技术
+** 基本概念
+***   js数据类型
+   基本数据类型：Undefined,  Null, Boolean, Number, String.
+   一个复杂数据类型：Object.
+*** with 语句
+    with (expression) statement;
+    with语句作用，将代码的作用域设置到一个特定的对象中。
+*** 理解参数
+    未指定返回值的函数返回的是一个特殊的undefined值。
+    命名的参数只提供便利，不是必须的。
+    函数没有签名，参数不定，所以真正的重载是不可能做到的。，如果定义两个名字相同的函数，则只有后定义的起作用。
+
+    #+BEGIN_SRC js
+      function doAdd() {
+          if (arguments.length == 1) {
+              alert (arguments[0] + 10)
+          } else if (arguments.length ==2){
+              alert (arguments[0] + arguments[1])
+          }
+
+      }
+    #+END_SRC
+
+** 变量，作用域，内存问题
+   基本类型，一个变量复制另一个变量，复制的是值的一个副本。
+   引用类型复制的是引用，修改一个，对另一个会有影响。
+   没有块级作用域。
+
+   #+BEGIN_SRC js
+     for( var i=0; i < 10; i++) {
+         doSomething(i);
+     }
+
+     alert(i)  // 10
+   #+END_SRC
+
+   基本数据类型占据固定大小空间，保存在栈内存中。
+   引用类型的值是对象，保持在堆内存中。
+   typeof, instanceof.
+   垃圾回收：标记清除， 引用计数。
+   为了有效回收内存，不用的全局对象，全局属性及循环引用变量的引用应该及时清楚，设为null.
+
+** 引用类型
+   创建object实例的两种方式：
+   1. new Object()
+   2. 对象字面量(对象定义的一种简写方式) ::
+
+        #+BEGIN_SRC js
+          var person = {
+              name : "Jone",
+              age : 20
+          }
+        #+END_SRC
+ 
