@@ -1,0 +1,30 @@
+ 4747* mvn clean install -DskipTests
+ 4748* sudo mongod
+ 4749* mvn clean install -DskipTests
+ 4750* git remote -v
+ 4751* git status
+ 4752* yasearch SourceTree
+ 4753* git remote add origin git@github.com:insightbox/DataCrawler.git
+ 4754* git fetch
+ 4755* ls
+ 4756* git status
+ 4757* git log
+ 4758* git remote -v
+ 4759* git branch -a
+ 4760* ls
+ 4761* git status
+ 4762* git stash
+ 4763* git status
+ 4764* git pull --rebase origin/master
+ 4765* git remote -v
+ 4766* git pull --rebase origin master
+ 4767* git log
+ 4768* git push --track origin master
+ 4769* git push --u origin master
+ 4770* git push --u
+ 4771* git push -u origin master
+ 4772* git log
+ 4773* git stash apply
+ 4774* history
+ 4775  df -h
+ 4776  cd

@@ -1,0 +1,8 @@
+** strategy pattern
+   + 定义一个接口 flys
+   + 接口的两个实现类: ItFlys, CantFlys
+   + 定义一个类, Has A Relationship: Animal类中有flyingType属性,是Flys类型; 和tryToFly(), setFlyingAbility(Flys)两个方法.
+   + Animal的两个实现类: Dog, Bird.
+     
+** Observer Pattern    
+-

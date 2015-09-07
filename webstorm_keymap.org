@@ -1,0 +1,2 @@
+kill this line : Alt+x
+comment/uncomment with block comment: Ctrl+shift+/

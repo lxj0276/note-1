@@ -1,0 +1,29 @@
+* 基础
+** nodejs安装全局模块
+   npm install xxx -g
+   `which node` --> /usr/bin/node --> 安装的就是 /usr/lib/node_modules/
+* 框架
+**  express
+    web framework
+** persist
+   ORM framework
+** db-migrate
+   database migration
+** dnode
+   RPC
+** async
+   async helpers
+** socket.io
+   realtime networking 
+** vows
+   BDD framwork
+** java
+   bridge to java API
+** restify
+   REST framework
+** pm2
+   pm2 是一个带有负载均衡功能的Node应用的进程管理器.
+** node-inspector
+   [[http://jingyan.baidu.com/article/dca1fa6fbd580ff1a44052de.html][node-inspector使用方法]]
+** Jasmine
+   A JavaScript Testing Framework
