@@ -1,3 +1,9 @@
+* git
+
+
+  如果你想在克隆远程仓库的时候，自定义本地仓库的名字，你可以使用如下命令：git clone https://github.com/libgit2/libgit2  ylibgit
+
+* henry
  4747* mvn clean install -DskipTests
  4748* sudo mongod
  4749* mvn clean install -DskipTests
