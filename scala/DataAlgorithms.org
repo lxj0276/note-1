@@ -1,0 +1,5 @@
+* Two web sites
+  [[https://github.com/mahmoudparsian/data-algorithms-book/][sourceCode-github]]
+  [[http://mapreduce4hackers.com][extra-source-files]]
+** other projects
+   [[http://giraph.apache.org][giraph]]

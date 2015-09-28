@@ -1,0 +1,27 @@
+* 1. Algorithmic Thinking, Peak Finding
+* 2. Models of Computation, Document Distance
+* Insertion Sort, Merge Sort
+* Heaps and Heap Sort
+  [[https://en.wikipedia.org/wiki/Heap_(data_structure)][Heap (data structure)wiki]]
+  When a heap is a complete binary tree, it has a smallest possible height—a heap with N nodes always has log N height.
+** ADT(abstract data type)
+   An abstract data type is defined as a mathematical model of the data objects that make up a data type as well as the functions that operate on these objects.
+    A broad division may be drawn between "imperative" and "functional" definition styles.
+** Binary heap
+* Binary Search Trees, BST Sort
+* AVL Trees, AVL Sort
+* Counting Sort, Radix Sort, Lower Bounds for Sorting
+* Hashing with Chaining
+* 9.Table Doubling, Karp-Rabin
+* 10. Open Addressing, Cryptographic Hashing
+* FQA
+** 时间复杂度,空间复杂度
+   + List
+   + Dict
+   + Long
+     x + y ==> O(|x| + |y|)
+     x * y ==>
+   + heap
+
+** dictionary 是存储到一个hash table中? 用hash
+   After hash may be collision, then can store with a chaining.

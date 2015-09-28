@@ -1,0 +1,100 @@
+* 1
+peak finder
+asymptotic
+complexity
+cushion
+recitation
+slight
+tedious
+instantaneous
+heap
+automated
+toy
+alphanumeric
+mute
+dot product
+bunch
+variant
+megabyte
+identical
+median
+comparion function
+paradim
+compression
+identical
+opaque
+occlude
+subroutine
+swap
+trivally
+retime
+prime
+routine
+recurrence
+modulo
+initial
+auxiliary
+increment
+arbitrary
+indice
+trivally
+rep
+heap
+subtree
+violation
+precondition
+trivial
+wavy
+sum up
+subtle
+motivate
+reserve
+removal
+solder
+indice
+notion
+duly
+* 2
+  rotation
+subset
+annoy
+even
+century
+priority
+comparison
+outcome
+preprocess
+damage
+factorial
+notch
+extend
+radix
+tough
+motivation
+tweaking
+fancy
+interpreter
+lookups
+substring search
+commonalities
+cryptography
+collision
+slot
+gigantic
+giant
+discrete
+finite
+term
+heck
+guaranty
+uniform
+factor
+division
+multiplication method
+prime
+amortization
+amortized
+shrink
+crap
+rolling
+potentially

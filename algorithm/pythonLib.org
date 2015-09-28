@@ -1,0 +1,3 @@
+[[http://qxde01.blog.163.com/blog/static/67335744201368101922991/][Python机器学习库 ]]
+[[https://napuzhang.wordpress.com/tag/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/][PYTHON 工具总结]]
+[[http://www.kdnuggets.com/2015/06/top-20-python-machine-learning-open-source-projects.html][Top 20 Python Machine Learning Open Source Projects]]

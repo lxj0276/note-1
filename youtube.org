@@ -2,3 +2,5 @@
 author: derekbanas
 
 youtube-viewer --author=derekbanas --order=date --results=40 design pattern
+
+youtube-viewer --author=MIT  --results=40 Introduction to Algorithms, Fall 2011

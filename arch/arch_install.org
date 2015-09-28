@@ -1,11 +1,18 @@
 [[http://i.linuxtoy.org/docs/guide/ch31.html][完美工作站 Archlinux]]
 * 安装的软件
 + sysstat ::  a collection of performance monitoring tools (iostat,isag,mpstat,pidstat,sadf,sar)
-+ deluge
++ deluge ::  A BitTorrent client with multiple user interfaces in a client/server model.
 + zathura :: pdf阅读器，vim操作
-+ source-highlight: less输出高亮代码
++ source-highlight :: less输出高亮代码
 + ccat :: cat输出高亮代码
 + smartgit :: Git client with Hg and SVN support.
++ yed :: Very powerful graph editor written in java
++ avant-window-navigator :: AWN is a customisable dock-like bar at the edge of the screen.
++ awn-extras-applets :: Collection of applets for avant-window-navigator
++ nagios :: Nagios is an open source host, service and network monitoring program.
++ gnome-tweak-tool :: A tool to customize advanced GNOME 3 options.
++ calibre :: Ebook management application
+
 
 GTK youtobe viewer
 bcloud 百度云盘(命令行bypy)
