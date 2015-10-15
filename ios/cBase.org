@@ -1,0 +1,56 @@
+* c语言基础
+内存寻址是由大到小.输出地址用%p
+
+char name[] = "it"; // name可以修改 \
+char *name2 = "it"; // name2不可以修改 \
+c语言的内存(5种):
+1. 常量区
+2. 堆: 对象
+3. 栈: 局部变量, 数组
+** 指针
+  1. 定义指向函数的指针
+     double (*p)(double, char *);
+     p = func;
+
+     或者:
+     double (*p)(double, char *) = func
+
+  2. 返回指针类型
+     char * test() { return "test" };
+
+  3. 利用指针访问结构体成员
+     (*p).age 与 p->age 功能相同
+
+** 文件包含
+   1. <> 表示系统自带的文件, ""表示自定义的文件
+   2. 不允许循环包含, 不可以a.h include b.h, 而b.h include a.h
+   3. 宏定义头要写两句:
+
+      #+BEGIN_SRC C
+        #ifndef FILENAME
+        #define FILENAME
+        ...code...
+        #endif
+      #+END_SRC
+
+** typedef
+   typedef 可以用来定义结构体,枚举别名, 这样以后再定义变量的时候不用每次都加上struct了. \
+   使用场合: 基本数据类型, 指针, 结构体, 枚举,指向函数的指针.
+
+   #+BEGIN_SRC C
+     // 定义一个struct的结构体,命名别名为Student,以后定义变量的时候不用再 struct Student stu;
+     typedef struct{
+       int age;
+     } Student;
+
+     typedef struct Person * PersonPoint;
+   #+END_SRC
+
+** static, extern
+   对函数和变量有效.
+   外部函数：定义在函数中，被本地文件和其他文件访问，默认情况下函数都是外部函数。extern定义 \
+   内部函数：定义的函数只能被本地访问，其他文件不可以访问。 static定义 (声明，定义都要有static关键字)
+
+   static修饰局部变量：
+   1. 延长局部变量的生命周期，程序结束的时候，局部变量才会被销毁
+   2. 不会改变局部变量的作用域
