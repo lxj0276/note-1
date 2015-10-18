@@ -14,6 +14,21 @@
 * Hashing with Chaining
 * 9.Table Doubling, Karp-Rabin
 * 10. Open Addressing, Cryptographic Hashing
+* 11. Integer Arithmetic, Karatsuba Multiplication.webm
+* 12. Square Roots, Newton's Method.webm
+* 13. Breadth-First Search (BFS).webm
+  可以解决最短路径问题
+  不能解决cycle问题
+* 14. Depth-First Search (DFS), Topological Sort.webm
+  不能解决最短路径问题
+  能够解决cycle问题
+* 15. Single-Source Shortest Paths Problem.webm
+* 16. Dijkstra
+* 17. Bellman-Ford.webm
+* 18. Speeding up Dijkstra
+* 19. Dynamic Programming I: Fibonacci, Shortest Paths
+* 20. Dynamic Programming II: Text Justification, Blackjack
+* 21. DP III: Parenthesization, Edit Distance, Knapsack
 * FQA
 ** 时间复杂度,空间复杂度
    + List
