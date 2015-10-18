@@ -1,6 +1,9 @@
 #+OPTIONS: ^:nil
 
 * 简单应用
+** 查询
+   sed -n "/abc/p" test.txt
+   grep "abc" test.txt
 ** hive中替换None为0
 要先确定哪些字段需要被替换,然后前边加上if(
 sed "s/\bif(\([^ |^,]*\)/if(\1 = \'None\', 0, \1)/" aaa.txt
