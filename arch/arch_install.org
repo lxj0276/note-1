@@ -12,7 +12,7 @@
 + nagios :: Nagios is an open source host, service and network monitoring program.
 + gnome-tweak-tool :: A tool to customize advanced GNOME 3 options.
 + calibre :: Ebook management application
-
+             
 
 GTK youtobe viewer
 bcloud 百度云盘(命令行bypy)
