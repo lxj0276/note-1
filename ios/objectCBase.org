@@ -83,6 +83,282 @@
  2. 分类方法实现中可以访问原来类中声明的成员变量
  3. 分类可以重新实现原来类中的方法，但是会覆盖掉原来的方法，会导致原来的方法没法再使用
  4. 方法调用的优先级：分类(最后参与编译的分类优先) --> 原来类  --> 父类
+** oc中的类
+ 1. 当程序启动时，就会加载项目中所有的类和分类，而且加载后会调用每个类和分类的+load方法。只会调用一次。
+ 2. 当第一次使用某个类时，就会调用当前类的+initialize方法
+ 3. 先加载父类，再加载子类（先调用父类的+load方法，再调用子类的+load方法）
+   先初始化父类，再初始化子类（先调用父类的+initialize方法，再调用子类的+initialize方法）
+
+类本身也是一个对象，是个Class类型的对象，简称类对象
+
+#+BEGIN_SRC C
+  // 当程序启动的时候，就会加载一次项目中所有的类。类加载完毕后就会调用+load方法
+  + (void)load
+  {
+      NSLog(@"Person---load");
+  }
+
+  // 当第一次使用这个类的时候，就会调用一次+initialize方法
+  + (void)initialize
+  {
+      NSLog(@"Person-initialize");
+  }
+#+END_SRC
+
+1. 当程序启动时，就会加载项目中所有的类和分类，而且加载后会调用每个类和分类的+load方法。只会调用一次。
+2. 当第一次使用某个类时，就会调用当前类的+initialize方法
+3. 先加载父类，再加载子类（先调用父类的+load方法，再调用子类的+load方法）
+   先初始化父类，再初始化子类（先调用父类的+initialize方法，再调用子类的+initialize方法）
+
+默认情况下，利用NSLog和%@输出对象时，结果是：<类名：内存地址>
+1. 会调用对象p的-description方法
+2. 拿到-description方法的返回值（NSString *）显示到屏幕上
+3. -description方法默认返回的是“类名+内存地址”
+
+SEL其实是对方法的一种包装，将方法包装成一个SEL类型的数据，去找对应的方法地址。找到方法地址就可以调用方法
+ 其实消息就是SEL
+
+** 内存管理
+   1. 方法的基本使用
+     1> retain ：计数器+1，会返回对象本身
+     2> release ：计数器-1，没有返回值
+     3> retainCount ：获取当前的计数器
+     4> dealloc
+      * 当一个对象要被回收的时候，就会调用
+      * 一定要调用[super dealloc]，这句调用要放在最后面
+   2. 概念
+     1> 僵尸对象 ：所占用内存已经被回收的对象，僵尸对象不能再使用
+     2> 野指针 ：指向僵尸对象（不可用内存）的指针，给野指针发送消息会报错（EXC_BAD_ACCESS）
+     3> 空指针 ：没有指向任何东西的指针（存储的东西是nil、NULL、0），给空指针发送消息不会报错
+*** 代码规范
+set方法管retain, dealloc方法管release.
+
+    内存管理代码规范：
+ 1.只要调用了alloc，必须有release（autorelease）
+   对象不是通过alloc产生的，就不需要release
+
+ 2.set方法的代码规范
+ 1> 基本数据类型：直接复制
+ - (void)setAge:(int)age
+ {
+    _age = age;
+ }
+
+ 2> OC对象类型
+ - (void)setCar:(Car *)car
+ {
+    // 1.先判断是不是新传进来对象
+    if ( car != _car )
+    {
+        // 2.对旧对象做一次release
+        [_car release];
+
+        // 3.对新对象做一次retain
+        _car = [car retain];
+    }
+ }
+
+ 3.dealloc方法的代码规范
+ 1> 一定要[super dealloc]，而且放到最后面
+ 2> 对self（当前）所拥有的其他对象做一次release
+ - (void)dealloc
+ {
+    [_car release];
+    [super dealloc];
+ }
+
+-----
+
+1.set方法内存管理相关的参数
+ * retain : release旧值，retain新值（适用于OC对象类型）
+ * assign : 直接赋值（默认，适用于非OC对象类型）
+ * copy   : release旧值，copy新值
+
+ 2.是否要生成set方法
+ * readwrite : 同时生成setter和getter的声明、实现(默认)
+ * readonly  : 只会生成getter的声明、实现
+
+ 3.多线程管理
+ * nonatomic : 性能高 (一般就用这个)
+ * atomic    : 性能低（默认）
+
+ 4.setter和getter方法的名称
+ * setter : 决定了set方法的名称，一定要有个冒号 :
+ * getter : 决定了get方法的名称(一般用在BOOL类型)
+** @class 和 @import的区别
+1.@class的作用：仅仅告诉编译器，某个名称是一个类
+ @class Person; // 仅仅告诉编译器，Person是一个类
+
+ 2.开发中引用一个类的规范
+ 1> 在.h文件中用@class来声明类
+ 2> 在.m文件中用#import来包含类的所有东西
+
+ 3.两端循环引用解决方案
+ 1> 一端用retain
+ 2> 一端用assign
+
+-----
+
+1.@class
+使用场景
+对于循环依赖关系来说，比方A类引用B类，同时B类也引用A类
+
+这种代码编译会报错。当使用@class在两个类相互声明，就不会出现编译报错
+用法概括
+使用 @class 类名; 就可以引用一个类，说明一下它是一个类
+和#import的区别
+#import方式会包含被引用类的所有信息，包括被引用类的变量和方法；@class方式只是告诉编译器在A.h文件中 B *b 只是类的声明，具体这个类里有什么信息，这里不需要知道，等实现文件中真正要用到时，才会真正去查看B类中信息
+如果有上百个头文件都#import了同一个文件，或者这些文件依次被#improt,那么一旦最开始的头文件稍有改动，后面引用到这个文件的所有类都需要重新编译一遍，这样的效率也是可想而知的，而相对来 讲，使用@class方式就不会出现这种问题了
+在.m实现文件中，如果需要引用到被引用类的实体变量或者方法时，还需要使用#import方式引入被引用类
+
+
+2.循环retain
+比如A对象retain了B对象，B对象retain了A对象
+这样会导致A对象和B对象永远无法释放
+
+3.解决方案
+当两端互相引用时，应该一端用retain、一端用assign
+
+*** autorelease
+ 1. autorelease的基本用法
+ 1> 会将对象放到一个自动释放池中
+ 2> 当自动释放池被销毁时，会对池子里面的所有对象做一次release操作
+ 3> 会返回对象本身
+ 4> 调用完autorelease方法后，对象的计数器不变
+
+ 2. autorelease的好处
+ 1> 不用再关心对象释放的时间
+ 2> 不用再关心什么时候调用release
+
+ 3. autorelease的使用注意
+ 1> *占用内存较大的对象不要随便使用autorelease*:不能精确控制释放的时间，大对象占用内存时间长
+ 2> 占用内存较小的对象使用autorelease，没有太大影响
+
+ 4. *错误写法*
+ + alloc之后调用了autorelease，又调用release
+ @autoreleasepool
+ {
+    // 1
+    Person *p = [[[Person alloc] init] autorelease];
+
+    // 0
+    [p release];
+ }
+
+ + 连续调用多次autorelease
+ @autoreleasepool
+ {
+    Person *p = [[[[Person alloc] init] autorelease] autorelease];
+ }
+
+ 5.自动释放池
+ 1> 在iOS程序运行过程中，会创建无数个池子。这些池子都是以栈结构存在（先进后出）
+ 2> 当一个对象调用autorelease方法时，会将这个对象放到栈顶的释放池
+
+ 6.自动释放池的创建方式
+ 1> iOS 5.0前
+ NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+
+ [pool release]; // [pool drain];
+
+
+ 2> iOS 5.0 开始
+ @autoreleasepool
+ {
+
+ }
+
+
+** block要掌握的东西
+
+ 1> 如何定义block变量
+ int (^sumBlock)(int, int);
+ void (^myBlock)();
+
+ 2> 如何利用block封装代码
+ ^(int a, int b) {
+    return a - b;
+ };
+
+ ^() {
+    NSLog(@"----------");
+ };
+
+ ^ {
+    NSLog(@"----------");
+ };
+
+ 3> block访问外面变量
+ * block内部可以访问外面的变量
+ * 默认情况下，block内部不能修改外面的局部变量
+ * 给局部变量加上__block关键字，这个局部变量就可以在block内部修改
+
+ 4>　利用typedef定义block类型
+ typedef int (^MyBlock)(int, int);
+ // 以后就可以利用MyBlock这种类型来定义block变量
+ MyBlock block;
+ MyBlock b1, b2;
+
+ b1 = ^(int a, int b) {
+    return a - b;
+ };
+
+ MyBlock b3 = ^(int a, int b) {
+    return a - b;
+ };
+
+** @protocol
+1.协议的定义
+ @protocol 协议名称 <NSObject>
+  // 方法声明列表....
+ @end
+
+
+ 2.如何遵守协议
+ 1> 类遵守协议
+ @interface 类名 : 父类名 <协议名称1, 协议名称2>
+
+ @end
+
+ 2> 协议遵守协议
+ @protocol 协议名称 <其他协议名称1, 其他协议名称2>
+
+ @end
+
+ 3.协议中方法声明的关键字
+ 1> @required (默认)
+   要求实现，如果没有实现，会发出警告
+
+ 2> @optional
+   不要求实现，怎样不会有警告
+
+ 4.定义一个变量的时候，限制这个变量保存的对象遵守某个协议
+ 类名<协议名称> *变量名;
+ id<协议名称> 变量名;
+ NSObject<MyProtocol> *obj;
+ id<MyProtocol> obj2;
+
+ 如果没有遵守对应的协议，编译器会警告
+
+ 5.@property中声明的属性也可用做一个遵守协议的限制
+ @property (nonatomic, strong) 类名<协议名称> *属性名;
+ @property (nonatomic, strong) id<协议名称> 属性名;
+
+ @property (nonatomic, strong) Dog<MyProtocol> *dog;
+ @property (nonatomic, strong) id<MyProtocol> dog2;
+
+ 6.协议可用定义在单独.h文件中，也可用定义在某个类中
+ 1> 如果这个协议只用在某个类中，应该把协议定义在该类中
+
+ 2> 如果这个协议用在很多类中，就应该定义在单独文件中
+
+ 7.分类可用定义在单独.h和.m文件中，也可用定义在原来类中
+ 1> 一般情况下，都是定义在单独文件
+ 2> 定义在原来类中的分类，只要求能看懂语法
+
+
+
+
 ** 命名规范
 *** 成员变量
     成员变量的命名规范：一定要以下划线 _ 开头
