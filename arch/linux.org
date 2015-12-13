@@ -253,3 +253,6 @@ o 是owner的意思 -rw 就是把 读和写的权限去掉
  systemctl start sshd
  systemctl status sshd
  systemctl stop  sshd
+* quickly kill process
+  killall -9 mpv
+  pss mpv  | awk '{print $2}' | xargs kill -9
