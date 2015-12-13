@@ -1,0 +1,278 @@
+* hive
+**  hive 优化
+*** 参数设置调优
+**** 设置jvm重用
+     JVM重用是hadoop调优参数的内容，对hive的性能具有非常大的影响，特别是对于很难避免小文件的场景或者task特别多的场景，这类场景大多数执行时间都很短。
+     1. JVM重用可以使得JVM实例在同一个JOB中重新使用N次，N的值可以在Hadoop的mapre-site.xml文件中进行设置
+     mapred.job.reuse.jvm.num.tasks
+     2. 也可在hive的执行设置：
+     set  mapred.job.reuse.jvm.num.tasks=10;
+**** 开启并行执行
+     hive执行开启：set hive.exec.parallel=true
+**** 调整reducer个数
+     设置  hive.exec.reducers.bytes.per.reducer（默认为1GB），受hive.exec.reducers.max（默认为999）影响：
+
+     mapred.reduce.tasks = min ( 参数2，总输入数据量/参数1 )
+***  count(distinct)的优化
+    /*改写前*/
+    select a， count(distinct b) as c from tbl group by a;
+    /*改写后*/
+    select a， count(*) as c
+    from (select distinct a， b from tbl) group by a;
+*** 数据倾斜问题
+    操作：join,group by,count distinct
+
+    原因：key分布不均匀
+
+    倾斜度衡量：平均记录数超过50w且最大记录数是超过平均记录数的4倍；最长时长比平均时长超过4分钟，且最大时长超过平均时长的2倍
+
+    数据倾斜Hive的典型操作是： 多表关联的查询， SELECT a.* FROM a JOIN b ON (a.id = b.id AND a.department = b.department)
+
+**** Reducer端数据倾斜。
+    如果一个Reducer要处理的数据量远多于其它Reducer要处理的数据量，那么就会产生Reducer端的数据倾斜。那么Reducer要处理的数据量是如何确定的呢？通常数据(KV数值对）Shuffle到某个Reducer是根据Key进行Hash然后对Reducer个数进行取模。
+
+    那么Reducer端的优化包含三种做法
+    1. 增加Reducer个数
+    2. 空KEY过滤（join的时候）
+    3. 空KEY转换(left outer join的时候)
+**** 设置set hive.groupby.skewindata=true
+     这个参数的意思是做Reduce操作的时候，拿到的key并不是所有相同值给同一个Reduce，而是随机分发，然后Reduce做聚合，做完之后再做一轮MR，拿前面聚合过的数据再算结果。
+**** 大小表关联，大表和大表关联
+***** 大小表关联
+      将key相对分散，并且数据量小的表放在join的左边
+***** 大表和大表关联
+      大表和大表关联：把空值的key变成一个字符串加上随机数，把倾斜的数据分到不同的reduce上，由于null值关联不上，处理后并不影响最终结果。
+      所以这个参数其实跟Hive.Map.aggr做的是类似的事情，只是拿到Reduce端来做，而且要额外启动一轮Job，所以 *其实不怎么推荐用，效果不明显* 。
+***** 大表和不小的表关联
+      优化 select * from log a left outer join members b on a.memberid = b.memberid
+
+      优化后：（先过滤一部分， 让表更小， 再按小表关联大表）
+      #+BEGIN_SRC sql
+        select /*+mapjoin(x)*/* from log a left outer join
+            ( select  /*+mapjoin(c)*/d.*
+              from (select  distinct memberid from log ) c
+              join members d
+              on c.memberid = d.memberid
+            )x on a.memberid = b.memberid
+      #+END_SRC
+
+    倾斜分成group by造成的倾斜和join造成的倾斜，需要分开看。
+
+    1. group by
+        group by造成的倾斜有两个参数可以解决，一个是Hive.Map.aggr，默认值已经为true，意思是会做Map端的combiner。另一个参数是Hive.groupby. skewindata。这个参数的意思是做Reduce操作的时候，拿到的key并不是所有相同值给同一个Reduce，而是随机分发，然后Reduce做聚合，做完之后再做一轮MR，拿前面聚合过的数据再算结果。所以这个参数其实跟Hive.Map.aggr做的是类似的事情，只是拿到Reduce端来做，而且要额外启动一轮Job，所以 *其实不怎么推荐用，效果不明显* 。
+
+        如果说要改写SQL来优化的话，可以按照下面这么做：
+        /*改写前*/
+        select a， count(distinct b) as c from tbl group by a;
+        /*改写后*/
+        select a， count(*) as c
+        from (select distinct a， b from tbl) group by a;
+
+    2. join
+*** hive 如何很多任务用一张表的时候 这些任务起一次map(multi insert)
+** hive更新数据
+   hive不支持对某个具体行的操作，hive对数据的操作只支持覆盖原数据和追加数据。对于更新操作，hive是通过查询将原表的数据进行转化最后存储在新表里，这和传统数据库的更新操作有很大不同。
+* hadoop
+** 数据导入到hadoop
+   业务库mysql数据量比较大， 如何同步到hadoop？比如千万级，亿级数据。
+
+** MapR 的join如何写
+
+** mysql到hadoop的更新数据如何同步
+
+* java
+** hashmap的结构
+* mahout
+** 推荐系统的评测指标
+为了评估推荐算法的好坏需要各方面的评估指标。
+
+1. 准确率
+准确率就是最终的推荐列表中有多少是推荐对了的。
+
+2. 召回率
+召回率就是推荐对了的占全集的多少。
+
+** 基于物品的协同过滤
+推荐系统应用数据分析技术，找出用户最可能喜欢的东西推荐给用户，现在很多电子商务网站都有这个应用。目前用的比较多、比较成熟的推荐算法是协同过滤（Collaborative Filtering，简称CF）推荐算法，CF的基本思想是根据用户之前的喜好以及其他兴趣相近的用户的选择来给用户推荐物品。
+*** 1
+   三、Item-based算法详细过程
+
+        （1）相似度计算
+        Item-based算法首选计算物品之间的相似度，计算相似度的方法有以下几种：
+
+        1. 基于余弦（Cosine-based）的相似度计算，通过计算两个向量之间的夹角余弦值来计算物品之间的相似性，公式如下：
+
+
+
+        其中分子为两个向量的内积，即两个向量相同位置的数字相乘。
+
+        2. 基于关联（Correlation-based）的相似度计算，计算两个向量之间的Pearson-r关联度，公式如下：
+
+
+
+        其中表示用户u对物品i的打分，表示第i个物品打分的平均值。
+
+        3. 调整的余弦（Adjusted Cosine）相似度计算，由于基于余弦的相似度计算没有考虑不同用户的打分情况，可能有的用户偏向于给高分，而有的用户偏向于给低分，该方法通过减去用户打分的平均值消除不同用户打分习惯的影响，公式如下：
+
+
+
+        其中表示用户u打分的平均值。
+
+        （2）预测值计算
+
+        根据之前算好的物品之间的相似度，接下来对用户未打分的物品进行预测，有两种预测方法：
+
+        1. 加权求和。
+
+        用过对用户u已打分的物品的分数进行加权求和，权值为各个物品与物品i的相似度，然后对所有物品相似度的和求平均，计算得到用户u对物品i打分，公式如下：
+
+
+
+        其中为物品i与物品N的相似度，为用户u对物品N的打分。
+
+        2. 回归。
+
+        和上面加权求和的方法类似，但回归的方法不直接使用相似物品N的打分值，因为用余弦法或Pearson关联法计算相似度时存在一个误区，即两个打分向量可能相距比较远（欧氏距离），但有可能有很高的相似度。因为不同用户的打分习惯不同，有的偏向打高分，有的偏向打低分。如果两个用户都喜欢一样的物品，因为打分习惯不同，他们的欧式距离可能比较远，但他们应该有较高的相似度。在这种情况下用户原始的相似物品的打分值进行计算会造成糟糕的预测结果。通过用线性回归的方式重新估算一个新的值，运用上面同样的方法进行预测。重新计算的方法如下：
+
+
+
+        其中物品N是物品i的相似物品，和通过对物品N和i的打分向量进行线性回归计算得到，为回归模型的误差。具体怎么进行线性回归文章里面没有说明，需要查阅另外的相关文献。
+
+*** 2
+    基于物品的协同过滤
+ItemBasedCF 应该是业界的应用最广泛的推荐算法了。该算法的核心思想主要是：给目标用户推荐与他喜欢的物品相似度较高高的物品。我们经常在京东、天猫上看到「购买了该商品的用户也经常购买的其他商品」，就是主要基于 ItemBasedCF。一般我们先计算物品之间的相似度，然后根据物品的相似度和用户的历史行为给用户生成推荐列表。
+
+物品 i 和 j 之间的相似度可以使用如下公式计算：
+
+[Math Processing Error]
+从上面的定义可以看到，在协同过滤中两个物品产生相似度是因为它们共同被很多用户喜欢，也就是说每个用户都可以通过他们的历史兴趣列表给物品“贡献”相似度。
+
+根据上述核心思想，可以有如下算法步骤：
+
+建立用户-物品的倒排表
+物品与物品之间的共现矩阵 C[i][j]，表示物品 i 与 j 共同被多少用户所喜欢。
+用户与用户之间的相似度矩阵 W[i][j] ， 根据上述相似度计算公式计算。
+用上面的相似度矩阵来给用户推荐与他所喜欢的物品相似的其他物品。用户 u 对物品 j 的兴趣程度可以估计为
+
+
+[Math Processing Error] 为和物品 j 最相似的前 K 个物品， [Math Processing Error] 为对用户 u 所喜欢的物品集合， W[j][i] 为物品 j 和物品 i 之间的相似度， [Math Processing Error] 为用户 u 对物品 i 的兴趣。
+
+下面是ItemBasedCF 的代码实现：
+
+class ItemBasedCF:
+    def __init__(self,train_file,test_file):
+        self.train_file = train_file
+        self.test_file = test_file
+        self.readData()
+    def readData(self):
+        #读取文件，并生成用户-物品的评分表和测试集
+        self.train = dict()     #用户-物品的评分表
+        for line in open(self.train_file):
+            # user,item,score = line.strip().split(",")
+            user,item,score,_ = line.strip().split("\t")
+            self.train.setdefault(user,{})
+            self.train[user][item] = int(score)
+        self.test = dict()      #测试集
+        for line in open(self.test_file):
+            # user,item,score = line.strip().split(",")
+            user,item,score,_ = line.strip().split("\t")
+            self.test.setdefault(user,{})
+            self.test[user][item] = int(score)
+
+    def ItemSimilarity(self):
+        #建立物品-物品的共现矩阵
+        C = dict()  #物品-物品的共现矩阵
+        N = dict()  #物品被多少个不同用户购买
+        for user,items in self.train.items():
+            for i in items.keys():
+                N.setdefault(i,0)
+                N[i] += 1
+                C.setdefault(i,{})
+                for j in items.keys():
+                    if i == j : continue
+                    C[i].setdefault(j,0)
+                    C[i][j] += 1
+        #计算相似度矩阵
+        self.W = dict()
+        for i,related_items in C.items():
+            self.W.setdefault(i,{})
+            for j,cij in related_items.items():
+                self.W[i][j] = cij / (math.sqrt(N[i] * N[j]))
+        return self.W
+
+    #给用户user推荐，前K个相关用户
+    def Recommend(self,user,K=3,N=10):
+        rank = dict()
+        action_item = self.train[user]     #用户user产生过行为的item和评分
+        for item,score in action_item.items():
+            for j,wj in sorted(self.W[item].items(),key=lambda x:x[1],reverse=True)[0:K]:
+                if j in action_item.keys():
+                    continue
+                rank.setdefault(j,0)
+                rank[j] += score * wj
+        return dict(sorted(rank.items(),key=lambda x:x[1],reverse=True)[0:N])
+采用 MovieLens 数据集对 ItemCF 算法测试之后各评测指标的结果如下
+
+
+UserCF 和 ItemCF 的区别和应用
+UserCF 算法的特点是：
+
+用户较少的场合，否则用户相似度矩阵计算代价很大
+适合时效性较强，用户个性化兴趣不太明显的领域
+对新用户不友好，对新物品友好，因为用户相似度矩阵不能实时计算
+很难提供令用户信服的推荐解释
+对应地，ItemCF 算法的特点：
+
+适用于物品数明显小于用户数的场合，否则物品相似度矩阵计算代价很大
+适合长尾物品丰富，用户个性化需求强的领域
+对新用户友好，对新物品不友好，因为物品相似度矩阵不需要很强的实时性
+利用用户历史行为做推荐解释，比较令用户信服
+因此，可以看出 UserCF 适用于物品增长很快，实时性较高的场合，比如新闻推荐。而在图书、电子商务和电影领域，比如京东、天猫、优酷中，ItemCF 则能极大地发挥优势。在这些网站中，用户的兴趣是比较固定和持久的，而且这些网站的物品更新速度不会特别快，一天一更新是在忍受范围内的。
+** mahout中的算法
+* 数据分析维度
+** 店铺的维度
+   时间， 平台维度（京东， 淘宝，一号店，亚马逊等），流量来源维度（移动，pc端），地域维度（省，市），行业（服饰，影响数码）
+
+** 会员
+   购买时间维度， 地域，平台， 流量来源
+
+** 会员rfm模型
+   最近一次消费，消费频率， 消费金额
+
+** 商品
+   地域，平台， 时间，
+** 用户画像
+*** user profile
+    性别， 年龄， 地域， 婚否， 孕妇， 小孩年龄， 星座， 收入
+*** 用户行为
+    最近活跃时间， 活跃程度, 购买金额
+*** 购买偏好
+    购买类型分类： 品牌敏感， 促销敏感型， 购买力旺盛型。
+*** 用户标签
+    网购达人， 奶爸奶妈， 数码达人， 家庭夫妇， 时尚男女
+* python
+** python 一二维数组转换
+   一维->二维
+   #+BEGIN_SRC java
+     int[] a = new int[n];
+     int[,] b = new int[r, c];
+
+     for (int i = 0; i < n; i++)
+         b[i / c, i % c] = a[i];
+or
+    for (int i = 0; i < r; i++)
+    {
+        for (int j = 0; j < c; j++)
+        {
+            b[i, j] = a[i * c + j];
+        }
+    }
+   #+END_SRC
+
+   二维->一维
+   #+BEGIN_SRC java
+     int[,] a = new int[r, c];
+     int[] b = new int[r * c];
+     for(int i = 0; i < b.Length; i++)
+         b[i] = a[i / c, i % c];
+   #+END_SRC

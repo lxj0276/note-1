@@ -1,0 +1,345 @@
+* 安装基本系统
+** UEFI模式测试
+如果你想使用UEFI，并且你的机器支持UEFI，你在引导时应该会看到如下选项，
+Arch Linux archiso x86_64 UEFI USB
+UEFI Shell x86_64 v1
+UEFI Shell x86_64 v2
+EFI Default Loader
+
+你应该可以知道Archlinux只提供64位的UEFI模式安装，32位无法引导，本人已经尝试过了。 如果你忘记了是否出现过上述选项，你也可以使用如下命令：
+efivar -l
+
+如果你看到了一大串内容，那就是进入了UEFI安装模式。否则，请记住，你的电脑可能不支持UEFI或者你没进入UEFI安装模式，在后续内容中，你应该选择BIOS和MBR。
+** 创建分区
+在这里设计到一个很大的内容，如何安排分区，这个看每个人如何规划了，下面我将使用一个比较普遍的方案：
+/dev/sda1  1G  /boot  物理分区
+/dev/sda2  40G /      物理分区
+/dev/sda3  60G /home  物理分区
+/dev/sda4  8G  swap   物理分区
+
+*** 首先是MBR分区的创建，GPT的请略过，这里使用的工具是fdisk。
+
+fdisk /dev/sda
+本机只有一个硬盘，所以使用/dev/sda，如果你有多个硬盘，应该也能知道该使用什么绝对地址了。 分区的方法都比较相似，使用m，可以列出所有命令，请根据提示分区。
+
+*** 其次是GPT分区，基本和MBR分区一样，只是我们使用的工具是gdisk。
+
+gdisk /dev/sda
+
+需要注意的是分区的标志，
+/dev/sda1 EF00
+/dev/sda2 8300
+/dev/sda3 8300
+/dev/sda4 8200
+
+** 安装文件系统
+接下来是安装文件系统，在这里GPT和MBR的区别只有/dev/sda1这个分区，我们放到最后解释。这里我们使用的FS是比较成熟的ext4，至于最新的btrfs，老实说我没用过，即使我用的是SSD，并且“据说”btrfs对SSD有优化，大家可以尝试下。
+
+mkfs.ext4 /dev/sda2
+mkfs.ext4 /dev/sda3
+mkswap /dev/sda4
+swapon /dev/sda4
+最后一条命令是开启交换分区。 对于/boot这个分区，使用MBR的命令如下：
+mkfs.ext4 /dev/sda1
+
+对于GPT分区，请使用如下命令：
+mkfs.fat -F32 /dev/sd1
+** 挂载分区
+如果你使用推荐的分区，请使用如下命令，否则，请自行调整
+
+mount /dev/sda2 /mnt
+mkdir /mnt/{boot,home}
+mount /dev/sda1 /mnt/boot
+mount /dev/sda3 /mnt/home
+** 选择更新源
+
+sed -i "s/^\b/#/g" /etc/pacman.d/mirrorlist
+nano /etc/pacman.d/mirrorlist
+pacman -Syy
+还是和之前说的那样，请根据你的网络环境选择镜像，选择镜像，只需要将对应地址前的#去掉即可，这里推荐使用ustc或者163的源。 这里还有一个小故事，第一次安装Arch的时候，在mirrorlist中所有的Taiwan后面都有“Province of China”字样，顿生好感，只可惜现在的mirrorlist中已经没有这个彩蛋了。
+** 部署基本系统
+这里只要一条基本的命令就能自动完成部署了，比Gentoo简单不少。如果你想使用netstat和ifconfig之类的指令，请加上net-tools。
+
+pacstrap -i /mnt base base-devel net-tools
+** 生成fstab
+fstab中记录了挂载的相关信息，Archlinux中提供了工具来一键生成(怎么感觉逼格有点低。。。)
+
+genfstab -U -p /mnt >> /mnt/etc/fstab
+这里使用的是UUID，如果不加-U，那么在fstab中记录的就是/dev/sdX之类的地址了，UUID的方式更加好，为什么呢？请自行wiki。
+
+** 基本系统设置
+首先请使用chroot进入部署好的基本系统，这里使用“进入”，只是为了避免此blog涵盖过多内容，关于chroot的知识，点击进入。
+
+arch-chroot /mnt /bin/bash
+alias ls='ls --color'
+后一条命令是为了让ls显示颜色，方便查看。
+** 设置Locale
+nano /etc/locale.gen
+这里你至少开启en_US.UTF-8和zh_CN.UTF-8。
+
+locale-gen
+echo LANG=zh_CN.UTF-8 >> locale.conf
+这里由于console字体的原因，中文会变成方框，如果你不安装桌面环境，请使用en_US.UTF-8。
+** 设置console
+
+nano /etc/vconsole.conf
+
+输入如下内容
+KEYMAP=us
+FONT=
+** 设置时区
+
+ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+这里大家可能会发现BIOS的时间和系统不一样了，我提供一个解决方案。
+
+nano /etc/adjtime
+
+输入如下内容：
+0.000000 0 0.000000
+0
+LOCAL
+原本是为了方便时区调整的措施，点击详解，对于多系统的用户而言，就很纠结了，特别是我这样有OCD的。
+
+** 设置主机名
+虽说这里的主机名可以有大写，不过我建议大家使用常规的英文小写。
+
+echo 主机名 > /etc/hostname
+
+你还得修改/etc/hosts文件的内容。
+nano /etc/hosts
+你会看到如下内容：
+#
+# /etc/hosts: static lookup table for host names
+#
+#<ip-address>   <hostname.domain.org>             <hostname>
+127.0.0.1   localhost.localdomain localhost   主机名
+::1     localhost.localdomain localhost   主机名
+#End of file
+请把myhostname替换成你所设置的主机名。
+
+** 生成初始ramdisk环境
+
+mkinitcpio -p linux
+** 用户设置
+首先是设置root的密码：
+
+passwd
+创建一个日常用户，这里添加wheel用户组是为了能够使用sudo提权，毕竟我可不敢直接拿着root操作(虽然我经常这么干)。
+
+useradd -m -g users -G wheel -s /bin/bash 用户名
+passwd 用户名
+** 安装启动器
+*** 首先是对于BIOS用户，UEFI的请略过。这里推荐使用GRUB。
+pacman -S grub-bios
+grub-install /dev/sda
+grub-mkconfig -o /boot/grub/grub.cfg
+这三条命令分别是使用pacman获取grub，将引导信息写到sda，以及生成配置文件grub.cfg。
+
+*** 对于使用UEFI的用户，推荐使用gummiboot。
+按照官方wiki的说法，只要你使用UEFI，无论如何都请安装dosfstools和efibootmgr。
+
+pacman -S dosfstools efibootmgr
+
+下面安装gummiboot，并用其生成配置。
+
+pacman -S gummiboot
+gummiboot --path=/boot install
+
+接下来我们需要创建两个配置文件，如下：
+nano /boot/loader/entries/arch.conf
+title          Arch Linux
+linux          /vmlinuz-linux
+initrd         /initramfs-linux.img
+options        root=/dev/sda2 rw
+
+nano /boot/loader/loader.conf
+default  arch
+timeout  5
+
+** 设置网络
+*** check the status
+$ lspci -v
+    02:00.0 Ethernet controller: Attansic Technology Corp. L1 Gigabit Ethernet Adapter (rev b0)
+        ...
+        Kernel driver in use: atl1
+        Kernel modules: atl1
+
+$ dmesg | grep atl1
+    ...
+    atl1 0000:02:00.0: eth0 link is up 100 Mbps full duplex
+*** get current device names
+ls /sys/class/net 或者 ip link
+*** change device name
+sudo nano /etc/udev/rules.d/10-network.rules
+
+SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="50:7b:9d:1a:ea:bb", NAME="enp5s0"
+SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="aa:bb:cc:dd:ee:ff", NAME="net0"
+*** Enabling and disabling network interfaces
+    ip link set eth0 up
+    ip link set eth0 down
+check the result：
+    ip link show dev eth0
+** 重启
+需要退出chroot，卸载分区，然后直接reboot。
+exit
+umount /mnt/{boot,home}
+umount /mnt
+reboot
+请注意，如果你的机器只有无线网卡，并且你希望通过wifi-menu联网，那么请确保在reboot之前，你已经安装了dialog。
+
+* 相关驱动安装
+这里有个问题很纠结，我准备在这篇blog里先提供Gnome环境的配置，而目前Gnome能够只是wayland了，但是呢，还不完美，经过本人的测试，会出现部分触控失灵等问题。因此，先偷个懒，使用Gnome的默认环境X。
+
+** 安装ALSA(声卡)
+pacman -S alsa-utils
+** 安装显卡驱动
+由于我使用的是Intel核显，因此如下是核显驱动的安装，如果你使用的是其他显卡，请参考官方wiki，点击进入。
+pacman -S mesa xf86-video-intel
+** 安装触摸板驱动
+pacman -S xf86-input-synaptics
+
+** Gnome桌面环境安装
+前面我们并没有单独安装X环境，那是因为无论是wayland还是X，都会在安装Gnome的时候作为依赖自动安装的，所以可以放心。
+
+*** Gnome基本环境安装
+pacman -S gnome
+*** 安装额外软件包
+其实有另外一个包合集gnome-extra，只不过这个包里面包含了太多没用的东西，没什么用，OCD又犯了。。。
+pacman -S file-roller evolution gedit gnome-music gnome-photos cheese gnome-mplayer
+pacman -S unrar unzip p7zip
+*** 安装浏览器
+这里我们使用chromium，至于为什么不是firefox，原因有二，其一，我觉得它更快；其二，它能用最近的flash插件。
+pacman -S chromium
+
+   (最新的flash插件需要到AUR上去下，这里提供下载地址，点击下载。
+   下载完成后，解压，进入相关目录。
+    makepkg
+    pacman -U 生成的文件名，以.xz结尾)
+*** 配置输入法
+fcitx
+pacman -S fcitx fcitx-qt4 fcitx-qt5 fcitx-gtk2 fcitx-gtk3
+这里会把qt的环境给依赖进来，恶心。。。 在用户目录下添加个配置文件：
+$ nano ~/.xprofile
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS=@im=fcitx
+*** 注册相关服务（注册了相关服务网络才可用用）
+systemctl enable gdm
+systemctl enable NetworkManager
+** 配置/etc/pacman.d/mirrorlist
+Server = http://mirrors.opencas.cn/archlinux/$repo/os/$arch
+Server = http://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch
+Server = http://mirrors.163.com/archlinux/$repo/os/$arch
+Server = http://mirrors.neusoft.edu.cn/archlinux/$repo/os/$arch
+Server = http://mirrors.hustunique.com/archlinux/$repo/os/$arch
+Server = http://mirrors.zju.edu.cn/archlinux/$repo/os/$arch
+
+** /etc/pacman.conf
+#
+# /etc/pacman.conf
+#
+# See the pacman.conf(5) manpage for option and repository directives
+
+#
+# GENERAL OPTIONS
+#
+[options]
+# The following paths are commented out with their default values listed.
+# If you wish to use different paths, uncomment and update the paths.
+#RootDir     = /
+#DBPath      = /var/lib/pacman/
+#CacheDir    = /var/cache/pacman/pkg/
+#LogFile     = /var/log/pacman.log
+#GPGDir      = /etc/pacman.d/gnupg/
+HoldPkg     = pacman glibc
+#XferCommand = /usr/bin/curl -C - -f %u > %o
+#XferCommand = /usr/bin/wget --passive-ftp -c -O %o %u
+#CleanMethod = KeepInstalled
+#UseDelta    = 0.7
+Architecture = auto
+
+# Pacman won't upgrade packages listed in IgnorePkg and members of IgnoreGroup
+#IgnorePkg   =
+#IgnoreGroup =
+
+#NoUpgrade   =
+#NoExtract   =
+
+# Misc options
+#UseSyslog
+#Color
+#TotalDownload
+CheckSpace
+#VerbosePkgLists
+
+# By default, pacman accepts packages signed by keys that its local keyring
+# trusts (see pacman-key and its man page), as well as unsigned packages.
+SigLevel    = Required DatabaseOptional
+LocalFileSigLevel = Optional
+#RemoteFileSigLevel = Required
+
+# NOTE: You must run `pacman-key --init` before first using pacman; the local
+# keyring can then be populated with the keys of all official Arch Linux
+# packagers with `pacman-key --populate archlinux`.
+
+#
+# REPOSITORIES
+#   - can be defined here or included from another file
+#   - pacman will search repositories in the order defined here
+#   - local/custom mirrors can be added here or in separate files
+#   - repositories listed first will take precedence when packages
+#     have identical names, regardless of version number
+#   - URLs will have $repo replaced by the name of the current repo
+#   - URLs will have $arch replaced by the name of the architecture
+#
+# Repository entries are of the format:
+#       [repo-name]
+#       Server = ServerName
+#       Include = IncludePath
+#
+# The header [repo-name] is crucial - it must be present and
+# uncommented to enable the repo.
+#
+
+# The testing repositories are disabled by default. To enable, uncomment the
+# repo name header and Include lines. You can add preferred servers immediately
+# after the header, and they will be used before the default mirrors.
+
+#[testing]
+#Include = /etc/pacman.d/mirrorlist
+
+[core]
+Include = /etc/pacman.d/mirrorlist
+
+[extra]
+Include = /etc/pacman.d/mirrorlist
+
+#[community-testing]
+#Include = /etc/pacman.d/mirrorlist
+
+[community]
+Include = /etc/pacman.d/mirrorlist
+
+#[multilib]
+#Include = /etc/pacman.d/mirrorlist
+
+[archlinuxfr]
+SigLevel = Never
+Server = http://repo.archlinux.fr/$arch
+
+# If you want to run 32 bit applications on your x86_64 system,
+# enable the multilib repositories as required here.
+
+#[multilib-testing]
+#Include = /etc/pacman.d/mirrorlist
+
+#[multilib]
+Include = /etc/pacman.d/mirrorlist
+
+# An example of a custom package repository.  See the pacman manpage for
+# tips on creating your own repositories.
+#[custom]
+#SigLevel = Optional TrustAll
+#Server = file:///home/custompkgs
+
+** 安装zsh

@@ -1,0 +1,49 @@
+* Introduction to Data Analysis with Spark
+  Spark Core contains the basic functionality of spark, including components of task scheduling, memory management, fault recovery, interaction with storages systems, and  more.
+
+  Modified Apache Hive to run on Spark has now been replaced by Spark SQL to privied better integration with the spark engine and language APIs.
+* Downloading spark and get started
+* Programming with RDDs
+** Creating RDDs
+  1. Take an existing collection in your program and pass it to SparkContext's parallelize() method.
+    val lines = sc.parallelize(List("pandas", "i like pandas"))
+  2. Load data from external storage.
+    val lines = sc.textFile("/path/to/file")
+** Common Transformations And Actions
+*** Transformations
+    map, filter, flatmap,
+* Working with Key/Value Pairs
+** Data Partitioning(Advanced)
+   Partitioning will not be helpfull in all applications - for example, if a given RDD is scanned only once,  there is no point in partitioning it in advance. It is useful only when a dataset is reused multiple times in key-oriented operations such as joins.
+
+   You might range-partition the RDD into sorted ranges of keys so that elements with keys in the same range appear on the same node.
+
+   Many operations other than join() will take advantage of the partitioning information, for example, sortByKey() and groupByKey() will result in range-partitoned and hash-partitoned RDDs.
+   On the other hand, operations like map() cause the new RDD to forget the parents partitioning information.
+** Operations That Benefit from Partitioning
+   As of spark 1.0, the operations that benefit from partitioning are cogroup(), groupWith(), join(), leftOuterJoin(), rightOuterJoin(), groupByKey(), reduceByKey(), combineByKey(), and lookup().
+** Operations That Affect Partitoning
+   It provides two other operations, mapValues() and flatMapValues(),other than map(), which guarantee that each tuple's key remains the same.
+
+   Here are all the operations that result in a partitioner being set on the output RDD: cogroup(), groupWith(), join(), leftOuterJoin(), rightOuterJoin(), groupByKey(), reduceByKey(), combineByKey(), partitionBy(), sort(), mapValues(), flatMapValues(), filter(). All other operations will produce a result with no partitioner.
+* Loading and Saving Your Data
+* Advanced Spark Programming
+  We introduce two types of shared variables: *accumulators* to aggregate information and *broadcast* variables to efficiently distribute large values.
+** Optimizing Broadcasts
+   The defalt serialized library used in Spark's Scala and Java APIs, can be very inefficient.Can optimize serialization by selecting a different serialization library using the spark.serializer property(can use Kryo, a faster serialization library).
+* Running on a Cluster
+** Driver
+   When the driven runs, it performs two duties:
+   1. converting a user program into tasks
+   2. scheduling tasks on executors.
+** Executors
+   Executors have two roles:
+   1. Run the tasks that make up the application and return results to the driver.
+   2. Provide in-memory storage of RDDs that are cached by user programs.
+** Cluster Manager
+   The cluster manager is a pluggable component in spark.
+   This allow spark run on top of different external managers, such as YARN and Mesos, or Standalone cluster manager.
+* Tuning and Debugging Spark
+* Spark SQL
+* Spark Streaming
+* Machine Learning with MLlib

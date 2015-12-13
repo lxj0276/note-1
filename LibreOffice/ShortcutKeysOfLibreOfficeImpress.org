@@ -1,0 +1,114 @@
+[[https://help.libreoffice.org/index.php?title=Impress/Shortcut_Keys_for_Impress/zh-CN&direction=next&oldid=644107][LibreOffice Impress 的快捷键]]
+[[https://help.libreoffice.org/Impress/Shortcut_Keys_for_Impress][Shortcut Keys for LibreOffice Impress]]
+* 中文
+
+LibreOffice Impress 的功能键
+
+快捷键	效果
+F2 键	退出文本。
+F3 键	Enter Group.
+Ctrl+F3 键	Exit Group.
+Shift+F3	副本
+F4 键	位置和大小
+F5 键	查看幻灯片放映。
+Ctrl+Shift+F5	导航
+F7 键	拼写检查
+Ctrl+F7 键	同义词库
+F8 键	编辑接点。
+Ctrl+Shift+F8	文字对准框
+F11 键	样式和格式
+幻灯片放映中的快捷键
+
+快捷键	效果
+Esc 键	结束演示。
+空格或右箭头或下箭头或向下翻页或 Enter 键或 Return 键或 N	播放下一个效果（如果有，否则，转到下一张幻灯片）。
+Alt+Page Down 组合键	转到下一张幻灯片，而不播放效果。
+[数字] + Enter	键入幻灯片编号并按 Enter 键，切换到该幻灯片。
+左箭头或上箭头或向上翻页或 Backspace 键或 P	再次播放以前的效果。如果此幻灯片上不存在以前的效果，则显示上一张幻灯片。
+Alt+Page Up 组合键	转到上一张幻灯片，而不播放效果。
+Home 键	跳到幻灯片放映中的第一张幻灯片。
+End 键	跳到幻灯片放映中的最后一张幻灯片。
+Ctrl + 向上翻页	转到上一张幻灯片。
+Ctrl + 向下翻页	转到下一张幻灯片。
+B 或。	显示黑色屏幕，直到发生下一个按键或鼠标滚轮事件。
+W 或，	显示白色屏幕，直到发生下一个按键或鼠标滚轮事件。
+普通视图中的快捷键
+
+快捷键	效果
+加号 (+) 键	放大。
+减号 (-) 键	缩小。
+乘号 (×) 键（数字小键盘）	将页面调整为窗口大小。
+除号 (÷) 键（数字小键盘）	放大当前的选定内容。
+Shift+Ctrl+G 键	对选定的对象进行组合。
+Shift+Ctrl+Alt+A 组合键	取消选定的组合。
+Ctrl + 点击	进入一个组合，以便对组合中的各个对象进行编辑。在组合外单击，可以返回普通视图。
+Shift+Ctrl + K	合并选定对象。
+Shift+Ctrl + K	拆分选定对象。此合并功能只适用于通过合并两个或多个对象而创建的对象。
+Ctrl+加号 (+) 键	置于顶层。
+Shift+Ctrl + 加号键	上移一层。
+Ctrl + 减号键	下移一层。
+Shift+Ctrl + 减号键	置于底层。
+编辑文本的的快捷键
+
+快捷键	效果
+Ctrl+连字符(-)	自定义连字符; 您设置的连字符。
+Ctrl+Shift+减号 (-)	非跨行连接号 (不用于断字)
+Ctrl+Shift+空格	占位空格。占位空格不用于断字，调整文本时宽度也不会伸缩。
+Shift+回车	段内换行
+左箭头	将光标向左移
+Shift+←	将选区向左移
+Ctrl+向左方向键	调到单词开头
+Ctrl+Shift+向左方向键	逐个单词向左选取
+向右箭头	将光标向右移
+Shift+→	将选区向右移动
+Ctrl+向右方向键	移至下一单词的开头
+Ctrl+Shift+向右方向键	逐个单词向右选取
+向上箭头	将光标向上移动一行
+Shift+↑	向上选择各行
+Ctrl+向上方向键	将光标移动至前一段落的开头
+Ctrl+Shift+向上方向键	选择直到段落开头。再次按下可将选取扩展至前一段落的开头。
+向下箭头	将光标向下移动一行
+Shift+↓	向下选择各行
+Ctrl+向下方向键	将光标移至段落末尾。再次按下可将光标移至下一段落末尾
+CtrlShift+向下方向键	选择到段落末尾。再次按下可将选区扩展至下一段落的末尾
+Home	转到行首
+Shift+Home	选择至行首
+End	转到行末
+Shift+End	选择至行末
+Ctrl+Home	转到幻灯片文字区开头
+Ctrl+Shift+Home	选择至幻灯片文字区开头
+Ctrl+End	转到幻灯片文字区末尾
+Ctrl+Shift+End	选择至文档末尾
+Ctrl+Del	删除至单词末尾之间的文字
+Ctrl+退格键	删除至单词开头之间的文字
+在列表中: 删除当前段落之前的空段落
+
+Ctrl+Shift+Del	删除至句子末尾之间的文字
+Ctrl+Shift+退格键	删除至句子开头之间的文字
+LibreOffice Impress 的快捷键
+
+快捷键	效果
+箭头键	沿箭头方向移动选定的对象或页面视图。
+Ctrl + 箭头键	在页面视图中移动。
+按住 Shift 键并拖动	限制选定的对象沿水平方向或垂直方向移动。
+Ctrl + 拖动 (需启用 移动时复制 选项)	按住Ctrl 键并拖动对象，可以创建对象的复本。
+Alt 键	按住 Alt 键，可以通过从对象中心向外拖动鼠标来绘制对象或调整对象的大小。
+Alt 键+单击	选择位于当前选定对象后面的对象。
+Alt+Shift+单击	选择位于当前选定对象前面的对象。
+Shift+单击	选择邻近的项目或文字段。在选择的起始位置单击，然后移到结束位置，在按住 Shift 键的同时单击。
+Shift+拖动（修改大小时）	在拖动时按住 Shift 键可以按比例修改对象的大小。
+Tab 键	按照创建对象的顺序依次选择对象。
+Shift+Tab 键	按照与创建对象相反的顺序依次选择对象。
+Esc 键	退出当前模式。
+Enter 键	在新的演示文稿中激活占位符对象（仅适用于已选定框的情况）。
+Ctrl+Enter 键	移到幻灯片中的下一个文字对象。
+如果按 Ctrl+Enter 键时有文字对象或没有下一个文字对象，则会插入相同版式的新幻灯片/页面作为新的当前幻灯片/页面。
+
+PageUp	切换到上一张幻灯片。在第一张幻灯片中无此功能。
+PageDown	切换到下一张幻灯片。在最后一张幻灯片中无此功能。
+在幻灯片浏览中使用键盘进行浏览
+
+快捷键	效果
+Home/End	Set the focus to the first/last slide.
+Left/Right arrow keys or Page Up/Down	Set the focus to the next/previous slide.
+Enter 键	Change to Normal Mode with the active slide.

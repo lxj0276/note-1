@@ -1,0 +1,4 @@
+* Verifying source file signatures with gpg... patch-4.2.4 ... FAILED (unknown public key 38DBBDC86092693E)
+resolved:
+1. gpg --recv-keys 38DBBDC86092693E
+2. gpg --lsign 38DBBDC86092693E
