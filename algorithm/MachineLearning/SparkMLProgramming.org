@@ -1,0 +1,38 @@
+[[http://spark.apache.org/docs/latest/ml-guide.html][Spark ML Programming Guide]]
+
+* Spark ML Programming Guide
+** Main concepts
+  *DataFrame* : Spark ML uses DataFrame from Spark SQL as an ML dataset, which can hold a variety of data types. E.g., a DataFrame could have different columns storing text, feature vectors, true labels, and predictions.
+
+  *Transformer* : A Transformer is an algorithm which can transform one DataFrame into another DataFrame. E.g., an ML model is a Transformer which transforms DataFrame with features into a DataFrame with predictions.
+
+  *Estimator* : An Estimator is an algorithm which can be fit on a DataFrame to produce a Transformer. E.g., a learning algorithm is an Estimator which trains on a DataFrame and produces a model.
+
+  *Pipeline* : A Pipeline chains multiple Transformers and Estimators together to specify an ML workflow.
+
+  *Parameter*: All Transformers and Estimators now share a common API for specifying parameters.
+
+** TODO DataFrame
+   A DataFrame can be created either implicitly or explicitly from a regular RDD.
+** Pipeline components
+*** Transformers
+     A Transformer is an abstraction that includes feature transformers and learned models.
+     A Transformer implements a method transform(), which converts one DataFrame into another, generally by appending one or more columns.
+     For example:
+     + A feature transformer might take a DataFrame, read a column (e.g., text), map it into a new column (e.g., feature vectors), and output a new DataFrame with the mapped column appended.
+     + A learning model might take a DataFrame, read the column containing feature vectors, predict the label for each feature vector, and output a new DataFrame with predicted labels appended as a column.
+*** Estimators
+    An Estimator abstracts the concept of a learning algorithm or any algorithm that fits or trains on data.
+     An Estimator implements a method fit(), which accepts a DataFrame and produces a Model, which is a Transformer.
+
+      For example, a learning algorithm such as LogisticRegression is an Estimator, and calling fit() trains a LogisticRegressionModel, which is a Model and hence a Transformer.
+** Pipeline
+   Spark ML represents such a workflow as a Pipeline, which consists of a sequence of PipelineStages (Transformers and Estimators) to be run in a specific order.
+*** How it works
+    A Pipeline is specified as a sequence of stages, and each stage is either a Transformer or an Estimator.
+    For Transformer stages, the transform() method is called on the DataFrame. For Estimator stages, the fit() method is called to produce a Transformer (which becomes part of the PipelineModel, or fitted Pipeline), and that Transformer’s transform() method is called on the DataFrame.
+    The figure below is for the training time usage of a Pipeline.( The first two (Tokenizer and HashingTF) are Transformers (blue), and the third (LogisticRegression) is an Estimator (red). )
+    [[/home/kay/note/algorithm/MachineLearning/MLPictures/ml-Pipeline.png]]
+*** Parameters
+    Spark ML Estimators and Transformers use a uniform API for specifying parameters.
+    A ParamMap is a set of (parameter, value) pairs.
