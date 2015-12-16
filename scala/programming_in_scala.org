@@ -140,19 +140,19 @@ list有可变和不可变的
   import scala.io.Source
   def widthOfLength(s: String) = s.length.toString.length
   if (args.length > 0) {
-  val lines = Source.fromFile(args(0)).getLines().toList
-  val longestLine = lines.reduceLeft(
-  (a, b) => if (a.length > b.length) a else b
-  )
-  val maxWidth = widthOfLength(longestLine)
-  for (line <- lines) {
-  val numSpaces = maxWidth - widthOfLength(line)
-  val padding = " " * numSpaces
-  println(padding + line.length +" | "+ line)
-  }
+      val lines = Source.fromFile(args(0)).getLines().toList
+      val longestLine = lines.reduceLeft(
+          (a, b) => if (a.length > b.length) a else b
+      )
+      val maxWidth = widthOfLength(longestLine)
+      for (line <- lines) {
+      val numSpaces = maxWidth - widthOfLength(line)
+      val padding = " " * numSpaces
+      println(padding + line.length +" | "+ line)
+      }
   }
   else
-  Console.err.println("Please enter filename")
+      Console.err.println("Please enter filename")
 #+END_SRC
 
 * 类和对象 classes and objects 
@@ -186,7 +186,7 @@ list有可变和不可变的
      f: ()Unit
    #+END_SRC
 
-   当代码要在多行时可以用()扩起来，也可以用+符号做后缀。
+   当代码要在多行时可以用()扩起来，也可以把符号放在行尾，scala通常的风格是把操作符放在行尾而不是行首。
 
    #+BEGIN_SRC scala
      (x
@@ -270,8 +270,9 @@ list有可变和不可变的
    基本类型都可以写成字面量。字面量就是直接写在代码里的常量值。
    scala的原字符串和符号字面量：
    + scala为原始字符串引入了一种特殊的语法：三个引号(""")作为开始和结束，类似python中。
-   + 符号字面量被写成 '<标识符> ::
-     这里的标识符可以是任何字母或数字哦的标识符。这种字面量被映射成预定义类scala.Symbol实例。
+   + 符号字面量被写成 '<标识符>
+
+     这里的标识符可以是任何字母或数字的标识符。这种字面量被映射成预定义类scala.Symbol实例。
      符号字面量除了显示名字之外，什么都不能做。
 
         #+BEGIN_SRC scala
@@ -294,7 +295,7 @@ list有可变和不可变的
    中缀操作符， 前缀操作符， 后缀操作符。其中前，后缀操作符都是一元(unary)的。
 
    #+BEGIN_SRC scala
-     scala> val sum = 1 + 2    // Scala invokes (1).+(2)
+     scala> val sum = 1 + 2    // Scala invokes (1).+(2)
        sum: Int = 3
      scala> val sumMore = (1).+(2) 
        sumMore: Int = 3
@@ -326,7 +327,8 @@ list有可变和不可变的
 * 函数式对象
   面向对象的更深层次，使用函数式（即不可变）有理数作为例子。
   + 类参数和构造参数
-  + 方法和操作符
+  + 方法和操作符 ::
+    
   + 私有成员 :: val numer: Int = n
   + 重写 
   + 先决条件检查 require(flat: Boolean)
@@ -344,11 +346,12 @@ list有可变和不可变的
   不可变对象，必须确保对象创建时数据的有效性。先决条件判断的两种方式：
   + 使用require方法 :: 
     方法带一个布尔型参数，如果值为false，require将抛出IllegalArgumentException阻止对象被构造
-  + 
-
+ 
   操作符名称来创建方法并定义隐式转换能帮助设计出让客户代码更简洁和易于理解的库。如果无技巧的使用，也会让客户代码变得难以阅读和理解。
   代码要可读，易懂，简洁。
-  
+
+  字母数字标示符java和scala不相同的地方在于常量的定义。java使用全大写下划线分割，scala只要求第一个字母必须大写（然后驼峰规则最好）。
+  例如： MAX_VALUE， 在scala 中MaxValue
   #+BEGIN_SRC scala
     class Rational(n: Int, d: Int) {
         require(d != 0)
@@ -441,7 +444,7 @@ list有可变和不可变的
    while循环不产生值，通常被纯函数式语言所舍弃，为了让程序发挥作用，while循环通常不是更新var就是执行I/O。
    如果用函数式风格编写，一般要用递归实现。
 
-   递归的实现：默认的最大公约数函数gcdloop使用了var和while循环。
+   递归的实现：默认的最大公约数函数gcd loop使用了var和while循环。
    下边的采用了递归而不需要while和var.
 
    #+BEGIN_SRC scala
@@ -528,7 +531,7 @@ list有可变和不可变的
            case "chips" => "salsa"
            case "eggs" => "bacon"
            case _ => "huh?"
-         }           
+         }
 
        println(friend)
    #+END_SRC
@@ -537,8 +540,8 @@ list有可变和不可变的
    用if代替continue, 用布尔变量代替每个break是最简单的形式; 也可以把循环重写为递归函数(可以省略var变量)。
 
    #+BEGIN_SRC scala
-     // java的版本
-      int i = 0;                // This is Java
+       // java的版本
+       int i = 0;                // This is Java
        boolean foundIt = false;
        while (i < args.length) {
          if (args[i].startsWith("-")) {
@@ -552,8 +555,8 @@ list有可变和不可变的
          i = i + 1;
        }
 
-     //用if和布尔判断代替continue和break
-     var i = 0
+       //用if和布尔判断代替continue和break
+       var i = 0
        var foundIt = false
 
        while (i < args.length && !foundIt) {
@@ -606,7 +609,7 @@ list有可变和不可变的
   + 作为对象成员的函数
   + 内嵌在函数中的函数
   + 函数字面量和函数值
-    
+
 ** 本地函数
    像定义本地变量一样可以把函数定义在别的函数内部。
    本地函数能够访问包含其函数的参数。
@@ -677,7 +680,7 @@ list有可变和不可变的
    #+END_SRC
 
 ** 闭包 closure
-   函数字面量在运行时创建的函数值(对象)被成为闭包（需要包含自由变量）。
+    函数字面量在运行时创建的函数值(对象)被成为闭包（需要包含自由变量）。
     不带自由变量的函数字面量成为封闭项（closed term).
 
     #+BEGIN_SRC scala
@@ -687,7 +690,7 @@ list有可变和不可变的
     #+END_SRC
     任何以(x: Int) => x + more为模板在运行期创建的函数值将必须捕获对自由变量more的绑定。
 
-    java的内部类不允许访问i外围范围内可以改变的变量。
+    java的内部类不允许访问外围范围内可以改变的变量。
     闭包在运行期改变的自由变量值，仍然在闭包之外可见。
 
     #+BEGIN_SRC scala
@@ -882,10 +885,7 @@ list有可变和不可变的
 
 * 组合与继承
   scala更多对面向对象的支持，实践中经常出现。
-  In addition to these topics, we’ll discuss abstract classes, pa-
-rameterless methods, extending classes, overriding methods and fields, para-
-metric fields, invoking superclass constructors, polymorphism and dynamic
-binding, final members and classes, and factory objects and methods.
+  In addition to these topics, we’ll discuss abstract classes, parameterless methods, extending classes, overriding methods and fields, parametric fields, invoking superclass constructors, polymorphism and dynamic binding, final members and classes, and factory objects and methods.
 
 ** 抽象类
    一个方法只要没有实现（即没有等号或者方法体），它就是抽象的。抽象方法的声明不需要抽象修饰符。
@@ -902,7 +902,7 @@ binding, final members and classes, and factory objects and methods.
    统一访问原则(uniform access principle): 客户代码不应由属性是通过字段实现还是方法实现而受到影响。
    惯例：无论何时，只要方法没有参数，并且方法仅能通过读取所包含对象的属性去访问可变状态，就使用无参数方法。
 
-   原则上，scala的函数调用可以省略所有的空括号。然后，在调用的方法超出其调用者对象的属性时，推荐仍然写一对空括号。例如：如果方法执行了I/O,或写入可重复赋值的变量（var），或读取不是调用折字段的var，总之，无论是直接还是非直接使用可变对象，都应该添加空括号。
+   原则上，scala的函数调用可以省略所有的空括号。然后，在调用的方法超出其调用者对象的属性时，推荐仍然写一对空括号。例如：如果方法执行了I/O,或写入可重复赋值的变量（var），或读取不是调用者字段的var，总之，无论是直接还是非直接使用可变对象，都应该添加空括号。
 
    scala鼓励使用将不带参数且没有副作用的方法定义为无参数方法的风格。
    但是永远不要定义没有括号的带副作用的方法。
@@ -1092,7 +1092,7 @@ binding, final members and classes, and factory objects and methods.
     trait被定义之后，可以用extends或with关键字，把它混入到类中。
     如果想把特质混入显示扩展超类的类中，可以用extends指明待扩展的超类，用with混入特质。
 
-    可以用特质的定义做任何类定义能做的事，除了以下亮点不同之外语法也相同：
+    可以用特质的定义做任何类定义能做的事，除了以下两点不同之外语法也相同：
     1. 特质不能有任何“类”参数（传入给类的主构造器的参数）
     2. 在特质中，super的调用是动态绑定的。而不论在哪里，类的super调用都是静态绑定的. \\
        特质中的super调用是线性的。
@@ -1135,8 +1135,8 @@ binding, final members and classes, and factory objects and methods.
 ** trait用来做可堆叠的改变
    trait可以改变类的方法。trait是可堆叠的。
    trait在声明为抽象的方法中可以有super调用，而这种调用 在普通的类中是非法的。因为trait的super调用是动态绑定的。
-   super调用在实现可堆叠改动的特质来说常用到，为了告诉编译器目的是什么，还不须对这种方法打上abstract override的标志，这种标志在类中也是非法的。
-   trait的混入次序是非常重要的，越靠近右侧的特质越先其作用。右侧特质的方法先被调用，如果这个方法调用了super,他调用其左侧特质的方法。
+   super调用在实现可堆叠改动的特质来说常用到，为了告诉编译器目的是什么，还必须对这种方法打上abstract override的标志，这种标志在类中也是非法的。
+   trait的混入次序是非常重要的，越靠近右侧的特质越先起作用。右侧特质的方法先被调用，如果这个方法调用了super,他调用其左侧特质的方法。
    应时刻关注是否有机会以可堆叠的改变方式安排代码。
 
    #+BEGIN_SRC scala
@@ -1219,8 +1219,8 @@ binding, final members and classes, and factory objects and methods.
 
    引用选择器可以包括以下模式：
    + 简单名x。 :: 把x包含进引用名集。
-   + 重命名子句x => y。
-   + 隐藏子句x => _。 :: 把x排除在引用名集之外
+   + 重命名子句x => y。  import java.sql.{Date => sDate}
+   + 隐藏子句x => _。 :: 把x排除在引用名集之外  import Fruits.{Pear => _, _}
    + 全包括 _ 。 :: 如果存在全包括，那么必须是引用选择的最后一个。
      
    scala隐式为每个源文件添加三个引用：
@@ -1342,6 +1342,7 @@ binding, final members and classes, and factory objects and methods.
    #+END_SRC
 
 ** 单元测试
+   JUnit, TestNG, ScalaTest, ScalaCheck, specs
 *** ScalaTest
     简单扩展org.scalatest.Suite类
     Suite代表一个测试集，测试方法名以test开头。可以直接在scala解释器中通过调用execute方法运行Suite.
