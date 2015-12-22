@@ -1,0 +1,2 @@
+获取jvm file编码：
+　　System.getProperty("file.encoding")
