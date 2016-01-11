@@ -1,0 +1,11 @@
+* colorful(^_^)
+** sealed关键字
+   有两个作用:
+   1. 其修饰的trait，class只能在当前文件里面被继承
+   2. 用sealed修饰这样做的目的是告诉scala编译器在检查模式匹配的时候，让scala知道这些case的所有情况，scala就能够在编译的时候进行检查，看你写的代码是否有没有漏掉什么没case到，减少编程的错误。
+** java initialization
+   [[https://www.caoqq.net/java-class-initialization.html][java class initialization]]
+   [[http://docs.oracle.com/javase/specs/jls/se8/html/jls-12.html#jls-12.4][initialization of classes and interfaces and when initialization occurs]]
+   [[http://stackvoid.com/Java-Class-lifecycle/][java类生命周期]]
+   [[http://allenhk.iteye.com/blog/1866288][java程序编译,运行的过程]]
+* unknown

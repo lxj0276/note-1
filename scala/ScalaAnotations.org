@@ -1,0 +1,5 @@
+* known
+* not sure
+  - @inline
+    instead of a function call resulting in parameters being placed on the stack and an invoke operation occurring, the definition of the function is copied at compile time to where the invocation was made, saving the invocation overhead at runtime.
+

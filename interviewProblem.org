@@ -69,6 +69,50 @@
         from (select distinct a， b from tbl) group by a;
 
     2. join
+       [[http://blog.csdn.net/wf1982/article/details/7200376][map join 优化]]
+       - common join
+         不受数据量大小影响， 但是最没有效率。
+
+       - map join
+         map join 计算步骤分为两步： 将小表数据变成hashtable广播到所有的map端， 将大表的数据进行合理的切分， 然后在map阶段的时候用大表的数据一行一行的去探测(probe)小表的hashtable. 如果join key 相等， 就写入到hdfs.
+         缺点： 小表有大小限制。
+
+       - bucket map join
+         当连接的两个表的join key 都是bucket column的时候， 就可以通过： hive.optimize.bucketmapjoin=ture 来控制hive执行bucket map join.
+         注意: 小表的number buckets必须是大表的数倍.
+         bucket map join 的执行也分为两步： 
+         1. 先将小表做map操作变成hashtable,然后广播到大表的map端，大表接受了num_buckets个小表的hashtable并不需要合并称一个大的hashtable。
+
+         2. 大表也会产生num_buckets个split， 每个split标记跟小表的标记一致。这样只需要把小表的一个hashtable放入内存即可。
+         
+         缺点： 内存限制为小表中最大的那个hashtable的大小。 
+       - sort merge bucket map join
+         Bucket Map Join 并没有解决map join 在小表必须完全装载进内存的限制, 如果想要在一个reduce 节点的大表和小表都不用装载进内存，必须使两个表都在join key 上有序才行，你可以在建表的时候就指定sorted byjoin key 或者使用index 的方式.
+
+            set hive.optimize.bucketmapjoin = true;
+
+            set hive.optimize.bucketmapjoin.sortedmerge = true;
+
+            set hive.input.format=org.apache.hadoop.hive.ql.io.BucketizedHiveInputFormat;
+
+            Bucket columns == Join columns == sort columns
+
+            这样小表的数据可以每次只读取一部分，然后还是用大表一行一行的去匹配，这样的join 没有限制内存的大小. 并且也可以执行全外连接.
+       - skew join
+            真实数据中数据倾斜是一定的, hadoop 中默认是使用
+
+            hive.exec.reducers.bytes.per.reducer = 1000000000
+
+            也就是每个节点的reduce 默认是处理1G大小的数据，如果你的join 操作也产生了数据倾斜，那么你可以在hive 中设定
+
+            set hive.optimize.skewjoin = true; 
+            set hive.skewjoin.key = skew_key_threshold （default = 100000）
+
+            hive 在运行的时候没有办法判断哪个key 会产生多大的倾斜，所以使用这个参数控制倾斜的阈值，如果超过这个值，新的值会发送给那些还没有达到的reduce, 一般可以设置成你
+
+            （处理的总记录数/reduce个数）的2-4倍都可以接受.
+
+            倾斜是经常会存在的，一般select 的层数超过2层，翻译成执行计划多于3个以上的mapreduce job 都很容易产生倾斜，建议每次运行比较复杂的sql 之前都可以设一下这个参数. 如果你不知道设置多少，可以就按官方默认的1个reduce 只处理1G 的算法，那么  skew_key_threshold  = 1G/平均行长. 或者默认直接设成250000000 (差不多算平均行长4个字节)
 *** hive 如何很多任务用一张表的时候 这些任务起一次map(multi insert)
 ** hive更新数据
    hive不支持对某个具体行的操作，hive对数据的操作只支持覆盖原数据和追加数据。对于更新操作，hive是通过查询将原表的数据进行转化最后存储在新表里，这和传统数据库的更新操作有很大不同。
@@ -82,6 +126,12 @@
 
 * java
 ** hashmap的结构
+   在我们编程的世界里数据的基本组织可以说有三种形式。
+    1. 结构体(或对象)
+    2. 数组
+    3. 链表
+
+   hashmap 数组加链表(链表散列)
 * mahout
 ** 推荐系统的评测指标
 为了评估推荐算法的好坏需要各方面的评估指标。
@@ -101,43 +151,23 @@
         Item-based算法首选计算物品之间的相似度，计算相似度的方法有以下几种：
 
         1. 基于余弦（Cosine-based）的相似度计算，通过计算两个向量之间的夹角余弦值来计算物品之间的相似性，公式如下：
-
-
-
         其中分子为两个向量的内积，即两个向量相同位置的数字相乘。
 
         2. 基于关联（Correlation-based）的相似度计算，计算两个向量之间的Pearson-r关联度，公式如下：
-
-
-
         其中表示用户u对物品i的打分，表示第i个物品打分的平均值。
 
         3. 调整的余弦（Adjusted Cosine）相似度计算，由于基于余弦的相似度计算没有考虑不同用户的打分情况，可能有的用户偏向于给高分，而有的用户偏向于给低分，该方法通过减去用户打分的平均值消除不同用户打分习惯的影响，公式如下：
-
-
-
         其中表示用户u打分的平均值。
 
         （2）预测值计算
-
         根据之前算好的物品之间的相似度，接下来对用户未打分的物品进行预测，有两种预测方法：
-
         1. 加权求和。
-
         用过对用户u已打分的物品的分数进行加权求和，权值为各个物品与物品i的相似度，然后对所有物品相似度的和求平均，计算得到用户u对物品i打分，公式如下：
-
-
-
         其中为物品i与物品N的相似度，为用户u对物品N的打分。
-
         2. 回归。
-
         和上面加权求和的方法类似，但回归的方法不直接使用相似物品N的打分值，因为用余弦法或Pearson关联法计算相似度时存在一个误区，即两个打分向量可能相距比较远（欧氏距离），但有可能有很高的相似度。因为不同用户的打分习惯不同，有的偏向打高分，有的偏向打低分。如果两个用户都喜欢一样的物品，因为打分习惯不同，他们的欧式距离可能比较远，但他们应该有较高的相似度。在这种情况下用户原始的相似物品的打分值进行计算会造成糟糕的预测结果。通过用线性回归的方式重新估算一个新的值，运用上面同样的方法进行预测。重新计算的方法如下：
-
-
-
         其中物品N是物品i的相似物品，和通过对物品N和i的打分向量进行线性回归计算得到，为回归模型的误差。具体怎么进行线性回归文章里面没有说明，需要查阅另外的相关文献。
-
+        
 *** 2
     基于物品的协同过滤
 ItemBasedCF 应该是业界的应用最广泛的推荐算法了。该算法的核心思想主要是：给目标用户推荐与他喜欢的物品相似度较高高的物品。我们经常在京东、天猫上看到「购买了该商品的用户也经常购买的其他商品」，就是主要基于 ItemBasedCF。一般我们先计算物品之间的相似度，然后根据物品的相似度和用户的历史行为给用户生成推荐列表。
@@ -215,23 +245,42 @@ class ItemBasedCF:
 
 
 UserCF 和 ItemCF 的区别和应用
+
 UserCF 算法的特点是：
+    用户较少的场合，否则用户相似度矩阵计算代价很大
+    适合时效性较强，用户个性化兴趣不太明显的领域
+    对新用户不友好，对新物品友好，因为用户相似度矩阵不能实时计算
+    很难提供令用户信服的推荐解释
 
-用户较少的场合，否则用户相似度矩阵计算代价很大
-适合时效性较强，用户个性化兴趣不太明显的领域
-对新用户不友好，对新物品友好，因为用户相似度矩阵不能实时计算
-很难提供令用户信服的推荐解释
 对应地，ItemCF 算法的特点：
-
-适用于物品数明显小于用户数的场合，否则物品相似度矩阵计算代价很大
-适合长尾物品丰富，用户个性化需求强的领域
-对新用户友好，对新物品不友好，因为物品相似度矩阵不需要很强的实时性
-利用用户历史行为做推荐解释，比较令用户信服
-因此，可以看出 UserCF 适用于物品增长很快，实时性较高的场合，比如新闻推荐。而在图书、电子商务和电影领域，比如京东、天猫、优酷中，ItemCF 则能极大地发挥优势。在这些网站中，用户的兴趣是比较固定和持久的，而且这些网站的物品更新速度不会特别快，一天一更新是在忍受范围内的。
+    适用于物品数明显小于用户数的场合，否则物品相似度矩阵计算代价很大
+    适合长尾物品丰富，用户个性化需求强的领域
+    对新用户友好，对新物品不友好，因为物品相似度矩阵不需要很强的实时性
+    利用用户历史行为做推荐解释，比较令用户信服
+    因此，可以看出 UserCF 适用于物品增长很快，实时性较高的场合，比如新闻推荐。而在图书、电子商务和电影领域，比如京东、天猫、优酷中，ItemCF 则能极大地发挥优势。在这些网站中，用户的兴趣是比较固定和持久的，而且这些网站的物品更新速度不会特别快，一天一更新是在忍受范围内的。
 ** mahout中的算法
+   [[http://blog.csdn.net/u010967382/article/details/39183839][Mahout推荐算法编程实践]]
+*** mahout推荐算法
+    Perference：表示用户的喜好数据，是个三元组（userid, itemid, value），分别表示用户id, 物品id和用户对这个物品的喜好值。
+    DataModel：是Perference的集合，可以认为是协同过滤用到的user*item的大矩阵。DateModel可以来自db, 文件或者内存。
+    Similarity：相似度计算的接口，各种相似度计算算法都是继承自这个接口，具体相似度计算的方法，可以参考这篇文章：http://anylin.iteye.com/blog/1721978
+    Recommender: 利用Similarity找到待推荐item集合后的各种推荐策略，这是最终要暴露个使用者的推荐接口
+    Item-based:
+            GenericItemBasedRecommender
+            GenericBooleanPrefItemBasedRecommender
+            KnnItemBasedRecommender
+    User-based:
+            GenericUserBasedRecommender
+            GenericBooleanPerfUserBasedRecommender
+    Model-based:
+            SlopeOneRecommender
+            SVDRecommender
+            TreeClusteringRecommender
+    ItemAverageRecommender
+            ItemUserAverageRecommender
 * 数据分析维度
 ** 店铺的维度
-   时间， 平台维度（京东， 淘宝，一号店，亚马逊等），流量来源维度（移动，pc端），地域维度（省，市），行业（服饰，影响数码）
+   时间， 平台维度（京东， 淘宝，一号店，亚马逊等），流量来源维度（移动，pc端），地域维度（省，市），行业（服饰，影像数码）
 
 ** 会员
    购买时间维度， 地域，平台， 流量来源
