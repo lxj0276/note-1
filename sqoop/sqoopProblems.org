@@ -1,0 +1,6 @@
+* problems
+** Caused by: java.lang.RuntimeException: Can't parse input data: 'null'
+   由于文件中有多余的空行， 可能是空行按某个字符拆分不出东西， 数组越界， null不能拆分， 或者什么原因。
+
+*** Answer
+    目前的解决是再读一下文本 过滤空行， 然后用sqoop导入。
