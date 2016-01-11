@@ -1,0 +1,110 @@
+#+OPTIONS: ^:nil
+
+* 数据序列化
+  Spark的目标是在易用性(允许在操作中用任何类型的Java类)和性能上取得一个平衡。
+  Spark提供了两个序列化包:
+  1. Java serialization
+     默认的(易用，慢)
+  2. Kryo serialization
+     比Java Serialization更快而且更紧凑， 但是并不支持所有类型的序列化， 而且为了获得更好的性能， 需要在用之前提前注册.
+
+  在Job初始化的时候， 通过设置SparkConf 并且调用 conf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")　来更改应用 Kryo.
+  配置这个参数后， 不仅能保证在不同工作节点上 shuffling 数据的时候可以用到Kryo序列化器， 而且在序列化RDDs 到硬盘的时候也可以用上.
+
+  可以用 registerKryoClasses 方法来注册你自己的Kryo类.
+  #+BEGIN_SRC scala
+    val conf = new SparkConf().setMaster(...).setAppName(...)
+    conf.registerKryoClasses(Array(classOf[MyClass1], classOf[MyClass2]))
+    val sc = new SparkContext(conf)
+  #+END_SRC
+
+  如果你的对象非常大， 那么你需要增加配置参数 spark.kryoserializer.buffer， 这个参数的值要比你要序列化的最大对象要大.
+
+  如果没有注册自己的类， 那么Kryo也一样在用， 但是她将会存储每个对象的全类名， 这样会造成一些浪费.
+* 内存调优
+  在内存调优的时候有三种情况需要考虑：
+  1. 对象所用的内存总量(你可能想要把整个数据集都加载到内存)
+  2. 进入这些对象所消耗的内存
+  3. GC上边的开销(如果对象更新很快)
+
+  Java 对象可以快速进入， 但是它比单纯的数据要多消耗2-5倍的内存。
+  这是因为下边几个原因：
+  - 每一个不同的对象都有一个对象头， 大约消耗16bytes, 并且含有指向其他类的指针。
+  - Java Strings 比单纯的数据大约要多40bytes的消耗(因为他们存的是Char数组， 并且保持着多余的数据， 比如长度等)
+  - 常见的集合类， 比如HashMap, LinkedList, 用的链型数据结构， 对每一个实体都是一个包装对象(例如：Map.Entry). 这个对象不就有头，而且有指向下一个元素的指针(通常每一个大小是8bytes)
+  - 基本类型的集合存储的时候， 经常是存储的包装类型(比如java.lang.Integer)
+
+  下边章节将首先概览一下spark中的内存管理； 然后讨论一个特殊的策略帮助在应用中可以更有效的使用内存。
+  特别的， 我们将描述如何判断对象的内存使用情况，以及如何提高它. 提高内存使用的方法不仅仅是改变数据结构， 而且也包括数据的序列化格式.
+  然后， 我们将优化spark的缓存大小，以及Java 垃圾回收.
+** 内存管理概览
+   有两种情况内存使用将会非常大: *执行* 和 *存储*.
+   - 执行 :: 内存使用跟shuffles, joins, sorts and aggregations 的计算有关.
+   - 存储 :: 内存使用跟缓存和在集群种传递数据有关.
+
+   在spark中， 执行和存储共享一个统一的内存区域。当一个操作不需要应用内存的时候，另一个操作可以占用所有的内存. 如果必要的话， /执行/ 可以驱逐 /存储/ 的内存使用， 但是 /存储/ 不能驱逐 /执行/ 的内存使用(主要是因为实现此功能比较复杂)
+
+   有两个相应的配置参数， 一般情况下用户不需要修改他们：
+   1. spark.memory.fraction \\
+      总内存(M)的大小(默认 0.75用于JVM heap space, 0.25用于用户的数据结构)
+   2. spark.memory.storageFraction \\
+      最小的存储空间(R)大小(默认情况下为0.5)
+** 判定内存使用量
+   1. 最好的方法是把数据集放入到一个RDD中， 然后把它放到缓存中， 在web UI 的Storage页面查看这个RDD占据了多少内存.
+   2. 判定一个特殊对象的内存占用， 可以用 SizeEstimator 的 estimate方法. 这个方法在测试不同数据设计用以减少内存使用量的时候非常有用， 也可以用来判定广播变量在每一个执行堆中占用的空间总量.
+** 优化数据结构
+   减少内存消耗的第一步是避免优先考虑Java特性， 比如指针类型或者包装类.
+   有几种方式来达到这个目的：
+   1. 设计数据结构的时候更倾向于用 /数组对象/ 和 /基本数据类型/ 来替代Java和Scala的 /集合类/ (eg: HashMap)， (fastutil包)
+   2. 尽量避免嵌入式数据结构中包含许多小的对象和指针.
+   3. 考虑使用数字ID或者枚举类型来代替string作为key.
+   4. 当RAM小于32G的时候， 设置JVM参数 /-XX:+UseCompressedOops/ 使得指针为4bytes, 而不是8bytes. 可以把这个参数添加到 /spark-env.sh/.
+** 序列化RDD存储
+   当对象太大的时候， 一个减少内存使用的简单方式是使用序列化形式, 可以用序列化存储层次 [[http://spark.apache.org/docs/latest/programming-guide.html#rdd-persistence][RDD persistence API]] (例如： MEMORY_ONLY_SER). Spark 能够把每一个RDD分区存储为一个大的二进制数组.  序列化存储的唯一劣势是进入时间变慢. 推荐使用 *Kryo* 存储序列化形式的缓存数据.
+** Garbage Colelction 垃圾回收优化
+   当Java 需要回收一些旧对象来保证有足够的空间时， 它需要跟踪所有的对象来找到那些是没有用的. 需要记住的一点是， Java的垃圾回收消耗是跟Java对象的数量成正比的. 一个更号的方法是用序列化形式持久化对象， 这样就能保证一个RDD分区只有一个对象.
+   如果GC是问题的话， 在尝试其他方法之前， 首先考虑的是序列化缓存.
+*** 度量GC的影响
+    GC优化的第一步是统计GC的频率和GC的总时间. 可以通过增加Java选项： /-verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimesStamps 来得到统计数据, 数据将会在log中打印出来.
+*** 高级GC优化
+    JVM内存管理的基本信息：
+    - /Java Heap/ 空间分为两个区域： /新生代/ 和 /年老代/. 新生代保存着短生命周期的对象, 年老代的目的是保存长生命周期的对象.
+    - 新生代又分为三个区域： /Eden/, /Survivor1/, /Survivor2/.
+    - GC程序可以简单描述为：当 /Eden/ 满了的时候， 一个小的GC将会在 /Eden/ 运行， 然后 /Eden/ 和 /Survivor/ 中的对象会复制到 /Survivor2/. /Survivor/ 区域是交换区. 当对象足够老，或者 /Survivor2/ 满了的时候， 它会移到年老代. 最后当年老代将近要满的时候， 全局GC被调用.
+
+    Spark中GC优化的一个目标是： 保证仅仅只有长生命周期的RDDs存储在年老代， 并且新生代有足够的大小来存储短生命周期的对象. 这样可以帮助避免全局GCs.
+    下边这些步骤可能会有帮助：
+    1. 收集GC状态， 查看是否有太多的垃圾回收. 如果一个任务完成前有多次的GC， 意味着没有足够的可用内存来执行任务.
+    2. 在打印出来的GC状态中， 如果年老代一直处于快要满的状态， 那么可以通过降低 /spark.memory.storageFraction/ 参数大小来减少用于缓存的内存大小; 缓存更少的对象比减慢任务执行更好.
+    3. 如果有很多小的垃圾回收(Eden GC), 而不多的全局GC， 那么可以分配更多的内存给 /Eden/.
+       可以通过评估每一个任务需要的内存来设置 /Eden/ 的大小. 如果 /Eden/ 的大小是 E， 那么新生代的大小可以用选项 /-Xmm=4/3*E/ 来设定.
+    4. 例子： 如果我们从HDFS上读取数据， 任务所需内存的大小可以用数据块的大小来评估. 一个压缩数据块解压后的大小一般是解压前的2-3倍. 所以如果我们在工作空间中有3-4个任务， HDFS数据块的大小是64M, 那么我没评估 /Eden/ 的大小为 4*3*64MB.
+    5. 改变GC参数设置后， 监控GC频率和花费的时间. [[http://www.oracle.com/technetwork/java/javase/gc-tuning-6-140523.html][gc turing 6 HotSpot]]
+*  其他需要考虑的
+** 并行度
+   Spark会根据每一个文件的大小来(可用通过参数SparkContext.textFile等来控制) 自动设置 /map/ 任务的数量 和分布式 /reduce/ 操作, 例如： groupByKey 和 reduceByKey(用最大的父RDD分区). 可以传递并行度等级作为第二个参数， 或者 /spark.default.parallelism/ 改变默认值.
+   通常， 我们推荐在集群中每一个CPU core运行 2,3 个任务.
+    
+** 减少任务的内存使用
+   当RDD的大小跟内存大小不匹配的时候， 可能会出现OOME(OutOfMemoryError), 起因可能是其中一个任务中的工作集， 比如 /groupByKey/ 的reduce 任务太大. 通常一个任务中执行grouping任务，比如shuffle的 /sortByKey/, /groupByKey/, /reduceByKey/, /join/ 等操作会创建一个哈希表，会使数据集过大.
+
+** Broadcasting 大的变量
+   用SparkContxt的 /broadcast/ 方法， 可以大大减少每一个序列化任务的大小 和 在集群中开始一个job的消耗.
+   如果任务中用到了driver pargram中任何大的对象(比如： 查找表进行统计), 那么考虑把它变为广播变量.
+   Spark会在master中打印出每一个任务的序列化大小， 因此可以通过查看来决定是否一个任务太大， 通常任务大于20KB, 那么它就值得优化.
+   
+** 数据本地化
+   数据本地化是一个作业的主要影响因素. 通常移动代码会比移动数据更快.
+   数据本地化指的是数据和执行它的代码程序有多近. 基于数据当前位置，数据本地化有很多层级， 从近到远依次是： /PROCESS_LOCAL/, /NODE_LOCAL/, /NO_PREF/, /PACK_LOCAL/, /ANY/.
+   Spark 倾向于把所有的任务安排在最本地化的层级， 但是这有的时候不可能实现. 在这种情况下， 当没有空闲的节点， 并且没有未处理的数据时， Spark 会调整到一个低一级的层级.
+   这个过程中有两个可选项：
+   1. 在这个服务器上等待， 知道CPU空闲
+   2. 在别的地方立即再开启一个新的任务， 然后移动数据到那里.
+   通常， spark会等待一段时间， 如果CPU一直没有空闲， 那么它会移动数据到别的空闲的CPU. 等待时间可以设置， 在 [[http://spark.apache.org/docs/latest/configuration.html#scheduling][configuration page]] 查看 /spark.locality/ 参数. 如果任务非常长， 以及非常差的本地化， 那么需要增加这些设置.
+
+* 总结
+  对于大多数程序， 更改为Kryo序列化， 并且持久化数据为序列化模式会姐姐大多数常见的性能问题.
+* 原网址   
+  [[http://spark.apache.org/docs/latest/tuning.html][Tuning Spark]]
+
+  
