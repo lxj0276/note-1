@@ -1,2 +1,102 @@
+* 简介
 Machine Learning Platform using spark:
     MLLIB/GraphX Possibilities
+
+** spark system requirements
+*** Storage Systems
+It is important to place it as close to this system as possible. If at all possible, run Spark on the same nodes as HDFS. The simplest way is to set up a Spark standalone mode cluster on the same nodes, and configure Spark and Hadoop’s memory and CPU usage to avoid interference
+*** Local Disks
+While Spark can perform a lot of its computation in memory, it still uses local disks to store data that doesn’t fit in RAM, as well as to preserve intermediate output between stages. We recommend having 4-8 disks per node, configured without RAID
+*** Memory
+Spark runs well with anywhere from 8 GB to hundreds of gigabytes of memory per machine. In all cases, we recommend allocating only at most 75% of the memory for Spark; leave the rest for the operating system and buffer cache.
+*** Network
+    When the data is in memory, a lot of Spark applications are network-bound. Using a 10 Gigabit or higher network is the best way to make these applications faster. This is especially true for “distributed reduce” applications such as group-bys, reduce-bys, and SQL joins.
+*** CPU Cores
+    Spark scales well to tens of CPU cores per machine because it performs minimal sharing between threads. You should likely provision at least 8-16 cores per machine.
+
+** What is spark?
+   Distributed data analytics engine, generalizing MapReduce.
+   Core engine, with streaming, SQL, mechine learning, and graph processing modules.
+** RDD(Resilient Distributed Dataset
+   - Distributed collection of objects
+   - Benefits of RDDs?
+     - RDDs exist in-memory
+     - Built via parallel trasformations(map, filter, ...)
+     - RDDs are automatically rebuilt on failure
+   - two ways to create RDDs:
+     - Parallelizing an existing collection in your driver program
+     - Referencing a dataset in an external storage system.
+** spark SQL
+   - Unified data access with SchemaRDDs
+   - Tables are a representation of (schema + data) = SchemaRDD
+   - Hive Compatibility
+   - Standard Connectivity via ODBC and/or JDBC
+** spark streaming
+   - spark streaming expresses streams as a series of RDDs over time
+   - combine streaming with batch and interactive queries
+   - stateful and fault tolerant
+   - Inputs :: Kafka, flume,, hdfs/s3, kinesis, twitter
+   - Outputs :: hdfs, databases, dashboards
+** spark machine learning
+   - Iterative computation
+   - Vectors, Matrices = RDD[Vector]
+     
+   *Current MLlib 1.1 Algorithms*:
+    • linear SVM and logistic regression
+    • classification and regression tree
+    • k-means clustering
+    • recommendation via alternating least squares
+    • singular value decomposition
+    • linear regression with L1- and L2-regularization
+    • multinomial naive Bayes
+    • basic statistics
+    • feature transformations
+** spark graphX
+   - Unifies graphs with RDDs of edges and vertices
+   - View the same data as both graphs and collections
+   - Custom iterative graph algorithms via pregel api
+     
+   *Current GraphX Algorithms*:
+    • PageRank
+    • Connected components
+    • Label propagation
+    • SVD++
+    • Strongly connected components
+    • Triangle count
+** Applying Graphs to CyberAnalytics
+Use the graph as a pre-merged perspective of all the available data sets
+*Graphs enable discovery*:
+    • It’s called a network! – represent that information in the more
+    natural and appropriate format
+    • Graphs are optimized to show the relationships present in
+    metadata
+    • “fail fast, fail cheap” – choose a graph engine that supports rapid
+    hypothesis testing
+    • Returning answers before the analyst forgets why he asked
+    them, this enables the investigative discovery flow
+    • Using this framework, analysts can more easily and more quickly
+    find unusual things – this matters significantly when there is the
+    constant threat of new unusual things
+    • When all focus is no longer on dealing with the known, there is
+    bandwidth for discovery
+    • When all data can be analyzed in a holistic manner, new patterns
+    and relationships can be seen
+** Using Graph Analysis to Identify Patterns
+/Example mature cyber-security questions/
+    • Who hacked us? What did they touch in our network? Where else did they go?
+    • What unknown botnets are we hosting?
+    • What are the vulnerabilities in our network configuration?
+    • Who are the key influencers in the company / on the network?
+    • What’s weird that’s happening on the network?
+/Proven graph algorithms help answer these questions/
+    • Subgraph identification
+    • Alias identification
+    • Shortest-path identification
+    • Common-node identification
+    • Clustering / community identification
+    • Graph-based cyber-security discovery environment
+/Analytic tradecraft and algorithms mature together/
+    • General questions require swiss army knives
+    • Specific, well-understood questions use exacto knives
+* Enterprise Data Storage and Analysis on spark
+

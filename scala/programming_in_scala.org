@@ -1219,7 +1219,7 @@ list有可变和不可变的
 
    引用选择器可以包括以下模式：
    + 简单名x。 :: 把x包含进引用名集。
-   + 重命名子句x => y。  import java.sql.{Date => sDate}
+   + 重命名子句x => y ::  import java.sql.{Date => sDate}
    + 隐藏子句x => _。 :: 把x排除在引用名集之外  import Fruits.{Pear => _, _}
    + 全包括 _ 。 :: 如果存在全包括，那么必须是引用选择的最后一个。
      
@@ -1349,17 +1349,471 @@ list有可变和不可变的
 
 * 样本类和模式匹配
   是在编写正规的非封装的数据结构时用到的工具，尤其对树型递归数据很有用
+** case class
+  #+BEGIN_SRC scala
+    abstract class Expr
+      case class Var(name: String) extends Expr
+      case class Number(num: Double) extends Expr
+      case class UnOp(operator: String, arg: Expr) extends Expr
+      case class BinOp(operator: String, 
+          left: Expr, right: Expr) extends Expr
+  #+END_SRC
 
+  Using the "case" modifier makes the Scala compiler add some syntactic conveniences to your class.
+  1. adds a factoy method with the name of class rather than use "new"
+
+     #+BEGIN_SRC scala
+       val v  = Var("x")
+     #+END_SRC
+
+     The factory methods are particularly nice when you nest them, because there are no noisy new keywords.
+
+     #+BEGIN_SRC scala
+       val op = BinOp("+", Number(1), v)
+     #+END_SRC
+
+  2. all arguments in the parameter list of a case class implicitly get a val prefix, so they are maintained as fields
+
+     #+BEGIN_SRC scala
+       v.name
+       op.left
+     #+END_SRC
+
+  3. the compiler adds "natural" implementations of methods toString, hashcode and equals to your class.
+
+  4. the compiler adds a copy method to your class for making modified copies.
+
+     #+BEGIN_SRC scala
+       val op = BinOp("+", Number(1), v)  // res1: BinOp = BinOp(+,Number(1.0),Var(x))
+       op.copy(operator = "-")   // res2: BinOp = BinOp(-,Number(1.0),Var(x))
+     #+END_SRC
+** pattern matching
+
+   #+BEGIN_SRC scala
+     scala:
+       selector match { alternatives }
+     java:
+       switch (selector) {alternatives}
+   #+END_SRC
+
+   #+BEGIN_SRC scala
+     def simplifyTop(expr: Expr): Expr = expr match {
+         case UnOp("-", UnOp("-", e))  => e   // Double negation
+         case BinOp("+", e, Number(0)) => e   // Adding zero
+         case BinOp("*", e, Number(1)) => e   // Multiplying by one
+         case _ => expr
+       }
+   #+END_SRC
+** Kinds of patterns
+*** wildcard patterns
+
+    #+BEGIN_SRC scala
+      expr match {
+          case BinOp(op, left, right) =>
+            println(expr +" is a binary operation")
+          case _ => println("It's something else")
+        }
+
+     expr match {
+        case BinOp(_, _, _) => println(expr +"is a binary operation")
+        case _ => println("It's something else")
+      }
+    #+END_SRC
+*** constant patterns
+
+    #+BEGIN_SRC scala
+       def describe(x: Any) = x match {
+          case 5 => "five"
+          case true => "truth"
+          case "hello" => "hi!"
+          case Nil => "the empty list"
+          case _ => "something else"
+        }
+    #+END_SRC
+*** variable patterns
+
+    #+BEGIN_SRC scala
+       expr match {
+          case 0 => "zero"
+          case somethingElse => "not zero: "+ somethingElse
+        }
+
+      // Since pi is a variable pattern, so here compiler will not let you add a default case at all. 
+       scala> E match {
+             |   case pi => "strange math? Pi = "+ pi
+             |   case _ => "OK"  
+             | }
+        <console>:9: error: unreachable code
+                 case _ => "OK"  
+                           ^
+      // If you use a lowercase name for a pattern constant, enclose them with back ticks.
+      scala> E match {
+             |   case `pi` => "strange math? Pi = "+ pi
+             |   case _ => "OK"
+             | }
+        res13: java.lang.String = OK
+    #+END_SRC
+*** Constructor patterns
+The extra patterns mean that scala patterns support deep matches.
+    #+BEGIN_SRC scala
+      // checks the top-level object is a BinOp, and its third constructor parameter is Number, and that the value field of that number is 0
+       expr match {
+          case BinOp("+", e, Number(0)) => println("a deep match")
+          case _ => 
+        }
+    #+END_SRC
+*** Sequence patterns
+    Can match against sequence types like List or Array just like you match agaist case classes.
+
+    #+BEGIN_SRC scala
+      // checks for a three-element list starting with zero
+      expr match {
+          case List(0, _, _) => println("found it")
+          case _ =>
+        }
+
+      // match against a sequence without specifying how long it can be, can specify _* as the last element of pattern
+       expr match {
+          case List(0, _*) => println("found it")
+          case _ =>
+        }
+
+    #+END_SRC
+*** Tuple patterns
+
+    #+BEGIN_SRC scala
+       def tupleDemo(expr: Any) =
+          expr match {
+            case (a, b, c)  =>  println("matched "+ a + b + c)
+            case _ =>
+          }
+    #+END_SRC
+*** Typed patterns
+    Can use a typed pattern as a convenient replacement for type tests and casts.
+
+    #+BEGIN_SRC scala
+      def generalSize(x: Any) = x match {
+          case s: String => s.length
+          case m: Map[_, _] => m.size
+          case _ => -1
+        }
+
+    #+END_SRC
+*** typed erasure
+    The only exception to the erasure rule is arrays.
+    Scala uses the erasure model of generics, just like java does.This means no information about type arguments is maintained at runtime.
+
+    #+BEGIN_SRC scala
+      // wrong
+      scala>  def isIntIntMap(x: Any) = x match {
+           |   case m: Map[Int, Int] => true
+           |   case _ => false
+           | }
+        <console>:5: warning: non variable type-argument Int in
+        type pattern is unchecked since it is eliminated by erasure
+                 case m: Map[Int, Int] => true
+                         ^
+       scala> isIntIntMap(Map("abc" -> "abc"))
+        res18: Boolean = true
+
+      // Array can
+      scala> def isStringArray(x: Any) = x match {
+             |   case a: Array[String] => "yes"
+             |   case _ => "no"
+             | }
+       isStringArray: (Any)java.lang.String
+
+        scala> val as = Array("abc")
+        as: Array[java.lang.String] = Array(abc)
+
+        scala> isStringArray(as)
+        res19: java.lang.String = yes
+
+        scala> val ai = Array(1, 2, 3)
+        ai: Array[Int] = Array(1, 2, 3)
+
+        scala> isStringArray(ai)
+        res20: java.lang.String = no
+
+    #+END_SRC
+*** variable binding
+    Can simply write the variable name, then @, and then the pattern.
+    The meaning of such a pattern is to perform the pattern match as normal, and if the pattern succeeds, set the variable to the matched object just as with a simple variable pattern.
+
+    #+BEGIN_SRC scala
+      expr match {
+          case UnOp("abs", e @ UnOp("abs", _)) => e
+          case _ =>
+        }
+    #+END_SRC
+** pattern guards
+   A pattern guards comes after a pattern and starts with an if.
+
+   #+BEGIN_SRC scala
+     // wrong
+     scala> def simplifyAdd(e: Expr) = e match {
+            |   case BinOp("+", x, x) => BinOp("*", x, Number(2))
+            |   case _ => e
+            | }
+       <console>:10: error: x is already defined as value x
+                case BinOp("+", x, x) => BinOp("*", x, Number(2))
+
+     // right
+      scala> def simplifyAdd(e: Expr) = e match {
+            |   case BinOp("+", x, y) if x == y =>
+            |     BinOp("*", x, Number(2))
+            |   case _ => e
+            | }
+       simplifyAdd: (Expr)Expr
+
+     // match only positive integers
+       case n: Int if 0 < n => ...  
+
+       // match only strings starting with the letter `a'
+       case s: String if s(0) == 'a' => ... 
+   #+END_SRC
+** sealed classes
+   A sealed class can not have any new subclasses added except the ones in the same file.
+
+   Therefore, if you write a hierarchy of classes intended to be pattern matched, you should consider sealing them.
+
+   #+BEGIN_SRC scala
+      sealed abstract class Expr
+       case class Var(name: String) extends Expr
+       case class Number(num: Double) extends Expr
+       case class UnOp(operator: String, arg: Expr) extends Expr
+       case class BinOp(operator: String, 
+           left: Expr, right: Expr) extends Expr
+
+
+      def describe(e: Expr): String = e match {
+         case Number(_) => "a number"
+         case Var(_)    => "a variable"
+       }
+     warning: match is not exhaustive!
+       missing combination           UnOp
+       missing combination          BinOp
+
+     // down here is ok
+      def describe(e: Expr): String = e match {
+         case Number(_) => "a number"
+         case Var(_) => "a variable"
+         case _ => throw new RuntimeException // Should not happen
+       }
+
+   #+END_SRC
+** the Option type 
+   Optional values are produced by some of the standard operations on Scala's collections.
+   Such a value can be of two forms.It can be of the form Some(x) where x is the actual value. Or it can be the None object, which represents a missing value. 
+  
 * 使用列表
   最常用到的数据结构
+** List literals
+   The type of a list that has elements of type T is written List[T].
+
+   #+BEGIN_SRC scala
+     val fruit: List[String] = List("apples", "oranges", "pears")
+     val nums: List[Int] = List(1, 2, 3, 4)
+     val diag3: List[List[Int]] =
+       List(
+         List(1, 0, 0),
+         List(0, 1, 0),
+         List(0, 0, 1)
+       )
+     val empty: List[Nothing] = List()
+   #+END_SRC
+
+   The list type in scala is /covariant/. This means that  types S and T, if S is a subtype of T, then List[S] is a subtype of List[T].
+** constructing lists
+   All lists are built from two fundamental building blocks, Nil and ::(pronounced "cons").
+
+   #+BEGIN_SRC scala
+     val nums = 1 :: 2 :: 3 :: Nil
+   #+END_SRC
+** basic operations on lists
+   All operations on lists can be expressed in terms of the following three:
+   - head :: returns the first element
+   - tail :: returns a list consisting of all elements except the first
+   - isEmpty :: return ture if the list is empty.
+     
+   In scala, the insertion sort algorithm looks like:
+
+   #+BEGIN_SRC scala
+     def isort(xs: List[Int]): List[Int] =
+       if (xs.isEmpty) Nil
+       else insert(xs.head, isort(xs.tail))
+
+     def insert(x: Int, xs: List[Int]): List[Int] =
+       if (xs.isEmpty || x <= xs.head) x :: xs
+       else xs.head :: insert(x, xs.tail)
+   #+END_SRC
+** list patterns
+
+   #+BEGIN_SRC scala
+     val fruit: List[String] = List("apples", "oranges", "pears")
+
+     scala> val List(a, b, c) = fruit
+     a: String = apples
+     b: String = oranges
+     c: String = pears
+
+     scala> val a :: b :: rest = fruit
+     a: String = apples
+     b: String = oranges
+     rest: List[String] = List(pears)
+
+     def isort(xs: List[Int]): List[Int] = xs match {
+       case List()   => List()
+       case x :: xs1 => insert(x, isort(xs1))
+     }
+
+     def insert(x: Int, xs: List[Int]): List[Int] = xs match {
+       case List()  => List(x)
+       case y :: ys => if (x <= y) x :: xs
+       else y :: insert(x, ys)
+     }
+   #+END_SRC
 
 * 集合类型
   如何使用scala集合类型：列表，数组，元组集（tuple）及映射表
+** Sequences
+*** Lists
+    fast addition and removal of items to the beginnig of the list bu t they do not provide fast access to arbitrary indexes.
+*** Arrays
+    allow to hold a sequence of elements and efficiently access an element at an arbitrary position, both to get or update the element.
+*** List buffers
+    Class list provides fast access to the head of the list, but not the end. Thus, when you need to build a list by appending to the end, you should consider building the list backwards by prepending elements to the front, then when down, calling reverse.
 
-* 有状态的对象
+    Or another choice is ListBuffer. ListBuffer is a mutable object, which can help you build lists more efficiently when you need to append.
+*** ArrayBuffers
+    An ArrayBuffer is like an array, except that you can additionally add and remove elements from the beginning and end of the sequence.
+*** Strings( via StringOps)
+    StringOps implements many sequence methods.
+    You can treat any string like a sequence, because Predef has an implicit conversion from String to StringOps.
+** Sets and Maps
+** selecting mutable versus immutable collection
+   For small maps and sets, the immutable versions are much more compact than the mutable ones.
+** initializing collections
+   The most common way to create and initialize a collection is to pass the initial elements to a factory method on the companion object.
+
+   #+BEGIN_SRC scala
+     scala> List(1, 2, 3)
+     res0: List[Int] = List(1, 2, 3)
+
+     scala> Set('a', 'b', 'c')
+     res1: scala.collection.immutable.Set[Char] = Set(a, b, c)
+
+     scala> import scala.collection.mutable
+     import scala.collection.mutable
+
+     scala> mutable.Map("hi" -> 2, "there" -> 5)
+     res2: scala.collection.mutable.Map[java.lang.String,Int] =
+       Map(hi -> 2, there -> 5)
+
+     scala> Array(1.0, 2.0, 3.0)
+     res3: Array[Double] = Array(1.0, 2.0, 3.0)
+   #+END_SRC
+
+   #+BEGIN_SRC scala
+     scala> import scala.collection.mutable
+     import scala.collection.mutable
+
+     scala> val stuff = mutable.Set(42)
+     stuff: scala.collection.mutable.Set[Int] = Set(42)
+
+     // the problem is that stuff was given an element type of Int
+     scala> stuff += "abracadabra"
+     <console>:7: error: type mismatch;
+     found   : java.lang.String("abracadabra")
+     required: Int
+     stuff += "abracadabra"
+
+     // resulve
+     scala> val stuff = mutable.Set[Any](42)
+     stuff: scala.collection.mutable.Set[Any] = Set(42)
+
+   #+END_SRC
+
+   #+BEGIN_SRC scala
+     scala> val colors = List("blue", "yellow", "red", "green")
+     colors: List[java.lang.String] =
+       List(blue, yellow, red, green)
+
+     scala> import scala.collection.immutable.TreeSet
+     import scala.collection.immutable.TreeSet
+
+     // cannot pass the colors list to the factory method for TreeSet
+     scala> val treeSet = TreeSet(colors)
+     <console>:6: error: no implicit argument matching
+     parameter type (List[java.lang.String]) =>
+     Ordered[List[java.lang.String]] was found.
+     val treeSet = TreeSet(colors)
+
+     // resulved
+     scala> val treeSet = TreeSet[String]() ++ colors
+     treeSet: scala.collection.immutable.SortedSet[String] =
+       Set(blue, green, red, yellow)
+   #+END_SRC
+** converting between mutable and immutable sets and maps
+
+   #+BEGIN_SRC scala
+     scala> import scala.collection.mutable
+     import scala.collection.mutable
+
+     scala> treeSet
+     res5: scala.collection.immutable.SortedSet[String] =
+       Set(blue, green, red, yellow)
+
+     scala> val mutaSet = mutable.Set.empty ++ treeSet
+     mutaSet: scala.collection.mutable.Set[String] =
+       Set(yellow, blue, red, green)
+
+     scala> val immutaSet = Set.empty ++ mutaSet
+     immutaSet: scala.collection.immutable.Set[String] =
+       Set(yellow, blue, red, green)
+
+    scala> val muta = mutable.Map("i" -> 1, "ii" -> 2)
+    muta: scala.collection.mutable.Map[java.lang.String,Int] =
+        Map(ii -> 2, i -> 1)
+
+    scala> val immu = Map.empty ++ muta
+    immu: scala.collection.immutable.Map[java.lang.String,Int] =
+        Map(ii -> 2, i -> 1)
+
+   #+END_SRC
+** Tuples
+   Tuples can combine objects of different types.
+   A common application of tuples is returning multiple values from a method.
+   Tuples are great when you combine data that has no meaning beyond "and A and B".
+   However, whenever the combination has some meaning , or you want to and some mehod to the combination, it is better to go ahead and create a class.
+* 有状态的对象 (stateful objects)
   什么是有状态（可变）的对象，scala提供语法层面表达他们的术语。
   包括一个在离散事件模拟上的案例研究，用来演示一些有状态对象的动作
+** what make an object stateful?
+  For a stateful object, the result of a method call or field access may depend on what operations are previously performed on the object.
 
+  #+BEGIN_SRC scala
+    class BankAccount {
+
+      private var bal: Int = 0
+
+      def balance: Int = bal
+
+      def deposit(amount: Int) {
+        require(amount > 0)
+        bal += amount
+      }
+
+      def withdraw(amount: Int): Boolean =
+        if (amount > bal) false
+        else {
+          bal -= amount
+          true
+        }
+    }
+  #+END_SRC
+
+  State and vars usually go hand in hand, but a class might be stateful without defining or inheriting any vars because it forwards method calls to other objects that have mutable state.
   在scala中字段不可以随意省略"=_"初始化器。如果：
    var celsius: Float = _ 写为 var celsius: Float ，将定义为抽象变量，而不是未初始化的变量。
   #+BEGIN_SRC scala
@@ -1374,12 +1828,202 @@ list有可变和不可变的
         override def toString = fahrenheit +"F/"+ celsius +"C"
       }
   #+END_SRC
+** reassignable variables and properties
+   If it appears in a class, the var definition:
+       var hour = 12
+   generates a getter:"hour", and a setter:"hour_="
 
-* 类型参数化
+   #+BEGIN_SRC scala
+     class Time {
+
+       private[this] var h = 12
+       private[this] var m = 12
+
+       def hour: Int = h
+       def hour_= (x: Int) {
+         require(0 <= x && x < 24)
+         h = x
+       } 
+
+       def minute = m
+       def minute_= (x: Int) {
+         require(0 <= x && x < 60)
+         m = x
+       }
+     }
+   #+END_SRC
+   It is also possible and sometimes useful, to fefine a gette and a setter without an associated field.
+
+   #+BEGIN_SRC scala
+     class Thermometer {
+       // you can set to a default value by specifing "_" as the "initializing value"
+       var celsius: Float = _
+
+       def fahrenheit = celsius * 9 / 5 + 32
+       def fahrenheit_= (f: Float) {
+         celsius = (f - 32) * 5 / 9
+       }
+       override def toString = fahrenheit +"F/"+ celsius +"C"
+     }
+   #+END_SRC
+
+* 类型参数化(type parameterization)
   纯函数队列类的设计，以及一些信息隐藏技术。
   本章建立了关于各种类型参数的描述，以及它如何与信息隐藏实现交互。
+  Type parameterization allows you to write generic classes and traits.
+  For example, sets are generic and take a type parameter: Set[T].
+  Unlike java, which allows raw types, scala requires that you specify type parameters.
+  Set[String] is a subtype of Set[AnyRef].
 
-** 变化型注解
+** Functional queues
+
+   #+BEGIN_SRC scala
+     // first version 1.1
+     class SlowAppendQueue[T](elems: List[T]) { // Not efficient
+       def head = elems.head
+       def tail = new SlowAppendQueue(elems.tail)
+       def append(x: T) = new SlowAppendQueue(elems ::: List(x))
+     }
+
+     // first version 1.2
+     class SlowHeadQueue[T](smele: List[T]) { // Not efficient
+      // smele is elems reversed
+      def head = smele.last
+      def tail = new SlowHeadQueue(smele.init)
+      def append(x: T) = new SlowHeadQueue(x :: smele)
+     }
+   #+END_SRC
+
+   #+BEGIN_SRC scala
+     // second version 
+     class Queue[T](
+       private val leading: List[T],
+       private val trailing: List[T]
+     ) {
+       private def mirror =
+         if (leading.isEmpty)
+           new Queue(trailing.reverse, Nil)
+         else
+           this
+
+       def head = mirror.leading.head
+
+       def tail = {
+         val q = mirror
+         new Queue(q.leading.tail, q.trailing)
+       }
+
+       def append(x: T) =
+         new Queue(leading, x :: trailing)
+     }
+
+   #+END_SRC
+
+** Information hiding
+*** private constructors and factory methods
+    It is possible to hide the primary constructor by adding a private modifier in front of the class parameter list.
+
+    #+BEGIN_SRC scala
+      class Queue[T] private (
+        private val leading: List[T],
+        private val trailing: List[T]
+      )
+
+      scala> new Queue(List(1, 2), List(3))
+      <console>:6: error: constructor Queue cannot be accessed in
+      object $iw
+      new Queue(List(1, 2), List(3))
+
+      // one possibility way to add an auxiliary constructor, like:
+      def this(elems: T*) = this(elems.toList, Nil)
+
+      // another possibility way is to add a factory method that builds a queue from such a sequence of initial elements. like：
+      Object Queue {
+        def apply[T](xs: T*) = new Queue[T](xs.toList, Nil)
+      }
+   // Important note: 
+      // make the object a companion object of the class.
+      // Note that, because the factory method is called apply, clients can create queues with an expression such as Queue(1, 2, 3)
+      // Using methods named apply inside global objects, you can support usage patterns  that look like invocations of global methods.
+    #+END_SRC
+*** an alternative: private classes
+    One way to hide the initialization and representation of a calss is private constructors and private members.
+    The other way, more radical, is to hide the class itself and only export a trait that reveals the public interface of the class.
+
+    #+BEGIN_SRC scala
+      trait Queue[T] {
+        def head: T
+        def tail: Queue[T]
+        def append(x: T): Queue[T]
+      }
+
+      object Queue {
+
+        def apply[T](xs: T*): Queue[T] =
+          new QueueImpl[T](xs.toList, Nil)
+
+        private class QueueImpl[T](
+          private val leading: List[T],
+          private val trailing: List[T]
+        ) extends Queue[T] {
+
+          def mirror =
+            if (leading.isEmpty)
+              new QueueImpl(trailing.reverse, Nil)
+            else
+              this
+
+          def head: T = mirror.leading.head
+
+          def tail: QueueImpl[T] = {
+            val q = mirror
+            new QueueImpl(q.leading.tail, q.trailing)
+          }
+
+          def append(x: T) =
+            new QueueImpl(leading, x :: trailing)
+        }
+      }
+
+    #+END_SRC
+
+** 变化型注解(Variance annotations)
+   In Scala, however, generic types have by default nonvariant (or, “rigid”) subtyping.
+   However, you can demand covariant (flexible) subtyping of queues by changing the first line of the definition of class Queue like this:
+
+   #+BEGIN_SRC scala
+     trait Queue[+T] { ... }
+   #+END_SRC
+Besides + , there is also a prefix - , which indicates contravariant subtyping. If Queue were defined like this:
+
+#+BEGIN_SRC scala
+  // this means if T is a subtype of type S , this would imply that Queue[S] is a subtype of Queue[T]
+  trait Queue[-T] { ... }
+#+END_SRC
+
+
+#+BEGIN_SRC scala
+    class Cell[T](init: T) {
+      private[this] var current = init
+      def get = current
+      def set(x: T) { current = x }
+    }
+
+  // Hava some error
+  val c1 = new Cell[String]("abc")
+  val c2: Cell[Any] = c1
+  <console>:9: error: type mismatch;
+   found   : Cell[String]
+   required: Cell[Any]
+  Note: String <: Any, but class Cell is invariant in type T.
+  You may wish to define T as +T instead. (SLS 4.5)
+         val c2: Cell[Any] = c1
+                             ^
+  // IT'S OK
+  val c2: Cell[Any] = c1.asInstanceOf[Cell[Any]]
+  c2: Cell[Any] = Cell@2437c6dc
+#+END_SRC
+
    参数的变化型：协变（类型参数前的+）(covariant)，逆边（类型参数前的-）(contravariant)，非协变（类型参数前没有符号）(nonvariant)。
    + 非协变 ::
      trait Queue[T] {...}
@@ -1394,7 +2038,8 @@ list有可变和不可变的
    超类型和子类型的关系是自反的，亦类型对于自身来讲，既是超类型，也是子类型。
 
    #+BEGIN_SRC scala
-     def append[U >: T](x: U) = new Queue[U] (leading, x :: trailing)  // ...
+     def append[U >: T](x: U) = new Queue[U] (leading, x :: trailing) 
+     // ...
    #+END_SRC
 
    类型驱动设计。
