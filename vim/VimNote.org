@@ -1,0 +1,6 @@
+* vim highlight
+1. set in .vimrc
+    You can also put this into your .vimrc :
+    au BufReadPost *.html set syntax=html
+2. set in buffer
+   :set syntax=html

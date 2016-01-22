@@ -99,4 +99,22 @@ Use the graph as a pre-merged perspective of all the available data sets
     • General questions require swiss army knives
     • Specific, well-understood questions use exacto knives
 * Enterprise Data Storage and Analysis on spark
+* spark debug configure
+** spark-submit启动参数
+*** 设置JVM参数，打开调试监听, debug模式， 端口5005
+    export SPARK_JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005
+*** 运行程序
+    /home/ncms/mydata/bigdata/spark-1.5.1-bin-hadoop2.6/bin/spark-submit --executor-memory 512M --num-executors 4 /home/ncms/clean/clean.jar hdfs://cms-112:9000/user/ncms/business/cms_zbgg_m20160118/part-m-00569 debugtest
 
+    然后terminal会停留在： Listening for transport dt_socket at address: 5005
+** 客户端通过jdb或IDE中configurations配置连接
+   1. jdb方式：在命令行$JAVA_HOME/bin/jdb -attach 10.68.156.40:9904进行连接
+   2. eclipse方式：Run->debug configurations->XX应用程序->Connection Properties中配置host和port
+   3. IDEA方式：Run->Edit configurations->"+"->Remote配置host和port
+*** idea 客户端
+    1. 在IDEA中打开spark源码
+       由于spark-submit命令将会启动SparkSubmit.scala中的main函数，因此我们找到spark源码中的SparkSubmit.scala文件，并在main函数中增加断点
+    2. IDE中配置远程调试
+       Run -> Edit Configurations->点击左上角的+号->Remote->在弹出的页面里面将Host和Port两个选项设置为你Driver运行所在节点机器的IP和Port, 设置远程debug的名字
+    3. debug启动
+       Run -> Debug -> 选择2步设置的远程debug的名字 -> debug 即可
