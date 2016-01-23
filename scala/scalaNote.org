@@ -1,2 +1,481 @@
-获取jvm file编码：
+* 获取jvm file编码
 　　System.getProperty("file.encoding")
+* 基础
+** apply方法
+   apply method is just a handy way of closing the gap between functions and objects in Scala.
+
+   #+BEGIN_SRC scala
+     // we will be able to use this object as a function, as well as an object
+     object Foo {
+       var y = 5
+       def apply (x: Int) = x + y
+     }
+     
+     Foo (1) // using Foo object in function notation
+   #+END_SRC
+
+   #+BEGIN_SRC scala
+     class MyAdder(x: Int) {
+       def apply(y: Int) = y + y
+     }
+     
+     val x = new MyAdder(2)
+     val y = x(4) // equivalent to x.apply(4)
+     
+     // It's often use in companion object, to provide a nice factory method for a class or a trait
+     trait A {
+       val x: Int
+       def myComplexStrategy: Int
+     }
+     
+     object A {
+       def apply(x: Int): A = new MyA(x)
+     
+       private class MyA(val x: Int) extends A {
+         val myComplexStrategy = 42
+       }
+     }
+   #+END_SRC
+
+** scala 函数和方法的区别
+   [[http://stackoverflow.com/questions/2529184/difference-between-method-and-function-in-scala][Difference between method and function in Scala]]
+*** 学术上
+   - Function Type :: 是(T1, ..., Tn) => U 的一种类型, 是标准库中trait FunctionN的一种简写. /匿名函数/ 和 /方法值/ 有函数类型， 并且函数类型能被用于 值， 变量和函数声明定义的一部分. 实际上， 它(指的是函数类型?)可以做为方法类型的一部分.
+   - Method Type :: 是一个 /非值类型/. 意味着方法类型没有值， 没有对象， 没有实例. 方法值实际上是函数类型. 方法类型由 *def* 声明， 除了它的body，所有关于def的都是方法类型.
+   - 值声明和定义 和 变量声明和定义 :: 包括类型和值， 都是通过 *val* 和 *var* 声明, 分别为 /函数类型/, /匿名函数/ 或者 /方法值/ .  在JVM中, 方法值倍Java方法的调用来实现.
+   - Function Declaration 函数声明 :: 包括类型和实体都是由 *def* 来声明. 类型部分是方法类型， 实体部分是表达式或者程序块. 它在JVM中也是通过Java调用方法来实现
+    最后， /匿名函数/ 和 /方法值/ 都是 /函数类型/. 区别的是方法值的被创建是通过函数调用，或者加 *_* 后缀(比如: m _)
+*** 应用上
+**** 一个大的不同是 *return* 的含义
+     return 只能从一个方法中返回.
+     #+BEGIN_SRC scala
+       scala> val f = () => { return "test" }
+       <console>:4: error: return outside method definition
+              val f = () => { return "test" }
+     #+END_SRC
+     
+     在方法中定义的函数， 它的return值是 non-local
+     #+BEGIN_SRC scala
+       scala> def f: String = {                 
+            |    val g = () => { return "test" }
+            | g()                               
+            | "not this"
+            | }
+       f: String
+       
+       scala> f
+       res4: String = test
+     #+END_SRC
+
+     而，从一个本地方法中返回值，只能是从这个方法中返回.
+     #+BEGIN_SRC scala
+       scala> def f2: String = {         
+            | def g(): String = { return "test" }
+            | g()
+            | "is this"
+            | }
+       f2: String
+       
+       scala> f2
+       res5: String = is this
+     #+END_SRC
+
+*** 
+*** call-by-name 传名参数本质上是个方法
+    [[http://stackoverflow.com/questions/4543228/whats-the-difference-between-and-unit/4545703#4545703][What's the difference between => , ()=>, and Unit=>]]
+    传名参数实质是一个没有参数列表的方法。正是因此你才可以使用名字调用而不用添加()
+    #+BEGIN_SRC scala
+      scala> def m1(x: => Int)=List(x,x)
+      
+      m1: (x: => Int)List[Int]
+      
+      scala> import util.Random
+      
+      import util.Random
+      
+      scala> val r = new Random()
+      
+      r: scala.util.Random = scala.util.Random@d4c330b
+      
+      scala> //因为方法被调用了两次，所以两个值不相等
+      
+      scala> m1(r.nextInt)
+      
+      res21: List[Int] = List(-1273601135, 2004676878)
+
+
+        // 如果你在方法体部分缓存了传名参数（函数），那么你就缓存了值（因为x函数被调用了一次）
+        scala> //把传名参数代表的函数缓存起来
+
+        scala> def m1(x: => Int) ={val y=x;List(y,y)}
+
+        m1: (x: => Int)List[Int]
+
+        scala> m1(r.nextInt)
+
+        res22: List[Int] = List(-1040711922, -1040711922)
+
+        能否在函数体部分引用传名参数所代表的方法呢，是可以的(缓存的是传名参数所代表的方法)。
+
+        scala> def m1(x: => Int)={val y=x _;List(y(),y())}
+
+        m1: (x: => Int)List[Int]
+
+        scala> m1(r.nextInt)
+
+        res23: List[Int] = List(-1982925840, -933815401)
+    #+END_SRC
+
+    传名参数在DSL(域领域语言)上比较游泳：
+    #+BEGIN_SRC scala
+      def measured(block: ⇒ Unit): Long = {
+        val startTime = System.currentTimeMillis()
+        block
+        System.currentTimeMillis() - startTime
+      }
+      
+      Long timeTaken = measured {
+        // any code here you like to measure
+        // written just as there were no "measured" around
+      }
+    #+END_SRC
+
+** scala 执行shell命令
+
+   #+BEGIN_SRC scala
+     import scala.sys.process._
+     "ls".!!
+   #+END_SRC
+   
+* abstract members
+  Besides methods, you can also declare abstract fields and even abstract types as members of classes and traits.
+  In this chapter we'll describe all for kinds of abstract member: vals, vars, methods, and types.
+  Along the way we'll discuss pre-initialized fields, lazy vals, path-dependent types, and enumerations.
+
+  Trait declares one of each kind of abstract member and its extends.
+
+  #+BEGIN_SRC scala
+    trait Abs {
+      type T
+      def transform(x: T): T
+      val initial: T
+      var current: T
+    }
+    
+    class Concrete extends Abs {
+      type T = String
+      def transform(x: String) = x + x
+      val initial = "hi"
+      var current = initial
+    }
+  #+END_SRC
+** type members
+  An abstract type in scala is always a member of some class or trait, such as type T in trait Abstract.
+  One reason to use a type member is to define a short, descriptive alias for a type whose real name is more verbose, or less obvious in meaning , than the alias.
+  The Other main use of type members is to declare abstract type that must be defined in subclass.
+** abstract vals
+   It gives a name and type for a val, but not its value.
+   And this value has to be provided by a concrete val definition in a subclass.
+
+   #+BEGIN_SRC scala
+     // define an abstract val
+     val initial: String
+     
+     // define an abstract parameterless method
+     def initial: String
+   #+END_SRC
+
+   Any implementation of /val/ must be a /val/ definition, it may not be a /var/ or /def/.
+   But abstract method declarations, may be implemented by both concrete method /def/ definitions and concrete /val/ definitions.
+   Examples:
+
+   #+BEGIN_SRC scala
+     abstract class Fruit {
+       val v: String  // v for value
+       val m: String  // m for method 
+     }
+     
+     abstract class Apple extends Fruit {
+       val v: String
+       val m: String // OK to override a 'def' with a 'val'
+     }
+     
+     abstract class BadApple extends Fruit {
+       def v: String // ERROR: cannot override a 'val' with a 'def'
+       def m: String
+     }
+   #+END_SRC
+** abstract vars 
+   Vars declared as members of classes come equipped with getter and setter methods.
+   This holds for abstract vars as well.
+   If you declare an abstract var named hour, you implicitly declare an abstract getter method, hour, and an abstract setter method, hour_=.
+
+   #+BEGIN_SRC scala
+     trait AbstractTime {
+       var hour: Int
+       var minute: Int
+     }
+     
+     // the definition of abstractTime up is exactly equivalent to the definition shown in below
+     trait AbstractTime {
+       def hour: Int          // getter for `hour'
+       def hour_=(x: Int)     // setter for `hour'
+       def minute: Int        // getter for `minute'
+       def minute_=(x: Int)   // setter for `minute'
+     }
+     
+   #+END_SRC
+** Initializing abstract vals
+   Abstract vals let you provide details in a subclass that are missing in a superclass, this is particularly important for tarits, because traits don't have a constructor to which you could pass parameters.
+
+   #+BEGIN_SRC scala
+     trait RationalTrait {
+       val numerArg: Int
+       val denomArg: Int
+       require(denomArg != 0)
+       private val g = gcd(numerArg, denomArg)
+       val numer = numerArg / g
+       val denom = denomArg / g
+       private def gcd(a: Int, b: Int): Int =
+         if (b == 0) a else gcd(b, a % b)
+       override def toString = numer +"/"+ denom
+     }
+   #+END_SRC
+If you try to instantiate this trait with some numerator and denominator
+expressions that are not simple literals, you’ll get an exception:
+
+#+BEGIN_SRC scala
+  scala> new RationalTrait {
+    val numerArg = 1 * x
+    val denomArg = 2 * x
+  }
+  java.lang.IllegalArgumentException: requirement failed
+  at scala.Predef$.require(Predef.scala:134)
+  at RationalTrait$class.$init$(<console>:8)
+  at $anon$1.<init>(<console>:8)
+    ...
+#+END_SRC
+The exception in this example was thrown because denomArg still had its
+default value of 0 when class RationalTrait was initialized, which caused
+the require invocation to fail.
+
+In fact, Scala offers two alternative solu-
+tions to this problem, pre-initialized fields and lazy val s.
+*** Pre-initialized fields
+    simply place the field definition in braces before the superclass constructor call.
+
+    #+BEGIN_SRC scala
+      scala> new {
+      val numerArg = 1 * x
+      val denomArg = 2 * x
+      } with RationalTrait
+      res1: java.lang.Object with RationalTrait = 1/2
+    #+END_SRC
+
+    #+BEGIN_SRC scala
+      class RationalClass(n: Int, d: Int) extends {
+      val numerArg = n
+      val denomArg = d
+      } with RationalTrait {
+      def + (that: RationalClass) = new RationalClass(
+      numer * that.denom + that.numer * denom,
+      denom * that.denom
+      )
+      }
+    #+END_SRC
+
+*** Lazy vals
+
+     #+BEGIN_SRC scala
+       scala> object Demo {
+       val x = { println("initializing x"); "done" }
+       }
+       defined module Demo
+       Now, first refer to Demo , then to Demo.x :
+       scala> Demo
+       initializing x
+       res3: Demo.type = Demo$@17469af
+       scala> Demo.x
+       res4: java.lang.String = done
+     #+END_SRC
+Compare the up and the blow source code. They are initializing in the diffrent location.
+     #+BEGIN_SRC scala
+       scala> object Demo {
+       lazy val x = { println("initializing x"); "done" }
+       }
+       defined module Demo
+       scala> Demo
+       res5: Demo.type = Demo$@11dda2d
+       scala> Demo.x
+       initializing x
+       res6: java.lang.String = done
+     #+END_SRC
+
+#+BEGIN_SRC scala
+  trait LazyRationalTrait {
+    val numerArg: Int
+    val denomArg: Int
+    lazy val numer = numerArg / g
+    lazy val denom = denomArg / g
+    override def toString = numer +"/"+ denom
+    private lazy val g = {
+      require(denomArg != 0)
+      gcd(numerArg, denomArg)
+    }
+    private def gcd(a: Int, b: Int): Int =
+      if (b == 0) a else gcd(b, a % b)
+  }
+
+
+scala> val x = 2
+  x: Int = 2
+
+scala> new LazyRationalTrait {
+   |   val numerArg = 1 * x
+   |   val denomArg = 2 * x
+   | }
+res1: java.lang.Object with LazyRationalTrait = 1/2
+#+END_SRC
+** Abstract types
+   The rest of this chapter discusses what such an abstract type declaration means and what it’s good for.
+   Here is a well-known example where abstract types show up naturally.
+
+   #+BEGIN_SRC scala
+     class Food
+     abstract class Animal {
+       def eat(food: Food)
+     }
+     
+       class Grass extends Food
+       class Cow extends Animal {
+         override def eat(food: Grass) {} // This won't compile
+       }
+     
+       BuggyAnimals.scala:7: error: class Cow needs to be
+       abstract, since method eat in class Animal of type
+           (Food)Unit is not defined
+       class Cow extends Animal {
+             ^
+       BuggyAnimals.scala:8: error: method eat overrides nothing
+         override def eat(food: Grass) {}
+                 ^
+   #+END_SRC
+   Animal s do eat Food , but what kind of Food each Animal eats depends on the Animal . This can be neatly expressed with an abstract type.
+
+   #+BEGIN_SRC scala
+     class Food
+     abstract class Animal {
+         type SuitableFood <: Food
+         def eat(food: SuitableFood)
+     }
+     
+     class Grass extends Food
+     class Cow extends Animal {
+         type SuitableFood = Grass
+         override def eat(food: Grass) {}
+     }
+   #+END_SRC
+** Path-dependent types
+   #+BEGIN_SRC scala
+       scala> class Fish extends Food
+       defined class Fish
+     
+       scala> val bessy: Animal = new Cow
+       bessy: Animal = Cow@674bf6
+     
+       scala> bessy eat (new Fish)
+       <console>:10: error: type mismatch;
+        found   : Fish
+        required: bessy.SuitableFood
+              bessy eat (new Fish)
+                         ^
+   #+END_SRC
+   A type like bessy.SuitableFood is called a /path-dependent type/.
+   The word “path” here means a reference to an object. It could be a single name, such as bessy , or a longer access path, such as farm.barn.bessy.SuitableFood , where each of farm , barn , and bessy are variables (or singleton object names) that refer to objects.
+   A path-dependent type resembles the syntax for an inner class type in Java, but there is a crucial difference: a path-dependent type names an outer object, whereas an inner class type names an outer class.
+   Java-style inner class types can also be expressed in Scala, but they are written differently.
+   Consider these two classes, Outer and Inner :
+
+   #+BEGIN_SRC scala
+     class Outer {
+       class Inner
+     }
+   #+END_SRC
+** Structural subtyping
+   When a class inherits from another, the first class is said to be a nominal subtype of the other one.
+   Scala additionally supports structural subtyping, where you get a subtyping relationship simply because two types have the same members. To get structural subtyping in Scala, use Scala’s refinement types.
+   Nominal subtyping is usually more convenient, so you should try nominal types first with any new design.
+   
+   Nonetheless, structural subtyping has its own advantages.
+   1. One is that sometimes there really is no more to a type than its members.
+      Instead of defining AnimalThatEatsGrass , you can use a refinement type.
+
+      #+BEGIN_SRC scala
+        Animal { type SuitableFood = Grass }
+        
+        // Given this type, you can now write the pasture class like this:
+        class Pasture {
+            var animals: List[Animal { type SuitableFood = Grass }] = Nil
+            // ...
+        }
+      #+END_SRC
+   2. Another place structural subtyping is helpful is if you want to group together a number of classes that were written by someone else.
+
+      #+BEGIN_SRC scala
+        using(new PrintWriter("date.txt")) { writer =>
+          writer.println(new Date)
+        }
+        
+        using(serverSocket.accept()) { socket =>
+          socket.getOutputStream().write("hello, world\n".getBytes)
+        }
+        
+        // Implementing using is mostly straightforward. The method performs an operation and then closes an object, Here is a first try at implementing this method:(wrong)
+        def using[T, S](obj: T)(operation: T => S) = {
+            val result = operation(obj)
+            obj.close() // type error!
+            result
+        }
+        
+        // Here’s a complete working definition:
+        def using[T <: { def close(): Unit }, S](obj: T)
+          (operation: T => S) = {
+                val result = operation(obj)
+                obj.close()
+                result
+        }
+      #+END_SRC
+** Enumerations
+   There’s a class in its standard library, scala.Enumeration . To create a new enumeration, you define an object that extends this class.
+
+   #+BEGIN_SRC scala
+     object Color extends Enumeration {
+         val Red = Value
+         val Green = Value
+         val Blue = Value
+     }
+     
+     object Color extends Enumeration {
+         val Red, Green, Blue = Value
+     }
+     
+     // You could also import everything in Color with:
+     import Color._
+     
+     // ou can associate names with enumeration values by using a different overloaded variant of the Value method:
+     object Direction extends Enumeration {
+         val North = Value("North")
+         val East = Value("East")
+         val South = Value("South")
+         val West = Value("West")
+     }
+     
+     scala> for (d <- Direction.values) print(d +" ")
+     North East South West
+     
+     scala> Direction.East.id
+     res14: Int = 1
+     
+     scala> Direction(1)
+     res15: Direction.Value = East
+   #+END_SR
