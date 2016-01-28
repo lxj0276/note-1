@@ -1,0 +1,3 @@
+* Related website
+[[http://www.open-open.com/lib/view/open1328059700311.html][UML类图几种关系的总结]]
+[[http://www.cnblogs.com/way-peng/archive/2012/06/11/2544932.html][uml 各类图]]
