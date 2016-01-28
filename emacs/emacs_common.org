@@ -34,3 +34,4 @@ http://www.cnblogs.com/holbrook/archive/2012/04/12/2444992.html
 * command
 ** 点击(类似与鼠标左键快捷键)打开网页
    C-c C-o
+* dired 操作
