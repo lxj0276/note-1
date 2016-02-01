@@ -1,0 +1,5 @@
+* Important concept
+  1. Feature generation 特征提取
+  2. 
+
+     

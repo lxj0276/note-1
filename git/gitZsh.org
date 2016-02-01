@@ -1,0 +1,32 @@
+* 常用alias
+  
+  - gl :: 'git pull'
+
+  - gp :: 'git push'
+  - gpv :: 'git push -v'
+          
+  - gcmsg :: 'git commit -m'
+  - gcam :: 'git commit -a -m'
+  - gc :: 'git commit -v'
+  - gc! :: 'git commit -v --amend'
+           
+  - gst :: 'git status'
+  - gsb :: 'git status -sb'
+
+  - gco :: 'git checkout'
+  - gcb :: 'git checkout -b'
+           
+  - gd :: 'git diff'
+
+  - gm :: 'git merge'
+
+  - glg :: 'git log --stat --color'
+  - glgga :: 'git log --graph --decorate --all'
+             
+  - grh :: 'git reset HEAD'
+           
+  - grb :: git rebase'
+  - grbi :: 'git rebase -i'
+            
+  - gts :: 'git tag -s'
+  - gtv :: 'git tag | sort -V'
