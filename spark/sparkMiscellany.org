@@ -84,4 +84,4 @@ each partition of the parent RDD is used by at most one partition of the child R
 当父RDD最多被一个子RDD依赖的时候，是窄依赖.
 **** 宽依赖
      multiple child partitions may depend on one partition of the parent RDD. 
-     当多个子分区依赖同一个父 RDD 的分区的时候.
+     当多个子分区可能依赖同一个父 RDD 的分区的时候.
