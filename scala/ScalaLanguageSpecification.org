@@ -1,0 +1,40 @@
+* 词法
+** 标识符
+  反引号括起来的字符串是那些 Scala 中是保留字的 Java 中标识符的一个方法。
+  例如,在 Scala 中 Thread.yield()是非法的,因为 yield 是保留字。但是可以这样调用:
+  Thread.`yield`()
+** 换行符
+   Scala 是一个基于行的语言。分号和换行均可作为语句的结束。如果换行满足以下三
+个条件则会被认为是一个特殊符号‟nl‟:
+1. 换行之前的符号是一个语句的结束
+2. 换行之后的符号是一个语句的开始
+3. 符号处在一个允许多语句的区域中
+可以作为语句结束的符号是:常量,标识符,保留字以及以下的分隔符:
+  #+BEGIN_SRC scala
+    this null true false
+    - ) ] }
+    return
+    type
+    <xml-start>
+  #+END_SRC
+
+  可以作为语句开始的符号是除了以下分隔符及保留字之外的所有 Scala 符号:
+  符号 case 只有在 class 或者 object 符号之前才可以作为语句开始
+  #+BEGIN_SRC scala
+    catch else extends finally forSome match requires
+    with yield , <:
+    ]
+    .
+    ;
+    :
+    _
+    =
+    =>
+    <-
+    <%
+    >:
+    #
+    [
+    )
+    }
+  #+END_SRC
