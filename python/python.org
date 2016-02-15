@@ -100,3 +100,7 @@ python -i -m pdb dir/src.py
     A.static_foo('hi')
     # executing static_foo(hi)
   #+END_SRC
+* 魔术方法何时调用
+  [[http://www.diveintopython3.net/special-method-names.html][Special Method Names And How To Invoke]]
+  [[http://pycoders-weekly-chinese.readthedocs.org/en/latest/issue6/a-guide-to-pythons-magic-methods.html][Python 魔术方法指南]]
+  [[http://www.cnblogs.com/wilber2013/p/4690681.html][调用魔术方法]]
