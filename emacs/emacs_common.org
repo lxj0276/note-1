@@ -31,7 +31,22 @@ C-x r C-SPC    point-to-register
 * org模式
 http://www.cnblogs.com/holbrook/archive/2012/04/12/2444992.html
 
+** 时间戳
+C-c .	插入时间戳；如果连续插入两个时间戳，则插入一个时间范围
+C-u C-c .	更加精确的时间戳，在日程表中以时间线显示
+C-c !	插入时间戳，不在日程表中显示
+C-c <	直接插入时间戳（当前日期）
+C-c C-o	访问当前时间戳的日程表
+S-left|S-right	以天为单位调整时间戳时间
 * command
 ** 点击(类似与鼠标左键快捷键)打开网页
    C-c C-o
 * dired 操作
+* emacs 显示行号
+(require 'linum)
+(global-linum-mode t)
+* emacs 自绑定快捷键
+** python 快速跳入跳出方法 
+(global-set-key (kbd "C-c .") 'jedi:goto-definition)
+(global-set-key (kbd "C-c ,") 'jedi:goto-definition-pop-marker)
+(global-set-key (kbd "C-c ?") 'jedi:show-doc)
