@@ -1,0 +1,87 @@
+* Miscellany
+** No classify
+  数据处理最重要的标准：
+
+  hadoop 是非周期数据流模式： load data -> process data -> write output -> finish.
+  spark 是reuse a working set of data.
+
+** Trait vs abstract class
+   1. 如果被用在多个不相关的类中，用 trait
+   2. 如果要java 代码中继承， 用abstract class(只有抽象成员的trait将被转换为接口)
+   3. 如果要分发编译后的代码， 让别人来继承， 那么用抽象类(当trait增加或者减少成员时， 任何继承它的类都必须重新编译)
+   4. 如果效率非常非常重要， 用类（类比接口方法调用要快）
+   5. 不符合上边情况下， 用trait.
+
+** 返回不同的值类型
+
+   #+BEGIN_SRC scala
+     def toInt(in: String): Option[Int] = {
+       try {
+         Some(Integer.parseInt(in.trim))
+       } catch {
+         case e: NumberFormatException => None
+       }
+     }
+     
+     toInt(someString) match {
+       case Some(i) => println(i)
+       case None => println("That didn't work.")
+     }
+     
+   #+END_SRC
+
+** spark sql
+*** Catalyst
+Catalyst provides an execution planning framework
+- SQL parser & analyzer
+- Logical operators & general expressions
+- Logical optimizer
+- Transform operator tree
+Corresponding to Figure 2, Catalyst runs through following steps:
+Parse the query => Analyze the unresolved Logical Plan using the Catalog => Optimize the Logical Plan.
+
+*** Some optimization rules in Spark-SQL
+Optimizations	Action
+**** NullPropagation
+     1+null => null
+     count(null) = 0
+**** ConstantFolding
+     1+2=>3
+**** BooleanSimplification:
+	   false AND $right => false
+     true AND $right => $right
+     true OR $right => true
+     false OR $right => $right
+     if(true, $then, $else) => $then
+**** SimplifyFilters
+     remove trivially filters:
+     Filter(true, child) => child
+     Filter(false, child)=> empty
+**** CombineFilters
+     merges 2 filters:
+     Filter($fc, Filter($nc, child)) => Filter(AND($fc, $nc), child)
+**** PushPredicateThroughProject
+     pushes Filter operators through project operator:
+     Filter('i==1', Project(i, j, child)) => Project(i, j, Filter('i==1', child))
+**** PushPredicateThroughJoin
+     pushes Filter operators through join operator:
+     Filter('left.i'.att == 1, Join(left, right)) => Join(Filter('i==1', left), right)
+**** ColumnPruning
+	   Eliminates the reading of unused columns:
+     Join(left, right, leftSemi, "left.id".attr == "right.id".attr)=> Join(left, Project('id, right'), leftSemi)
+*** Increasing performance by generating byte code at run-time
+
+** How can 2 applications share RDDs
+   Use  *SparkJobServer*
+
+   
+* FQ NA
+** 如何确定窄依赖还是宽依赖
+如何知道是宽依赖还是窄依赖( 有一个父RDD的才是窄依赖, 还是只要不依赖所有的RDD(有一些)的就是窄依赖？), 可以确认join的时候依赖两个父RDD,是窄依赖.
+*** 答案
+**** 窄依赖
+each partition of the parent RDD is used by at most one partition of the child RDD.
+当父RDD最多被一个子RDD依赖的时候，是窄依赖.
+**** 宽依赖
+     multiple child partitions may depend on one partition of the parent RDD. 
+     当多个子分区可能依赖同一个父 RDD 的分区的时候.

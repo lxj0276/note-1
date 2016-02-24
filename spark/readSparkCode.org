@@ -1,4 +1,8 @@
 [[http://blog.csdn.net/lovehuangjiaju/article/details/49227919][Spark 1.5.0 远程调试]]
+* 工具方法
+** Akka消息跟踪
+   如果我们想知道LaunchTask消息的发送方和接收方( 可以用grep查找)：
+   grep LaunchTask -r core/src/main
 * 基础
 ** 基本概念（Basic Concepts）
 
@@ -40,5 +44,7 @@ Spark支持以下几种部署模式，Standalone、Mesos和YARN。这些部署�
   scheduler 模块主要分为两大部分:
   1. TaskSchedulerListener
   2. TaskScheduler
+* Storage模块
+  [[http://jerryshao.me/architecture/2013/10/08/spark-storage-module-analysis/][Spark源码分析之-Storage模块]]
 * FQA
 ** DAGScheduler模块介入运算，计算RDD之间的依赖关系, 如何介入 ?
