@@ -9,7 +9,7 @@
 (defun org-mode-my-init ()
   (define-key org-mode-map (kbd "×") (kbd "*"))
   (define-key org-mode-map (kbd "－") (kbd "-"))
-  (set-face-attribute 'org-level-1 nil :height 1.2 :bold t)
+  (sal-set-key (kbd "M-SPC") 'set-face-attribute 'org-level-1 nil :height 1.2 :bold t)
   (set-face-attribute 'org-level-2 nil :height 1.1 :bold t)
   (set-face-attribute 'org-level-3 nil :height 1.1 :bold t)
   )
