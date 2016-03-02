@@ -204,6 +204,10 @@ o 是owner的意思 -rw 就是把 读和写的权限去掉
 ** nc
 ** ab
 ** curl
+
+* linux 快速格式化
+** ntfs格式
+sudo mkfs.ntfs -Q /dev/sdb1
 * linux后台运行和关闭、查看后台任务 (fg、bg、jobs、&、nohup、ctrl + z命令)
     一、&
     加在一个命令的最后，可以把这个命令放到后台执行,如gftp &,
