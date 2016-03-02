@@ -1,0 +1,2 @@
+* 启动virtualbox需要启动的服务
+sudo modprobe vboxdrv

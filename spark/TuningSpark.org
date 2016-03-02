@@ -108,3 +108,88 @@
   [[http://spark.apache.org/docs/latest/tuning.html][Tuning Spark]]
 
   
+* spark gc调优
+** 首先检查spark应用本身
+   1. 是不是cache了没有必要的cache
+   2. 迭代计算, 及时清除cache. 要及时uncache, unpersist.
+** gc的几中方式
+   1. 引用计数算法:
+      老牌垃圾回收算法。无法处理循环引用，没有被Java采纳
+   2. 根搜索算法
+      根搜索算法的基础上，现代虚拟机的实现当中，垃圾搜集的算法主要有三种，分别是标记-清除算法、复制算法、标记-整理算法。
+   3. 标记-清除算法
+      缺点:
+      - 首先，它的缺点就是效率比较低（递归与全堆对象遍历），导致stop the world的时间比较长，尤其对于交互式的应用程序来说简直是无法接受。试想一下，如果你玩一个网站，这个网站一个小时就挂五分钟，你还玩吗？
+      - 第二点主要的缺点，则是这种方式清理出来的空闲内存是不连续的，这点不难理解，我们的死亡对象都是随即的出现在内存的各个角落的，现在把它们清除之后，内存的布局自然会乱七八糟。而为了应付这一点，JVM就不得不维持一个内存的空闲列表，这又是一种开销。而且在分配数组对象的时候，寻找连续的内存空间会不太好找。
+   4. 复制算法：（新生代的GC） 
+      - 与标记-清除算法相比，复制算法是一种相对高效的回收方法
+      - 不适用于存活对象较多的场合，如老年代（复制算法适合做新生代的GC）
+      - 复制算法的最大的问题是：空间的浪费
+   5. 标记-整理算法：（老年代的GC）
+      标记/整理算法不仅可以弥补标记/清除算法当中，内存区域分散的缺点，也消除了复制算法当中，内存减半的高额代价。
+      
+      但是，标记/整理算法唯一的缺点就是效率也不高。
+不仅要标记所有存活对象，还要整理所有存活对象的引用地址。从效率上来说，标记/整理算法要低于复制算法。
+   6. 分代收集算法：（新生代的GC+老年代的GC）
+      - 根据对象的存活周期的不同将内存划分为几块儿。一般是把Java堆分为新生代和老年代：短命对象归为新生代，长命对象归为老年代。
+      - 少量对象存活，适合复制算法：在新生代中，每次GC时都发现有大批对象死去，只有少量存活，那就选用复制算法，只需要付出少量存活对象的复制成本就可以完成GC。
+      - 大量对象存活，适合用标记-清理/标记-整理：在老年代中，因为对象存活率高、没有额外空间对他进行分配担保，就必须使用“标记-清理”/“标记-整理”算法进行GC。
+
+*** gc收集器的比较
+    1. incremental(已废弃)
+    2. serial
+    3. parallel(用多线程copy)
+       - only in young
+       - copy, multi-thread
+       - STW
+       - 1.6后默认打开, 以前使用serialOld
+       - -XX:+UseParallelGC (打开parallel GC)
+       - Throughput最大化
+    4. parallelOld
+    5. ParNew
+    6. CMS
+       - only work in old generation
+       - 目标是实现更短的暂停, 而不是更高的throughput
+       - -XX:+UseConcMarkSweepGC
+    7. G1 (最主要的)
+       把堆空间氛围许多固定大小的区域, 动态分配个年代空间大小(Eden, survivor, old gen, humongous, unused)
+       - cSet
+         需要回收的对象
+       - RSet
+         从别的区域进入当前区域的引用, 用来隔离各个区域
+       - 每个区域维护rset何cset各一个
+         
+** gc方案分析 调优的考量
+   1. footprint
+      application(soft/weak/phantom refs...)
+   2. throughput(吞吐量)
+   3. latency
+      把暂停时的工作尽量往并行阶段转移
+*** gc方案分析
+    - 如果不在意延时, 可以先用parallel GC试试, 如果没有发生full GC, 可以使用parallel gc. 即使在意延时, 也可以先使用parallel GC, 当延时不能达到要求时, 再尝试其他方案
+    - 关掉Plab "-XX:-ResizePLAB"
+    - 如果使用G1, 确保使用最新的JVM(1.7之后, 即使没有调优也可以优于cms)
+*** gc调优 收集gc日志
+    可以把下列参数都加到spark的java ops中, 把整个gc的日志都保留下来
+    - -XX:+PrintFlagsFinal -XX:+PrintReferenceGC
+    - -verbose:gc -XX:+PrintGCDetails
+    - -XX:+PrintGCTimeStamps
+    - -XX:+PrintAdaptiveSizePolicy
+    - -XX:+UnlockDiagnsticVMOptions
+    - -XX:+G1SummarizeConcMark
+*** g1 gc调优
+    避免 full gc
+    减少暂停时间: 减少总的暂停时间, 减少最大暂停时间
+
+    对于那次应用的参数:
+    -XX:+UseG1GC -XX:+PrintFlagsFinal -XX:+PrintReferenceGC -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintAdaptiveSizePolicy -XX:+UnblockDiagnosticVMOptions -XX:+G1SummarizeConcMark -Xms88g -Xmx88g
+** 小结
+   如果遇到Full GC,可以使用 "-XX:UseG1GC -XX:ResizePLAB"
+
+   spark 为内存管理在不断优化: Tachyon, Project Tungsten(堆外存储)
+
+   可以尝试使用更多的executor
+** 总结
+   1. 应用本身的优化
+   2. G1是有一个很有潜力的垃圾回收器, 对大heap管理, spark应用中使用G1得到了令人满意的结果
+   3. spark新的堆外存储等技术也值得关注
