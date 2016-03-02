@@ -42,6 +42,7 @@ S-left|S-right	以天为单位调整时间戳时间
 ** 点击(类似与鼠标左键快捷键)打开网页
    C-c C-o
 * dired 操作
+<<<<<<< HEAD
 * emacs 显示行号
 (require 'linum)
 (global-linum-mode t)
@@ -50,3 +51,15 @@ S-left|S-right	以天为单位调整时间戳时间
 (global-set-key (kbd "C-c .") 'jedi:goto-definition)
 (global-set-key (kbd "C-c ,") 'jedi:goto-definition-pop-marker)
 (global-set-key (kbd "C-c ?") 'jedi:show-doc)
+=======
+* emacs 快速启动
+** emacs -q
+不加载任何配置启动
+** 用 emacsclient 来连接 emacs server
+1. 这个方法首先要有一个启动好了的 Emacs ，并且要已经启动了 server 模式， 你可以用 M-x server-start 来启动 server 模式，或者在自己的 ~/.emacs 里 面加入 (server-start) 来自动启动 server 。
+2. 可以通过 emacsclient filename 来快速使用 Emacs 打开文件了！ 事实上，文件是在作为 server 的那个 Emacs 里面打开的，而 emacsclient 将 等待 server 编辑文件。这个时候你可以转到 server 那里去编辑文件
+3. 编辑好 之后用 C-x # 来关闭文件并通知 emacsclient 文件已经编辑完成。
+4. 你就 可以把自己的 EDITOR 变量设置成 emacsclient 而不用怕启动速度慢了：
+  EDITOR="emacsclient +%d %s"
+
+>>>>>>> 07c7b8c3b810b9f990e7421a481084bccc0f6c27
