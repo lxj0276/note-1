@@ -31,10 +31,27 @@ C-x r C-SPC    point-to-register
 * org模式
 http://www.cnblogs.com/holbrook/archive/2012/04/12/2444992.html
 
+** 时间戳
+C-c .	插入时间戳；如果连续插入两个时间戳，则插入一个时间范围
+C-u C-c .	更加精确的时间戳，在日程表中以时间线显示
+C-c !	插入时间戳，不在日程表中显示
+C-c <	直接插入时间戳（当前日期）
+C-c C-o	访问当前时间戳的日程表
+S-left|S-right	以天为单位调整时间戳时间
 * command
 ** 点击(类似与鼠标左键快捷键)打开网页
    C-c C-o
 * dired 操作
+<<<<<<< HEAD
+* emacs 显示行号
+(require 'linum)
+(global-linum-mode t)
+* emacs 自绑定快捷键
+** python 快速跳入跳出方法 
+(global-set-key (kbd "C-c .") 'jedi:goto-definition)
+(global-set-key (kbd "C-c ,") 'jedi:goto-definition-pop-marker)
+(global-set-key (kbd "C-c ?") 'jedi:show-doc)
+=======
 * emacs 快速启动
 ** emacs -q
 不加载任何配置启动
@@ -47,6 +64,18 @@ http://www.cnblogs.com/holbrook/archive/2012/04/12/2444992.html
 * emacs快捷键
   - M+m j k :: 类似于ide中shift+enter 快捷键，下一行并且缩进 (evil-goto-next-line-and-indent)
   - SPC t f :: 添加80线
+
+* eww mode (h find help)  
+You can open a URL or search the web with the command M-x eww. If the input doesn’t look like a URL or domain name the web will be searched via eww-search-prefix. The default search engine is DuckDuckGo. If you want to open a file either prefix the file name with file:// or use the command M-x eww-open-file.
+
+If loading the URL was successful the buffer *eww* is opened and the web page is rendered in it. You can leave EWW by pressing q or exit the browser by calling eww-quit. To reload the web page hit g (eww-reload). Pressing w (eww-copy-page-url) will copy the current URL to the kill ring.
+
+A URL under the point can be downloaded with d (eww-download). The file will be written to the directory specified in eww-download-directory (Default: ~/Downloads/).
+
+EWW remembers the URLs you have visited to allow you to go back and forth between them. By pressing l (eww-back-url) you go to the previous URL. You can go forward again with r (eww-forward-url). If you want an overview of your browsing history press H (eww-list-histories) to open the history buffer *eww history*. The history is lost when EWW is quit. If you want to remember websites you can use bookmarks.
+
+EWW allows you to bookmark URLs. Simply hit b (eww-add-bookmark) to store a bookmark for the current website. You can view stored bookmarks with B (eww-list-bookmarks). This will open the bookmark buffer *eww bookmarks*.
+
   - SPC t n :: 显示行号
 
   - SPC c l :: 注释/取消注释一行
@@ -70,3 +99,4 @@ http://www.cnblogs.com/holbrook/archive/2012/04/12/2444992.html
 (define-key python-mode-map (kbd "<C-tab>") 'jedi:complete)
 
 如果不能用跳入，跳出方法等快捷键， 可以 M+x jedi: setup
+
