@@ -9,7 +9,7 @@
 (defun org-mode-my-init ()
   (define-key org-mode-map (kbd "×") (kbd "*"))
   (define-key org-mode-map (kbd "－") (kbd "-"))
-  (sal-set-key (kbd "M-SPC") 'set-face-attribute 'org-level-1 nil :height 1.2 :bold t)
+  (set-face-attribute 'org-level-1 nil :height 1.2 :bold t)
   (set-face-attribute 'org-level-2 nil :height 1.1 :bold t)
   (set-face-attribute 'org-level-3 nil :height 1.1 :bold t)
   )
@@ -61,11 +61,11 @@
     (previous-line 2)
     (org-edit-src-code)))
 
-(global-set-key (kbd "C-i") 'anaconda-mode-find-definitions)
+;(global-set-key (kbd "C-i") 'anaconda-mode-find-definitions)
+(global-set-key (kbd "C-i") (kbd "SPC m g g"))
 (global-set-key (kbd "<C-tab>") 'anaconda-mode-complete)
 
 (global-set-key (kbd "M-j") 'spacemacs/evil-goto-next-line-and-indent)
-
 ;(global-set-key (kbd "M-?") 'jedi:show-doc)
 ;(global-set-key (kbd "M-.") 'jedi:goto-definition)
 ;(global-set-key (kbd "M-,") 'jedi:goto-definition-pop-marker)
