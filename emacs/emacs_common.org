@@ -44,4 +44,29 @@ http://www.cnblogs.com/holbrook/archive/2012/04/12/2444992.html
 3. 编辑好 之后用 C-x # 来关闭文件并通知 emacsclient 文件已经编辑完成。
 4. 你就 可以把自己的 EDITOR 变量设置成 emacsclient 而不用怕启动速度慢了：
   EDITOR="emacsclient +%d %s"
+* emacs快捷键
+  - M+m j k :: 类似于ide中shift+enter 快捷键，下一行并且缩进 (evil-goto-next-line-and-indent)
+  - SPC t f :: 添加80线
+  - SPC t n :: 显示行号
 
+  - SPC c l :: 注释/取消注释一行
+  - SPC c p :: 注释/取消注释一段
+       
+  - SPC s s :: 搜索， 立即进入
+  - SPC s b :: 高亮搜索
+  - SPC s p :: smart search
+  - SPC s j :: jump in buffer
+  - SPC x u :: downcase-region
+  - SPC n . :: 进入查看模式， "."向下翻页， ","向上翻页。
+** jedi补全 及快捷键
+(setq jedi:setup-keys t)
+(add-hook 'python-mode-hook 'jedi:setup)
+(add-hook 'python-mode-hook 'jedi:ac-setup)
+(setq jedi:complete-on-dot t)
+
+(define-key python-mode-map (kbd "M-.") 'jedi:goto-definition)
+(define-key python-mode-map (kbd "M-,") 'jedi:goto-definition-pop-marker)
+(define-key python-mode-map (kbd "M-?") 'jedi:show-doc)
+(define-key python-mode-map (kbd "<C-tab>") 'jedi:complete)
+
+如果不能用跳入，跳出方法等快捷键， 可以 M+x jedi: setup
