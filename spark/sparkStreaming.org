@@ -1,0 +1,41 @@
+* basic concepts
+** Initializing StreamingContext 
+** Discretized Streams (DStreams) 
+** Input DStreams and Receivers 
+- Basic sources :: Sources directly available in the StreamingContext API. Examples: file systems, socket connections, and Akka actors. 
+- Advanced sources :: Sources like Kafka, Flume, Kinesis, Twitter, etc. are available through extra utility classes. These require linking against extra dependencies as discussed in the linking section.
+
+Therefore, it is important to remember that a Spark Streaming application needs to be allocated enough cores (or threads, if running locally) to process the received data, as well as to run the receiver(s).
+
+When running a Spark Streaming program locally, do not use “local” or “local[1]” as the master URL. If you are using a input DStream based on a receiver (e.g. sockets, Kafka, Flume, etc.), then the single thread will be used to run the receiver, leaving no thread for processing the received data.
+
+Extending the logic to running on a cluster, the number of cores allocated to the Spark Streaming application must be more than the number of receivers. Otherwise the system will receive data, but not be able to process it.
+
+** Transformations on DStreams 
+** Output Operations on DStreams 
+Typically, creating a connection object has time and resource overheads. Therefore, creating and destroying a connection object for each record can incur unnecessarily high overheads and can significantly reduce the overall throughput of the system. A better solution is to use rdd.foreachPartition - create a single connection object and send all the records in a RDD partition using that connection.
+
+#+BEGIN_SRC scala
+  dstream.foreachRDD { rdd =>
+    rdd.foreachPartition { partitionOfRecords =>
+      val connection = createNewConnection()
+      partitionOfRecords.foreach(record => connection.send(record))
+      connection.close()
+    }
+  }
+  def sendPartition(iter):
+      connection = createNewConnection()
+      for record in iter:
+          connection.send(record)
+      connection.close()
+
+  dstream.foreachRDD(lambda rdd: rdd.foreachPartition(sendPartition))
+#+END_SRC
+
+** Accumulators and Broadcast Variables 
+** DataFrame and SQL Operations 
+** MLlib Operations 
+** Caching / Persistence 
+** Checkpointing 
+** Deploying Applications 
+** Monitoring Applications 
