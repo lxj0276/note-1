@@ -41,6 +41,19 @@
 (require 'linum)
 (global-linum-mode t)
 
+;;;input * before close chinese input-method
+(defun org-mode-my-init ()
+                                        ; ......
+  (define-key org-mode-map (kbd "×") (kbd "*"))
+  (define-key org-mode-map (kbd "－") (kbd "-"))
+  )
+
+(add-hook 'org-mode-hook 'org-mode-my-init)
+
+;; org 自动换行
+(add-hook 'org-mode-hook
+          (lambda () (setq truncate-lines nil)))
+
 ;;orgmode 中插入代码
 ;;按 M-x org-insert-src-block ，然后输入代码类型（如 emacs-lisp，按 TAB 可自动补全）即可。
 (defun org-insert-src-block (src-code-type)
@@ -72,5 +85,7 @@
 ;;插入代码高亮
 ;(setq org-src-fontify-natively t)
 
+(define-key global-map (kbd "C-+") 'text-scale-increase)
+(define-key global-map (kbd "C--") 'text-scale-decrease)
 
 (provide 'custom)
