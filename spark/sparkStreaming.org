@@ -33,9 +33,28 @@ Typically, creating a connection object has time and resource overheads. Therefo
 #+END_SRC
 
 ** Accumulators and Broadcast Variables 
+Accumulators and Broadcast variables cannot be recovered from checkpoint in Spark Streaming.  If you enable checkpointing and use Accumulators or Broadcast variables as well, you’ll have to create lazily instantiated singleton instances for Accumulators and Broadcast variables so that they
+can be re-instantiated after the driver restarts on failure.
 ** DataFrame and SQL Operations 
 ** MLlib Operations 
 ** Caching / Persistence 
 ** Checkpointing 
 ** Deploying Applications 
 ** Monitoring Applications 
+* Performance Tuning
+** Reducing the Batch Processing Times
+However, the recommended minimum value of block interval is about 50 ms, below which the task launching overheads may be a problem.
+** Data Serialization
+** Task Launching Overheads
+** Setting the Right Batch Interval
+Whether this is true for an application can be found by monitoring the processing times in the streaming web UI, where the batch processing time should be less than the batch interval.
+* Memory Tuning
+** Persistence Level of DStreams
+** Clearing old data
+** CMS Garbage Collector 
+**  Other tips:
+To further reduce GC overheads, here are some more tips to try.
+
+- Use Tachyon for off-heap storage of persisted RDDs. See more detail in the Spark Programming Guide.
+- Use more executors with smaller heap sizes. This will reduce the GC pressure within each JVM heap. 
+
