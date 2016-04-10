@@ -1,4 +1,14 @@
+#+STARTUP: overview
+#+TAGS: DIARY(d) READING(r) FILMS(f) THINKING(t)
+#+TAGS: IDEAS(i) LEARNING(l) JAVA(j) PYTHON(p) SCALA(s) 
+* Todos
+** TODO 解决内存溢出问题， 工具以及如何应用      <2016-04-09 Sat 00:18> :LEARNING:JAVA:
+ 
+ Link: file:~/note/java/javaNote.org::*java%20%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BA
+** TODO 深入了解， 弄懂 java 虚拟机（jvm)     <2016-04-09 Sat 09:34> :THINKING:LEARNING:JAVA:
+ 
 
-* TODO MLInAction 1
-
-* TODO ML2
+ Link: file:~/note/java/javaNote.org::*%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JVM
+** TODO  各个设计模式的应用场景      <2016-04-09 Sat 10:42>      :LEARNING:
+ 
+ Link: file:~/note/DesignPattern/DesignPattern.org::*The%20scenarios%20of%20design%20pattern

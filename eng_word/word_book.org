@@ -77,4 +77,16 @@
     理性主义者
     rational
 24. implicit 含蓄，盲从的
-25. 
+25.
+* neural network
+- spike :: 尖峰信号
+- synapse :: （神经元）的突触
+- axon :: （神经元）的轴突
+- vesicle :: 囊,泡
+- transmitter :: 发送器， 传送者， 传递质
+- molecule :: 分子
+- diffuse :: 散播， 传播
+- cleft :: 裂缝， 裂口
+- bind :: 绑定， 约束， 赋值
+- membrane :: (动物或植物体内的)薄膜, 隔膜
+- cortical :: kdkksds

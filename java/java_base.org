@@ -1,7 +1,6 @@
 [[http://www.jianshu.com/p/b2ba1251d8c1][做一名程序员需要学哪些知识?]]
-file:/home/kay/repository/note/pictures/javaBase.jpg
 
-* java基础编程 [[http://docs.oracle.com/javase/8/docs/api/][javase8API]]
+* java 基础编程 [[http://docs.oracle.com/javase/8/docs/api/][javase8API]]
 ** java.lang
 Provides classes that are fundamental to the design of the Java programming language.
 
