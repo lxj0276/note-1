@@ -1,0 +1,18 @@
+#    -*- mode: org -*-
+
+
+Archived entries from file /home/kay/note/youtube.org
+
+
+* search tech
+:PROPERTIES:
+:ARCHIVE_TIME: 2016-04-09 Sat 00:29
+:ARCHIVE_FILE: ~/note/youtube.org
+:ARCHIVE_OLPATH: search tech
+:ARCHIVE_CATEGORY: youtube
+:END:
+author: derekbanas
+
+youtube-viewer --author=derekbanas --order=date --results=40 design pattern
+
+youtube-viewer --author=MIT  --results=40 Introduction to Algorithms, Fall 2011

@@ -1,0 +1,25 @@
+
+ spark.mllib contains the original API built on top of RDDs. 
+ spark.ml provides higher-level API built on top of DataFrames for constructing ML pipelines. 
+* spark.mllib: data types, algorithms, and utilities
+** data types
+*** Local vector
+ MLlib supports two types of local vectors: dense and sparse. A dense vector is backed by a double array representing its entry values, while a sparse vector is backed by two parallel arrays: indices and values. For example, a vector (1.0, 0.0, 3.0) can be represented in dense format as [1.0, 0.0, 3.0] or in sparse format as (3, [0, 2], [1.0, 3.0]), where 3 is the size of the vector.
+
+Note: Scala imports scala.collection.immutable.Vector by default, so you have to import org.apache.spark.mllib.linalg.Vector explicitly to use MLlib’s Vector.
+*** Labeled point
+A labeled point is a local vector, either dense or sparse, associated with a label/response. In MLlib, labeled points are used in supervised learning algorithms.
+We use a double to store a label, so we can use labeled points in both regression and classification. For binary classification, a label should be either 0 (negative) or 1 (positive). For multiclass classification, labels should be class indices starting from zero: 0, 1, 2, ....
+*** Local matrix
+A local matrix has integer-typed row and column indices and double-typed values, stored on a single machine. 
+*** Distributed matrix
+A distributed matrix has long-typed row and column indices and double-typed values, stored distributively in one or more RDDs. 
+**** RowMatrix
+A RowMatrix is a row-oriented distributed matrix without meaningful row indices, backed by an RDD of its rows, where each row is a local vector. 
+**** IndexedRowMatrix
+An IndexedRowMatrix is similar to a RowMatrix but with meaningful row indices. 
+**** CoordinateMatrix
+A CoordinateMatrix is a distributed matrix backed by an RDD of its entries. 
+A CoordinateMatrix can be created from an RDD[MatrixEntry] instance, where MatrixEntry is a wrapper over (Long, Long, Double). 
+**** BlockMarix
+A BlockMatrix is a distributed matrix backed by an RDD of MatrixBlocks, where a MatrixBlock is a tuple of ((Int, Int), Matrix), where the (Int, Int) is the index of the block, and Matrix is the sub-matrix at the given index with size rowsPerBlock x colsPerBlock. 

@@ -1,0 +1,27 @@
+* CLASS.FORNAME 和 CLASSLOADER.LOADCLASS 的区别
+Class 的装载分了三个阶段，loading，linking 和 initializing，分别定义在 The Java Language Specification 的 12.2，12.3 和 12.4。
+Class.forName(className) 实际上是调用 Class.forName(className, true, this.getClass().getClassLoader())。注意第二个参数，是指 Class 被 loading 后是不是必须被初始化.
+ClassLoader.loadClass(className)实际上调用的是 ClassLoader.loadClass(name, false)，第二个参数指出 Class 是否被 link。
+区别就出来了。Class.forName(className)装载的 class 已经被初始化，而 ClassLoader.loadClass(className)装载的 class 还没有被 link。
+一般情况下，这两个方法效果一样，都能装载 Class。但如果程序依赖于 Class 是否被初始化，就必须用 Class.forName(name)了。
+例 如，在 JDBC 编程中，常看到这样的用法，Class.forName("com.mysql.jdbc.Driver")，如果换成了 getClass().getClassLoader().loadClass("com.mysql.jdbc.Driver")，就不行。
+为什么呢？打开 com.mysql.jdbc.Driver 的源代码看看，
+
+#+BEGIN_SRC java
+  //
+  // Register ourselves with the DriverManager
+  //
+  static {
+      try {
+          java.sql.DriverManager.registerDriver(new Driver());
+      } catch (SQLException E) {
+          throw new RuntimeException("Can't register driver!");
+      }
+  }
+  
+#+END_SRC
+
+原来，Driver 在 static 块中会注册自己到 java.sql.DriverManager。而 static 块就是在 Class 的初始化中被执行。所以这个地方就只能用 Class.forName(className)。
+* 深入理解JVM
+* java 内存溢出
+

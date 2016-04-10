@@ -1,5 +1,6 @@
 [[http://www.newthinktank.com/page/2/?s=design+pattern][newthinktank.design+pattern]]
-
+* TODO The scenarios of design pattern
+* design patterns
 ** strategy pattern
    + 定义一个接口 flys
    + 接口的两个实现类: ItFlys, CantFlys

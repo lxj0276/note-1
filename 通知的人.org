@@ -1,0 +1,81 @@
+* TODO  一班
+** DONE 周旭
+CLOSED: [2016-04-06 Wed 20:07]
+- State "DONE"       from "TODO"       [2016-04-06 Wed 20:07]
+** DONE 邵晓然
+- State "DONE"       from "TODO"       [2016-04-10 Sun 17:58]
+** DONE 郭明亮
+CLOSED: [2016-04-07 Thu 21:47]
+** TODO 王明亮 （没有电话）
+** DONE 张钊
+CLOSED: [2016-04-06 Wed 20:08]
+- State "DONE"       from "TODO"       [2016-04-06 Wed 20:08]
+** DONE 曹立伟
+CLOSED: [2016-04-07 Thu 21:47]
+** DONE 贾新凯
+- State "DONE"       from "TODO"       [2016-04-10 Sun 17:38]
+** DONE 郭肖鹏
+- State "DONE"       from "TODO"       [2016-04-10 Sun 17:42]
+** DONE 徐东轩
+- State "DONE"       from "TODO"       [2016-04-10 Sun 18:12]
+** DONE 校力帆  发地址
+
+- State "DONE"       from "TODO"       [2016-04-10 Sun 17:47]
+** TODO 任朔
+** DONE 王云飞  发地址
+- State "DONE"       from "TODO"       [2016-04-10 Sun 17:50]
+** DONE 王国志 发地址
+- State "DONE"       from "TODO"       [2016-04-10 Sun 17:53]
+** DONE 聂彦超（已结婚  不通知）
+- State "DONE"       from "TODO"       [2016-04-10 Sun 21:05] \\
+  已结婚 不通知
+** DONE 光辉 发地址
+- State "DONE"       from "TODO"       [2016-04-10 Sun 18:00]
+** TODO 李聪达 (空号)
+** TODO 俊甲(号不对)
+* TODO 其他
+** DONE 王曲翔 发地址
+- State "DONE"       from "TODO"       [2016-04-10 Sun 18:07]
+** DONE 李海龙
+- State "DONE"       from "TODO"       [2016-04-10 Sun 18:07]
+** DONE 猴红星
+CLOSED: [2016-04-07 Thu 21:48]
+** DONE 胖亮的
+CLOSED: [2016-04-07 Thu 21:48]
+** DONE 武立帅
+CLOSED: [2016-04-07 Thu 21:48]
+** DONE 洁新
+- State "DONE"       from "TODO"       [2016-04-10 Sun 18:09]
+** DONE 康为波
+- State "DONE"       from "TODO"       [2016-04-10 Sun 18:23]
+** DONE 李亚飞
+- State "DONE"       from "TODO"       [2016-04-10 Sun 18:15]
+** DONE 巴（瑞）超
+CLOSED: [2016-04-07 Thu 21:48]
+** DONE 康朝翔
+- State "DONE"       from "TODO"       [2016-04-10 Sun 18:27]
+** TODO 李博 无法接通
+** TODO 李嘉琳
+* TODO 大学
+** DONE 李建国
+CLOSED: [2016-04-07 Thu 21:48]
+** DONE 李方园
+CLOSED: [2016-04-07 Thu 21:48]
+** DONE 李家法
+CLOSED: [2016-04-07 Thu 21:48]
+** DONE 马潇
+CLOSED: [2016-04-07 Thu 21:48]
+** DONE  （杨）哲子
+CLOSED: [2016-04-07 Thu 21:48]
+** DONE 王云鹏 发地址
+- State "DONE"       from "TODO"       [2016-04-10 Sun 18:42]
+** DONE 文谦 
+- State "DONE"       from "TODO"       [2016-04-10 Sun 18:36]
+** DONE 吴江斌 发地址
+- State "DONE"       from "TODO"       [2016-04-10 Sun 18:51]
+** DONE 何晓波
+CLOSED: [2016-04-05 Tue 21:02]
+- State "DONE"       from "TODO"       [2016-04-05 Tue 21:02]
+** DONE 焦东波
+CLOSED: [2016-04-05 Tue 21:14]
+- State "DONE"       from "TODO"       [2016-04-05 Tue 21:14]
