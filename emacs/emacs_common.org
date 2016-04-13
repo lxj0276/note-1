@@ -99,4 +99,8 @@ EWW allows you to bookmark URLs. Simply hit b (eww-add-bookmark) to store a book
 (define-key python-mode-map (kbd "<C-tab>") 'jedi:complete)
 
 如果不能用跳入，跳出方法等快捷键， 可以 M+x jedi: setup
+* emacs 正则
+** 正则去掉空行
+flush-lines命令
+用正则^$
 
