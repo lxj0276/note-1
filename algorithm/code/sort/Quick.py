@@ -49,6 +49,7 @@ if __name__ == "__main__":
     print ar
     br = quickSort(ar)
     print br
+    print ar
 
     print cr
     print quickSort(cr)
