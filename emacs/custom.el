@@ -85,6 +85,14 @@
 ;;插入代码高亮
 ;(setq org-src-fontify-natively t)
 
+;; java support
+(setq eclim-eclipse-dirs "~/Tools/eclipse"
+      eclim-executable "~/Tools/eclipse/eclim")
+
+;; 有道快捷键绑定
+(define-key global-map (kbd "C-c y") 'youdao-dictionary-search-at-point+)
+(define-key global-map (kbd "C-c i") 'youdao-dictionary-search-from-input)
+
 (define-key global-map (kbd "C-+") 'text-scale-increase)
 (define-key global-map (kbd "C--") 'text-scale-decrease)
 
