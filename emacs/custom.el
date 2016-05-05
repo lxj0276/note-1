@@ -35,7 +35,7 @@
 
 
 ;;标题格式, "文件名  @  全路径文件名"
-(setq frame-title-format '("%b   @   " buffer-file-name))
+(setq frame-title-format '("%b   @ " buffer-file-name))
 
 ;; 显示行号
 (require 'linum)
