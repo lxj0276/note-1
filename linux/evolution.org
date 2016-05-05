@@ -1,0 +1,22 @@
+* 设置签名
+[[http://www.linuceum.com/HintsTips/qikEvolution.php][Setting up a Default Signature using Evolution]]
+
+Edit → Preferences:
+
+Edit -> Preferences Menu
+
+Click on the "Composer Preferences" icon, then select the "Signatures" tab. You can then click the "Add" button to create a new signature - or click on any signature listed and the "Edit" to change it:
+
+Editing a Signature
+
+Note: if you want to add in images, change the signature type from "Plain Text" to "HTML" : then cut and paste in the HTML you want displayed in your signature:
+
+Cut and Paste HTML into a signature
+
+Once you've created your signature, you can tell Evolution to add this automatically by choosing:
+
+Edit → Preferences:
+
+Click on the "Mail Accounts" icon, then select the mail account you wish to apply the signature to. Click the "Edit" button and on the first tab ("Identity"), pick your signature from the drop down box at the bottom of the window, then click "OK":
+
+Picking a signature
