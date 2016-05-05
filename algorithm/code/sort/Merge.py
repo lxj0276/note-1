@@ -9,7 +9,7 @@
 再考虑递归分解，基本思路是将数组分解成left和right，如果这两个数组内部数据是有序的，那么就可以用上面合并数组的方法将这两个数组合并排序。如何让这两个数组内部是有序的？可以再二分，直至分解出的小组只含有一个元素时为止，此时认为该小组内部已有序。然后合并排序相邻二个小组即可。
 
 * 算法时间复杂度
-          最好的情况下：一趟归并需要n次，总共需要logN次，因此为O(N*logN)
+          最好的情况下：一趟归并需要n次，总共需要logN次，因此为O(n)
           最坏的情况下，接近于平均情况下，为O(N*logN)
           说明：对长度为n的文件，需进行logN 趟二路归并，每趟归并的时间为O(n)，故其时间复杂度无论是在最好情况下还是在最坏情况下均是O(nlgn)。
 * 稳定性
@@ -19,29 +19,47 @@
 
 
 def mergeSort(A):
+    def merge(left, right):
+        '''将两个有序序列left,right 合并成一个较大的序列'''
+        result = []
+        l, r = 0, 0
+        while l < len(left) and r < len(right):
+            if left[l] < right[r]:
+                result.append(left[l])
+                l = l + 1
+            else:
+                result.append(right[r])
+                r = r + 1
+        # 添加没有迭代完的(左边后者右边有一个没有迭代完)
+        result = result + left[l:]
+        result = result + right[r:]
+        return result
+
     if len(A) <= 1:
         return A
-    num = int(len(A)/2)  # 二分分解
+    num = int(len(A)//2)  # 二分分解
     left = mergeSort(A[:num])
     right = mergeSort(A[num:])
     return merge(left, right)
 
+''' use deque '''
+from collections import deque
 
-def merge(left, right):
-    '''将两个有序序列left,right 合并成一个较大的序列'''
-    result = []
-    l, r = 0, 0
-    while l < len(left) and r < len(right):
-        if left[l] < right[r]:
-            result.append(left[l])
-            l = l + 1
-        else:
-            result.append(right[r])
-            r = r + 1
-    '''why?'''
-    result = result + left[l:]
-    result = result + right[r:]
-    return result
+def merge_sort(lst):
+    if len(lst) <= 1:
+        return lst
+
+    def merge(left, right):
+        merged,left,right = deque(),deque(left),deque(right)
+        while left and right:
+            merged.append(left.popleft() if left[0] <= right[0] else right.popleft())  # deque popleft is also O(1)
+        merged.extend(right if right else left)
+        return list(merged)
+
+    middle = int(len(lst) // 2)
+    left = merge_sort(lst[:middle])
+    right = merge_sort(lst[middle:])
+    return merge(left, right)
 
 
 if __name__ == "__main__":
@@ -53,3 +71,7 @@ if __name__ == "__main__":
 
     print cr
     print mergeSort(cr)
+
+    print ar
+    br = merge_sort(ar)
+    print br

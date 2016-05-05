@@ -22,7 +22,6 @@
 def quickSort(A):
     return quick(A, 0, len(A) - 1)
 
-
 def quick(B, left, right):
     # 快排函数，ary为待排序数组，left为待排序的左边界，right为右边界
     if left >= right:
@@ -51,4 +50,7 @@ if __name__ == "__main__":
     print br
 
     print cr
+    print(cr)
     print quickSort(cr)
+
+    print(quick2(cr))
