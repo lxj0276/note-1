@@ -161,8 +161,20 @@ S-left|S-right	以天为单位调整时间戳时间
 * emacs 快捷键
   - M+m j k :: 类似于 ide 中 shift+enter 快捷键，下一行并且缩进 (evil-goto-next-line-and-indent)
   - SPC t f :: 添加 80 线
+** jedi 补全 及快捷键
+(setq jedi:setup-keys t)
+(add-hook 'python-mode-hook 'jedi:setup)
+(add-hook 'python-mode-hook 'jedi:ac-setup)
+(setq jedi:complete-on-dot t)
 
+(define-key python-mode-map (kbd "M-.") 'jedi:goto-definition)
+(define-key python-mode-map (kbd "M-,") 'jedi:goto-definition-pop-marker)
+(define-key python-mode-map (kbd "M-?") 'jedi:show-doc)
+(define-key python-mode-map (kbd "<C-tab>") 'jedi:complete)
+
+如果不能用跳入，跳出方法等快捷键， 可以 M+x jedi: setup
 * eww mode (h find help)  
+
 You can open a URL or search the web with the command M-x eww. If the input doesn’t look like a URL or domain name the web will be searched via eww-search-prefix. The default search engine is DuckDuckGo. If you want to open a file either prefix the file name with file:// or use the command M-x eww-open-file.
 
 If loading the URL was successful the buffer *eww* is opened and the web page is rendered in it. You can leave EWW by pressing q or exit the browser by calling eww-quit. To reload the web page hit g (eww-reload). Pressing w (eww-copy-page-url) will copy the current URL to the kill ring.
@@ -184,18 +196,9 @@ EWW allows you to bookmark URLs. Simply hit b (eww-add-bookmark) to store a book
   - SPC s j :: jump in buffer
   - SPC x u :: downcase-region
   - SPC n . :: 进入查看模式， "."向下翻页， ","向上翻页。
-** jedi 补全 及快捷键
-(setq jedi:setup-keys t)
-(add-hook 'python-mode-hook 'jedi:setup)
-(add-hook 'python-mode-hook 'jedi:ac-setup)
-(setq jedi:complete-on-dot t)
-
-(define-key python-mode-map (kbd "M-.") 'jedi:goto-definition)
-(define-key python-mode-map (kbd "M-,") 'jedi:goto-definition-pop-marker)
-(define-key python-mode-map (kbd "M-?") 'jedi:show-doc)
-(define-key python-mode-map (kbd "<C-tab>") 'jedi:complete)
-
-如果不能用跳入，跳出方法等快捷键， 可以 M+x jedi: setup
+* spacemacs install w3m
+[[https://github.com/venmos/w3m-layer][w3m-layer]]
+默认搜索引擎可能不能用, 修改默认搜索引擎
 * emacs 正则
 ** 正则去掉空行
 flush-lines 命令
