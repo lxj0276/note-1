@@ -26,6 +26,61 @@
 * 排序算法
 [[http://blog.csdn.net/xiazdong/article/details/8462393][九大排序算法再总结]]
 [[http://wuchong.me/blog/2014/02/09/algorithm-sort-summary/][经典排序算法总结与实现]]
+[[https://zh.wikipedia.org/wiki/%25E6%258E%2592%25E5%25BA%258F%25E7%25AE%2597%25E6%25B3%2595][排序算法 维基百科]]
+[[https://en.wikipedia.org/wiki/Sorting_algorithm][sorting algorithm wikipeida]]
+时间复杂度, 空间复杂度, 稳定性.
+
+*穩定性* ：穩定排序算法會讓原本有相等鍵值的紀錄維持相對次序。也就是如果一個排序算法是穩定的，當有兩個相等鍵值的紀錄R和S，且在原本的串列中R出現在S之前，在排序過的串列中R也將會是在S之前。
+不穩定排序算法可能會在相等的鍵值中改變紀錄的相對次序，但是穩定排序算法從來不會如此。
+** 稳定的排序
+*** 冒泡排序 Bubble Sort
+
+#+BEGIN_SRC screen  
+// 虚拟码
+  function bubble_sort (array, length) {
+      var i, j;
+      for(i from 0 to length-1){
+          for(j from 0 to length-1-i){
+              if (array[j] > array[j+1])
+                  swap(array[j], array[j+1])
+          }
+      }
+  }
+#+END_SRC
+
+
+#+BEGIN_SRC java
+
+    public static void bubble_sort(int[] arr) {
+      int i, j, temp, len = arr.length;
+      for (i = 0; i < len - 1; i++)
+        for (j = 0; j < len - 1 - i; j++)
+          if (arr[j] > arr[j + 1]) {
+            temp = arr[j];
+            arr[j] = arr[j + 1];
+            arr[j + 1] = temp;
+          }
+    }
+#+END_SRC
+
+
+#+BEGIN_SRC scala
+
+    def bubbleSort(array: Array[Int]): Unit = {
+      val len = array.length
+      for (i <- 0 until len) {
+        for (j <- 0 until len - i - 1) {
+          if (array(j) > array(j + 1)){
+            val temp = array(j)
+            array(j) = array(j + 1)
+            array(j + 1) = temp
+          }
+        }
+      }
+    }
+#+END_SRC
+
+
 
 * 机器学习十大算法简介
 [[https://github.com/ty4z2008/Qix/blob/master/dl.md][机器学习(Machine Learning)&深度学习(Deep Learning)资料]]

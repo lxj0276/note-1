@@ -35,7 +35,7 @@
 
 
 ;;标题格式, "文件名  @  全路径文件名"
-(setq frame-title-format '("%b   @   " buffer-file-name))
+(setq frame-title-format '("%b   @ " buffer-file-name))
 
 ;; 显示行号
 (require 'linum)
@@ -84,6 +84,27 @@
 ;(global-set-key (kbd "M-,") 'jedi:goto-definition-pop-marker)
 ;;插入代码高亮
 ;(setq org-src-fontify-natively t)
+
+;; java support
+(setq eclim-eclipse-dirs "~/Tools/eclipse"
+      eclim-executable "~/Tools/eclipse/eclim")
+
+;; 有道快捷键绑定
+(define-key global-map (kbd "C-c y") 'youdao-dictionary-search-at-point+)
+(define-key global-map (kbd "C-c s") 'youdao-dictionary-search-at-point)
+(define-key global-map (kbd "C-c i") 'youdao-dictionary-search-from-input)
+
+;; 原生快捷键
+(define-key evil-normal-state-map "\C-y" 'yank)
+(define-key evil-insert-state-map "\C-y" 'yank)
+(define-key evil-visual-state-map "\C-y" 'yank)
+(define-key evil-insert-state-map "\C-e" 'end-of-line)
+(define-key evil-insert-state-map "\C-a" 'move-beginning-of-line)
+(define-key evil-insert-state-map "\C-n" 'next-line)
+(define-key evil-insert-state-map "\C-p" 'previous-line)
+(define-key evil-insert-state-map "\C-k" 'kill-line)
+(define-key evil-insert-state-map "\C-r" 'search-backward)
+
 
 (define-key global-map (kbd "C-+") 'text-scale-increase)
 (define-key global-map (kbd "C--") 'text-scale-decrease)

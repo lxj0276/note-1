@@ -12,7 +12,7 @@ C-x r i        insert-register
 将某个寄存器的内容插入某处
 C-x r j        jump-to-register
 C-x r k        kill-rectangle
-就是剪切某个选定的矩形区域，用C-x r y可以贴上
+就是剪切某个选定的矩形区域，用 C-x r y 可以贴上
 C-x r l        bookmark-bmenu-list
 C-x r m        bookmark-set
 C-x r n        number-to-register
@@ -24,11 +24,11 @@ C-x r s        copy-to-register
 C-x r w        window-configuration-to-register
 C-x r x        copy-to-register
 C-x r y        yank-rectangle
-类似于矩形区域的粘贴，就是将刚用C-x r k剪切的矩形区域粘贴过来
+类似于矩形区域的粘贴，就是将刚用 C-x r k 剪切的矩形区域粘贴过来
 C-x r C-SPC    point-to-register
 *** C-x r t        string-rectangle 在选定区域所有列前(注意起始和结束的列的位置)插入同样的字符
 
-* org模式
+* org 模式
 http://www.cnblogs.com/holbrook/archive/2012/04/12/2444992.html
 
 ** 时间戳
@@ -42,7 +42,104 @@ S-left|S-right	以天为单位调整时间戳时间
 ** 点击(类似与鼠标左键快捷键)打开网页
    C-c C-o
 * dired 操作
-<<<<<<< HEAD
+[[http://blog.csdn.net/cofol1986/article/details/7645785][Dired 模式常用快捷键]]
+** 查看帮助
+  ? 简单帮助
+  h 模式帮助
+** 移动光标
+  n, p, SPC 上、下移动光标 [p]
+  C-n, C-p 上、下移动光标 [p]
+  M-{, M-} 已标记的文件之间移动 [p]
+  C-M-p, C-M-n 缓冲中的子目录间移动 [p]
+  <, > 缓冲中的目录行间移动 [p]
+  C-M-u 缓冲中的目录树上移动 [p]
+  M-g 光标移动到某个文件上
+  M-G 光标移动到某个缓冲中的子目录上，(用 i 插入的)
+** 标记文件
+  m 标记文件，下移一行 [p]
+  u 去掉标记，下移一行 [p]
+  U 去掉缓冲中所有的标记
+  M-Backspace 去掉缓冲中所有的某个标记，缺省为 * 标记
+  Backspace 并去掉上一行标记，并上移一行 [p]
+  t 标记/未标记互换
+  D 删除所有标记的文件/目录 [*]
+  d 设置“删除标记”（字符 D），并且光标下移一行 [p]
+  x 删除用 d 标记的文件/目录
+  ~ 将缓冲中备份文件做删除标记 [u]
+  & 没用的文件，做删除标记
+  # 将缓冲中自动保存的文件做删除标记 [u]
+  . 按备份文件版本，将备份文件做删除标记 [u]
+  % g 标记所有“含有”regexp 的文件 [u]
+  * * 标记所有可执行文件 [u]
+  * . 标记所有同扩展名文件 [ux]
+  * / 标记所有目录 [u]
+  * @ 标记所有符号连接 [u]
+  * c 改变标记的符号
+  % d 通过匹配 regexp 标记删除
+  % m 通过匹配 regexp 标记 [u]
+** 复制、移动、创建 文件或目录以及连接
+  C-x C-f 创建文件
+  + 创建目录
+  R 文件的重命名/移动 [p*]
+  C 复制文件 [*]
+  S 创建文件的 Symbol link (绝对路径) [p*]
+  Y 创建文件的 Symbol link (相对路径) [px*]
+  H 创建文件的 Hard link [p*]
+  % C 复制匹配 regexp 的文件 [p*]
+  % S 创建匹配 regexp 的 Symbol link (绝对路径) [p*]
+  % Y 创建匹配 regexp 的 Symbol link (相对路径) [p*]
+  % H 创建匹配 regexp 的 Hark link [p*]
+** 修改文件名、属性
+  M 修改文件 rwx 权限属性 [*]
+  G 修改文件 Group 属性 [p*]
+  O 修改文件 Owner 属性 [p*]
+  T 修改文件的时间戳 [p*]
+  % l 文件名逐一改为小写 [p*]
+  % u 文件名逐一改为大写 [p*]
+  % R, % r 重命名/移动匹配 regexp 的文件 [p*]
+** 访问文件，目录
+  e, f, RET 打开文件或目录
+  a 打开文件或目录，并替换当前缓冲
+  v 使用 view 模式查看文件，q 退出，有些文件使用外部查看程序调用
+  o 另一个窗口中，打开文件或目录
+  C-o 另一个窗口中，打开文件或目录，但当前窗口不变
+  F 打开(多个)文件 [x*]
+  I 使用 Info 模式查看文件
+  N 使用 man 模式查看文件，若有前缀参数，提示输入处理命令 [ux*]
+  V 使用 RMAIL 模式查看文件 [x]
+** 退出
+  ^ 访问目录的父目录，若有前缀参数在另外的窗口中打开 [u]
+  q 退出缓冲，若有前缀参数则关闭缓冲 [u]
+** 隐藏/刷新缓冲中内容
+  s 互换缓冲中“文件名/时间”排序 [u]
+  C-u s 修改传递给 ls 的参数，即修改每行的内容
+  i 把当前行的子目录插入缓冲中
+  M-o 隐藏/显示部分次要文件，使缓冲更简便，若有前缀参数标记隐藏的文件 [ux]
+  $ 隐藏/显示当前目录中内容 [p]
+  M-$ 隐藏/显示缓冲中所有目录内容
+  k 隐藏文件，按 g 可以再显示出来 [p*]
+  l 刷新缓冲文件 [p*]
+  g 刷新缓冲所有文件
+  C-/, C-_, C-x u dired 模式的 undo
+** 其他
+  = 比较文件
+  M-= 文件和备份之间比较，若有前缀参数，提示输入 diff 选项 [u]
+  w 复制文件名到 kill-ring [p*]
+  Z 压缩/解压缩文件 [p*]
+  X 在文件上执行 shell 命令 [p*]
+  B 编译(Emacs Lisp)文件 [p*]
+  L 加载(Emacs Lisp)文件 [p*]
+  y 给出文件类型信息 (通过 file 命令)
+  P 打印文件 [p*]
+** dired-x.el 中的其他有用的函数
+  dired-mark-extension    按后缀标记
+  dired-flag-extension 按后缀标记删除
+  dired-clean-patch       标记删除 patch 文件
+    dired-clean-tex         标记删除 tex 编译文件
+    dired-very-clean-tex    标记删除 tex 编译文件
+    dired-jump              跳转到当前缓冲所在目录
+    dired-jump-other-window 在另一个窗口中跳转到当前缓冲所在目录
+    dired-omit-here-always  在当前目录生成 .dired  文件
 * emacs 显示行号
 (require 'linum)
 (global-linum-mode t)
@@ -56,16 +153,28 @@ S-left|S-right	以天为单位调整时间戳时间
 ** emacs -q
 不加载任何配置启动
 ** 用 emacsclient 来连接 emacs server
-1. 这个方法首先要有一个启动好了的 Emacs ，并且要已经启动了 server 模式， 你可以用 M-x server-start 来启动 server 模式，或者在自己的 ~/.emacs 里 面加入 (server-start) 来自动启动 server 。
+1. 这个方法首先要有一个启动好了的 Emacs，并且要已经启动了 server 模式， 你可以用 M-x server-start 来启动 server 模式，或者在自己的 ~/.emacs 里 面加入 (server-start) 来自动启动 server。
 2. 可以通过 emacsclient filename 来快速使用 Emacs 打开文件了！ 事实上，文件是在作为 server 的那个 Emacs 里面打开的，而 emacsclient 将 等待 server 编辑文件。这个时候你可以转到 server 那里去编辑文件
 3. 编辑好 之后用 C-x # 来关闭文件并通知 emacsclient 文件已经编辑完成。
 4. 你就 可以把自己的 EDITOR 变量设置成 emacsclient 而不用怕启动速度慢了：
   EDITOR="emacsclient +%d %s"
-* emacs快捷键
-  - M+m j k :: 类似于ide中shift+enter 快捷键，下一行并且缩进 (evil-goto-next-line-and-indent)
-  - SPC t f :: 添加80线
+* emacs 快捷键
+  - M+m j k :: 类似于 ide 中 shift+enter 快捷键，下一行并且缩进 (evil-goto-next-line-and-indent)
+  - SPC t f :: 添加 80 线
+** jedi 补全 及快捷键
+(setq jedi:setup-keys t)
+(add-hook 'python-mode-hook 'jedi:setup)
+(add-hook 'python-mode-hook 'jedi:ac-setup)
+(setq jedi:complete-on-dot t)
 
+(define-key python-mode-map (kbd "M-.") 'jedi:goto-definition)
+(define-key python-mode-map (kbd "M-,") 'jedi:goto-definition-pop-marker)
+(define-key python-mode-map (kbd "M-?") 'jedi:show-doc)
+(define-key python-mode-map (kbd "<C-tab>") 'jedi:complete)
+
+如果不能用跳入，跳出方法等快捷键， 可以 M+x jedi: setup
 * eww mode (h find help)  
+
 You can open a URL or search the web with the command M-x eww. If the input doesn’t look like a URL or domain name the web will be searched via eww-search-prefix. The default search engine is DuckDuckGo. If you want to open a file either prefix the file name with file:// or use the command M-x eww-open-file.
 
 If loading the URL was successful the buffer *eww* is opened and the web page is rendered in it. You can leave EWW by pressing q or exit the browser by calling eww-quit. To reload the web page hit g (eww-reload). Pressing w (eww-copy-page-url) will copy the current URL to the kill ring.
@@ -87,16 +196,11 @@ EWW allows you to bookmark URLs. Simply hit b (eww-add-bookmark) to store a book
   - SPC s j :: jump in buffer
   - SPC x u :: downcase-region
   - SPC n . :: 进入查看模式， "."向下翻页， ","向上翻页。
-** jedi补全 及快捷键
-(setq jedi:setup-keys t)
-(add-hook 'python-mode-hook 'jedi:setup)
-(add-hook 'python-mode-hook 'jedi:ac-setup)
-(setq jedi:complete-on-dot t)
-
-(define-key python-mode-map (kbd "M-.") 'jedi:goto-definition)
-(define-key python-mode-map (kbd "M-,") 'jedi:goto-definition-pop-marker)
-(define-key python-mode-map (kbd "M-?") 'jedi:show-doc)
-(define-key python-mode-map (kbd "<C-tab>") 'jedi:complete)
-
-如果不能用跳入，跳出方法等快捷键， 可以 M+x jedi: setup
+* spacemacs install w3m
+[[https://github.com/venmos/w3m-layer][w3m-layer]]
+默认搜索引擎可能不能用, 修改默认搜索引擎
+* emacs 正则
+** 正则去掉空行
+flush-lines 命令
+用正则^$
 

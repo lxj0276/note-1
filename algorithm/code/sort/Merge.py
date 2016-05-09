@@ -50,6 +50,7 @@ if __name__ == "__main__":
     print ar
     br = mergeSort(ar)
     print br
+    print ar
 
     print cr
     print mergeSort(cr)

@@ -46,6 +46,7 @@ def shellSort(A):
     n = len(A)
     gap = int(round(n/2))
     while gap > 0:
+        import pdb; pdb.set_trace()
         for i in range(gap, n):
             temp = A[i]
             j = i

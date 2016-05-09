@@ -1,2 +1,0 @@
-常用的分类算法包括：决策树分类法，朴素的贝叶斯分类算法(native Bayesian classifier)、基于支持向量机(SVM)的分类器，神经网络法，k-最近邻法(k-nearest neighbor，kNN)，
-模糊分类法等等.
