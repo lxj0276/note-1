@@ -261,3 +261,5 @@ sudo mkfs.ntfs -Q /dev/sdb1
 * quickly kill process
   killall -9 mpv
   pss mpv  | awk '{print $2}' | xargs kill -9
+* 统计文件的某一列(默认第一列)不重复数据的行数
+awk '{print $1}' filename | grep -v "192.168" | sort | uniq | wc
