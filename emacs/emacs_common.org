@@ -239,4 +239,32 @@ RET： 打开连接
 ** 正则去掉空行
 flush-lines 命令
 用正则^$
+* 修改有道 search 的快捷键, Ctrl-q 退出
+(local-set-key "\C-q" 'quit-window)
+#+BEGIN_SRC emacs-lisp
+  (defun -search-and-show-in-buffer (word)
+    "Search WORD and show result in `youdao-dictionary-buffer-name' buffer."
+    (if word
+        (with-current-buffer (get-buffer-create buffer-name)
+          (setq buffer-read-only nil)
+          (erase-buffer)
+          (org-mode)
+          (insert (-format-result word))
+          (goto-char (point-min))
+          (setq buffer-read-only t)
+          ;; Add Buffer Local Keys
+          ;; (see http://www.emacswiki.org/emacs/BufferLocalKeys)
+          (use-local-map (copy-keymap org-mode-map))
+;;;;;;;; below this line
+          (local-set-key "\C-q" 'quit-window)
+          (local-set-key "q" 'quit-window)
+          (set (make-local-variable 'current-buffer-word) word)
+          (local-set-key "p" (lambda()
+                               (interactive)
+                               (if (local-variable-if-set-p 'current-buffer-word)
+                                   (-play-voice current-buffer-word))))
+          (local-set-key "y" 'youdao-dictionary-play-voice-at-point)
 
+          (switch-to-buffer-other-window buffer-name))
+      (message "Nothing to look up")))
+#+END_SRC
