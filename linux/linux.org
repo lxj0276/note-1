@@ -264,6 +264,7 @@ sudo mkfs.ntfs -Q /dev/sdb1
 * 统计文件的某一列(默认第一列)不重复数据的行数
 awk '{print $1}' filename | grep -v "192.168" | sort | uniq | wc
 * 交换按键
+在 Linux 下这些更改快捷键的功能可以用 xmodmap。另一个很有用的配套工具是 xev，可以查看键盘上所有按键的键值。
 Create a file at ~/.Xmodmap with the following content:
 #+BEGIN_SRC sh
   clear Lock
