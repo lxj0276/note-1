@@ -5,11 +5,11 @@ service server start/restart/stop/status
    + ssh ::
      systemctl start sshd.service
 
-* JDK自带vm分析工具：
+* JDK 自带 vm 分析工具：
   jps
-  jstat:一个极强的监视VM内存工具。可以用来监视VM内存内的各种堆和非堆的大小及其内存使用量。
-  jmap：打印出某个java进程（使用pid）内存内的，所有‘对象’的情况（如：产生那些对象，及其数量）。
-  jconsole：一个java GUI监视工具，可以以图表化的形式显示各种数据。并可通过远程连接监视远程的服务器VM。
+  jstat:一个极强的监视 VM 内存工具。可以用来监视 VM 内存内的各种堆和非堆的大小及其内存使用量。
+  jmap：打印出某个 java 进程（使用 pid）内存内的，所有‘对象’的情况（如：产生那些对象，及其数量）。
+  jconsole：一个 java GUI 监视工具，可以以图表化的形式显示各种数据。并可通过远程连接监视远程的服务器 VM。
 
 ps mp PID(no)  -o THREAD
 
@@ -20,7 +20,7 @@ getconf LONG_BIT
 ** whois
 　　　功能说明：查找并显示用户信息。
 　　　语　　法：whois [帐号名称]
-　 　补充说明：whois指令会去查找并显示指定帐号的用户相关信息，因为它是到Network Solutions 的WHOIS数据库去查找，所以该帐号名称必须在上面注册方能寻获，且名称没有大小写的差别。
+　 　补充说明：whois 指令会去查找并显示指定帐号的用户相关信息，因为它是到 Network Solutions 的 WHOIS 数据库去查找，所以该帐号名称必须在上面注册方能寻获，且名称没有大小写的差别。
 　---------------------------------------------------------
 ** whoami
 　　
@@ -35,14 +35,14 @@ getconf LONG_BIT
 　　
 　　功能说明：显示目前登入系统的用户信息。
 　　语　　法：who [-Himqsw][--help][--version][am i][记录文件]
-　　补充说明：执行这项指令可得知目前有那些用户登入系统，单独执行who指令会列出登入帐号，使用的 　　　终端机，登入时间以及从何处登入或正在使用哪个X显示器。
+　　补充说明：执行这项指令可得知目前有那些用户登入系统，单独执行 who 指令会列出登入帐号，使用的 　　　终端机，登入时间以及从何处登入或正在使用哪个 X 显示器。
 　　参　　数：
-　　-H或--heading 　显示各栏位的标题信息列。
-　　-i或-u或--idle 　显示闲置时间，若该用户在前一分钟之内有进行任何动作，将标示成"."号，如果该用户已超过24小时没有任何动作，则标示出"old"字符串。
+　　-H 或--heading 　显示各栏位的标题信息列。
+　　-i 或-u 或--idle 　显示闲置时间，若该用户在前一分钟之内有进行任何动作，将标示成"."号，如果该用户已超过 24 小时没有任何动作，则标示出"old"字符串。
 　　-m 　此参数的效果和指定"am i"字符串相同。
-　　-q或--count 　只显示登入系统的帐号名称和总人数。
-　　-s 　此参数将忽略不予处理，仅负责解决who指令其他版本的兼容性问题。
-　　-w或-T或--mesg或--message或--writable 　显示用户的信息状态栏。
+　　-q 或--count 　只显示登入系统的帐号名称和总人数。
+　　-s 　此参数将忽略不予处理，仅负责解决 who 指令其他版本的兼容性问题。
+　　-w 或-T 或--mesg 或--message 或--writable 　显示用户的信息状态栏。
 　　--help 　在线帮助。
 　　--version 　显示版本信息。
 　　
@@ -51,31 +51,31 @@ getconf LONG_BIT
 　　
 　　功能说明：显示目前登入系统的用户信息。
 　　语　　法：w [-fhlsuV][用户名称]
-　　补充说明：执行这项指令可得知目前登入系统的用户有那些人，以及他们正在执行的程序。单独执行w
+　　补充说明：执行这项指令可得知目前登入系统的用户有那些人，以及他们正在执行的程序。单独执行 w
 　　指令会显示所有的用户，您也可指定用户名称，仅显示某位用户的相关信息。
 　　　参　　数：
 　　　　-f 　开启或关闭显示用户从何处登入系统。
 　　　　-h 　不显示各栏位的标题信息列。
 　　　　-l 　使用详细格式列表，此为预设值。
-　　　　-s 　使用简洁格式列表，不显示用户登入时间，终端机阶段作业和程序所耗费的CPU时间。
-　　　　-u 　忽略执行程序的名称，以及该程序耗费CPU时间的信息。
+　　　　-s 　使用简洁格式列表，不显示用户登入时间，终端机阶段作业和程序所耗费的 CPU 时间。
+　　　　-u 　忽略执行程序的名称，以及该程序耗费 CPU 时间的信息。
 　　　　-V 　显示版本信息。
 -----------------------------------------------------
-** finger命令
+** finger 命令
 　　
-　　finger命令的功能是查询用户的信息，通常会显示系统中某个用户的用户名、主目录、停滞时间、登录时间、登录shell等信息。如果要查询远程机上的用户信息，需要在用户名后面接“@主机名”，采用[用户名@主机名]的格式，不过要查询的网络主机需要运行finger守护进程。
+　　finger 命令的功能是查询用户的信息，通常会显示系统中某个用户的用户名、主目录、停滞时间、登录时间、登录 shell 等信息。如果要查询远程机上的用户信息，需要在用户名后面接“@主机名”，采用[用户名@主机名]的格式，不过要查询的网络主机需要运行 finger 守护进程。
 　　
 　　该命令的一般格式为：
 　　finger [选项] [使用者] [用户@主机]
 　　命令中各选项的含义如下：
 　　-s 显示用户的注册名、实际姓名、终端名称、写状态、停滞时间、登录时间等信息。
-　　-l 除了用-s选项显示的信息外，还显示用户主目录、登录shell、邮件状态等信息，以及用户主目录下的.plan、.project和.forward文件的内容。
-　　-p 除了不显示.plan文件和.project文件以外，与-l选项相同。　
-　　[例]在本地机上使用finger命令。
+　　-l 除了用-s 选项显示的信息外，还显示用户主目录、登录 shell、邮件状态等信息，以及用户主目录下的.plan、.project 和.forward 文件的内容。
+　　-p 除了不显示.plan 文件和.project 文件以外，与-l 选项相同。　
+　　[例]在本地机上使用 finger 命令。
 　　$ finger xxq
 　　Login: xxq Name:
 　　Directory: /home/xxq Shell: /bin/bash
-　　Last login Thu Jan 1 21:43 （CST） on tty1
+　　Last login Thu Jan 1 21:43（CST）on tty1
 　　No mail.
 　　No Plan.　
 　　$ finger
@@ -84,45 +84,45 @@ getconf LONG_BIT
 　　……
 ------------------------------------------------------------------
 ** 查看用户及用户组
-/etc/group文件包含所有组
-/etc/shadow和/etc/passwd系统存在的所有用户名
+/etc/group 文件包含所有组
+/etc/shadow 和/etc/passwd 系统存在的所有用户名
 
 ** 修改当前用户所属组的方法
-usermod 或者可以直接修改 /etc/paaawd文件即可
+usermod 或者可以直接修改 /etc/paaawd 文件即可
 ----------------------------------------------------------------
 　　　vlock(virtual console lock)
 　　　功能说明：锁住虚拟终端。
 　　　语　　法：vlock [-achv]
-　　　补充说明：执行vlock指令可锁住虚拟终端，避免他人使用。
+　　　补充说明：执行 vlock 指令可锁住虚拟终端，避免他人使用。
 　　　　参　　数：
-　　　　-a或--all 　锁住所有的终端阶段作业，如果您在全屏幕的终端中使用本参数，则会将用键盘
+　　　　-a 或--all 　锁住所有的终端阶段作业，如果您在全屏幕的终端中使用本参数，则会将用键盘
 　　　　切换终端机的功能一并关闭。
-　　　　-c或--current 　锁住目前的终端阶段作业，此为预设值。
-　　　　-h或--help 　在线帮助。
-　　　　-v或--version 　显示版本信息。
+　　　　-c 或--current 　锁住目前的终端阶段作业，此为预设值。
+　　　　-h 或--help 　在线帮助。
+　　　　-v 或--version 　显示版本信息。
 --------------------------------------------------------
 usermod
 　
 　　功能说明：修改用户帐号。
 　　语　　法：usermod [-LU][-c <备注>][-d <登入目录>][-e <有效期限>][-f <缓冲天数>][-g <群组>][-G <群组>][-l <帐号名称>][-s ][-u ][用户帐号]
-　　补充说明：usermod可用来修改用户帐号的各项设定。
+　　补充说明：usermod 可用来修改用户帐号的各项设定。
 　　参　　数：
 　　　　-c<备注> 　修改用户帐号的备注文字。
-　　　　-d登入目录> 　修改用户登入时的目录。
+　　　　-d 登入目录> 　修改用户登入时的目录。
 　　　　-e<有效期限> 　修改帐号的有效期限。
 　　　　-f<缓冲天数> 　修改在密码过期后多少天即关闭该帐号。
 　　　　-g<群组> 　修改用户所属的群组。
 　　　　-G<群组> 　修改用户所属的附加群组。
 　　　　-l<帐号名称> 　修改用户帐号名称。
 　　　　-L 　锁定用户密码，使密码无效。
-　　　　-s 　修改用户登入后所使用的shell。
-　　　　-u 　修改用户ID。
+　　　　-s 　修改用户登入后所使用的 shell。
+　　　　-u 　修改用户 ID。
 　　　　-U 　解除密码锁定。
 -------------------------------------------------------
 userdel
 　　　功能说明：删除用户帐号。
 　　　语　　法：userdel [-r][用户帐号]
-　　　补充说明：userdel可删除用户帐号与相关的文件。若不加参数，则仅删除用户帐号，而不删除相关文件。
+　　　补充说明：userdel 可删除用户帐号与相关的文件。若不加参数，则仅删除用户帐号，而不删除相关文件。
 　　参　　数：
 　　　　-f 　删除用户登入目录以及目录中所有文件。
 ----------------------------------------------------------
@@ -130,13 +130,13 @@ userdel
 userconf
 　　
 　　　　功能说明：用户帐号设置程序。
-　　　　语　　法：userconf [--addgroup <群组>][--adduser <用户ID><群组><用户名称>][--delgroup <群组>][--deluser <用户ID>][--help]
-　　　　补充说明：userconf实际上为linuxconf的符号连接，提供图形界面的操作方式，供管理员建立与管理各类帐号。若不加任何参数，即进入图形界面。
+　　　　语　　法：userconf [--addgroup <群组>][--adduser <用户 ID><群组><用户名称>][--delgroup <群组>][--deluser <用户 ID>][--help]
+　　　　补充说明：userconf 实际上为 linuxconf 的符号连接，提供图形界面的操作方式，供管理员建立与管理各类帐号。若不加任何参数，即进入图形界面。
 　　　　参　　数：
 　　　　--addgroup<群组> 　新增群组。
-　　　　--adduser<用户ID><群组><用户名称> 　新增用户帐号。
+　　　　--adduser<用户 ID><群组><用户名称> 　新增用户帐号。
 　　　　--delgroup<群组> 　删除群组。
-　　　　--deluser<用户ID> 　删除用户帐号。
+　　　　--deluser<用户 ID> 　删除用户帐号。
 　　　　--help 　显示帮助。
 　　
 ------------------------------------------------------
@@ -146,10 +146,10 @@ useradd
 　　　　功能说明：建立用户帐号。
 　　　　语　　法：useradd [-mMnr][-c <备注>][-d <登入目录>][-e <有效期限>][-f <缓冲天数>][-g <群组>][-G <群组>][-s ][-u ][用户帐号] 或 useradd -D [-b][-e <有效期限>][-f <缓冲天数>][-g <群组>][-G <群组>][-s ]
 　　
-　　　补充说明：useradd可用来建立用户帐号。帐号建好之后，再用passwd设定帐号的密码．而可用userdel删除帐号。使用useradd指令所建立的帐号，实际上是保存在/etc/passwd文本文件中。
+　　　补充说明：useradd 可用来建立用户帐号。帐号建好之后，再用 passwd 设定帐号的密码．而可用 userdel 删除帐号。使用 useradd 指令所建立的帐号，实际上是保存在/etc/passwd 文本文件中。
 　　
 　　　　参　　数：
-　　　　-c<备注> 　加上备注文字。备注文字会保存在passwd的备注栏位中。　
+　　　　-c<备注> 　加上备注文字。备注文字会保存在 passwd 的备注栏位中。　
 　　　　-d<登入目录> 　指定用户登入时的启始目录。
 　　　　-D 　变更预设值．
 　　　　-e<有效期限> 　指定帐号的有效期限。
@@ -160,45 +160,45 @@ useradd
 　　　　-M 　不要自动建立用户的登入目录。
 　　　　-n 　取消建立以用户名称为名的群组．
 　　　　-r 　建立系统帐号。
-　　　　-s　 　指定用户登入后所使用的shell。
-　　　　-u 　指定用户ID======================================================================
-在Linux中,用什么命令可以查看到用户组中包含有哪里用户?
-具有某种共同特征的用户集合起来就是用户组（Group）。用户组（Group）配置文件主要有 /etc/group和/etc/gshadow，其中/etc/gshadow是/etc/group的加密信息文件；在本标题下，您还能了解到什么是GID ；
+　　　　-s　 　指定用户登入后所使用的 shell。
+　　　　-u 　指定用户 ID======================================================================
+在 Linux 中,用什么命令可以查看到用户组中包含有哪里用户?
+具有某种共同特征的用户集合起来就是用户组（Group）。用户组（Group）配置文件主要有 /etc/group 和/etc/gshadow，其中/etc/gshadow 是/etc/group 的加密信息文件；在本标题下，您还能了解到什么是 GID；
 1、/etc/group 解说；
-/etc/group 文件是用户组的配置文件，内容包括用户和用户组，并且能显示出用户是归属哪个用户组或哪几个用户组，因为一个用户可以归属一个或多个不同的用户组；同一用 户组的用户之间具有相似的特征。比如我们把某一用户加入到root用户组，那么这个用户就可以浏览root用户家目录的文件，如果root用户把某个文件 的读写执行权限开放，root用户组的所有用户都可以修改此文件，如果是可执行的文件（比如脚本），root用户组的用户也是可以执行的；
-用户组的特性在系统管理中为系统管理员提供了极大的方便，但安全性也是值得关注的，如某个用户下有对系统管理有最重要的内容，最好让用户拥有独立的用户组，或者是把用户下的文件的权限设置为完全私有；另外root用户组一般不要轻易把普通用户加入进去，
+/etc/group 文件是用户组的配置文件，内容包括用户和用户组，并且能显示出用户是归属哪个用户组或哪几个用户组，因为一个用户可以归属一个或多个不同的用户组；同一用 户组的用户之间具有相似的特征。比如我们把某一用户加入到 root 用户组，那么这个用户就可以浏览 root 用户家目录的文件，如果 root 用户把某个文件 的读写执行权限开放，root 用户组的所有用户都可以修改此文件，如果是可执行的文件（比如脚本），root 用户组的用户也是可以执行的；
+用户组的特性在系统管理中为系统管理员提供了极大的方便，但安全性也是值得关注的，如某个用户下有对系统管理有最重要的内容，最好让用户拥有独立的用户组，或者是把用户下的文件的权限设置为完全私有；另外 root 用户组一般不要轻易把普通用户加入进去，
 2、/etc/group 内容具体分析
-/etc/group 的内容包括用户组（Group）、用户组口令、GID及该用户组所包含的用户（User），每个用户组一条记录；格式如下：
+/etc/group 的内容包括用户组（Group）、用户组口令、GID 及该用户组所包含的用户（User），每个用户组一条记录；格式如下：
 group_name:passwd:GID:user_list
 在/etc/group 中的每条记录分四个字段：
 第一字段：用户组名称；
 第二字段：用户组密码；
 第三字段：GID
-第四字段：用户列表，每个用户之间用,号分割；本字段可以为空；如果字段为空表示用户组为GID的用户名；
+第四字段：用户列表，每个用户之间用,号分割；本字段可以为空；如果字段为空表示用户组为 GID 的用户名；
 我们举个例子：
-root:x:0:root,linuxsir 注：用户组root，x是密码段，表示没有设置密码，GID是0,root用户组下包括root、linuxsir以及GID为0的其它用户（可以通过 /etc/passwd查看）；；beinan:x:500:linuxsir 注：用户组beinan，x是密码段，表示没有设置密码，GID是500,beinan用户组下包括linuxsir用户及GID为500的用户（可以通 过/etc/passwd查看）；linuxsir:x:502:linuxsir 注：用户组linuxsir，x是密码段，表示没有设置密码，GID是502,linuxsir用户组下包用户linuxsir及GID为502的用户 （可以通过/etc/passwd查看）；helloer:x:503: 注：用户组helloer，x是密码段，表示没有设置密码，GID是503,helloer用户组下包括GID为503的用户，可以通过 /etc/passwd查看；
+root:x:0:root,linuxsir 注：用户组 root，x 是密码段，表示没有设置密码，GID 是 0,root 用户组下包括 root、linuxsir 以及 GID 为 0 的其它用户（可以通过 /etc/passwd 查看）；；beinan:x:500:linuxsir 注：用户组 beinan，x 是密码段，表示没有设置密码，GID 是 500,beinan 用户组下包括 linuxsir 用户及 GID 为 500 的用户（可以通 过/etc/passwd 查看）；linuxsir:x:502:linuxsir 注：用户组 linuxsir，x 是密码段，表示没有设置密码，GID 是 502,linuxsir 用户组下包用户 linuxsir 及 GID 为 502 的用户 （可以通过/etc/passwd 查看）；helloer:x:503: 注：用户组 helloer，x 是密码段，表示没有设置密码，GID 是 503,helloer 用户组下包括 GID 为 503 的用户，可以通过 /etc/passwd 查看；
 
 而/etc/passwd 对应的相关的记录为：
 root:x:0:0:root:/root:/bin/bashbeinan:x:500:500:beinan sun:/home/beinan:/bin/bashlinuxsir:x:505:502:linuxsir open,linuxsir office,13898667715:/home/linuxsir:/bin/bashhelloer:x:502:503::/home/helloer:/bin/bash
-由此可以看出helloer用户组包括 helloer用户；所以我们查看一个用户组所拥有的用户，可以通过对比/etc/passwd和/etc/group来得到
+由此可以看出 helloer 用户组包括 helloer 用户；所以我们查看一个用户组所拥有的用户，可以通过对比/etc/passwd 和/etc/group 来得到
 ================================================================
-LINUX有什么命令可以查看当前的所有用户和用户组?
+LINUX 有什么命令可以查看当前的所有用户和用户组?
 就是把当前系统有的都列出来
 有这样的命令么?
 chmod o-rw config.inc.php
-上面这个命令是啥意思?--------------------------------------用浏览文件的命令可以到/etc/passwd中查看用户文件
-例如less /etc/passwd
+上面这个命令是啥意思?--------------------------------------用浏览文件的命令可以到/etc/passwd 中查看用户文件
+例如 less /etc/passwd
 或者 cat /etc/passwd
-chmod这个命令是用来改权限的
-o 是owner的意思 -rw 就是把 读和写的权限去掉
+chmod 这个命令是用来改权限的
+o 是 owner 的意思 -rw 就是把 读和写的权限去掉
 如果要加上的话就 +rw 就行了 后面的 config.inc.php 是文件名，也就是你要改变权限的文件！
-当然你也可以用man chmod来查看这个命令的更多用法
-** 查看shell，切换shell
-   当前shell:   echo $SHELL
-   查看shell种类： chsh -l
-   切换shell: chsh -s `which zch`
+当然你也可以用 man chmod 来查看这个命令的更多用法
+** 查看 shell，切换 shell
+   当前 shell:   echo $SHELL
+   查看 shell 种类：chsh -l
+   切换 shell: chsh -s `which zch`
 
-* linux命令工具
+* linux 命令工具
   [[http://www.pixelbeat.org/cmdline_zh_CN.html][linux 常用命令]]
 ** telnet
 ** nc
@@ -206,58 +206,85 @@ o 是owner的意思 -rw 就是把 读和写的权限去掉
 ** curl
 
 * linux 快速格式化
-** ntfs格式
+** ntfs 格式
 sudo mkfs.ntfs -Q /dev/sdb1
-* linux后台运行和关闭、查看后台任务 (fg、bg、jobs、&、nohup、ctrl + z命令)
+* linux 后台运行和关闭、查看后台任务 (fg、bg、jobs、&、nohup、ctrl + z 命令)
     一、&
-    加在一个命令的最后，可以把这个命令放到后台执行,如gftp &,
+    加在一个命令的最后，可以把这个命令放到后台执行,如 gftp &,
     二、ctrl + z
     可以将一个正在前台执行的命令放到后台，并且处于暂停状态，不可执行
     三、jobs
     查看当前有多少在后台运行的命令
-    jobs -l选项可显示所有任务的PID，jobs的状态可以是running, stopped, Terminated,但是如果任务被终止了（kill），shell 从当前的shell环境已知的列表中删除任务的进程标识；也就是说，jobs命令显示的是当前shell环境中所起的后台正在运行或者被挂起的任务信息；
+    jobs -l 选项可显示所有任务的 PID，jobs 的状态可以是 running, stopped, Terminated,但是如果任务被终止了（kill），shell 从当前的 shell 环境已知的列表中删除任务的进程标识；也就是说，jobs 命令显示的是当前 shell 环境中所起的后台正在运行或者被挂起的任务信息；
     四、fg
     将后台中的命令调至前台继续运行
-    如果后台中有多个命令，可以用fg %jobnumber将选中的命令调出，%jobnumber是通过jobs命令查到的后台正在执行的命令的序号(不是pid)
+    如果后台中有多个命令，可以用 fg %jobnumber 将选中的命令调出，%jobnumber 是通过 jobs 命令查到的后台正在执行的命令的序号(不是 pid)
     五、bg
     将一个在后台暂停的命令，变成继续执行 （在后台执行）
-    如果后台中有多个命令，可以用bg %jobnumber将选中的命令调出，%jobnumber是通过jobs命令查到的后台正在执行的命令的序号(不是pid)
+    如果后台中有多个命令，可以用 bg %jobnumber 将选中的命令调出，%jobnumber 是通过 jobs 命令查到的后台正在执行的命令的序号(不是 pid)
     将任务转移到后台运行：
-    先ctrl + z；再bg，这样进程就被移到后台运行，终端还能继续接受命令。
+    先 ctrl + z；再 bg，这样进程就被移到后台运行，终端还能继续接受命令。
     概念：当前任务
-    如果后台的任务号有2个，[1],[2]；如果当第一个后台任务顺利执行完毕，第二个后台任务还在执行中时，当前任务便会自动变成后台任务号码“[2]” 的后台任务。所以可以得出一点，即当前任务是会变动的。当用户输入“fg”、“bg”和“stop”等命令时，如果不加任何引号，则所变动的均是当前任务
+    如果后台的任务号有 2 个，[1],[2]；如果当第一个后台任务顺利执行完毕，第二个后台任务还在执行中时，当前任务便会自动变成后台任务号码“[2]” 的后台任务。所以可以得出一点，即当前任务是会变动的。当用户输入“fg”、“bg”和“stop”等命令时，如果不加任何引号，则所变动的均是当前任务
     六：nohup
-    如果你正在运行一个进程，而且你觉得在退出帐户时该进程还不会结束，那么可以使用nohup命令。该命令可以在你退出帐户/关闭终端之后继续运行相应的进程。
+    如果你正在运行一个进程，而且你觉得在退出帐户时该进程还不会结束，那么可以使用 nohup 命令。该命令可以在你退出帐户/关闭终端之后继续运行相应的进程。
     进程的终止
     后台进程的终止：
     方法一：
-    通过jobs命令查看job号（假设为num），然后执行kill %num
+    通过 jobs 命令查看 job 号（假设为 num），然后执行 kill %num
     方法二：
-    通过ps命令查看job的进程号（PID，假设为pid），然后执行kill pid
+    通过 ps 命令查看 job 的进程号（PID，假设为 pid），然后执行 kill pid
     前台进程的终止：
     ctrl+c
-    kill的其他作用
-    kill除了可以终止进程，还能给进程发送其它信号，使用kill -l 可以察看kill支持的信号。
-    SIGTERM是不带参数时kill发送的信号，意思是要进程终止运行，但执行与否还得看进程是否支持。如果进程还没有终止，可以使用kill -SIGKILL pid，这是由内核来终止进程，进程不能监听这个信号。
+    kill 的其他作用
+    kill 除了可以终止进程，还能给进程发送其它信号，使用 kill -l 可以察看 kill 支持的信号。
+    SIGTERM 是不带参数时 kill 发送的信号，意思是要进程终止运行，但执行与否还得看进程是否支持。如果进程还没有终止，可以使用 kill -SIGKILL pid，这是由内核来终止进程，进程不能监听这个信号。
     进程的挂起（暂停的意思吧）
     后台进程的挂起：
-    在solaris中通过stop命令执行，通过jobs命令查看job号(假设为num)，然后执行stop %num；
-    在redhat中，不存在stop命令，可通过执行命令kill -stop PID，将进程挂起；
-    当要重新执行当前被挂起的任务时，通过bg %num 即可将挂起的job的状态由stopped改为running，仍在后台执行；当需要改为在前台执行时，执行命令fg %num即可；
+    在 solaris 中通过 stop 命令执行，通过 jobs 命令查看 job 号(假设为 num)，然后执行 stop %num；
+    在 redhat 中，不存在 stop 命令，可通过执行命令 kill -stop PID，将进程挂起；
+    当要重新执行当前被挂起的任务时，通过 bg %num 即可将挂起的 job 的状态由 stopped 改为 running，仍在后台执行；当需要改为在前台执行时，执行命令 fg %num 即可；
     前台进程的挂起：
     ctrl+Z;
-    使用jobs 查看任务。　　使用fg %n　关闭。
+    使用 jobs 查看任务。　　使用 fg %n　关闭。
 * export, source **.sh 与 sh **.sh
-  用户可以有许多 shell，每个shell都是由某个shell（称为父shell）派生的。
-  + export :: 要使某个变量的值可以在其他shell中被改变，可以使用export命令对已定义的变量进行输出。 export命令将使系统在创建每一个新的shell时定义这个变量的一个拷贝。这个过程称之为变量输出。
-  + source :: source命令也称为“点命令”，也就是一个点符号（.）,是bash的内部命令。
-    source命令通常用于重新执行刚修改的初始化文件，使之立即生效，而不必注销并重新登录。
-    source filename：这个命令其实只是简单地读取脚本里面的语句依次在当前shell里面执行，没有建立新的子shell。那么脚本里面所有新建、改变变量的语句都会保存在当前shell里面。
-  + sh :: sh filename 重新建立一个子shell，在子shell中执行脚本里面的语句，该子shell继承父shell的环境变量，但子shell新建的、改变的变量不会被带回父shell，除非使用export。
-* archlinux 开启关闭ssh服务
+  用户可以有许多 shell，每个 shell 都是由某个 shell（称为父 shell）派生的。
+  + export :: 要使某个变量的值可以在其他 shell 中被改变，可以使用 export 命令对已定义的变量进行输出。export 命令将使系统在创建每一个新的 shell 时定义这个变量的一个拷贝。这个过程称之为变量输出。
+  + source :: source 命令也称为“点命令”，也就是一个点符号（.）,是 bash 的内部命令。
+    source 命令通常用于重新执行刚修改的初始化文件，使之立即生效，而不必注销并重新登录。
+    source filename：这个命令其实只是简单地读取脚本里面的语句依次在当前 shell 里面执行，没有建立新的子 shell。那么脚本里面所有新建、改变变量的语句都会保存在当前 shell 里面。
+  + sh :: sh filename 重新建立一个子 shell，在子 shell 中执行脚本里面的语句，该子 shell 继承父 shell 的环境变量，但子 shell 新建的、改变的变量不会被带回父 shell，除非使用 export。
+* archlinux 开启关闭 ssh 服务
  systemctl start sshd
  systemctl status sshd
  systemctl stop  sshd
 * quickly kill process
   killall -9 mpv
   pss mpv  | awk '{print $2}' | xargs kill -9
+* 统计文件的某一列(默认第一列)不重复数据的行数
+awk '{print $1}' filename | grep -v "192.168" | sort | uniq | wc
+* 交换按键
+在 Linux 下这些更改快捷键的功能可以用 xmodmap。另一个很有用的配套工具是 xev，可以查看键盘上所有按键的键值。
+Create a file at ~/.Xmodmap with the following content:
+#+BEGIN_SRC sh
+  clear Lock
+
+  clear control
+  clear mod1
+
+  keycode 37 = Alt_L
+  keycode 64 = Control_L
+  keycode 105 = Alt_R
+  keycode 108 = Control_R
+
+  add control = Control_L Control_R
+  add mod1 = Alt_L Alt_R
+
+  keycode 9 = Caps_Lock
+  keycode 66 = Escape
+  add Lock = Caps_Lock
+#+END_SRC 
+
+then, run this line in terminal:
+
+xmodmap ~/.Xmodmap
