@@ -1,0 +1,7 @@
+Used mainly in databases, the term refers to identifying incomplete, incorrect, inaccurate, irrelevant, etc. parts of the data and then replacing, modifying, or deleting this dirty data or coarse data.
+* 预处理阶段
+* 去除/补全有缺失的数据
+* 去除/修改格式和内容错误的数据
+* 去除/修改逻辑错误的数据
+* 去除不需要的数据
+* 关联性验证
