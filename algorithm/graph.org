@@ -1,0 +1,280 @@
+[[http://www.tutorialspoint.com/graph_theory/graph_theory_fundamentals.htm][tutorialspoint.com graph]]
+** Graph Theory
+*** Fundamentals
+- Point
+- Line
+- Vertex
+- Edge
+- Graph
+- Loop
+- Degree of Vertex :: Notation − deg(V).
+  deg(v) ≤ n – 1 ∀ v ∈ G
+- Degree of Vertex in an Undirected Graph
+- Degree of Vertex in a Directed Graph 
+  Indegree of a Graph => Notation − deg+(V). \
+  Outdegree of a Graph => Notation − deg-(V).
+- Pendent Vertex :: A vertex with degree one is called a pendent vertex.
+- Isolated Vertex :: A vertex with degree zero is called an isolated vertex.
+- Adjacency
+- Parallel Edges
+- Multi Graph :: A graph having parallel edges is known as a Multigraph.
+- Degree Sequence of a Graph
+  If the degrees of all vertices in a graph are arranged in descending or ascending order, then the sequence obtained is known as the degree sequence of the graph.
+*** Basic Properties
+**** Distance between Two Vertices  => Notation − d(U,V)
+the shortest path is considered as the distance between the two vertices.
+**** Eccentricity of a Vertex  => Notation − e(V)
+The maximum distance between a vertex to all other vertices is considered as the eccentricity of vertex.
+**** Radius of a Connected Graph  => Notation − r(G)
+The minimum eccentricity from all the vertices is considered as the radius of the Graph G. 
+**** Diameter of a Graph  => Notation − d(G)
+The maximum eccentricity from all the vertices is considered as the diameter of the Graph G. 
+**** Central Point
+If the eccentricity of a graph is equal to its radius, then it is known as the central point of the graph. If
+
+e(V) = r(V),
+
+then ‘V’ is the central point of the Graph ’G’.
+**** Centre 
+The set of all central points of ‘G’ is called the centre of the Graph.
+**** Circumference
+The number of edges in the longest cycle of ‘G’.
+**** Girth   => Notation − g(G).
+The number of edges in the shortest cycle of ‘G’ is called its Girth.
+**** Sum of Degrees of Vertices Theorem
+If G = (V, E) be a non-directed graph with vertices V = {V1, V2,…Vn} then
+
+n ∑ i=1 deg(Vi) = 2|E| 
+***** Corollary 1
+If G = (V, E) be a directed graph with vertices V = {V1, V2,…Vn}, then
+
+n ∑ i=1 deg^+(V[i]) = |E| = n ∑ i=1 deg^−(V[i]) 
+***** Corollary 2
+In any non-directed graph, the number of vertices with Odd degree is Even.
+***** Corollary 3
+In a non-directed graph, if the degree of each vertex is k, then
+
+k|V| = 2|E|
+***** Corollary 4
+In a non-directed graph, if the degree of each vertex is at least k, then
+
+k|V| ≤ 2|E|
+***** Corollary 5
+In a non-directed graph, if the degree of each vertex is at most k, then
+
+k|V| ≥ 2|E|
+*** Types of Graphs
+**** Null Graph
+**** Trivial Graph
+  A graph with *only one vertex* is called a Trivial Graph.
+**** Non-Directed Graph
+**** Directed Graph
+**** Simple Graph
+  A graph with *no loops and no parallel edges* is called a simple graph.
+  The maximum number of edges possible in a single graph with ‘n’ vertices is ^nC[2] where ^nC[2] = n(n – 1)/2.
+   
+  The number of simple graphs possible with ‘n’ vertices = 2^^nc[2] = 2^n(n-1)/2.
+**** Connected Graph
+  A graph G is said to be connected if there *exists a path between every pair of vertices*. There should be at least one edge for every vertex in the graph.
+**** Regular Graph
+  A graph G is said to be regular, *if all its vertices have the same degree*.
+**** Complete Graph
+*K[n]*: A simple graph with ‘n’ mutual vertices is called a complete graph and it is *denoted by ‘K[n]’*.
+
+In the graph, a vertex should have edges with all other vertices, then it called a complete graph.
+
+In other words, if a vertex is connected to all other vertices in a graph, then it is called a complete graph.
+**** Cycle Graph  => Notation − C[n]
+If the *degree of each vertex in the graph is two*, then it is called a Cycle Graph.
+**** Wheel Graph  => Notation − W[n]
+A wheel graph is obtained from a cycle graph C[n-1] by adding a new vertex. That new vertex is called a Hub which is connected to all the vertices of C[n].
+
+
+No. of edges in Wn = No. of edges from hub to all other vertices +
+                    No. of edges from all other nodes in cycle graph without a hub.
+                     = (n–1) + (n–1)
+                     = 2(n–1)
+**** Cyclic Graph
+A graph *with at least one cycle* is called a cyclic graph.
+**** Complete Bipartite Graph
+A bipartite graph ‘G’, G = (V, E) with partition V = {V[1], V[2]} is said to be a complete bipartite graph if every vertex in V[1] is connected to every vertex of V[2].
+
+In general, a complete bipartite graph connects each vertex from set V[1] to each vertex from set V[2].
+
+
+*K[m, n]*: If |V[1]| = m and |V[2]| = n, then the complete bipartite graph is denoted by K[m, n]. 
+**** Star Graph
+A complete bipartite graph of the form K[1, n-1] is a star graph with n-vertices. 
+*** Connectivity
+A graph is said to be connected *if there is a path between every pair of vertex*.
+
+*Notation* − For any connected graph G,
+
+  K(G) ≤ λ(G) ≤ δ(G)
+
+  Vertex connectivity (K(G)), edge connectivity (λ(G)), minimum number of degrees of G(δ(G)).
+**** Cut Vertex
+Let ‘G’ be a connected graph. A vertex V ∈ G is called a cut vertex of ‘G’, if ‘G-V’ (Delete ‘V’ from ‘G’) results in a disconnected graph. Removing a cut vertex from a graph breaks it in to two or more graphs.
+
+Note − Removing a cut vertex may render a graph disconnected.
+
+A connected graph ‘G’ may have at most (n–2) cut vertices.
+**** Cut Edge (Bridge)
+Let ‘G’ be a connected graph. An edge ‘e’ ∈ G is called a cut edge if ‘G-e’ results in a disconnected graph.
+
+Note − Let ‘G’ be a connected graph with ‘n’ vertices, then
+
+  * a cut edge e ∈ G if and only if the edge ‘e’ is not a part of any cycle in G.
+   
+  * the maximum number of cut edges possible is ‘n-1’.
+   
+  * whenever cut edges exist, cut vertices also exist because at least one vertex of a cut edge is a cut vertex.
+   
+  * if a cut vertex exists, then a cut edge may or may not exist.
+**** Cut Set of a Graph
+Let ‘G’= (V, E) be a connected graph. A subset E’ of E is called a cut set of G if deletion of all the edges of E’ from G makes G disconnect.
+**** Edge Connectivity  => Notation − λ(G)
+Let ‘G’ be a connected graph. The minimum number of edges whose removal makes ‘G’ disconnected is called edge connectivity of G.
+
+In other words, the number of edges in a smallest cut set of G is called the edge connectivity of G.
+**** Vertex Connectivity  => Notation − K(G)
+Let ‘G’ be a connected graph. The minimum number of vertices whose removal makes ‘G’ either disconnected or
+reduces ‘G’ in to a trivial graph is called its vertex connectivity.
+*** Coverings
+A covering graph is a subgraph which contains either all the vertices or all the edges *corresponding* to some other graph. A subgraph which contains all the vertices is called a *line/edge covering*. A subgraph which contains all the edges is called a *vertex covering*.
+
+*** Matchings
+A matching graph is a subgraph of a graph where there are no edges adjacent to each other. Simply, there should not be any common vertex between any two edges.
+**** Matching  => Notation − M(G)
+Let ‘G’ = (V, E) be a graph. A subgraph is called a matching M(G), if each vertex of G is incident with at most one edge in M, i.e.,
+
+deg(V) ≤ 1 ∀ V ∈ G
+*** Independent Sets
+Independent sets are represented in sets, in which
+1. there should not be *any edges adjacent to each other*. There should not be any common vertex between any two edges.
+2. there should not be *any vertices adjacent to each other*. There should not be any common edge between any two vertices.
+**** Independent Line Set
+*** Isomorphism
+A graph can exist in different forms having the same number of vertices, edges, and also the same edge connectivity. Such graphs are called isomorphic graphs. 
+**** Isomorphic Graphs
+Two graphs G[1] and G[2] are said to be isomorphic if −
+
+  1. Their number of components (vertices and edges) are same.
+  2. Their edge connectivity is retained.
+**** Planar Graphs
+A graph ‘G’ is said to be planar if it can be drawn on a plane or a sphere so that no two edges cross each other at a non-vertex point.
+***** Regions
+Every planar graph divides the plane into connected areas called regions.
+
+Degree of a bounded region r = deg(r) = Number of edges enclosing the regions r.
+
+Degree of an unbounded region r = deg(r) = Number of edges enclosing the regions r.
+***** properties
+In planar graphs, the following properties hold good −
+
+  * 1. In a planar graph with ‘n’ vertices, sum of degrees of all the vertices is
+   
+    n ∑ i=1 deg(V[i]) = 2|E|
+  * 2. According to Sum of Degrees of Regions Theorem, in a planar graph with ‘n’ regions, Sum of degrees of
+    regions is −
+   
+    n ∑ i=1 deg(r[i]) = 2|E|
+
+Based on the above theorem, you can draw the following conclusions −
+
+In a planar graph,
+
+  * If degree of each region is K, then the sum of degrees of regions is
+   
+    K|R| = 2|E|
+   
+  * If the degree of each region is at least K(≥ K), then
+   
+    K|R| ≤ 2|E|
+   
+  * If the degree of each region is at most K(≤ K), then
+   
+    K|R| ≥ 2|E|
+   
+Note − Assume that all the regions have same degree.
+
+3. According to Euler’s Formulae on planar graphs,
+
+  * If a graph ‘G’ is a connected planar, then
+   
+    |V| + |R| = |E| + 2
+   
+  * If a planar graph with ‘K’ components then
+   
+    |V| + |R|=|E| + (K+1)
+   
+Where, |V| is the number of vertices, |E| is the number of edges, and |R| is the number of regions.
+
+4. Edge Vertex Inequality
+
+If ‘G’ is a connected planar graph with degree of each region at least ‘K’ then,
+
+|E| ≤ k / k − 2 {|v| - 2}
+
+You know, |V| &plus; |R| = |E| &plus; 2
+
+K.|R| ≤ 2|E|
+
+K(|E| - |V| &plus; 2) ≤ 2|E|
+
+(K - 2)|E| ≤ K(|V| - 2)
+
+|E| ≤ k / k − 2 {|v| - 2}
+
+5. If ‘G’ is a simple connected planar graph, then
+
+|E| ≤ 3|V| − 6
+|R| ≤ 2|V| − 4
+
+There exists at least one vertex V ∈ G, such that deg(V) ≤ 5
+
+6. If ‘G’ is a simple connected planar graph (with at least 2 edges) and no triangles, then
+
+|E| ≤ {2|V| – 4}
+
+7. Kuratowski’s Theorem
+
+A graph ‘G’ is non-planar if and only if ‘G’ has a subgraph which is homeomorphic to K[5] or K[3,3].
+***** Homomorphism
+Two graphs G[1] and G[2] are said to be homomorphic, if each of these graphs can be obtained from the same graph ‘G’ by dividing some edges of G with more vertices.
+***  Traversability
+A graph is traversable if you can draw a path between all the vertices without retracing the same path.
+**** Euler’s Path
+An Euler’s path contains each edge of ‘G’ exactly once and each vertex of ‘G’ at least once. A connected graph G is said to be traversable if it contains an Euler’s path.
+**** Euler’s Circuit
+In an Euler’s path, if the starting vertex is same as its ending vertex, then it is called an Euler’s circuit.
+**** Hamiltonian Graph
+A connected graph G is said to be a Hamiltonian graph, if there exists a cycle which contains all the vertices of G.
+**** Hamiltonian Path
+A connected graph is said to be Hamiltonian if it contains each vertex of G exactly once. Such a path is called a Hamiltonian path.
+** Data Struture & algorithm
+There are different ways to store graphs in a computer system. The data structure used depends on both the graph structure and the algorithm used for manipulating the graph.
+1. store in List
+  List structures are often perferred for sparse graphs as they have smaller memory requirements.
+2. store in Matrix
+  Matrix can provide faster access but consume huge memory. 
+3. the best structure is often a combination of both.
+*** List Structures
+**** incidence list
+An array of pairs of vertices
+**** adjacency list
+An adjacency list is a collection of unordered lists used to represent a finite graph. Each list describes the set of neighbors of a vertex in the graph.
+
+Separately lists the neighbors of each vertex.
+*** Matrix structures
+**** incidence matrix
+a matrix of 0's and 1's whose rows represent vertices and whose columns represent edges
+**** adjacency matrix
+ in which both the rows and columns are indexed by vertices. 
+**** distance matrix
+like the adjacency matrix, has both its rows and columns indexed by vertices, but rather than containing a 0 or a 1 in each cell it contains the length of a shortest path between two vertices.
+*** usage
+ For a sparse graph (one in which most pairs of vertices are not connected by edges) an adjacency list is significantly more space-efficient than an adjacency matrix (stored as an array): the space usage of the adjacency list is proportional to the number of edges and vertices in the graph, while for an adjacency matrix stored in this way the space is proportional to the square of the number of vertices. However, it is possible to store adjacency matrices more space-efficiently, matching the linear space usage of an adjacency list, by using a hash table indexed by pairs of vertices rather than an array.
+
+
+The other significant difference between adjacency lists and adjacency matrices is in the efficiency of the operations they perform. In an adjacency list, the neighbors of each vertex may be listed efficiently, in time proportional to the degree of the vertex. In an adjacency matrix, this operation takes time proportional to the number of vertices in the graph, which may be significantly higher than the degree. On the other hand, the adjacency matrix allows testing whether two vertices are adjacent to each other in constant time; the adjacency list is slower to support this operation.

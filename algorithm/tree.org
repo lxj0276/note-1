@@ -1,0 +1,14 @@
+[[http://www.tutorialspoint.com/data_structures_algorithms/tree_data_structure.htm][tutorialspoint.com tree_data_structure]]
+** Binary Tree
+A binary tree have benefits of both an ordered array and a linked list as search is as quick as in sorted array and insertion or deletion operation are as fast as in linked list.
+** Binary Search Tree
+Binary Search tree exhibits a special behaviour. A node's left child must have value less than its parent's value and node's right child must have value greater than it's parent value.
+
+#+BEGIN_SRC C
+  struct node {
+    int data;   
+    struct node *leftChild;
+    struct node *rightChild;
+  };
+#+END_SRC
+
