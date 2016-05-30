@@ -1,0 +1,1 @@
+[[https://github.com/judasn/IntelliJ-IDEA-Tutorial/blob/master/keymap-introduce.md][idea 快捷键]]
