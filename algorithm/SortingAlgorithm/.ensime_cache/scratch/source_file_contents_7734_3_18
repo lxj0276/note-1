@@ -1,6 +1,0 @@
-class SortingAlgorithm {
-  def bubbleSort(array: Arr) {
-    len = 
-    for(i in Range)
-  }
-}
