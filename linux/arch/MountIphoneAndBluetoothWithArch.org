@@ -1,0 +1,38 @@
+
+[[http://linux-wiki.cn/wiki/zh-hans/%E4%B8%8EiPad/iPhone%E5%90%8C%E6%AD%A5][archlinux 与 iPad/iPhone 同步]]
+* 需要安装的软件包
+libimobiledevice, ifuse
+提供一个可访问 iOS 设备的用户空间文件系统，这些工具还依赖 usbmuxd，用于管理与 iOS 设备的 USB 连接。
+gvfs-afc, gvfs-afp
+如果使用 GNOME，强烈推荐安装 GVFS 的这两个后端，这样 iOS 设备会在连接后被自动挂载。
+注意发行版仓库中的版本可能不够新，此时需要自行安装新版工具，如 Archlinux 用户可直接安装 libimobiledevice-git。
+
+另外，视发行版不同，安装后可能需要赋予用户相应的权限。如 Archlinux 中，需要把用户加入 usbmux 组。
+
+* 使用
+*
+如果正确安装了上述软件，先以 root 身份运行 usbmuxd
+
+$ sudo usbmuxd
+再连接 iPad 或 iPhone，GNOME 应该就能自动辨识出相应设备了。
+
+如果没有使用 GNOME+GVFS，可使用 ifuse 命令手动挂载，如：
+
+$ mkdir ~/iOS
+$ ifuse ~/iOS
+
+* 用蓝牙挂载 logitech k480 蓝牙键盘 
+[[https://wiki.archlinux.org/index.php/Bluetooth_(%25E7%25AE%2580%25E4%25BD%2593%25E4%25B8%25AD%25E6%2596%2587)][Bluetooth (简体中文)]]
+yain bluez bluz-utils
+
+yain bluez bluez-utils
+
+modprobe btusb
+
+systemctl start bluetooth.service
+
+在 setting 中启动蓝牙
+
+键盘启动蓝牙 连接
+
+在键盘中输入显示的数字
