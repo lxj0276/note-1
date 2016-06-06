@@ -1,19 +1,38 @@
-                                     o
-                                     |
-                                     |
-                                     o
-                                     |
-                                     |
-                                     o
-                                     |
-                                     |
-                                     o
-                                     |
-                                     |
-                                     o
-                                     |
-                                     |
-                                     s
-                                     |
-                                     |
-                                     o
+* Resilient Distributed Datasets: A Fault-Tolerant Abstraction for In-Memory Cluster Computing
+RDD are motivated two types of applications: iterative algorithm and interactive data mining tools.
+
+coarse-grained transformations
+
+Formally, an RDD is a read-only, partitioned collection of records. RDDs can only be created through deterministic operations on either (1) data in stable storage or (2) other RDDs. We call these operations transformations to
+differentiate them from other operations on RDDs. Examples of transformations include map, filter, and join.
+
+Users can control two other aspects of RDD: persistence and partitioning.
+
+Users can indicate which RDDs they will reuse and choose a storage strategy for them (e.g., in-memory storage). They can also ask that an RDD’s elements be partitioned across machines based on a key in each record. This is useful for placement optimizations, such as ensuring that two datasets that will be joined together are hash-partitioned in the same way.
+
+ Spark computes RDDs lazily the first time they are used in an action, so that it can pipeline transformations.
+
+Only the lost partitions of an RDD need to be recomputed upon failure, and they can be recomputed in parallel on different nodes, without having to roll back the whole program.
+
+RDDs would be less suitable for applications that make asynchronous finegrained updates to shared state, such as a storage system for a web application or an incremental web crawler.
+
+Our goal is to provide an efficient programming model for batch analytics and leave these asynchronous applications to specialized systems.
+
+To use Spark, developers write a driver program that connects to a cluster of workers.
+
+The driver defines one or more RDDs and invokes actions on them. Spark code on the driver also tracks the RDDs’ lineage. 
+Users provide arguments to RDD operations like map by passing closures (function literals).
+Scala represents each closure as a Java object, and these objects can be serialized and loaded on another node to pass the closure across the network. Scala also saves any variables bound in the closure as fields in the Java object.
+
+We can control the partitioning of hte RDDs. If we specify a partitioning for both RDDs which will have join operating, then the same key will store on the same machine, and will not need translate in the network.
+e.g.: val links = spark.textFile(...).map(...).partitionBy(MyPartFunc).persist()
+   val ranks = spark.textFile(...).map(...).partitionBy(MyPartFunc).persist()
+
+In a nutshell, we propose representing each RDD through a common interface that exposes five pieces of information: a set of partitions, which are atomic pieces of the dataset; a set of dependencies on parent RDDs; a function for computing the dataset based on its parents; and metadata about its partitioning scheme and data placement.
+[[~/note/spark/SparkPictures/1.png]]
+
+How to represent dependencies between RDDs? We found it both sufficient and useful to classify dependencies into two types: narrow dependencies, where each partition of the parent RDD is used by at most one partition of the child RDD, wide dependencies, where multiple child partitions may depend on it.
+
+[[~/note/spark/SparkPictures/2.png]]
+
+[[~/note/spark/SparkPictures/3.png]]
