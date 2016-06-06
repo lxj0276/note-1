@@ -1,54 +1,54 @@
 查看技术的浏览器兼容性: http://caniuse.com/
 * Full screen api
 The fullscreen API provides an easy way for web content to be presented using the user's entire screen.
-HTML5中的一个api,用于element或者document的全屏
+HTML5 中的一个 api,用于 element 或者 document 的全屏
 * css3 filter
-Filters主要是运用在图片上，以实现一些特效。（尽管他们也能运用于video上），不过我们在些只来讨论图片上的运用。
+Filters 主要是运用在图片上，以实现一些特效。（尽管他们也能运用于 video 上），不过我们在些只来讨论图片上的运用。
 
-目前支持这个属性的浏览器少得可怜，现在只是webkit支持，而且只有webkit nightly版本和Chrome 18.0.976以上以上版本才支持，所以说，你要是想看到效果就需要下载这两
-个版本中的一个，我使用的是Google Chrome Canary。
+目前支持这个属性的浏览器少得可怜，现在只是 webkit 支持，而且只有 webkit nightly 版本和 Chrome 18.0.976 以上以上版本才支持，所以说，你要是想看到效果就需要下载这两
+个版本中的一个，我使用的是 Google Chrome Canary。
 
 语法:
 elm {
 filter: none | <filter-function > [ <filter-function> ]*
 }
 
-其默认值是none，他不具备继承性，其中filter-function一个具有以下值可选：
+其默认值是 none，他不具备继承性，其中 filter-function 一个具有以下值可选：
 
-grayscale灰度
-sepia褐色（求专业指点翻译）
-saturate饱和度
-hue-rotate色相旋转
-invert反色
-opacity透明度
-brightness亮度
-contrast对比度
-blur模糊
-drop-shadow阴影
+grayscale 灰度
+sepia 褐色（求专业指点翻译）
+saturate 饱和度
+hue-rotate 色相旋转
+invert 反色
+opacity 透明度
+brightness 亮度
+contrast 对比度
+blur 模糊
+drop-shadow 阴影
 
 * Web Audio API
-Web Audio还是一个比较新的JavaScript API，它和HTML5中的&lt;audio&gt;是不同的，简单来说，&lt;audio&gt;标签是为了能在网页中嵌入音频文件，和播放器一样，具有操作界面，而Web Audio则是给了开发者对音频数据进行处理、分析的能力，例如混音、过滤等，类似于对音频数据进行PS。
+Web Audio 还是一个比较新的 JavaScript API，它和 HTML5 中的&lt;audio&gt;是不同的，简单来说，&lt;audio&gt;标签是为了能在网页中嵌入音频文件，和播放器一样，具有操作界面，而 Web Audio 则是给了开发者对音频数据进行处理、分析的能力，例如混音、过滤等，类似于对音频数据进行 PS。
 
-一般的网站应用应该是用不倒这些API中的，但是一些游戏引擎或者在线音乐编辑等类型的网站应该用得到。
+一般的网站应用应该是用不倒这些 API 中的，但是一些游戏引擎或者在线音乐编辑等类型的网站应该用得到。
 
-Web Audio API紧紧围绕着一个概念设计：audio context，它就像是一个有向图，途中的每个节点都是一个audio node，音频数据从源节点按照程序中指定的边一步一步的走的目的节点。
-如果你接触过directshow开发，audio context就像filter manager，而audio node则是各种filter，当然，如果你是个linux开发者，这有看起来像是pipe。一个audio context中的audio node可以有很多，上面的是最简单的形式了。而audio node又包括四种，
+Web Audio API 紧紧围绕着一个概念设计：audio context，它就像是一个有向图，途中的每个节点都是一个 audio node，音频数据从源节点按照程序中指定的边一步一步的走的目的节点。
+如果你接触过 directshow 开发，audio context 就像 filter manager，而 audio node 则是各种 filter，当然，如果你是个 linux 开发者，这有看起来像是 pipe。一个 audio context 中的 audio node 可以有很多，上面的是最简单的形式了。而 audio node 又包括四种，
 1. 源节点（source node）
-2. 处理节点（gain node、panner node、wave shaper node、oscillator node、delay node、convolver node等）
+2. 处理节点（gain node、panner node、wave shaper node、oscillator node、delay node、convolver node 等）
 4. 目的节点（destination node）
 * dom mutation observe
-Mutation Observer（变动观察器）是监视DOM变动的接口。当DOM对象树发生任何变动时，Mutation Observer会得到通知。
+Mutation Observer（变动观察器）是监视 DOM 变动的接口。当 DOM 对象树发生任何变动时，Mutation Observer 会得到通知。
+sdfadfasdf
+要概念上，它很接近事件。可以理解为，当 DOM 发生变动会触发 Mutation Observer 事件。但是，它与事件有一个本质不同：事件是同步触发，也就是说 DOM 发生变动立刻会触发相应的事件；Mutation Observer 则是异步触发，DOM 发生变动以后，并不会马上触发，而是要等到当前所有 DOM 操作都结束后才触发。
 
-要概念上，它很接近事件。可以理解为，当DOM发生变动会触发Mutation Observer事件。但是，它与事件有一个本质不同：事件是同步触发，也就是说DOM发生变动立刻会触发相应的事件；Mutation Observer则是异步触发，DOM发生变动以后，并不会马上触发，而是要等到当前所有DOM操作都结束后才触发。
+这样设计是为了应付 DOM 变动频繁的情况。举例来说，如果在文档中连续插入 1000 个段落（p 元素），会连续触发 1000 个插入事件，执行每个事件的回调函数，这很可能造成浏览器的卡顿；而 Mutation Observer 完全不同，只在 1000 个段落都插入结束后才会触发，而且只触发一次。
 
-这样设计是为了应付DOM变动频繁的情况。举例来说，如果在文档中连续插入1000个段落（p元素），会连续触发1000个插入事件，执行每个事件的回调函数，这很可能造成浏览器的卡顿；而Mutation Observer完全不同，只在1000个段落都插入结束后才会触发，而且只触发一次。
-
-Mutation Observer有以下特点：
+Mutation Observer 有以下特点：
 
 它等待所有脚本任务完成后，才会运行，即采用异步方式
-它把DOM变动记录封装成一个数组进行处理，而不是一条条地个别处理DOM变动。
-它即可以观察发生在DOM节点的所有变动，也可以观察某一类变动
-目前，Firefox(14+)、Chrome(26+)、Opera(15+)、IE(11+)和Safari(6.1+)支持这个API。Safari 6.0和Chrome 18-25使用这个API的时候，需要加上WebKit前缀（WebKitMutationObserver）。可以使用下面的表达式检查浏览器是否支持这个API。
+它把 DOM 变动记录封装成一个数组进行处理，而不是一条条地个别处理 DOM 变动。
+它即可以观察发生在 DOM 节点的所有变动，也可以观察某一类变动
+目前，Firefox(14+)、Chrome(26+)、Opera(15+)、IE(11+)和 Safari(6.1+)支持这个 API。Safari 6.0 和 Chrome 18-25 使用这个 API 的时候，需要加上 WebKit 前缀（WebKitMutationObserver）。可以使用下面的表达式检查浏览器是否支持这个 API。
 
 var MutationObserver = window.MutationObserver ||
     window.WebKitMutationObserver ||
@@ -56,108 +56,108 @@ var MutationObserver = window.MutationObserver ||
 
 var mutationObserverSupport = !!MutationObserver;
 * webRTC
-WebRTC，名称源自网页实时通信（Web Real-Time Communication）的缩写，是一个支持网页浏览器进行实时语音对话或视频对话的技术，是谷歌2010年以6820万美元收购Global IP Solutions公司而获得的一项技术。
-1.     WebRTC学习
-1.1   WebRTC现状
-本人最早接触WebRTC是在2011年底，那时Google已经在Android源码中加入了webrtc源码，放在/external/webrtc/，但是Android并没有用到它，更没有被浏览器使用。当时试图在Android 2.3（Gingerbread）高通平台的手机上用H.264 硬件codec替换掉WebRTC缺省使用的VP8软codec，费了不少劲勉强换掉后效果很差只得放弃。
+WebRTC，名称源自网页实时通信（Web Real-Time Communication）的缩写，是一个支持网页浏览器进行实时语音对话或视频对话的技术，是谷歌 2010 年以 6820 万美元收购 Global IP Solutions 公司而获得的一项技术。
+1.     WebRTC 学习
+1.1   WebRTC 现状
+本人最早接触 WebRTC 是在 2011 年底，那时 Google 已经在 Android 源码中加入了 webrtc 源码，放在/external/webrtc/，但是 Android 并没有用到它，更没有被浏览器使用。当时试图在 Android 2.3（Gingerbread）高通平台的手机上用 H.264 硬件 codec 替换掉 WebRTC 缺省使用的 VP8 软 codec，费了不少劲勉强换掉后效果很差只得放弃。
 
-最近得知Google最新版的Chrome for Android已经支持WebRTC，应老板的要求搭一个手机浏览器上视频通信的demo，为此在网上搜集各种资料，发现经过一年多的发展，国内外研究和使用WebRTC的人明显多起来，可用的demo也很多。在此做一个笔记，留作日后参考。
+最近得知 Google 最新版的 Chrome for Android 已经支持 WebRTC，应老板的要求搭一个手机浏览器上视频通信的 demo，为此在网上搜集各种资料，发现经过一年多的发展，国内外研究和使用 WebRTC 的人明显多起来，可用的 demo 也很多。在此做一个笔记，留作日后参考。
 
-目前基于WebRTC的开发其实有两个方向，一个是基于浏览器的WebRTC应用开发，编程语言主要是JavaScript、HTML等，这也是WebRTC作为HTML5标准的组成部分原本的目的；另一个是C层面的移植和开发，作为一款非常强大的开源软件，很多领域的软件项目都可以利用到WebRTC的音视频通信和处理能力，这些场合的应用程序可能是C语言写的，也不一定与浏览器有关。本文是属于前一种方向。
+目前基于 WebRTC 的开发其实有两个方向，一个是基于浏览器的 WebRTC 应用开发，编程语言主要是 JavaScript、HTML 等，这也是 WebRTC 作为 HTML5 标准的组成部分原本的目的；另一个是 C 层面的移植和开发，作为一款非常强大的开源软件，很多领域的软件项目都可以利用到 WebRTC 的音视频通信和处理能力，这些场合的应用程序可能是 C 语言写的，也不一定与浏览器有关。本文是属于前一种方向。
 
-1.2   WebRTC基本概念学习
-WebRTC的官方资料可以从其官网http://www.webrtc.org/和W 3C网站http://www.w3.org/TR/webrtc/上看到。
+1.2   WebRTC 基本概念学习
+WebRTC 的官方资料可以从其官网 http://www.webrtc.org/和 W 3C 网站 http://www.w3.org/TR/webrtc/上看到。
 
-学习WebRTC基础知识比较好的网站是《Getting Started with WebRTC》，网址是http://www.html5rocks.com/en/tutorials/webrtc/basics/，这个也是官网上推荐的。
+学习 WebRTC 基础知识比较好的网站是《Getting Started with WebRTC》，网址是 http://www.html5rocks.com/en/tutorials/webrtc/basics/，这个也是官网上推荐的。
 
-对浏览器来说，WebRTC其实就是提供了3个API：
+对浏览器来说，WebRTC 其实就是提供了 3 个 API：
 
-MediaStream (即getUserMedia)，用于获取媒体数据，例如来自摄像头和麦克风的视频流和音频流；
+MediaStream (即 getUserMedia)，用于获取媒体数据，例如来自摄像头和麦克风的视频流和音频流；
 
-RTCPeerConnection，用于peer跟peer之间呼叫和建立连接以便传输音视频数据流；
+RTCPeerConnection，用于 peer 跟 peer 之间呼叫和建立连接以便传输音视频数据流；
 
-RTCDataChannel，用于peer跟peer之间传输音视频之外的一般数据。
+RTCDataChannel，用于 peer 跟 peer 之间传输音视频之外的一般数据。
 
-需要注意的是这几个API的名称在不同浏览器及同一浏览器的不同版本之间略有差异，比如PeerConnection在FireFox上叫做mozRTCPeerConnection，而在当前版本的Chrome上叫做webkitRTCPeerConnection，将来WebRTC标准化完成后会把这些前缀去掉使用统一的名称。
+需要注意的是这几个 API 的名称在不同浏览器及同一浏览器的不同版本之间略有差异，比如 PeerConnection 在 FireFox 上叫做 mozRTCPeerConnection，而在当前版本的 Chrome 上叫做 webkitRTCPeerConnection，将来 WebRTC 标准化完成后会把这些前缀去掉使用统一的名称。
 
-目前网上找到的WebRTC demo都只用到了getUserMedia和RTCPeerConnection这两个API，另一个API即RTCDataChannel似乎目前还不太成熟。
+目前网上找到的 WebRTC demo 都只用到了 getUserMedia 和 RTCPeerConnection 这两个 API，另一个 API 即 RTCDataChannel 似乎目前还不太成熟。
 
-WebRTC是实现peer to peer的实时通信（可以两个或多个peer之间），在能够通信前peer跟peer之间必须建立连接，这是RTCPeerConnection的任务，为此需要借助一个信令服务器（signaling server）来进行，信令包括3种类型的信息：
+WebRTC 是实现 peer to peer 的实时通信（可以两个或多个 peer 之间），在能够通信前 peer 跟 peer 之间必须建立连接，这是 RTCPeerConnection 的任务，为此需要借助一个信令服务器（signaling server）来进行，信令包括 3 种类型的信息：
 
 Session control messages: 初始化和关闭通信，及报告错误；
 
-Network configuration: 双方的IP地址和端口号（局域网内部IP地址需转换为外部的IP地址）；
+Network configuration: 双方的 IP 地址和端口号（局域网内部 IP 地址需转换为外部的 IP 地址）；
 
-Media capabilities: 双方的浏览器支持使用何种codecs以及多高的视频分辨率。
+Media capabilities: 双方的浏览器支持使用何种 codecs 以及多高的视频分辨率。
 
-WebRTC并未规定使用何种信令机制和消息协议，象SIP、XMPP、XHR、WebSocket这些技术都可以用作WebRTC的信令通信。
+WebRTC 并未规定使用何种信令机制和消息协议，象 SIP、XMPP、XHR、WebSocket 这些技术都可以用作 WebRTC 的信令通信。
 
-除了信令服务器，peer跟peer建立连接还需要借助另一种服务器（称为STUN server）实现NAT/Firewall穿越，因为很多peer是处于私有局域网中，使用私有IP地址，必须转换为公有IP地址才能相互之间传输数据。这其中涉及到一些专业术语包括STUN、TURN、ICE等，具体的本人还有待学习。网上找到的WebRTC demo好象都用的是Google提供的STUN server。
+除了信令服务器，peer 跟 peer 建立连接还需要借助另一种服务器（称为 STUN server）实现 NAT/Firewall 穿越，因为很多 peer 是处于私有局域网中，使用私有 IP 地址，必须转换为公有 IP 地址才能相互之间传输数据。这其中涉及到一些专业术语包括 STUN、TURN、ICE 等，具体的本人还有待学习。网上找到的 WebRTC demo 好象都用的是 Google 提供的 STUN server。
 
-peer跟peer之间一旦建立连接就可以直接传输音视频数据流，并不需要借助第三方服务器中转。
+peer 跟 peer 之间一旦建立连接就可以直接传输音视频数据流，并不需要借助第三方服务器中转。
 
-2.     WebRTC封装库
-WebRTC的目的是为了简化基于浏览器的实时数据通信的开发工作量，但实际应用编程还是有点复杂，尤其调用RTCPeerConnection必须对如何建立连接、交换信令的流程和细节有较深入的理解。因此有高人为我们开发了WebRTC封装库，将WebRTC的调用细节封装起来，包装成更简单的API，使开发应用程序更简单。封装库的另一个目的是为了屏蔽不同浏览器之间的差异，例如上面说的API名称的差异。当然，这些库都是开源的，可以根据自己的需要重新修改。
+2.     WebRTC 封装库
+WebRTC 的目的是为了简化基于浏览器的实时数据通信的开发工作量，但实际应用编程还是有点复杂，尤其调用 RTCPeerConnection 必须对如何建立连接、交换信令的流程和细节有较深入的理解。因此有高人为我们开发了 WebRTC 封装库，将 WebRTC 的调用细节封装起来，包装成更简单的 API，使开发应用程序更简单。封装库的另一个目的是为了屏蔽不同浏览器之间的差异，例如上面说的 API 名称的差异。当然，这些库都是开源的，可以根据自己的需要重新修改。
 
-目前网上找到的有两种WebRTC封装库，一个是webrtc.io，网址是https://github.com/webRTC/webRTC.io，上面有详细说明和使用方法，有很多demo使用它；另一个是SimpleWebRTC，网址是https://github.com/HenrikJoreteg/SimpleWebRTC，貌似比webrtc.io用起来更简单。
+目前网上找到的有两种 WebRTC 封装库，一个是 webrtc.io，网址是 https://github.com/webRTC/webRTC.io，上面有详细说明和使用方法，有很多 demo 使用它；另一个是 SimpleWebRTC，网址是 https://github.com/HenrikJoreteg/SimpleWebRTC，貌似比 webrtc.io 用起来更简单。
 
-3.     WebRTC demo试用
-网上可以找到一堆WebRTC demo，在code.google.com上也能找到不少WebRTC应用项目的源码。有些demo是直接调用WebRTC API开发的，但大多数是调用上述两种WebRTC封装库开发的。由于WebRTC API的名称在不同浏览器及同一浏览器的不同版本之间存在差异，所以不是所有demo都能运行在所有浏览器上。
+3.     WebRTC demo 试用
+网上可以找到一堆 WebRTC demo，在 code.google.com 上也能找到不少 WebRTC 应用项目的源码。有些 demo 是直接调用 WebRTC API 开发的，但大多数是调用上述两种 WebRTC 封装库开发的。由于 WebRTC API 的名称在不同浏览器及同一浏览器的不同版本之间存在差异，所以不是所有 demo 都能运行在所有浏览器上。
 
-为了找到一个可在公司局域网环境中跑在手机上的WebRTC demo，本人试用了不少demo，下面选几个有代表性的介绍，其中有两个经修改后已在本人公司的局域网环境中运行成功。
+为了找到一个可在公司局域网环境中跑在手机上的 WebRTC demo，本人试用了不少 demo，下面选几个有代表性的介绍，其中有两个经修改后已在本人公司的局域网环境中运行成功。
 
-先说一下本人的测试环境：手机上的浏览器是Chrome for Android 26.0.1410.49，运行在Android 4.1.2上，这个Chrome版本本身是beta版，支持WebRTC但缺省是关闭WebRTC功能的，需要在chrome://flags中使能WebRTC并重启Chrome，或者在启动Chrome时增加命令行选项--enable-webrtc。本人在PC上运行WebRTC的浏览器是Chrome 26.0.1410.43，操作系统是Windows 7。
+先说一下本人的测试环境：手机上的浏览器是 Chrome for Android 26.0.1410.49，运行在 Android 4.1.2 上，这个 Chrome 版本本身是 beta 版，支持 WebRTC 但缺省是关闭 WebRTC 功能的，需要在 chrome://flags 中使能 WebRTC 并重启 Chrome，或者在启动 Chrome 时增加命令行选项--enable-webrtc。本人在 PC 上运行 WebRTC 的浏览器是 Chrome 26.0.1410.43，操作系统是 Windows 7。
 
 3.1  http://www.webrtc.org/demo（https://apprtc.appspot.com/）
-这是官方的demo，功能很全，可惜不知为何https://apprtc.appspot.com/这个网址已经连不上了，不过其源码还是可以下载到的，在https://code.google.com/p/webrtc-samples/。此demo没有用任何封装库。
+这是官方的 demo，功能很全，可惜不知为何 https://apprtc.appspot.com/这个网址已经连不上了，不过其源码还是可以下载到的，在 https://code.google.com/p/webrtc-samples/。此 demo 没有用任何封装库。
 
-这个demo所使用的信令机制使用了XHR和Google App Engine Channel API ，具体我不懂。
+这个 demo 所使用的信令机制使用了 XHR 和 Google App Engine Channel API，具体我不懂。
 
-在我的公司局域网环境里无法运行该demo。
+在我的公司局域网环境里无法运行该 demo。
 
-3.2   爱立信实验室开发的WebRTC demo
-据说是第一个基于浏览器的WebRTC视频通信demo，爱立信为此还开发了一个浏览器用于支持WebRTC，好象也是基于WebKit的，叫做Bowser browser（当时市场上可能还没有支持WebRTC的浏览器），该项目网址是https://labs.ericsson.com/apps/bowser。这个Bowser browser好象只支持Ubuntu 11.04 and 11.10（见https://labs.ericsson.com/apis/web-real-time-communication/downloads）。
+3.2   爱立信实验室开发的 WebRTC demo
+据说是第一个基于浏览器的 WebRTC 视频通信 demo，爱立信为此还开发了一个浏览器用于支持 WebRTC，好象也是基于 WebKit 的，叫做 Bowser browser（当时市场上可能还没有支持 WebRTC 的浏览器），该项目网址是 https://labs.ericsson.com/apps/bowser。这个 Bowser browser 好象只支持 Ubuntu 11.04 and 11.10（见 https://labs.ericsson.com/apis/web-real-time-communication/downloads）。
 
-该demo的网址是http://webrtc.labs.ericsson.net:8082。
+该 demo 的网址是 http://webrtc.labs.ericsson.net:8082。
 
-在我的公司局域网环境里无法运行该demo。
+在我的公司局域网环境里无法运行该 demo。
 
 3.3   人脸检测识别
-利用WebRTC的getUserMedia从摄像头获取图像进行人脸识别的demo，例如这两个：
+利用 WebRTC 的 getUserMedia 从摄像头获取图像进行人脸识别的 demo，例如这两个：
 
 http://neave.com/webcam/html5/face/
 http://www.raymondcamden.com/demos/2012/mar/29/test1.html
 
-这两个demo在PC和手机上的Chrome上都可运行。
+这两个 demo 在 PC 和手机上的 Chrome 上都可运行。
 
 3.4   http://www.simpl.info
-这个demo演示HTML, CSS and JavaScript的各种feature和使用方法，包括WebRTC的3个API：getUserMedia、RTCPeerConnection、RTCDataChannel的演示，但遗憾的是RTCPeerConnection的演示只是本地camera的画面传回给本地，并没有实现真正的设备之间音视频通信。
+这个 demo 演示 HTML, CSS and JavaScript 的各种 feature 和使用方法，包括 WebRTC 的 3 个 API：getUserMedia、RTCPeerConnection、RTCDataChannel 的演示，但遗憾的是 RTCPeerConnection 的演示只是本地 camera 的画面传回给本地，并没有实现真正的设备之间音视频通信。
 
-该项目的源码在https://github.com/samdutton/simpl。
+该项目的源码在 https://github.com/samdutton/simpl。
 
 3.5   Framegrabber
-这是一个基于WebRTC实现屏幕共享（screensharing）的Chrome扩展，源码在https://github.com/samdutton/rtcshare，有关介绍可参考这篇文章：http://blog.sina.com.cn/s/blog_51396f890102es7k.html。
+这是一个基于 WebRTC 实现屏幕共享（screensharing）的 Chrome 扩展，源码在 https://github.com/samdutton/rtcshare，有关介绍可参考这篇文章：http://blog.sina.com.cn/s/blog_51396f890102es7k.html。
 
 本人没有试用过。
 
 3.6   http://webrtc.dennis.is
-这个demo是基于库webrtc.io实现的，是webrtc.io官方的demo，使用WebSocket作为信令手段。
+这个 demo 是基于库 webrtc.io 实现的，是 webrtc.io 官方的 demo，使用 WebSocket 作为信令手段。
 
-在我的公司局域网环境里无法运行该demo；在家里无线路由器环境下可成功运行，但只能单向传输视频。
+在我的公司局域网环境里无法运行该 demo；在家里无线路由器环境下可成功运行，但只能单向传输视频。
 
 3.7   http://v.kainy.cn
-国内牛人做的，相当于是汉化版的http://webrtc.dennis.is，自然也是基于webrtc.io实现的，但使用的webrtc.io版本较老，不支持新版本Chrome所使用的API名称webkitRTCPeerConnection，所以无法在新版本Chrome上运行。具体介绍在http://blog.kainy.cn/2013/01/webrtc实现的视频聊天室应用/。
+国内牛人做的，相当于是汉化版的 http://webrtc.dennis.is，自然也是基于 webrtc.io 实现的，但使用的 webrtc.io 版本较老，不支持新版本 Chrome 所使用的 API 名称 webkitRTCPeerConnection，所以无法在新版本 Chrome 上运行。具体介绍在 http://blog.kainy.cn/2013/01/webrtc 实现的视频聊天室应用/。
 
 3.8   http://conversat.io
-这个demo是基于库SimpleWebRTC实现的，是SimpleWebRTC官方的demo，使用WebSocket作为信令手段。
+这个 demo 是基于库 SimpleWebRTC 实现的，是 SimpleWebRTC 官方的 demo，使用 WebSocket 作为信令手段。
 
-在我的公司局域网环境里无法运行该demo；在家里无线路由器环境下可成功运行，且可双向传视频，支持多个peer同时视频通信。
+在我的公司局域网环境里无法运行该 demo；在家里无线路由器环境下可成功运行，且可双向传视频，支持多个 peer 同时视频通信。
 
-经修改后在本人公司局域网成功运行，试过两个手机和一个笔记本电脑同时视频通信OK。修改和运行步骤：
+经修改后在本人公司局域网成功运行，试过两个手机和一个笔记本电脑同时视频通信 OK。修改和运行步骤：
 
-1.     从http://www.nodejs.org/download/下载nodejs最新版并安装，我是在Windows7 64位上安装的；
+1.     从 http://www.nodejs.org/download/下载 nodejs 最新版并安装，我是在 Windows7 64 位上安装的；
 
-2.     在命令行下依次运行如下命令（安装运行signaling server所需的模块）：
+2.     在命令行下依次运行如下命令（安装运行 signaling server 所需的模块）：
 
 npm install express
 npm install yetify
@@ -165,100 +165,100 @@ npm install getconfig
 npm install node-uuid
 npm install socket.io
 
-3.     从https://github.com/andyet/signalmaster下载信令服务器源码，该信令服务器是SimpleWebRTC缺省使用的，解开该源码后运行node server.js，该服务器监听8888端口，通过WebSocket与浏览器通信。
+3.     从 https://github.com/andyet/signalmaster 下载信令服务器源码，该信令服务器是 SimpleWebRTC 缺省使用的，解开该源码后运行 node server.js，该服务器监听 8888 端口，通过 WebSocket 与浏览器通信。
 
-4.     在同一台PC上运行apache server，将从http://conversat.io网站扒下来的文件放到该server上（可在Chrome浏览器中打开http://conversat.io然后鼠标右键单击在菜单中选“另存为”、“网页，全部”即可），修改其中的 index.html 和 simplewebrtc.js，将其中 url 改为'http://10.100.156.83:8888'（其中IP地址是我的PC在公司局域网中的IP地址）。
+4.     在同一台 PC 上运行 apache server，将从 http://conversat.io 网站扒下来的文件放到该 server 上（可在 Chrome 浏览器中打开 http://conversat.io 然后鼠标右键单击在菜单中选“另存为”、“网页，全部”即可），修改其中的 index.html 和 simplewebrtc.js，将其中 url 改为'http://10.100.156.83:8888'（其中 IP 地址是我的 PC 在公司局域网中的 IP 地址）。
 
-5.     在同一局域网中的其他设备上打开Chrome浏览器，地址栏输入http://10.100.156.83，输入相同的room名称（随便起）即可开始多方视频通信，也可修改上述index.html中的“var room”一行，设定为固定的room名称，就不需要每次在每个设备上手工输入room名称了。
+5.     在同一局域网中的其他设备上打开 Chrome 浏览器，地址栏输入 http://10.100.156.83，输入相同的 room 名称（随便起）即可开始多方视频通信，也可修改上述 index.html 中的“var room”一行，设定为固定的 room 名称，就不需要每次在每个设备上手工输入 room 名称了。
 
 3.9   国内牛人开发的视频聊天室应用
-这个demo是国内牛人赵书剑开发的视频聊天室，基于webrtc.io实现。
+这个 demo 是国内牛人赵书剑开发的视频聊天室，基于 webrtc.io 实现。
 
-该项目源码和文档下载地址是http://ishare.iask.sina.com.cn/f/35083616.html，源码在https://github.com/zsj2145676。
+该项目源码和文档下载地址是 http://ishare.iask.sina.com.cn/f/35083616.html，源码在 https://github.com/zsj2145676。
 
-经修改后在本人公司局域网成功运行，试过两个手机和一个笔记本电脑同时视频通信OK。修改和运行步骤：
+经修改后在本人公司局域网成功运行，试过两个手机和一个笔记本电脑同时视频通信 OK。修改和运行步骤：
 
-1.     从http://ishare.iask.sina.com.cn/f/35083616.html下载webrtc.chatdemo.zip，解压缩，修改其中public\javascripts\client.js中的rtc.connect一行，将实际的服务器地址写进去，例如改为：rtc.connect("ws://10.100.156.83:8001", room);
+1.     从 http://ishare.iask.sina.com.cn/f/35083616.html 下载 webrtc.chatdemo.zip，解压缩，修改其中 public\javascripts\client.js 中的 rtc.connect 一行，将实际的服务器地址写进去，例如改为：rtc.connect("ws://10.100.156.83:8001", room);
 
-2.     同上文3.8节步骤1、2安装nodejs
+2.     同上文 3.8 节步骤 1、2 安装 nodejs
 
-3.     运行node app.js，注意该demo本身已包含http server，不需要其他的比如apache server
+3.     运行 node app.js，注意该 demo 本身已包含 http server，不需要其他的比如 apache server
 
-4.     在同一局域网中的其他设备上打开Chrome浏览器，地址栏输入http://10.100.156.83:8000，输入相同的room名称（随便起）即可开始多方视频通信。
+4.     在同一局域网中的其他设备上打开 Chrome 浏览器，地址栏输入 http://10.100.156.83:8000，输入相同的 room 名称（随便起）即可开始多方视频通信。
 * requestAnimationFrame
-HTML5/CSS3时代，我们要在web里做动画选择其实已经很多了:
+HTML5/CSS3 时代，我们要在 web 里做动画选择其实已经很多了:
 
-你可以用CSS3的animattion+keyframes;
+你可以用 CSS3 的 animattion+keyframes;
 
-你也可以用css3的transition;
+你也可以用 css3 的 transition;
 
-你还可以用通过在canvas上作图来实现动画，也可以借助jQuery动画相关的API方便地实现;
+你还可以用通过在 canvas 上作图来实现动画，也可以借助 jQuery 动画相关的 API 方便地实现;
 
-当然最原始的你还可以使用window.setTimout()或者window.setInterval()通过不断更新元素的状态位置等来实现动画，前提是画面的更新频率要达到每秒60次才能让肉眼看到流畅的动画效果。
+当然最原始的你还可以使用 window.setTimout()或者 window.setInterval()通过不断更新元素的状态位置等来实现动画，前提是画面的更新频率要达到每秒 60 次才能让肉眼看到流畅的动画效果。
 
-现在又多了一种实现动画的方案，那就是还在草案当中的window.requestAnimationFrame()方法。
+现在又多了一种实现动画的方案，那就是还在草案当中的 window.requestAnimationFrame()方法。
 
-window.requestAnimationFrame() 将告知浏览器你马上要开始动画效果了，后者需要在下次动画前调用相应方法来更新画面。这个方法就是传递给window.requestAnimationFrame()的回调函数。
+window.requestAnimationFrame() 将告知浏览器你马上要开始动画效果了，后者需要在下次动画前调用相应方法来更新画面。这个方法就是传递给 window.requestAnimationFrame()的回调函数。
 
-也可这个方法原理其实也就跟setTimeout/setInterval差不多，通过递归调用同一方法来不断更新画面以达到动起来的效果，但它优于setTimeout/setInterval的地方在于它是由浏览器专门为动画提供的API，在运行时浏览器会自动优化方法的调用，并且如果页面不是激活状态下的话，动画会自动暂停，有效节省了CPU开销。
-[[http://www.zhangxinxu.com/wordpress/2013/09/css3-animation-requestanimationframe-tween-%E5%8A%A8%E7%94%BB%E7%AE%97%E6%B3%95/ ][CSS3动画那么强，requestAnimationFrame还有毛线用? ]]
+也可这个方法原理其实也就跟 setTimeout/setInterval 差不多，通过递归调用同一方法来不断更新画面以达到动起来的效果，但它优于 setTimeout/setInterval 的地方在于它是由浏览器专门为动画提供的 API，在运行时浏览器会自动优化方法的调用，并且如果页面不是激活状态下的话，动画会自动暂停，有效节省了 CPU 开销。
+[[http://www.zhangxinxu.com/wordpress/2013/09/css3-animation-requestanimationframe-tween-%E5%8A%A8%E7%94%BB%E7%AE%97%E6%B3%95/ ][CSS3 动画那么强，requestAnimationFrame 还有毛线用? ]]
 * webGL
 WebGL (Web Graphics Library) is a JavaScript API for rendering interactive 3D computer graphics and 2D graphics within any compatible web browser without the use of plug-ins.WebGL is integrated completely into all the web standards of the browser allowing GPU accelerated usage of physics and image processing and effects as part of the web page canvas. WebGL elements can be mixed with other HTML elements and composited with other parts of the page or page background.[3] WebGL programs consist of control code written in JavaScript and shader code that is executed on a computer's Graphics Processing Unit (GPU). WebGL is designed and maintained by the non-profit Khronos Group
-2012年4月，Google搜索悄然上线了一个新的功能，那就是在搜索框里输入一个曲线方程，那么Google就会在搜索页里为你画出这个曲线！这也是WebGL第一次被应用在Google的搜索引擎中，使用者可以在搜索框里输入任意一个二元方程，Google都会将此方程绘制出来，并且是显示在全3D的空间中，另外还可以自由调整和编辑曲线以及方程。
-如果想要临时查看一个方程的曲线，而周围又没有专业软件的时候，你可以应急使用一下Google的这个贴心新功能！不过要注意的是，这个功能只能运行在支持WebGL浏览器中，例如Chrome和Firefox，而不是IE！
+2012 年 4 月，Google 搜索悄然上线了一个新的功能，那就是在搜索框里输入一个曲线方程，那么 Google 就会在搜索页里为你画出这个曲线！这也是 WebGL 第一次被应用在 Google 的搜索引擎中，使用者可以在搜索框里输入任意一个二元方程，Google 都会将此方程绘制出来，并且是显示在全 3D 的空间中，另外还可以自由调整和编辑曲线以及方程。
+如果想要临时查看一个方程的曲线，而周围又没有专业软件的时候，你可以应急使用一下 Google 的这个贴心新功能！不过要注意的是，这个功能只能运行在支持 WebGL 浏览器中，例如 Chrome 和 Firefox，而不是 IE！
 * File System API
-新的HTML5标准给我们带来了大量的新特性和惊喜，例如，画图的 画布Canvas，多媒体的audio和 video等等。除了上面我们提到的，还有比较新的特性 - File System API，它能够帮助我们来突破沙箱访问我们本地的文件系统，从而有效的弥补桌面和web应用之间的鸿沟。
+新的 HTML5 标准给我们带来了大量的新特性和惊喜，例如，画图的 画布 Canvas，多媒体的 audio 和 video 等等。除了上面我们提到的，还有比较新的特性 - File System API，它能够帮助我们来突破沙箱访问我们本地的文件系统，从而有效的弥补桌面和 web 应用之间的鸿沟。
 
-API介绍:
-HTML5 FileSystem API包括几个部分：
+API 介绍:
+HTML5 FileSystem API 包括几个部分：
 1.文件读取接口: File/Blob, FileList, FileReader
 2.创建和写入接口: BlobBuilder, FileWriter
 3.目录和文件读取接口: DirectoryReader, FileEntry/DirectoryEntry, LocalFileSystem
-W3C规范定义了两种方式异步和同步(asynchronous and synchronous)。异步方式适用于普通程序，可以防止阻塞。同步方式用于Web Workers。
+W3C 规范定义了两种方式异步和同步(asynchronous and synchronous)。异步方式适用于普通程序，可以防止阻塞。同步方式用于 Web Workers。
 
 安全限制:
-考虑到安全性，API接口设计时做了一些限制。
+考虑到安全性，API 接口设计时做了一些限制。
 1.存储配额限制(quota limitations)
-2.同源限制,如只能读写同域内的cookie和localStorage
+2.同源限制,如只能读写同域内的 cookie 和 localStorage
 3.文件类型限制，限制可执行文件的创建或者重命名为可执行文件
 [[http://mao.li/javascript/html5-filesystem-api/][HTML5 FileSystem API 介绍]]
-[[http://blog.csdn.net/salonzhou/article/details/28275713][HTML5之本地文件系统API - File System API]]
+[[http://blog.csdn.net/salonzhou/article/details/28275713][HTML5 之本地文件系统 API - File System API]]
 * Content Security Policy
-内容安全策略的机制,Web应用可以使用它缓解普遍的内容注入漏洞,如跨站漏洞(XSS),内容安全策略是一个公开的策略,Web应用的作者(或服务器管理员)可以使用它限制资源的加载
+内容安全策略的机制,Web 应用可以使用它缓解普遍的内容注入漏洞,如跨站漏洞(XSS),内容安全策略是一个公开的策略,Web 应用的作者(或服务器管理员)可以使用它限制资源的加载
 
-例如,为了缓解XSS攻击,一个Web应用程序可以限制本身加载脚本只能从信任的URI,使攻击者难以注入恶意脚本.
+例如,为了缓解 XSS 攻击,一个 Web 应用程序可以限制本身加载脚本只能从信任的 URI,使攻击者难以注入恶意脚本.
 
-内容安全策略(CSP)并不是作为内容注入漏洞的第一道防线.相反,CSP是最适合用来作为深度防御,以减少内容注入攻击所造成的危害.
+内容安全策略(CSP)并不是作为内容注入漏洞的第一道防线.相反,CSP 是最适合用来作为深度防御,以减少内容注入攻击所造成的危害.
 
-通常,将现有Web应用程序应用CSP,为了获得最好的效果,作者将需要移动所有内嵌脚本和样式行,例如到外部脚本,因为用户代理不能确定是否有内嵌脚本注入攻击.
+通常,将现有 Web 应用程序应用 CSP,为了获得最好的效果,作者将需要移动所有内嵌脚本和样式行,例如到外部脚本,因为用户代理不能确定是否有内嵌脚本注入攻击.
 
-使用CSP时,Web应用可以通过提供一个Content-Security-Policy HTTP头或一个META的HTML元素.不过这样的政策只在当前文档适用而已.可以为整个网站,服务器提供应一个策略随着每个资源进行表示.
-[[http://www.2cto.com/Article/201307/230739.html][Content Security Policy介绍]]
+使用 CSP 时,Web 应用可以通过提供一个 Content-Security-Policy HTTP 头或一个 META 的 HTML 元素.不过这样的政策只在当前文档适用而已.可以为整个网站,服务器提供应一个策略随着每个资源进行表示.
+[[http://www.2cto.com/Article/201307/230739.html][Content Security Policy 介绍]]
 [[http://www.zhihu.com/question/21979782][知乎:Content Security Policy (CSP) 是什么？为什么它能抵御 XSS 攻击？]]
 ** 跨站漏洞(XSS)
-业界对跨站攻击的定义如下：“跨站攻击是指入侵者在远程WEB页面的HTML代码中插入具有恶意目的的数据，用户认为该页面是可信赖的，但是当浏览器下载该页面，嵌入其中的脚本将被解释执行。”由于HTML语言允许使用脚本进行简单交互，入侵者便通过技术手段在某个页面里插入一个恶意HTML代码，例如记录论坛保存的用户信息（Cookie），由于Cookie保存了完整的用户名和密码资料，用户就会遭受安全损失。如这句简单的Javascript脚本就能轻易获取用户信息：alert(document.cookie)，它会弹出一个包含用户信息的消息框。入侵者运用脚本就能把用户信息发送到他们自己的记录页面中，稍做分析便获取了用户的敏感信息。
+业界对跨站攻击的定义如下：“跨站攻击是指入侵者在远程 WEB 页面的 HTML 代码中插入具有恶意目的的数据，用户认为该页面是可信赖的，但是当浏览器下载该页面，嵌入其中的脚本将被解释执行。”由于 HTML 语言允许使用脚本进行简单交互，入侵者便通过技术手段在某个页面里插入一个恶意 HTML 代码，例如记录论坛保存的用户信息（Cookie），由于 Cookie 保存了完整的用户名和密码资料，用户就会遭受安全损失。如这句简单的 Javascript 脚本就能轻易获取用户信息：alert(document.cookie)，它会弹出一个包含用户信息的消息框。入侵者运用脚本就能把用户信息发送到他们自己的记录页面中，稍做分析便获取了用户的敏感信息。
 跨站脚本攻击分类
 
-1、持久型XSS，又称存储型XSS 。
-2、非持久型XSS，又称反射型XSS。
+1、持久型 XSS，又称存储型 XSS。
+2、非持久型 XSS，又称反射型 XSS。
 3、DOM-XSS，DOM（文档对象模型）。
-持久型的XSS较第二、第三种XSS攻击的危害较大。
+持久型的 XSS 较第二、第三种 XSS 攻击的危害较大。
 两种方式
 
-其一由于HTML语言允许使用脚本进行简单交互，入侵者便通过技术手段在某个页面里插入一个恶意HTML代码——例如记录论坛保存的用户信息（Cookie），由 于Cookie保存了完整的用户名和密码资料，用户就会遭受安全损失。
-其二XST攻击描述：攻击者将恶意代码嵌入一台已经被控制的主机上的web文件，当访问者浏览时恶意代码在浏览器中执行，然后访问者的cookie、http基本验证以及ntlm验证信息将被发送到已经被控制的主机，同时传送Trace请求给目标主机，导致cookie欺骗或者是中间人攻击。
+其一由于 HTML 语言允许使用脚本进行简单交互，入侵者便通过技术手段在某个页面里插入一个恶意 HTML 代码——例如记录论坛保存的用户信息（Cookie），由 于 Cookie 保存了完整的用户名和密码资料，用户就会遭受安全损失。
+其二 XST 攻击描述：攻击者将恶意代码嵌入一台已经被控制的主机上的 web 文件，当访问者浏览时恶意代码在浏览器中执行，然后访问者的 cookie、http 基本验证以及 ntlm 验证信息将被发送到已经被控制的主机，同时传送 Trace 请求给目标主机，导致 cookie 欺骗或者是中间人攻击。
 攻击条件
 
 XST：
-1、需要目标web服务器允许Trace参数；
-2、需要一个用来插入XST代码的地方；
+1、需要目标 web 服务器允许 Trace 参数；
+2、需要一个用来插入 XST 代码的地方；
 3、目标站点存在跨域漏洞。
 * Touch Events
 [[http://mobiforge.com/design-development/html5-mobile-web-touch-events][HTML5 for the Mobile Web: Touch Events]]
 [[https://developer.mozilla.org/en-US/docs/Web/API/Touch_events][Touch events]]
 [[http://www.w3.org/TR/touch-events/][W3C Recommendation: Touch Event]]
 * Date/timeinput types
-html5的几个form表单的属性
+html5 的几个 form 表单的属性
 [[http://www.html5rocks.com/en/tutorials/forms/html5forms/][Making Forms Fabulous with HTML5]]
 [[http://www.hongkiat.com/blog/html5-form-input-type/][A Look Into HTML5 Forms Input Types: Date, Color and Range]]
 * Audio & Videoelements

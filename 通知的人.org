@@ -1,3 +1,5 @@
+
+窦妪镇 庆丰会馆
 * TODO  一班
 ** DONE 周旭
 CLOSED: [2016-04-06 Wed 20:07]
@@ -6,7 +8,8 @@ CLOSED: [2016-04-06 Wed 20:07]
 - State "DONE"       from "TODO"       [2016-04-10 Sun 17:58]
 ** DONE 郭明亮
 CLOSED: [2016-04-07 Thu 21:47]
-** TODO 王明亮 （没有电话）
+** DONE 王明亮 发地址
+- State "DONE"       from "TODO"       [2016-04-14 Thu 21:01]
 ** DONE 张钊
 CLOSED: [2016-04-06 Wed 20:08]
 - State "DONE"       from "TODO"       [2016-04-06 Wed 20:08]
@@ -55,7 +58,8 @@ CLOSED: [2016-04-07 Thu 21:48]
 ** DONE 康朝翔
 - State "DONE"       from "TODO"       [2016-04-10 Sun 18:27]
 ** TODO 李博 无法接通
-** TODO 李嘉琳
+** DONE 李嘉琳
+- State "DONE"       from "TODO"       [2016-04-12 Tue 18:45]
 * TODO 大学
 ** DONE 李建国
 CLOSED: [2016-04-07 Thu 21:48]
@@ -79,3 +83,5 @@ CLOSED: [2016-04-05 Tue 21:02]
 ** DONE 焦东波
 CLOSED: [2016-04-05 Tue 21:14]
 - State "DONE"       from "TODO"       [2016-04-05 Tue 21:14]
+
+
