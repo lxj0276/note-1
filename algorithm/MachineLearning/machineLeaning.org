@@ -49,6 +49,11 @@ MP 神经元有几个显著缺点。首先它把直线一侧变为 0，另一侧
 只要你能砍足够多刀，把结果拼在一起，什么奇怪形状的边界神经网络都能够表示，所以说神经网络在理论上可以表示很复杂的函数/空间分布。
 
 **** 朴素贝叶斯分类
+假设: 特征独立性, 特征均衡性.
+
+贝叶斯及贝叶斯学派提出了一个思考问题的固定模式:
+file:./MLPictures/bayesian3.png
+
 查看[[https://zh.wikipedia.org/wiki/%25E6%259C%25B4%25E7%25B4%25A0%25E8%25B4%259D%25E5%258F%25B6%25E6%2596%25AF%25E5%2588%2586%25E7%25B1%25BB%25E5%2599%25A8][朴素贝叶斯分类器]] 中实例来理解.
 概率模型分类器是一个条件概率模型:
  p(C|F_1, F_2, ..., F_n) , 即 知道特征 F_i 的值后, 求是分类 C 的概率.
@@ -64,6 +69,35 @@ file:./MLPictures/bayesian2.png
 上式中后验概率最大的分类, 即为所找的分类.
 
 [[http://norvig.com/spell-correct.html][How to Write a Spelling Corrector]]
+
+**** k-近邻算法(k-nearest neighbors)
+给定一个训练数据集，对新的输入实例，在训练数据集中找到与该实例最邻近的 K 个实例（也就是上面所说的 K 个邻居）， 这 K 个实例的多数属于某个类，就把该输入实例分类到这个类中。
+
+为了公平，所有特征的数值都采取归一化处置。
+
+需要一个 distance 函数以计算两个样本之间的距离。 欧氏距离、余弦距离、汉明距离、曼哈顿距离.
+
+K 是一个自定义的常数，K 的值也直接影响最后的估计，一种选择 K 值得方法是使用 cross-validate（交叉验证）误差统计选择法。
+
+**** svm(support vector machine)
+SVM 的主要思想可以概括为两点：
+1. 是针对线性可分情况进行分析，对于线性不可分的情况，通过使用非线性映射算法将低维输入空间线性不可分的样本转化为高维特征空间使其线性可分，从而 使得高维特征空间采用线性算法对样本的非线性特征进行线性分析成为可能；
+2. 它基于结构风险最小化理论之上在特征空间中建构最优分割超平面，使得学习器得到全局最优化，并且在整个样本空间的期望风险以某个概率满足一定上界。
+
+它是一种二类分类模型，其基本模型定义为特征空间上的间隔最大的线性分类器，其学习策略便是间隔最大化，最终可转化为一个凸二次规划问题的求解。
+
+函数间隔: 超平面(w，b)关于 T 中所有样本点(xi，yi)的函数间隔最小值.
+file:./MLPictures/svm1.png
+但这样定义的函数间隔有问题，即如果成比例的改变 w 和 b（如将它们改成 2w 和 2b），则函数间隔的值 f(x)却变成了原来的 2 倍（虽然此时超平面没有改变），所以只有函数间隔还远远不够。
+
+我们可以对法向量 w 加些约束条件，从而引出真正定义点到超平面的距离--几何间隔（geometrical margin）的概念。
+file:./MLPictures/svm2.png
+
+最大间隔分类器 Maximum Margin Classifier 的定义.
+*虚线间隔边界上的点则是支持向量*
+file:./MLPictures/svm3.png
+
+**** 决策树(Decision Tree)
 ** 非监督式学习(Unsupervised Learning)
 Input data is not labelled and does not have a known result. A model is prepared by deducing structures present in the input data.
 在非监督式学习中，数据并不被特别标识，学习模型是为了推断出数据的一些内在结构。
@@ -148,6 +182,14 @@ Input data is provided as stimulus to a model from an environment to which the m
 9. 杰卡德距离 & 杰卡德相似系数
 10. 相关系数 & 相关距离
 11. 信息熵
+** 最大似然估计
+一旦我们获得 X_1,X_2, ...,X_n，我们就能从中找到一个关于 \theta 的估计。最大似然估计会寻找关于 \theta 的最可能的值（即，在所有可能的 \theta 取值中，寻找一个值使这个采样的“可能性”最大化。
+** 雅可比矩阵
+[[https://zh.wikipedia.org/wiki/%25E9%259B%2585%25E5%258F%25AF%25E6%25AF%2594%25E7%259F%25A9%25E9%2598%25B5][雅可比矩阵]]
+函数的一阶 *偏导数* 以一定方式排列成的矩阵.
+意义在于 一个多变数向量函数的最佳线性逼近.
+** 梯度下降法
+如果 F(x)在 a 点可微并有定义, 那么在 a 点沿着梯度 *相反* 的方向 下降最快
 * 算法类似性
 根据算法的功能和形式的类似性，我们可以把算法分类
 ** 回归算法（regression）
@@ -197,6 +239,13 @@ Input data is provided as stimulus to a model from an environment to which the m
 集成算法用一些相对较弱的学习模型独立地就同样的样本进行训练，然后把结果整合起来进行整体预测。集成算法的主要难点在于究竟集成哪些独立的较弱的学习模型以及如何把学习结果整合起来。
 
 常见的算法包括：Boosting，Bootstrapped Aggregation（Bagging），AdaBoost，堆叠泛化（Stacked Generalization，Blending），梯度推进机（Gradient Boosting Machine, GBM），随机森林（Random Forest）。
+* 概念
+** 泛化能力
+学习的目的是学到隐含在数据对背后的规律，对具有同一规律的学习集以外的数据，经过训练的算法也能给出合适的输出，该能力称为泛化能力。
+
+并非训练的次数越多越能得到正确的输入输出映射关系。算法的性能主要用它的泛化能力来衡量。
+
+通常期望经训练样本训练的算法具有较强的泛化能力.
 * Ten Examples of Machine Learning Problems
 1. Spam Detection  \\
  Given email in an inbox, identify those email messages that are spam and those that are not.Having a model of this problem would allow a program to leave non-spam emails in the inbox and move spam emails to a spam folder.
