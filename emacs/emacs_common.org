@@ -268,3 +268,8 @@ flush-lines 命令
           (switch-to-buffer-other-window buffer-name))
       (message "Nothing to look up")))
 #+END_SRC
+* emacs 输入特殊字符 和 公式
+  - 特殊符号 ::
+ C-x 8 RET 然后英语拼音.  e.g.: C-x 8 omega 
+  - 公式 ::
+ 把公式用\(\)包起来，　ｅ.g.: \(E = m ^ 2\) 
