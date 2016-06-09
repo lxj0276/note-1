@@ -288,3 +288,7 @@ Create a file at ~/.Xmodmap with the following content:
 then, run this line in terminal:
 
 xmodmap ~/.Xmodmap
+* 命令行打开文件
+xdg-open : 双击打开
+
+display : 查看图片
