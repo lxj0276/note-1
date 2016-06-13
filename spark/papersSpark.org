@@ -29,10 +29,10 @@ e.g.: val links = spark.textFile(...).map(...).partitionBy(MyPartFunc).persist()
    val ranks = spark.textFile(...).map(...).partitionBy(MyPartFunc).persist()
 
 In a nutshell, we propose representing each RDD through a common interface that exposes five pieces of information: a set of partitions, which are atomic pieces of the dataset; a set of dependencies on parent RDDs; a function for computing the dataset based on its parents; and metadata about its partitioning scheme and data placement.
-[[~/note/spark/SparkPictures/1.png]]
+[[../Pictures//SparkPictures/1.png]]
 
 How to represent dependencies between RDDs? We found it both sufficient and useful to classify dependencies into two types: narrow dependencies, where each partition of the parent RDD is used by at most one partition of the child RDD, wide dependencies, where multiple child partitions may depend on it.
 
-[[~/note/spark/SparkPictures/2.png]]
+[[../Pictures//SparkPictures/2.png]]
 
-[[~/note/spark/SparkPictures/3.png]]
+[[../Pictures//SparkPictures/3.png]]
