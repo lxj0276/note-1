@@ -3,6 +3,7 @@
 [[https://www.python.org/dev/peps/][Index of Python Enhancement Proposals (PEPs)]]
 
 * 字符串转时间
+dateutils 包中有很多有用的操作
 ** one day
 t = time.strptime(date, "%Y-%m-%d")
 date1 = datetime.datetime(* t[:3])
