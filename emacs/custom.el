@@ -90,7 +90,7 @@
       eclim-executable "~/Tools/eclipse/eclim")
 
 ;; 有道快捷键绑定
-(define-key global-map (kbd "C-c y") 'youdao-dictionary-search-at-point+)
+(define-key global-map (kbd "C-c k") 'youdao-dictionary-search-at-point+)
 (define-key global-map (kbd "C-c s") 'youdao-dictionary-search-at-point)
 (define-key global-map (kbd "C-c i") 'youdao-dictionary-search-from-input)
 
@@ -104,7 +104,15 @@
 (define-key evil-insert-state-map "\C-p" 'previous-line)
 (define-key evil-insert-state-map "\C-k" 'kill-line)
 (define-key evil-insert-state-map "\C-r" 'search-backward)
+(define-key global-map  (kbd "M-/") 'evil-lisp-state-undo-tree-redo)
 
+;; yasnippet 快捷键
+(define-key evil-insert-state-map "\C-c e" 'yas-expand) ; ctrl+c spc e
+(define-key evil-insert-state-map "\C-c n" 'yas-new-snippet)
+(define-key evil-insert-state-map "\C-c r" 'yas-reload-all)
+(define-key evil-normal-state-map " oe" 'yas-expand) ; spc o e
+(define-key evil-normal-state-map " on" 'yas-new-snippet)
+(define-key evil-normal-state-map " or" 'yas-reload-all)
 
 (define-key global-map (kbd "C-+") 'text-scale-increase)
 (define-key global-map (kbd "C--") 'text-scale-decrease)

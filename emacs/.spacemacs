@@ -26,24 +26,29 @@ values."
      auto-completion
      better-defaults
      emacs-lisp
+     python
+     (python :variables python-enable-yapf-format-on-save t)
+     latex
+     (latex :variables latex-build-command "LaTeX")
+     (latex :variables latex-enable-auto-fill t)
+     (latex :variables latex-enable-folding t)
      git
-     ;; markdown
      ranger
-     ranger :variables ranger-show-preview t
+     (ranger :variables ranger-show-preview t)
      org
      sql
-     ;; (shell :variables
-     ;;        shell-default-height 30
-     ;;        shell-default-position 'bottom)
-     ;; spell-checking
+     shell
+     (shell :variables
+            shell-default-height 50
+            shell-default-position 'bottom)
+     (shell :variables shell-default-shell 'multi-term)
+     spell-checking
      ;; syntax-checking
-     ;; version-control
+     version-control
      chinese
      (chinese :variables chinese-enable-youdao-dict t)
      java
      scala
-     python
-     (python :variables python-enable-yapf-format-on-save t)
      w3m
      )
    ;; List of additional packages that will be installed without being
@@ -106,12 +111,12 @@ values."
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(
-                         solarized-light
                          spacemacs-dark
+                         solarized-light
                          spacemacs-light
                          solarized-dark
                          leuven
-                         monoka
+                         monokai
                          zenburn)
    ;; If non nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
@@ -252,6 +257,7 @@ executes.
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
   (setq python-fill-column 99)
+  (add-hook 'doc-view-mode-hook 'auto-revert-mode)
   )
 
 (defun dotspacemacs/user-config ()
@@ -260,46 +266,8 @@ This function is called at the very end of Spacemacs initialization after
 layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
-you should place you code here."
-  (setq w3m-home-page "https://www.google.com.hk/")
-  ;; W3M Home Page
-  (setq w3m-default-display-inline-images t)
-  (setq w3m-default-toggle-inline-images t)
-  ;; W3M default display images
-  (setq w3m-command-arguments '("-cookie" "-F"))
-  (setq w3m-use-cookies t)
-  ;; W3M use cookies
-  (setq browse-url-browser-function 'w3m-browse-url)
-  ;; Browse url function use w3m
-  (setq w3m-view-this-url-new-session-in-background t)
-  ;; W3M view url new session in background
+you should place your code here."
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(sql-connection-alist
-   (quote
-    (("cms-113"
-      (sql-product
-       (quote mysql))
-      (sql-user "root")
-      (sql-database "clean")
-      (sql-server "cms-113"))
-     ("cms-134"
-      (sql-product
-       (quote mysql))
-      (sql-user "root")
-      (sql-database "cms")
-      (sql-server "cms-134"))))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
- '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
