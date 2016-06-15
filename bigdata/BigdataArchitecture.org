@@ -1,0 +1,3 @@
+[[https://www.linkedin.com/pulse/100-open-source-big-data-architecture-papers-anil-madan][100 open source Big Data architecture papers for data professionals.]]
+[[https://www.ibm.com/developerworks/cn/views/global/libraryview.jsp?sort_by=&show_abstract=true&show_all=&search_flag=&contentarea_by=Information+management&search_by=%25E5%25A4%25A7%25E6%2595%25B0%25E6%258D%25AE%25E6%259E%25B6%25E6%259E%2584%25E5%2592%258C%25E6%25A8%25A1%25E5%25BC%258F&product_by=-1&topic_by=-1&type_by=%25E6%2589%2580%25E6%259C%2589%25E7%25B1%25BB%25E5%2588%25AB&ibm-search=%25E6%2590%259C%25E7%25B4%25A2][文档库 IBMdeveloperWorkds 大数据架构和模式]]
+    
