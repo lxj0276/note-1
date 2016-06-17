@@ -1,0 +1,14 @@
+[[https://segmentfault.com/a/1190000005143946][WingIDE 的使用经验总结]]
+
+1. 修改 wingide 目录下的 keymap.vi,添加快捷键, 查有没有冲突, 有的话删除删除以前绑定的快捷键:
+#------------------------------------------------------------
+# Self define
+'Browse-Ctrl-i': 'goto-selected-symbol-defn' #有冲突
+'Browse-Ctrl-o': 'visit-history-previous' #有冲突
+'Ctrl-Slash': 'comment-out-region'
+'Ctrl-question': 'uncomment-out-region'
+'Ctrl-Period': 'comment-toggle'
+
+2. 自动补全
+edit  -> preferences -> Editor -> Auto-completion 
+把右边 keys 的地方，从 tab 改成 space
