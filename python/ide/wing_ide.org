@@ -12,3 +12,6 @@
 2. 自动补全
 edit  -> preferences -> Editor -> Auto-completion 
 把右边 keys 的地方，从 tab 改成 space
+
+3. 打开文件乱码问题
+   Edit -> Preferences -> Files  修改 Default Encoding: UTF-8 或者 gbk
