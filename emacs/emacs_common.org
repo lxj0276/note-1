@@ -41,6 +41,10 @@ S-left|S-right	以天为单位调整时间戳时间
 * command
 ** 点击(类似与鼠标左键快捷键)打开网页
    C-c C-o
+** 修改包的一些配置
+comtommize-group
+然后输入包，　修改变量，　然后 save the state, save for future sesson.
+
 * dired 操作
 [[http://blog.csdn.net/cofol1986/article/details/7645785][Dired 模式常用快捷键]]
 ** 查看帮助
@@ -276,3 +280,15 @@ flush-lines 命令
  C-x 8 RET 然后英语拼音.  e.g.: C-x 8 omega 
   - 公式 ::
  把公式用\(\)包起来，　ｅ.g.: \(E = m ^ 2\) 
+* emacs 的 evil surround 修改包围的字符串
+** Add surrounding
+
+You can surround in visual-state with S<textobject> or gS<textobject>. or in normal-state with ys<textobject> or yS<textobject>.
+** Change surrounding
+
+You can change a surrounding with cs<old-textobject><new-textobject>.
+** Delete surrounding
+
+You can delete a surrounding with ds<textobject>.
+
+
