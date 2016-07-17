@@ -1,0 +1,605 @@
+job  scheduler: linkin--> azkaban, spotify-->luigi
+    
+mysql-to-json kafka producer: maxwell
+
+* Hadoop 原理
+[[http://rudy-zhang.me/2015/05/23/Hadoop%25E5%259F%25BA%25E6%259C%25AC%25E5%258E%259F%25E7%2590%2586/][hadoop 基本原理]]
+** HDFS
+
+HDFS（Hadoop File System），是 Hadoop 的分布式文件存储系统
+
+将大文件分解为多个 Block，每个 Block 保存多个副本。提供容错机制，副本丢失或者宕机时自动恢复。
+默认每个 Block 保存 3 个副本，64M 为 1 个 Block。
+将 Block 按照 key-value 映射到内存当中。
+*** NameNode
+
+HDFS 使用主从结构，NameNode 是 Master 节点，是领导。所有的客户端的读写请求，都需要首先请求 NameNode。
+
+NameNode 存储
+
+fsimage：元数据镜像文件（文件系统的目录树，文件的元数据信息）。元数据信息包括文件的信息，文件对应的 block 信息（版本信息，类型信息，和 checksum），以及每一个 block 所在的 DataNode 的信息。
+edits：元数据的操作日志
+*** DataNode
+
+DataNode 是 Slave，负责真正存储所有的 block 内容，以及数据块的读写操作
+
+NameNode，DataNode，rack 只是一些逻辑上的概念。NameNode 和 DataNode 可能是一台机器也可能是，相邻的一台机器，很多 DataNode 可能处于同一台机器。rack 是逻辑上比 DataNode 更大的概念，可能是一台机器，一台机柜，也可能是一个机房。通过使文件的备份更广泛地分布到不同的 rack，DataNode 上可以保证数据的可靠性。
+
+*** HDFS 写入数据
+
+Client 拆分文件为 64M 一块。
+Client 向 NameNode 发送写数据请求。
+NameNode 节点，记录 block 信息。并返回可用的 DataNode。
+Client 向 DataNode 发送 block1,2,3….；发送过程是以流式写入。流式写入，数据流向为 DataNode1->DataNode2->DataNode3(1,2,3 为通过规则选出来的可用的 DataNode)
+发送完毕后告知 NameNode
+NameNode 告知 Client 发送完成
+在写数据的时候：
+
+写 1T 文件，我们需要 3T 的存储，3T 的网络流量贷款。
+在执行读或写的过程中，NameNode 和 DataNode 通过 HeartBeat 进行保存通信，确定 DataNode 活着。如果发现 DataNode 死掉了，就将死掉的 DataNode 上的数据，放到其他节点去。读取时，要读其他节点去。
+挂掉一个节点，没关系，还有其他节点可以备份；甚至，挂掉某一个机架，也没关系；其他机架上，也有备份。
+*** HDFS 读取数据
+
+Client 向 NameNode 发送读请求
+NameNode 查看 MetaData 信息，返回文件的 block 位置
+根据一定规则（优先选择附近的数据），按顺序读取 block
+** MapReduce
+
+Map 是把一组数据一对一的映射为另外的一组数据，其映射的规则由一个 map 函数来指定。Reduce 是对一组数据进行归约，这个归约的规则由一个 reduce 函数指定。
+
+整个的 MapReduce 执行过程可以表示为：
+
+(input)<k1, v1> => map => <k2, v2> => combine => <k2, v2’> => reduce => <k3, v3>(output)
+
+也可以表示为流程图：
+
+
+分割：把输入数据分割成不相关的若干键/值对（key1/value1）集合，作为 input
+映射：这些键/值对会由多个 map 任务来并行地处理。输出一些中间键/值对 key2/value2 集合
+排序：MapReduce 会对 map 的输出（key2/value2）按照 key2 进行排序（便于归并）
+conbine：属于同一个 key2 的所有 value2 组合在一起作为 reduce 任务的输入（相当于提前 reduce，减小 key2 的数量，减小 reduce 的负担）
+Partition：将 mapper 的输出分配到 reducer；（Map 的中间结果通常用”hash(key) mod R”这个结果作为标准）
+规约：由 reduce 任务计算出最终结果并输出 key3/value3。
+* hbase
+[[http://www.bitstech.net/2015/09/16/hbase-architecture/][hbase 原理和设计]]
+** 简介
+HBase —— Hadoop Database 的简称，Google BigTable 的另一种开源实现方式，从问世之初，就为了解决用大量廉价的机器高速存取海量数据、实现数据分布式存储提供可靠的方案。从功能上来讲，HBase 不折不扣是一个数据库，与我们熟悉的 Oracle、MySQL、MSSQL 等一样，对外提供数据的存储和读取服务。而从应用的角度来说，HBase 与一般的数据库又有所区别，HBase 本身的存取接口相当简单，不支持复杂的数据存取，更不支持 SQL 等结构化的查询语言；HBase 也没有除了 rowkey 以外的索引，所有的数据分布和查询都依赖 rowkey。所以，HBase 在表的设计上会有很严格的要求。架构上，HBase 是分布式数据库的典范，这点比较像 MongoDB 的 sharding 模式，能根据键值的大小，把数据分布到不同的存储节点上，MongoDB 根据 configserver 来定位数据落在哪个分区上，HBase 通过访问 Zookeeper 来获取-ROOT-表所在地址，通过-ROOT-表得到相应.META.表信息，从而获取数据存储的 region 位置。
+
+
+** 架构
+上面提到，HBase 是一个分布式的架构，除去底层存储的 HDFS 外，HBase 本身从功能上可以分为三块：Zookeeper 群、Master 群和 RegionServer 群。
+
+Zookeeper 群：HBase 集群中不可缺少的重要部分，主要用于存储 Master 地址、协调 Master 和 RegionServer 等上下线、存储临时数据等等。
+Master 群：Master 主要是做一些管理操作，如：region 的分配，手动管理操作下发等等，一般数据的读写操作并不需要经过 Master 集群，所以 Master 一般不需要很高的配置即可。
+RegionServer 群：RegionServer 群是真正数据存储的地方，每个 RegionServer 由若干个 region 组成，而一个 region 维护了一定区间 rowkey 值的数据，整个结构如下图：
+￼
+HBase 结构图
+
+上图中，Zookeeper(简称 ZK)是一个集群，通常有奇数个 ZK 服务组成。Master 为了服务可用性，也建议部署成集群方式，因为 Master 是整个管理操作的发起者，如果 Master 一旦发生意外停机，整个集群将会无法进行管理操作，所以 Master 也必须有多个，当然多个 Master 也有主从之分，如何区分哪个是主，哪个是从？关键看哪个 Master 能竞争到 ZK 上对应 Master 目录下的锁，持有该目录锁的 Master 为主 Master，其他从 Master 轮询竞争该锁，所以一旦主 Master 发生意外停机，从 Master 很快会因为竞争到 Master 文件夹上的锁而接管服务。
+RegionServer(简称 RS)在非 Replication 模式下，整个系统中都是唯一的，也就是说，在整个非 Replication 的 HBase 集群中，每台 RS 上保存的数据都不一样，所以相对于前面两者，该模式下的 RS 并不是高可用的，至少 RS 可能存在单点故障的问题，但是由于 HBase 内部数据分 region 存储和 region 可以迁移的机制，RS 服务的单点故障可能会在极小代价下很快恢复，但是一旦停掉的 RS 上有-ROOT-或者.META.表的 region，那后果还是比较严重，因为数据节点的 RS 停机，只会在短时间内影响该台 RS 上的 region 不可访问，等到 region 迁移完成后即可恢复，如果是-ROOT-、.META.所在的 RS 停机，整个 HBase 的新的求情都将受到影响，因为需要通过.META.表来路由，从而寻找到 region 所在 RS 的地址。
+
+数据组织
+整个架构中，ZK 用于服务协调和整个集群运行过程中部分信息的保存和-ROOT-表地址定位，Master 用于集群内部管理，所以剩下的 RS 主要用于处理数据。
+RS 是处理数据的主要场所，那么在 RS 内部的数据是怎么分布的？其实 RS 本身只是一个容器，其定义了一些功能线程，比如：数据合并线程(compact thread)、storeFile 分割线程(split thread)等等。容器中的主要对象就是 region，region 是一个表根据自身 rowkey 范围划分的一部分，一个表可以被划分成若干部分，也就是若干个 region，region 可以根据 rowkey 范围不同而被分布在不同的 RS 上(当然也可以在同一个 RS 上，但不建议这么做)。一个 RS 上可以包含多个表的 region，也可以只包含一个表的部分 region，RS 和表是两个不同的概念。
+这里还有一个概念——列簇。对 HBase 有一些了解的人，或多或少听说过：HBase 是一个列式存储的数据库，而这个列式存储中的列，其实是区别于一般数据库的列，这里的列的概念，就是列簇，列簇，顾名思义就是很多列的集合，而在数据存储上来讲，不同列簇的数据，一定是分开存储的，即使是在同一个 region 内部，不同的列簇也存储在不同的文件夹中，这样做的好处是，一般我们定义列簇的时候，通常会把类似的数据放入同一个列簇，不同的列簇分开存储，有利于数据的压缩，并且 HBase 本身支持多种压缩方式。
+
+** 原理
+前面介绍了 HBase 的一般架构，我们知道了 HBase 有 ZK、Master 和 RS 等组成，本节我们来介绍下 HBase 的基本原理，从数据访问、RS 路由到 RS 内部缓存、数据存储和刷写再到 region 的合并和拆分等等功能。
+
+RegionServer 定位
+访问 HBase 通过 HBase 客户端(或 API)进行，整个 HBase 提供给外部的地址，其实是 ZK 的入口，前面也介绍了，ZK 中有保存-ROOT-所在的 RS 地址，从-ROOT-表可以获取.META.表信息，根据.META.表可以获取 region 在 RS 上的分布，整个 region 寻址过程大致如下：
+
+￼
+
+RS 定位过程
+
+首先，Client 通过访问 ZK 来请求目标数据的地址。
+ZK 中保存了-ROOT-表的地址，所以 ZK 通过访问-ROOT-表来请求数据地址。
+同样，-ROOT-表中保存的是.META.的信息，通过访问.META.表来获取具体的 RS。
+.META.表查询到具体 RS 信息后返回具体 RS 地址给 Client。
+Client 端获取到目标地址后，然后直接向该地址发送数据请求。
+上述过程其实是一个三层索引结构，从 ZK 获取-ROOT-信息，再从-ROOT-获取.META.表信息，最后从.META.表中查到 RS 地址后缓存。这里有几个问题：
+
+既然 ZK 中能保存-ROOT-信息，那么为什么不把.META.信息直接保存在 ZK 中，而需要通过-ROOT-表来定位？
+Client 查找到目标地址后，下一次请求还需要走 ZK  —> -ROOT- —> .META.这个流程么？
+先来回答第一个问题：为什么不直接把.META.表信息直接保存到 ZK 中？主要是为了保存的数据量考虑，ZK 中不宜保存大量数据，而.META.表主要是保存 Region 和 RS 的映射信息，region 的数量没有具体约束，只要在内存允许的范围内，region 数量可以有很多，如果保存在 ZK 中，ZK 的压力会很大。所以，通过一个-ROOT-表来转存到 RS 中是一个比较理想的方案，相比直接保存在 ZK 中，也就多了一层-ROOT-表的查询，对性能来说影响不大。
+第二个问题：每次访问都需要走 ZK –> -ROOT- —> .META.的流程么？当然不需要，Client 端有缓存，第一次查询到相应 region 所在 RS 后，这个信息将被缓存到 Client 端，以后每次访问都直接从缓存中获取 RS 地址即可。当然这里有个意外：访问的 region 若果在 RS 上发生了改变，比如被 balancer 迁移到其他 RS 上了，这个时候，通过缓存的地址访问会出现异常，在出现异常的情况下，Client 需要重新走一遍上面的流程来获取新的 RS 地址。总体来说，region 的变动只会在极少数情况下发生，一般变动不会很大，所以在整个集群访问过程中，影响可以忽略。
+
+** Region 数据写入
+HBase 通过 ZK —> -ROOT-  —> .META.的访问获取 RS 地址后，直接向该 RS 上进行数据写入操作，整个过程如下图：
+
+￼
+
+RegionServer 数据操作过程
+
+Client 通过三层索引获得 RS 的地址后，即可向指定 RS 的对应 region 进行数据写入，HBase 的数据写入采用 WAL(write ahead log)的形式，先写 log，后写数据。HBase 是一个 append 类型的数据库，没有关系型数据库那么复杂的操作，所以记录 HLog 的操作都是简单的 put 操作(delete/update 操作都被转化为 put 进行)
+
+HLog
+HLog 写入
+
+HLog 是 HBase 实现 WAL 方式产生的日志信息，其内部是一个简单的顺序日志，每个 RS 上的 region 都共享一个 HLog，所有对于该 RS 上的 region 数据写入都被记录到该 HLog 中。HLog 的主要作用就是在 RS 出现意外崩溃的时候，可以尽量多的恢复数据，这里说是尽量多，因为在一般情况下，客户端为了提高性能，会把 HLog 的 auto flush 关掉，这样 HLog 日志的落盘全靠操作系统保证，如果出现意外崩溃，短时间内没有被 fsync 的日志会被丢失。
+
+HLog 过期
+
+HLog 的大量写入会造成 HLog 占用存储空间会越来越大，HBase 通过 HLog 过期的方式进行 HLog 的清理，每个 RS 内部都有一个 HLog 监控线程在运行，其周期可以通过 hbase.master.cleaner.interval 进行配置。
+HLog 在数据从 memstore flush 到底层存储上后，说明该段 HLog 已经不再被需要，就会被移动到.oldlogs 这个目录下，HLog 监控线程监控该目录下的 HLog，当该文件夹下的 HLog 达到 hbase.master.logcleaner.ttl 设置的过期条件后，监控线程立即删除过期的 HLog。
+
+Memstore
+数据存储
+
+memstore 是 region 内部缓存，其大小通过 HBase 参数 hbase.hregion.memstore.flush.size 进行配置。RS 在写完 HLog 以后，数据写入的下一个目标就是 region 的 memstore，memstore 在 HBase 内部通过 LSM-tree 结构组织，所以能够合并大量对于相同 rowkey 上的更新操作。
+正是由于 memstore 的存在，HBase 的数据写入都是异步的，而且性能非常不错，写入到 memstore 后，该次写入请求就可以被返回，HBase 即认为该次数据写入成功。这里有一点需要说明，写入到 memstore 中的数据都是预先按照 rowkey 的值进行排序的，这样有利于后续数据查找。
+
+数据刷盘
+
+memstore 中的数据在一定条件下会进行刷写操作，使数据持久化到相应的存储设备上，触发 memstore 刷盘的操作有多种不同的方式如下图：
+
+￼
+
+Memstore 刷写流程
+
+以上 1,2,3 都可以触发 memstore 的 flush 操作，但是实现的方式不同：
+
+1 通过全局内存控制，触发 memstore 刷盘操作。memstore 整体内存占用上限通过参数 hbase.regionserver.global.memstore.upperLimit 进行设置，当然在达到上限后，memstore 的刷写也不是一直进行，在内存下降到 hbase.regionserver.global.memstore.lowerLimit 配置的值后，即停止 memstore 的刷盘操作。这样做，主要是为了防止长时间的 memstore 刷盘，会影响整体的性能。
+在该种情况下，RS 中所有 region 的 memstore 内存占用都没达到刷盘条件，但整体的内存消耗已经到一个非常危险的范围，如果持续下去，很有可能造成 RS 的 OOM，这个时候，需要进行 memstore 的刷盘，从而释放内存。
+2 手动触发 memstore 刷盘操作
+HBase 提供 API 接口，运行通过外部调用进行 memstore 的刷盘
+3 memstore 上限触发数据刷盘
+前面提到 memstore 的大小通过 hbase.hregion.memstore.flush.size 进行设置，当 region 中 memstore 的数据量达到该值时，会自动触发 memstore 的刷盘操作。
+刷盘影响
+
+memstore 在不同的条件下会触发数据刷盘，那么整个数据在刷盘过程中，对 region 的数据写入等有什么影响？memstore 的数据刷盘，对 region 的直接影响就是：在数据刷盘开始到结束这段时间内，该 region 上的访问都是被拒绝的，这里主要是因为在数据刷盘结束时，RS 会对改 region 做一个 snapshot，同时 HLog 做一个 checkpoint 操作，通知 ZK 哪些 HLog 可以被移到.oldlogs 下。从前面图上也可以看到，在 memstore 写盘开始，相应 region 会被加上 UpdateLock 锁，写盘结束后该锁被释放。
+
+StoreFile
+memstore 在触发刷盘操作后会被写入底层存储，每次 memstore 的刷盘就会相应生成一个存储文件 HFile，storeFile 即 HFile 在 HBase 层的轻量级分装。数据量的持续写入，造成 memstore 的频繁 flush，每次 flush 都会产生一个 HFile，这样底层存储设备上的 HFile 文件数量将会越来越多。不管是 HDFS 还是 Linux 下常用的文件系统如 Ext4、XFS 等，对小而多的文件上的管理都没有大文件来的有效，比如小文件打开需要消耗更多的文件句柄；在大量小文件中进行指定 rowkey 数据的查询性能没有在少量大文件中查询来的快等等。
+
+Compact
+
+大量 HFile 的产生，会消耗更多的文件句柄，同时会造成 RS 在数据查询等的效率大幅度下降，HBase 为解决这个问题，引入了 compact 操作，RS 通过 compact 把大量小的 HFile 进行文件合并，生成大的 HFile 文件。
+RS 上的 compact 根据功能的不同，可以分为两种不同类型，即：minor compact 和 major compact。
+
+Minor Compact
+minor compact 又叫 small compact，在 RS 运行过程中会频繁进行，主要通过参数 hbase.hstore.compactionThreshold 进行控制，该参数配置了 HFile 数量在满足该值时，进行 minor compact，minor compact 只选取 region 下部分 HFile 进行 compact 操作，并且选取的 HFile 大小不能超过 hbase.hregion.max.filesize 参数设置。
+
+Major Compact
+相反 major compact 也被称之为 large compact，major compact 会对整个 region 下相同列簇的所有 HFile 进行 compact，也就是说 major compact 结束后，同一个列簇下的 HFile 会被合并成一个。major compact 是一个比较长的过程，对底层 I/O 的压力相对较大。
+major compact 除了合并 HFile 外，另外一个重要功能就是清理过期或者被删除的数据。前面提到过，HBase 的 delete 操作也是通过 append 的方式写入，一旦某些数据在 HBase 内部被删除了，在内部只是被简单标记为删除，真正在存储层面没有进行数据清理，只有通过 major compact 对 HFile 进行重组时，被标记为删除的数据才能被真正的清理。
+compact 操作都有特定的线程进行，一般情况下不会影响 RS 上数据写入的性能，当然也有例外：在 compact 操作速度跟不上 region 中 HFile 增长速度时，为了安全考虑，RS 会在 HFile 达到一定数量时，对写入进行锁定操作，直到 HFile 通过 compact 降到一定的范围内才释放锁。
+
+Split
+
+compact 将多个 HFile 合并单个 HFile 文件，随着数据量的不断写入，单个 HFile 也会越来越大，大量小的 HFile 会影响数据查询性能，大的 HFile 也会，HFile 越大，相对的在 HFile 中搜索的指定 rowkey 的数据花的时间也就越长，HBase 同样提供了 region 的 split 方案来解决大的 HFile 造成数据查询时间过长问题。
+一个较大的 region 通过 split 操作，会生成两个小的 region，称之为 Daughter，一般 Daughter 中的数据是根据 rowkey 的之间点进行切分的，region 的 split 过程大致如下图：
+
+￼
+
+region split 流程
+
+region 先更改 ZK 中该 region 的状态为 SPLITING。
+Master 检测到 region 状态改变。
+region 会在存储目录下新建.split 文件夹用于保存 split 后的 daughter region 信息。
+Parent region 关闭数据写入并触发 flush 操作，保证所有写入 Parent region 的数据都能持久化。
+在.split 文件夹下新建两个 region，称之为 daughter A、daughter B。
+Daughter A、Daughter B 拷贝到 HBase 根目录下，形成两个新的 region。
+Parent region 通知修改.META.表后下线，不再提供服务。
+Daughter A、Daughter B 上线，开始向外提供服务。
+如果开启了 balance_switch 服务，split 后的 region 将会被重新分布。
+上面 1 ~ 9 就是 region split 的整个过程，split 过程非常快，速度基本会在秒级内，那么在这么快的时间内，region 中的数据怎么被重新组织的？
+其实，split 只是简单的把 region 从逻辑上划分成两个，并没有涉及到底层数据的重组，split 完成后，Parent region 并没有被销毁，只是被做下线处理，不再对外部提供服务。而新产生的 region Daughter A 和 Daughter B，内部的数据只是简单的到 Parent region 数据的索引，Parent region 数据的清理在 Daughter A 和 Daughter B 进行 major compact 以后，发现已经没有到其内部数据的索引后，Parent region 才会被真正的清理。
+
+** HBase 设计
+HBase 是一个分布式数据库，其性能的好坏主要取决于内部表的设计和资源的分配是否合理。
+
+Rowkey 设计
+rowkey 是 HBase 实现分布式的基础，HBase 通过 rowkey 范围划分不同的 region，分布式系统的基本要求就是在任何时候，系统的访问都不要出现明显的热点现象，所以 rowkey 的设计至关重要，一般我们建议 rowkey 的开始部分以 hash 或者 MD5 进行散列，尽量做到 rowkey 的头部是均匀分布的。禁止采用时间、用户 id 等明显有分段现象的标志直接当作 rowkey 来使用。
+
+列簇设计
+HBase 的表设计时，根据不同需求有不同选择，需要做在线查询的数据表，尽量不要设计多个列簇，我们知道，不同的列簇在存储上是被分开的，多列簇设计会造成在数据查询的时候读取更多的文件，从而消耗更多的 I/O。
+
+TTL 设计
+选择合适的数据过期时间也是表设计中需要注意的一点，HBase 中允许列簇定义数据过期时间，数据一旦超过过期时间，可以被 major compact 进行清理。大量无用历史数据的残余，会造成 region 体积增大，影响查询效率。
+
+Region 设计
+一般地，region 不宜设计成很大，除非应用对阶段性性能要求很多，但是在将来运行一段时间可以接受停服处理。region 过大会导致 major compact 调用的周期变长，而单次 major compact 的时间也相应变长。major compact 对底层 I/O 会造成压力，长时间的 compact 操作可能会影响数据的 flush，compact 的周期变长会导致许多删除或者过期的数据不能被及时清理，对数据的读取速度等都有影响。
+相反，小的 region 意味着 major compact 会相对频繁，但是由于 region 比较小，major compact 的相对时间较快，而且相对较多的 major compact 操作，会加速过期数据的清理。
+当然，小 region 的设计意味着更多的 region split 风险，region 容量过小，在数据量达到上限后，region 需要进行 split 来拆分，其实 split 操作在整个 HBase 运行过程中，是被不怎么希望出现的，因为一旦发生 split，涉及到数据的重组，region 的再分配等一系列问题。所以我们在设计之初就需要考虑到这些问题，尽量避免 region 的运行过程中发生 split。
+HBase 可以通过在表创建的时候进行 region 的预分配来解决运行过程中 region 的 split 产生，在表设计的时候，预先分配足够多的 region 数，在 region 达到上限前，至少有部分数据会过期，通过 major compact 进行清理后，region 的数据量始终维持在一个平衡状态。
+region 数量的设计还需要考虑内存上的限制，通过前面的介绍我们知道每个 region 都有 memstore，memstore 的数量与 region 数量和 region 下列簇的数量成正比,一个 RS 下 memstore 内存消耗：
+
+Memory = memstore 大小 * region 数量 * 列簇数量
+
+如果不进行前期数据量估算和 region 的预分配，通过不断的 split 产生新的 region，容易导致因为内存不足而出现 OOM 现象。
+* hive 
+[[http://www.360doc.com/content/16/0517/00/29157075_559747518.shtml][Hive 原理及查询优化]]
+Hive 架构
+
+￼
+图片来自 Hortonworks
+
+
+
+下面这个旧一点的图片来自 Facebook
+
+
+
+￼
+
+
+
+从架构图上可以很清楚地看出 Hive 和 Hadoop（MapReduce，HDFS）的关系。
+
+
+
+Hive 是最上层，即客户端层或者作业提交层。 
+
+MapReduce/Yarn 是中间层，也就是计算层。 
+
+HDFS 是底层，也就是存储层。
+
+
+
+从 Facebook 的图上可以看出，Hive 主要有 QL，MetaStore 和 Serde 三大核心组件构成。QL 就是编译器，也是 Hive 中最核心的部分。Serde 就是 Serializer 和 Deserializer 的缩写，用于序列化和反序列化数据，即读写数据。MetaStore 对外暴露 Thrift API，用于元数据的修改。比如表的增删改查，分区的增删改查，表的属性的修改，分区的属性的修改等。等下我会简单介绍一下核心，QL。
+
+
+
+>>>>
+Hive 的数据模型
+
+￼
+
+Hive 的数据存储在 HDFS 上，基本存储单位是表或者分区，Hive 内部把表或者分区称作 SD，即 Storage Descriptor。一个 SD 通常是一个 HDFS 路径，或者其它文件系统路径。SD 的元数据信息存储在 Hive MetaStore 中，如文件路径，文件格式，列，数据类型，分隔符。Hive 默认的分格符有三种，分别是^A、^B 和^C，即 ASCii 码的 1、2 和 3，分别用于分隔列，分隔列中的数组元素，和元素 Key-Value 对中的 Key 和 Value。
+
+
+
+还记得大明湖畔暴露 Thrift API 的 MetaStore 么？嗯，是她，就是它！所有的数据能不能认得出来全靠它！
+
+
+
+Hive 的核心是 Driver，Driver 的核心是 SemanticAnalyzer。Hive 实际上是一个 SQL 到 Hadoop 作业的编译器。Hadoop 上最流行的作业就是 MapReduce，当然还有其它，比如 Tez 和 Spark。Hive 目前支持ＭapReduce, Tez, Spark 三种作业，其原理和刚才回顾的 MapReduce 过程类似，只是在执行优化上有区别。
+
+
+
+Hive 作业的执行过程实际上是 SQL 翻译成作业的过程？那么，它是怎么翻译的？
+
+
+
+￼
+
+
+
+一条 SQL，进入的 Hive。经过上述的过程，其实也是一个比较典型的编译过程变成了一个作业。
+
+
+
+￼
+
+
+
+首先，Driver 会输入一个字符串 SQL，然后经过 Parser 变成 AST，这个变成 AST 的过程是通过 Antlr 来完成的，也就是 Anltr 根据语法文件来将 SQL 变成 AST。
+
+
+
+AST 进入 SemanticAnalyzer（核心）变成 QB，也就是所谓的 QueryBlock。一个最简的查询块，通常来讲，一个 From 子句会生成一个 QB。生成 QB 是一个递归过程，生成的 ＱＢ经过 GenLogicalPlan 过程，变成了一个 Operator 图，也是一个有向无环图。
+
+
+
+OP DAG 经过逻辑优化器，对这个图上的边或者结点进行调整，顺序修订，变成了一个优化后的有向无环图。这些优化过程可能包括谓词下推（Predicate Push Down），分区剪裁（Partition Prunner），关联排序（Join Reorder）等等
+
+
+
+经过了逻辑优化，这个有向无环图还要能够执行。所以有了生成物理执行计划的过程。GenTasks。Ｈive 的作法通常是碰到需要分发的地方，切上一刀，生成一道 MapReduce 作业。如 Group By 切一刀，Join 切一刀，Distribute By 切一刀，Distinct 切一刀。
+
+
+
+这么很多刀砍下去之后，刚才那个逻辑执行计划，也就是那个逻辑有向无环图，就被切成了很多个子图，每个子图构成一个结点。这些结点又连成了一个执行计划图，也就是 Task Tree.
+
+
+
+把这些个 Task Tree 还可以有一些优化，比如基于输入选择执行路径，增加备份作业等。进行调整。这个优化就是由 Physical Optimizer 来完成的。经过 Physical Optimizer，这每一个结点就是一个 MapReduce 作业或者本地作业，就可以执行了。
+
+
+
+这就是一个 SQL 如何变成 MapReduce 作业的过程。要想观查这个过程的最终结果，可以打开 Hive，输入 Explain ＋ 语句，就能够看到。
+
+
+
+
+￼
+
+￼
+
+
+
+
+Hive 最重要的部分是 Group By 和 Join。下面分别讲解一下：
+
+
+
+首先是 Group By
+
+
+
+例如我们有一条 SQL 语句：
+
+INSERT INTO TABLE pageid_age_sum 
+
+SELECT pageid, age, count(1) 
+
+FROM pv_users 
+
+GROUP BY pageid, age;
+
+
+
+￼
+
+
+
+把每个网页的阅读数按年龄进行分组统计。由于前面介绍了，MapReduce 就是一个 Group By 的过程，这个 SQL 翻译成 MapReduce 就是相对简单的。
+
+
+
+￼
+
+
+
+我们在 Map 端，每一个 Map 读取一部分表的数据，通常是 64M 或者 256M，然后按需要 Group By 的 Key 分发到 Reduce 端。经过 Shuffle Sort，每一个 Key 再在 Reduce 端进行聚合（这里是 Count)，然后就输出了最终的结果。值得一提的是，Distinct 在实现原理上与 Group By 类似。当 Group By 遇上 Distinct……例如：SELECT pageid, COUNT(DISTINCT userid) FROM page_view GROUP BY pageid
+
+
+
+￼
+
+
+
+Hive 实现成 MapReduce 的原理如下：
+
+
+
+￼
+
+
+
+也就是说 Map 分发到 Reduce 的时候，会使用 pageid 和 userid 作为联合分发键，再去聚合（Count），输出结果。
+
+
+
+介绍了这么多原理，重点还是为了使用，为了适应场景和业务，为了优化。从原理上可以看出，当遇到 Group By 的查询时，会按 Group By 键进行分发？如果键很多，撑爆了机器会怎么样？
+
+
+
+对于 Impala，或 Spark，为了快，key 在内存中，爆是经常的。爆了就失败了。对于 Hive，Key 在硬盘，本身就比 Impala, Spark 的处理能力大上几万倍。但……不幸的是，硬盘也有可能爆。
+
+
+
+当然，硬盘速度也比内存慢上不少，这也是 Hive 总是被吐槽的原因，场景不同，要明白自己使用的场景。当 Group By Key 大到连硬盘都能撑爆时……这个时候可能就需要优化了。
+
+
+
+Ｇroup By 优化通常有 Map 端数据聚合和倾斜数据分发两种方式。Map 端部分聚合，配置开关是 hive.map.aggr
+
+
+
+也就是执行 SQL 前先执行 set hive.map.aggr=true;它的原理是 Map 端在发到 Reduce 端之前先部分聚合一下。来减少数据量。因为我们刚才已经知道，聚合操作是在 Reduce 端完成的，只要能有效的减少 Reduce 端收到的数据量，就能有效的优化聚合速度，避免爆机，快速拿到结果。
+
+
+
+另外一种方式则是针对倾斜的 key 做两道作业的聚合。什么是倾斜的数据？比如某猫双 11 交易，华为卖了 1 亿台，苹果卖了 10 万台。华为就是典型的倾斜数据了。如果要统计华为和苹果，会用两个 Reduce 作 Group By，一个处理 1 亿台，一个处理 10 万台，那个 1 亿台的就是倾余。
+
+
+
+由于按 key 分发，遇到倾斜数据怎么办？
+
+￼
+
+
+
+可以使用 hive.groupby.skewindata 选项，通过两道 MapReduce 作业来处理。当选项设定为 true，生成的查询计划会有两个 MR Job。第一个 MR Job 中，Map 的输出结果集合会随机分布到 Reduce 中，每个 Reduce 做部分聚合操作，并输出结果，这样处理的结果是相同的 Group By Key 有可能被分发到不同的 Reduce 中，从而达到负载均衡的目的；第二个 MR Job 再根据预处理的数据结果按照 Group ByKey 分布到 Reduce 中（这个过程可以保证相同的 Group By Key 被分布到同一个 Reduce 中），最后完成最终的聚合操作。 
+
+
+
+第一道作业：Map 随机分发，按 gby key 部分聚合 
+
+第二道作业：第一道作业结果 Map 倾斜的 key 分发，按 gbk key 进行最终聚合
+
+
+
+无论你使用 Map 端，或者两道作业。其原理都是通过部分聚合来来减少数据量。能不能部分聚合，部分聚合能不能有效减少数据量，通常与 UDAF，也就是聚合函数有关。也就是只对代数聚合函数有效，对整体聚合函数无效。
+
+
+
+所谓代数聚合函数，就是由部分结果可以汇总出整体结果的函数，如 count，sum。 所谓整体聚合函数，就是无法由部分结果汇总出整体结果的函数，如 avg，mean。 比如，sum, count，知道部分结果可以加和得到最终结果。 而对于，mean，avg，知道部分数据的中位数或者平均数，是求不出整体数据的中位数和平均数的。
+
+
+
+在遇到复杂逻辑的时候，还是要具体问题具体分析，根据系统的原理，优化逻辑。刚才说了，Hive 最重要的是 Group By 和 Join，所以下面我们讲 Join.
+
+
+
+>>>>
+JOIN
+
+例如这样一个查询：INSERT INTO TABLE pv_users 
+
+SELECT pv.pageid, u.age 
+
+FROM page_view pv JOIN user u ON (pv.userid = u.userid);
+
+
+
+￼
+
+
+
+把访问和用户表进行关联，生成访问用户表。Hive 的 Join 也是通过 MapReduce 来完成的。
+
+
+
+￼
+
+
+
+就上面的查询，在ＭapReduce 的 Join 的实现过程如下：
+
+
+
+￼
+
+
+
+Ｍap 端会分别读入各个表的一部分数据，把这部分数据进行打标，例如 pv 表标 1，user 表标 2.
+
+
+
+Map 读取是分布式进行的。标完完后分发到 Reduce 端，Reduce 端根据 Join Key，也就是关联键进行分组。然后按打的标进行排序，也就是图上的 Shuffle Sort。
+
+
+
+在每一个 Reduce 分组中，Key 为 111 的在一起，也就是一台机器上。同时，pv 表的数据在这台机器的上端，user 表的数据在这台机器的下端。
+
+
+
+这时候，Reduce 把 pv 表的数据读入到内存里，然后逐条与硬盘上 user 表的数据做 Join 就可以了。
+
+
+
+从这个实现可以看出，我们在写 Hive Join 的时候，应该尽可能把小表（分布均匀的表）写在左边，大表（或倾斜表）写在右边。这样可以有效利用内存和硬盘的关系，增强 Hive 的处理能力。
+
+
+
+同时由于使用 Join Key 进行分发，Hive 也只支持等值 Join，不支持非等值 Join。由于 Join 和 Group By 一样存在分发，所以也同样存在着倾斜的问题。所以 Join 也要对抗倾斜数据，提升查询执行性能。
+
+
+
+通常，有一种执行非常快的 Join 叫 Map Join。
+
+
+
+>>>>
+Map Join 优化
+
+
+
+手动的 Map Join SQL 如下：
+
+INSERT INTO TABLE pv_users 
+
+SELECT /* MAPJOIN(pv) */ pv.pageid, u.age 
+
+FROM page_view pv JOIN user u 
+
+ON (pv.userid = u.userid);
+
+还是刚才的例子，用 Map Join 执行
+
+
+
+￼
+￼
+
+
+
+Map Join 通常只适用于一个大表和一个小表做关联的场景，例如事实表和维表的关联。
+
+
+
+原理如上图，用户可以手动指定哪个表是小表，然后在客户端把小表打成一个哈希表序列化文件的压缩包，通过分布式缓存均匀分发到作业执行的每一个结点上。然后在结点上进行解压，在内存中完成关联。
+
+
+
+Map Join 全过程不会使用 Reduce，非常均匀，不会存在数据倾斜问题。默认情况下，小表不应该超过 25M。在实际使用过程中，手动判断是不是应该用 Map Join 太麻烦了，而且小表可能来自于子查询的结果。
+
+
+
+Hive 有一种稍微复杂一点的机制，叫 Auto Map Join
+
+
+
+￼
+
+
+
+还记得原理中提到的物理优化器？Physical Optimizer 么？它的其中一个功能就是把 Join 优化成 Auto Map Join
+
+
+
+图上左边是优化前的，右边是优化后的
+
+
+
+优化过程是把 Join 作业前面加上一个条件选择器 ConditionalTask 和一个分支。左边的分支是 MapJoin，右边的分支是 Common Join(Reduce Join)
+
+
+
+看看左边的分支是不是和我们上上一张图很像？
+
+
+
+这个时候，我们在执行的时候，就由这个 Conditional Task 进行实时路径选择，遇到小于 25 兆走左边，大于 25 兆走右边。所谓，男的走左边，女的走右边，人妖走中间。
+
+
+
+在比较新版的 Hive 中，Auto Mapjoin 是默认开启的。如果没有开启，可以使用一个开关，set hive.auto.convert.join=true 开启。
+
+当然，Join 也会遇到和上面的 Group By 一样的倾斜问题。
+
+
+
+￼
+
+
+
+Ｈive 也可以通过像 Group By 一样两道作业的模式单独处理一行或者多行倾斜的数据。
+
+
+
+>>>>
+hive 中设定 
+
+set hive.optimize.skewjoin = true;  
+
+set hive.skewjoin.key = skew_key_threshold（default = 100000）
+
+
+
+其原理是就在 Reduce Join 过程，把超过十万条的倾斜键的行写到文件里，回头再起一道 Join 单行的 Map Join 作业来单独收拾它们。最后把结果取并集就是了。如上图所示。
+
+
+
+Update/Insert/Delete 原理
+
+
+
+Ｈive 从 0.14 开始支持 ACID。也就是支持了 Update Insert Delete 及一些流式的 API。也就是这个原因，Hive 把 0.14.1 Bug Fixes 版本改成了 Hive 1.0，也就是认为功能基本稳定和健全了。
+
+
+
+由于 HDFS 是不支持本地文件更改的，同时在写的时候也不支持读。
+
+表或者分区内的数据作为基础数据。事务产生的新数据如 Insert/Update/Flume/Storm 等会存储在增量文件（Delta Files）中。读取这个文件的时候，通常是 Table Scan 阶段，会合并更改，使读出的数据一致。
+
+
+
+Hive Metastore 上面增加了若干个线程，会周期性地合并并合并删除这些增量文件。
+
+
+
+具体可以实现参考这个网页。https://cwiki.apache.org/confluence/display/Hive/Hive Transactions
+
+
+
+>>>>
+Hive 适合做什么？ 
+
+由于多年积累，Hive 比较稳定，几乎是 Hadoop 上事实的 SQL 标准。 Ｈive 适合离线 ETL，适合大数据离线 Ad-Hoc 查询。适合特大规模数据集合需要精确结果的查询。对于交互式 Ad-Hoc 查询，通常还会有别的解决方案，比如 Impala, Presto 等等。
+
+
+
+特大规模的离线数据处理，尤其是大表关联，特大规模数据聚集，很适合使用 Hive。讲了这么多原理，最重要的还是应用，还是创造价值。
+
+
+
+对 Hive 来说，数据量再大，都不怕。数据倾斜，是大难题。但有很多优化方法和业务改进方法可以避过。Hive 执行稳定，函数多，扩展性强，数据吞吐量大，了解原理，有助于用好和选型。
+
+
+
+我今天要介绍的差不多了，原理部分介绍比较多，使用和扩展介绍的比较少，希望有时间和大家再作交流。下面进入问答部分！
