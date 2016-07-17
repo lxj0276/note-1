@@ -38,7 +38,7 @@ def merge(left, right):
         else:
             result.append(right[r])
             r = r + 1
-    '''why?'''
+    '''why? 将剩下的数组加到最后'''
     result = result + left[l:]
     result = result + right[r:]
     return result

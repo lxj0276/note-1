@@ -5,7 +5,24 @@
 [[http://www.cs.uvm.edu/~icdm/algorithms/CandidateList.shtml][18 Candidates for the Top 10 Algorithms in Data Mining]]
 [[http://www.cs.uvm.edu/~icdm/algorithms/10Algorithms-08.pdf][A companion article in PDF for this top-10 algorithm initiative]]
 [[http://blog.sae.sina.com.cn/archives/5547][机器学习常见算法分类汇总]]
+*机器学习的基本框架大都是模型、目标和算法!*
 
+[[https://www.zhihu.com/question/24900876][最小二乘、极大似然、梯度下降有何区别？]]
+对于一个数据集，首先你要根据数据的特点和目的来选择合适模型。
+就你问的而言，选定的 *模型是 Logistic Regression* 。现在既然已经选择了模型，那么接下来的问题是：怎么才能让这个模型尽可能好的拟合或者分类数据呢？那么就需要有目标，所以要定下模型的 cost function，但是 cost function 怎么定呢？凭直觉随便选吗！不！可！能！
+我们都知道，Linear Regression 的 cost function 是最小二乘，即
+file:~/note/Pictures/MLPictures/costFunction1.png
+但是 Logistic Regression 的 cost function 却是
+file:~/note/Pictures/MLPictures/costFunction2.png
+为什么 Logistic Regression 不使用最小二乘做 cost function 呢？
+答案是各自的响应变量服从不同的概率分布。
+在 Linear Regression 中，前提假设是响应变量服从正态分布，而 Logistic 中的响应变量是服从二项分布的。(为什么不服从正态？因为二项分布非 0 即 1 啊！)
+因而，在用极大似然估计计算时，所得到的 cost function 自然是不一样的。(可自行推导)
+
+然而，只有目标是没用的，我们还要有方法来达到目标，这里的方法就是上述的算法——最优化算法。包括常用的梯度下降法(最速下降法)、牛顿法、拟牛顿法等。这样，一个机器学习算法就算完整了。
+[[https://zh.wikipedia.org/wiki/%25E7%2589%259B%25E9%25A1%25BF%25E6%25B3%2595][牛顿法]]
+
+由一些前提假设和极大似然估计从概率的角度推导出了 cost function（Linear 中是最小二乘，Logistic 中是对数似然），而梯度下降只是一个最优化算法，用来优化 cost function 的。
 * What is ML?
 1. The field of machine learning is concerned with the question of how to construct *computer programs* that *automatically improve* with experience. \\
  A computer program is said to learn from experience E with respect to some class of tasks T and performance measure P, if its performance at tasks in T, as measured by P, improves with experience E.
@@ -121,11 +138,27 @@ Input data is not labelled and does not have a known result. A model is prepared
     Principal component analysis,
     Independent component analysis,
     Non-negative matrix factorization,
-    Singular value decomposition. 
+    Singular value decomposition.
+**** PCA 
+主成分分析法是一种降维的统计方法，它借助于一个正交变换，将其分量相关的原随机向量转化成其分量不相关的新随机向量，这在代数上表现为将原随机向量的协方差阵变换成对角形阵，在几何上表现为将原坐标系变换成新的正交坐标系，使之指向样本点散布最开的 p 个正交方向，然后对多维变量系统进行降维处理，使之能以一个较高的精度转换成低维变量系统，再通过构造适当的价值函数，进一步把低维系统转化成一维系统。
+[[http://blog.csdn.net/zhongkelee/article/details/44064401][主成分分析（PCA）原理详解]]
+ PCA 的思想是将 n 维特征映射到 k 维上（k<n），这 k 维是全新的正交特征。这 k 维特征称为主成分，是重新构造出来的 k 维特征，而不是简单地从 n 维特征中去除其余 n-k 维特征。
+
+找到一个合理的方法，在减少需要分析的指标同时，尽量减少原指标包含信息的损失，以达到对所收集数据进行全面分析的目的。
+
+整个 PCA 过程貌似及其简单，就是求协方差的特征值和特征向量，然后做数据转换。但是有没有觉得很神奇，为什么求协方差的特征向量就是最理想的 k 维向量？其背后隐藏的意义是什么？整个 PCA 的意义是什么？
+在信号处理中认为信号具有较大的方差，噪声有较小的方差,样本在 u1 上的投影方差较大，在 u2 上的投影方差较小，那么可认为 u2 上的投影是由噪声引起的。
+意义：PCA 将 n 个特征降维到 k 个，可以用来进行数据压缩。
+
+假设三维空间中有一系列点，这些点分布在一个过原点的斜面上, 如果把这些数据按行或者按列排成一个矩阵，那么这个矩阵的秩就是 2！这些数据之间是有相关性的，这些数据构成的过原点的向量的最大线性无关组包含 2 个向量. 那么如果平面不过原点呢？这就是数据中心化的缘故！将坐标原点平移到数据中心，这样原本不相关的数据在这个新坐标系中就有相关性了！有趣的是，三点一定共面，也就是说三维空间中任意三点中心化后都是线性相关的，一般来讲 n 维空间中的 n 个点一定能在一个 n-1 维子空间中分析！
+
+特征很多是和类标签有关的，但里面存在噪声或者冗余。在这种情况下，需要一种特征降维的方法来减少特征数，减少噪音和冗余，减少过度拟合的可能性。
+
+
 **** k-means
 [[http://dataunion.org/7781.html][聚类及 K 均值、二分 K-均值聚类算法]]
 k-means 算法的基础是最小误差平方和准则。
-[[~/note/algorithm/MachineLearning/MLPictures/kmeans1.png]]
+[[~/note/Pictures/MLPictures/kmeans1.png]]
 ***** 算法过程
 1. 随机确定 k 个初始点作为质心；
 2. 为每个点找距其最近的质心，并将其分配给该质心所对应的簇；
@@ -182,6 +215,10 @@ Input data is provided as stimulus to a model from an environment to which the m
 9. 杰卡德距离 & 杰卡德相似系数
 10. 相关系数 & 相关距离
 11. 信息熵
+*** 似然函数
+最大似然估计提供了一种给定观察数据来评估模型参数的方法
+[[https://zh.wikipedia.org/wiki/%25E4%25BC%25BC%25E7%2584%25B6%25E5%2587%25BD%25E6%2595%25B0][https://zh.wikipedia.org/wiki/%E4%BC%BC%E7%84%B6%E5%87%BD%E6%95%B0]]
+[[http://www.cnblogs.com/liliu/archive/2010/11/22/1883702.html][最大似然估计(Maximum likelihood estimation)]]
 ** 最大似然估计
 一旦我们获得 X_1,X_2, ...,X_n，我们就能从中找到一个关于 \theta 的估计。最大似然估计会寻找关于 \theta 的最可能的值（即，在所有可能的 \theta 取值中，寻找一个值使这个采样的“可能性”最大化。
 ** 雅可比矩阵
@@ -190,6 +227,21 @@ Input data is provided as stimulus to a model from an environment to which the m
 意义在于 一个多变数向量函数的最佳线性逼近.
 ** 梯度下降法
 如果 F(x)在 a 点可微并有定义, 那么在 a 点沿着梯度 *相反* 的方向 下降最快
+** 协方差
+在统计学上， 协方差用来刻画两个随机变量的相关性， 反映的是变量之间的二阶统计特性。
+[[http://blog.csdn.net/itplus/article/details/11452743][关于协方差矩阵的理解]]
+协方差表示的是两个变量的总体的误差，刻画两个变量之间的相关性。
+协方差定义为两个随机变量离差乘积的期望。
+file:~/note/Pictures/MLPictures/xiefangcha1.png
+** 最小二乘法
+[[https://zh.wikipedia.org/wiki/%25E6%259C%2580%25E5%25B0%258F%25E4%25BA%258C%25E4%25B9%2598%25E6%25B3%2595][最小二乘法]]
+最小二乘法（又称最小平方法）是一种数学优化技术。它通过最小化误差的平方和寻找数据的最佳函数匹配。
+
+利用最小二乘法可以简便地求得未知的数据，并使得这些求得的数据与实际数据之间误差的平方和为最小。
+
+最小二乘法还可用于曲线拟合。
+
+其他一些优化问题也可通过最小化能量或最大化熵用最小二乘法来表达。
 * 算法类似性
 根据算法的功能和形式的类似性，我们可以把算法分类
 ** 回归算法（regression）

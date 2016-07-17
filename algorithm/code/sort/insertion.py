@@ -41,6 +41,6 @@ def insertSort(ary):
 
 if __name__ == "__main__":
     befArray = [3, 1, 5, 7, 2, 4, 9, 6]
-    print befArray
+    print (befArray)
     aftArray = insertSort(befArray)
-    print aftArray
+    print (aftArray)
