@@ -8,8 +8,10 @@ You should not put any user code in this function besides modifying the variable
 values."
   (setq-default
    ;; Base distribution to use. This is a layer contained in the directory
-   ;; `+distribution'. For now available distributions are `spacemacs-base'
+   ;; `+distribution'. For ns any to manually installow available distributions are `spacemacs-base'
    ;; or `spacemacs'. (default 'spacemacs)
+   ;; dotspacemacs-distribution 'spformat string characters are accepted to control
+   ;;   the line style oracemacs
    dotspacemacs-distribution 'spacemacs
    ;; List of additional paths where to look for configuration layers.
    ;; Paths must have a trailing slash (i.e. `~/.mycontribs/')
@@ -25,31 +27,33 @@ values."
      ;; ----------------------------------------------------------------
      auto-completion
      better-defaults
-     emacs-lisp
-     python
-     (python :variables python-enable-yapf-format-on-save t)
-     latex
-     (latex :variables latex-build-command "LaTeX")
-     (latex :variables latex-enable-auto-fill t)
-     (latex :variables latex-enable-folding t)
-     git
-     ranger
+     semantic
+     ycmd
+     c-c++
+     cscope
      (ranger :variables ranger-show-preview t)
-     org
-     sql
-     shell
-     (shell :variables
-            shell-default-height 50
-            shell-default-position 'bottom)
-     (shell :variables shell-default-shell 'multi-term)
-     spell-checking
-     ;; syntax-checking
-     version-control
+     (c-c++ :variables
+              c-c++-default-mode-for-headers 'c++-mode)
+     (c-c++ :variables c-c++-enable-clang-support t)
+     emacs-lisp
      chinese
      (chinese :variables chinese-enable-youdao-dict t)
+     git
+     ;; markdown
+     org
+;    (org :variables
+;         org-enable-github-support t)))
+     ;; (shell :variables
+     ;;        shell-default-height 30
+     ;;        shell-default-position 'bottom)
+     ;spell-checking
+     ;gtd
+     syntax-checking
      java
      scala
+     python
      w3m
+     ;; version-control
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -78,6 +82,7 @@ values."
    ;; This variable has no effect if Emacs is launched with the parameter
    ;; `--insecure' which forces the value of this variable to nil.
    ;; (default t)
+
    dotspacemacs-elpa-https t
    ;; Maximum allowed time in seconds to contact an ELPA repository.
    dotspacemacs-elpa-timeout 5
@@ -111,12 +116,13 @@ values."
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(
-                         spacemacs-dark
+                         monokai
                          solarized-light
+                         spacemacs-dark
                          spacemacs-light
+                         solarized-light
                          solarized-dark
                          leuven
-                         monokai
                          zenburn)
    ;; If non nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
@@ -222,7 +228,7 @@ values."
    ;; If non nil line numbers are turned on in all `prog-mode' and `text-mode'
    ;; derivatives. If set to `relative', also turns on relative line numbers.
    ;; (default nil)
-   dotspacemacs-line-numbers nil
+   dotspacemacs-line-numbers t
    ;; If non-nil smartparens-strict-mode will be enabled in programming modes.
    ;; (default nil)
    dotspacemacs-smartparens-strict-mode nil
@@ -251,23 +257,62 @@ values."
 
 (defun dotspacemacs/user-init ()
   "Initialization function for user code.
-It is called immediately after `dotspacemacs/init', before layer configuration
-executes.
- This function is mostly useful for variables that need to be set
-before packages are loaded. If you are unsure, you should try in setting them in
-`dotspacemacs/user-config' first."
+It is called immediately after `dotspacemacs/init'.  You are free to put almost
+any user code here.  The exception is org related code, which should be placed
+in `dotspacemacs/user-config'."
   (setq python-fill-column 99)
-  (add-hook 'doc-view-mode-hook 'auto-revert-mode)
   )
 
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
 This function is called at the very end of Spacemacs initialization after
-layers configuration.
-This is the place where most of your configurations should be done. Unless it is
-explicitly specified that a variable should be set before a package is loaded,
-you should place your code here."
+layers configuration. You are free to put any user code."
+  (global-company-mode)
+  (setq w3m-home-page "https://www.google.com.hk/")
+  ;; W3M Home Page
+  (setq w3m-default-display-inline-images t)
+  (setq w3m-default-toggle-inline-images t)
+  ;; W3M default display images
+  (setq w3m-command-arguments '("-cookie" "-F"))
+  (setq w3m-use-cookies t)
+  ;; W3M use cookies
+  (setq browse-url-browser-function 'w3m-browse-url)
+  ;; Browse url function use w3m
+  (setq w3m-view-this-url-new-session-in-background t)
+  ;; W3M view url new session in background
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(org-capture-templates
+   (quote
+    (("ort/checkitem" "Org Repo Checklist Item" checkitem
+      (file+headline
+       (ort/todo-file)
+       "Checklist"))
+     ("ort/todo" "Org Repo Todo" entry
+      (file+headline
+       (ort/todo-file)
+       "Todos")
+      "* TODO  %?			%T
+ %i
+ Link: %l
+"))))
+ '(package-selected-packages
+   (quote
+    (toc-org smeargle pyvenv pytest pyenv-mode pip-requirements orgit org-repo-todo org-present org-pomodoro org-plus-contrib org-bullets noflet magit-gitflow hy-mode htmlize helm-pydoc helm-gitignore helm-flyspell helm-company helm-c-yasnippet gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger flycheck-pos-tip flycheck evil-magit ensime cython-mode company-statistics company-quickhelp company-anaconda company auto-yasnippet auto-dictionary anaconda-mode ac-ispell adaptive-wrap ws-butler window-numbering volatile-highlights vi-tilde-fringe spaceline smooth-scrolling restart-emacs rainbow-delimiters popwin persp-mode pcre2el paradox page-break-lines open-junk-file neotree move-text macrostep lorem-ipsum linum-relative leuven-theme info+ indent-guide ido-vertical-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido fill-column-indicator fancy-battery expand-region exec-path-from-shell evil-visualstar evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-jumper evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-args evil-anzu eval-sexp-fu elisp-slime-nav define-word clean-aindent-mode buffer-move bracketed-paste auto-highlight-symbol auto-compile aggressive-indent ace-window ace-link ace-jump-helm-line quelpa package-build use-package which-key bind-key bind-map evil spacemacs-theme)))
+ '(py-force-py-shell-name-p t)
+ '(py-shell-name "python2.7")
+ '(send-mail-function (quote mailclient-send-it)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
+ '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
