@@ -1,0 +1,3 @@
+[[http://www.kancloud.cn/kancloud/tmux/62468][tmux 介绍]]
++ prefix z :: 把当前 pane 最大化/恢复
++ prefix q :: tmux 会显示每个 pane 的序号，按这个序号就可以跳过去了（按慢了可不行，得在数字消失前按）。 
