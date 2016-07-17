@@ -93,12 +93,15 @@
 ;;     M-x jedi:install-server RET
 ;; Then open Python file.
 (setq which-key-allow-evil-operators t)
-(setq initial-frame-alist (quote ((fullscreen . maximized))))
 
 ;; 有道快捷键绑定
+
 (define-key global-map (kbd "C-c k") 'youdao-dictionary-search-at-point+)
 (define-key global-map (kbd "C-c s") 'youdao-dictionary-search-at-point)
 (define-key global-map (kbd "C-c i") 'youdao-dictionary-search-from-input)
+(spacemacs/set-leader-keys "ok" 'youdao-dictionary-search-at-point+)
+(spacemacs/set-leader-keys "os" 'youdao-dictionary-search-at-point)
+(spacemacs/set-leader-keys "oi" 'youdao-dictionary-search-from-input)
 
 ;; 原生快捷键
 (define-key evil-normal-state-map "\C-y" 'yank)
