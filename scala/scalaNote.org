@@ -1,7 +1,7 @@
-* 获取jvm file编码
+* 获取 jvm file 编码
 　　System.getProperty("file.encoding")
 * 基础
-** apply方法
+** apply 方法
    apply method is just a handy way of closing the gap between functions and objects in Scala.
 
    #+BEGIN_SRC scala
@@ -40,10 +40,10 @@
 ** scala 函数和方法的区别
    [[http://stackoverflow.com/questions/2529184/difference-between-method-and-function-in-scala][Difference between method and function in Scala]]
 *** 学术上
-   - Function Type :: 是(T1, ..., Tn) => U 的一种类型, 是标准库中trait FunctionN的一种简写. /匿名函数/ 和 /方法值/ 有函数类型， 并且函数类型能被用于 值， 变量和函数声明定义的一部分. 实际上， 它(指的是函数类型?)可以做为方法类型的一部分.
-   - Method Type :: 是一个 /非值类型/. 意味着方法类型没有值， 没有对象， 没有实例. 方法值实际上是函数类型. 方法类型由 *def* 声明， 除了它的body，所有关于def的都是方法类型.
-   - 值声明和定义 和 变量声明和定义 :: 包括类型和值， 都是通过 *val* 和 *var* 声明, 分别为 /函数类型/, /匿名函数/ 或者 /方法值/ .  在JVM中, 方法值倍Java方法的调用来实现.
-   - Function Declaration 函数声明 :: 包括类型和实体都是由 *def* 来声明. 类型部分是方法类型， 实体部分是表达式或者程序块. 它在JVM中也是通过Java调用方法来实现
+   - Function Type :: 是(T1, ..., Tn) => U 的一种类型, 是标准库中 trait FunctionN 的一种简写. /匿名函数/ 和 /方法值/ 有函数类型， 并且函数类型能被用于 值， 变量和函数声明定义的一部分. 实际上， 它(指的是函数类型?)可以做为方法类型的一部分.
+   - Method Type :: 是一个 /非值类型/. 意味着方法类型没有值， 没有对象， 没有实例. 方法值实际上是函数类型. 方法类型由 *def* 声明， 除了它的 body，所有关于 def 的都是方法类型.
+   - 值声明和定义 和 变量声明和定义 :: 包括类型和值， 都是通过 *val* 和 *var* 声明, 分别为 /函数类型/, /匿名函数/ 或者 /方法值/ .  在 JVM 中, 方法值被 Java 方法的调用来实现.
+   - Function Declaration 函数声明 :: 包括类型和实体都是由 *def* 来声明. 类型部分是方法类型， 实体部分是表达式或者程序块. 它在 JVM 中也是通过 Java 调用方法来实现
     最后， /匿名函数/ 和 /方法值/ 都是 /函数类型/. 区别的是方法值的被创建是通过函数调用，或者加 *_* 后缀(比如: m _)
 *** 应用上
 **** 一个大的不同是 *return* 的含义
@@ -54,7 +54,7 @@
               val f = () => { return "test" }
      #+END_SRC
      
-     在方法中定义的函数， 它的return值是 non-local
+     在方法中定义的函数， 它的 return 值是 non-local
      #+BEGIN_SRC scala
        scala> def f: String = {                 
             |    val g = () => { return "test" }
@@ -80,7 +80,6 @@
        res5: String = is this
      #+END_SRC
 
-*** 
 *** call-by-name 传名参数本质上是个方法
     [[http://stackoverflow.com/questions/4543228/whats-the-difference-between-and-unit/4545703#4545703][What's the difference between => , ()=>, and Unit=>]]
     传名参数实质是一个没有参数列表的方法。正是因此你才可以使用名字调用而不用添加()
@@ -104,7 +103,7 @@
       res21: List[Int] = List(-1273601135, 2004676878)
 
 
-        // 如果你在方法体部分缓存了传名参数（函数），那么你就缓存了值（因为x函数被调用了一次）
+        // 如果你在方法体部分缓存了传名参数（函数），那么你就缓存了值（因为 x 函数被调用了一次）
         scala> //把传名参数代表的函数缓存起来
 
         scala> def m1(x: => Int) ={val y=x;List(y,y)}
@@ -126,7 +125,7 @@
         res23: List[Int] = List(-1982925840, -933815401)
     #+END_SRC
 
-    传名参数在DSL(域领域语言)上比较游泳：
+    传名参数在 DSL(域领域语言)上比较游泳：
     #+BEGIN_SRC scala
       def measured(block: ⇒ Unit): Long = {
         val startTime = System.currentTimeMillis()
@@ -140,7 +139,7 @@
       }
     #+END_SRC
 
-** scala 执行shell命令
+** scala 执行 shell 命令
 
    #+BEGIN_SRC scala
      import scala.sys.process._

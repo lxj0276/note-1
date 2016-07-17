@@ -33,8 +33,7 @@ Typically, creating a connection object has time and resource overheads. Therefo
 #+END_SRC
 
 ** Accumulators and Broadcast Variables 
-Accumulators and Broadcast variables cannot be recovered from checkpoint in Spark Streaming.  If you enable checkpointing and use Accumulators or Broadcast variables as well, you’ll have to create lazily instantiated singleton instances for Accumulators and Broadcast variables so that they
-can be re-instantiated after the driver restarts on failure.
+Accumulators and Broadcast variables cannot be recovered from checkpoint in Spark Streaming.  If you enable checkpointing and use Accumulators or Broadcast variables as well, you’ll have to create lazily instantiated singleton instances for Accumulators and Broadcast variables so that they can be re-instantiated after the driver restarts on failure.
 ** DataFrame and SQL Operations 
 ** MLlib Operations 
 ** Caching / Persistence 
