@@ -25,6 +25,7 @@ values."
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
+     
      auto-completion
      better-defaults
      semantic
@@ -39,15 +40,23 @@ values."
      chinese
      (chinese :variables chinese-enable-youdao-dict t)
      git
-     ;; markdown
+     markdown
      org
-;    (org :variables
-;         org-enable-github-support t)))
-     ;; (shell :variables
-     ;;        shell-default-height 30
-     ;;        shell-default-position 'bottom)
+     ;;    (org :variables
+     ;;         org-enable-github-support t)))
+     shell
+     (shell :variables
+            shell-default-height 10
+            shell-default-shell 'term
+            shell-default-term-shell "/usr/bin/zsh"
+            shell-default-position 'right)
+
      ;spell-checking
      ;gtd
+     persp-mode
+     spacemacs-layouts
+     (spacemacs-layouts :variables layouts-enable-autosave nil
+                        layouts-autosave-delay 300)
      syntax-checking
      java
      scala

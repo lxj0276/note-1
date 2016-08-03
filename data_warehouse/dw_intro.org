@@ -5,7 +5,7 @@
 ** 功能
 主要功能仍是将组织透过资讯系统之联机事务处理(OLTP)经年累月所累积的大量资料，透
 过数据仓库理论所特有的资料储存架构，作一有系统的分析整理，以利各种分析方法如联
-机分析处理(OLAP)、数据挖掘(Data Mining)之进行，并进而支持如决策支持系统(DSS)、
+机分析处理(OLAP>>on line transaction processing)、数据挖掘(Data Mining)之进行，并进而支持如决策支持系统(DSS)、
 主管资讯系统(EIS)之创建，帮助决策者能快速有效的自大量资料中，分析出有价值的资
 讯，以利决策拟定及快速回应外在环境变动，帮助建构商业智能(BI)。
 ** 组成
@@ -19,3 +19,9 @@
     操纵平台
     元数据
     管理平台
+    
+
+* The High-level Distinction Between Databases and Data Warehouses
+ A database designed to handle transactions isn’t designed to handle analytics. It
+isn’t structured to do analytics well. A data warehouse, on the other
+hand, is structured to make analytics fast and easy.
