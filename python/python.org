@@ -108,3 +108,38 @@ python -i -m pdb dir/src.py
 * python 设计模式
 ** python 实现单例
 [[./codesPy/singleton.py]]
+* python 正则表达式
+** 正则捕获替换
+*** 直接替换
+#+BEGIN_SRC python
+  import re
+  msg = 'telephone string, mobile int, c double'
+  re.sub(r'(string|int|double)', '', msg)
+
+#  2
+re.sub(r'def\s+([a-zA-Z_][a-zA-Z_0-9]*)\s*\(\s*\):',
+       r'static PyObject*\npy_\1(void)\n{',
+       'def myfunc():')
+'static PyObject*\npy_myfunc(void)\n{'
+#+END_SRC
+*** 函数替换
+
+#+BEGIN_SRC python
+  import re
+  def encode(match):
+      return "{}translate({}, '1234567890X', 'Zb5c7J9d3Ck'){}".format(match.group(1),
+                                                                      match.group(2),
+                                                                      match.group(3))
+  msg = 'telephone string, mobile int, c double'
+
+  re.sub('([, ])(Mobile)([, ])', encode, msg)
+
+# 2
+def dashrepl(matchobj):
+    if matchobj.group(0) == '-': return ' '
+    else: return '-'
+re.sub('-{1,2}', dashrepl, 'pro----gram-files')
+#  'pro--gram files'
+re.sub(r'\sAND\s', ' & ', 'Baked Beans And Spam', flags=re.IGNORECASE)
+'Baked Beans & Spam'
+#+END_SRC
