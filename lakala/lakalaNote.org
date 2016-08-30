@@ -1,6 +1,6 @@
 yang window pc pwd: 123
 
-root: lakala123321
+root: lakala@123321
 
 wifi: staff -> abcdeedcba
 
@@ -14,3 +14,4 @@ wifi: staff -> abcdeedcba
 
 
 d download youdao
+note
