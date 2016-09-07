@@ -295,3 +295,7 @@ You can delete a surrounding with ds<textobject>.
 1. set ic
 2. /search/c
 
+* windows 字体
+(dolist (charset '(kana han cjk-misc bopomofo))
+  (set-fontset-font (frame-parameter nil 'font) charset
+                    (font-spec :family "微软雅黑" :size 11)))
