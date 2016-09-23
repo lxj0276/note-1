@@ -292,3 +292,4 @@ xmodmap ~/.Xmodmap
 xdg-open : 双击打开
 
 display : 查看图片
+

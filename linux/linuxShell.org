@@ -113,3 +113,9 @@ length=${#array_name[@]}
 length=${#array_name[*]}
 # 取得数组单个元素的长度
 lengthn=${#array_name[n]}
+* split 切割文件
+5000 行切割，制定前缀，后边随机六位数字
+
+split -l 5000 file.bcp -d -a 6 file
+* 批量修改文件名
+find . -name "file*" | xargs -i -t mv {} {}.bak

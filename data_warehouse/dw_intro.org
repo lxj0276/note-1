@@ -1,5 +1,5 @@
 #+STARTUP: indent
-* DW或者DWH
+* DW 或者 DWH
 ** 定义
 数据仓库（Data Warehouse）是一个面向主题的（Subject Oriented）、集成的（Integrated）、相对稳定的（Non-Volatile）、反映历史变化（Time Variant）的数据集合，用于支持管理决策(Decision Making Support)。
 ** 功能
@@ -13,7 +13,7 @@
     信息发布系统
     操作型数据和外界数据
     数据集市
-    报表,查询, EIS工具
+    报表,查询, EIS 工具
     OLAP 工具
     数据挖掘工具
     操纵平台
@@ -22,6 +22,4 @@
     
 
 * The High-level Distinction Between Databases and Data Warehouses
- A database designed to handle transactions isn’t designed to handle analytics. It
-isn’t structured to do analytics well. A data warehouse, on the other
-hand, is structured to make analytics fast and easy.
+ A database designed to handle transactions isn’t designed to handle analytics. It isn’t structured to do analytics well. A data warehouse, on the other hand, is structured to make analytics fast and easy.
