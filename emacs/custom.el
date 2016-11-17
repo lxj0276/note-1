@@ -100,7 +100,7 @@
 (define-key global-map (kbd "C-c s") 'youdao-dictionary-search-at-point)
 (define-key global-map (kbd "C-c i") 'youdao-dictionary-search-from-input)
 (spacemacs/set-leader-keys "ok" 'youdao-dictionary-search-at-point+)
-(spacemacs/set-leader-keys "os" 'youdao-dictionary-search-at-point)
+(spacemacs/set-leader-keys "oy" 'youdao-dictionary-search-at-point)
 (spacemacs/set-leader-keys "oi" 'youdao-dictionary-search-from-input)
 
 ;; 原生快捷键
@@ -108,6 +108,7 @@
 (define-key evil-insert-state-map "\C-y" 'yank)
 (define-key evil-visual-state-map "\C-y" 'yank)
 (define-key evil-insert-state-map "\C-e" 'end-of-line)
+(define-key evil-normal-state-map "\C-e" 'end-of-line)
 (define-key evil-insert-state-map "\C-a" 'move-beginning-of-line)
 ;; (define-key evil-insert-state-map (kbd "C-d b") 'backward-delete-char)
 ;; (define-key evil-insert-state-map (kbd "C-d f") 'backward-delete-char)
@@ -119,23 +120,20 @@
 (define-key global-map (kbd "C-+") 'text-scale-increase)
 (define-key global-map (kbd "C--") 'text-scale-decrease)
 
+(spacemacs/set-leader-keys "oll" 'spacemacs//layouts-persp-load-state-from-file-L)
+(spacemacs/set-leader-keys "olk" 'kay/load-my-layout)
+(spacemacs/set-leader-keys "osk" 'kay/save-my-layout)
+(spacemacs/set-leader-keys "ols" 'spacemacs//layouts-persp-save-to-file-by-names-S)
+(defun kay/load-my-layout ()
+  (interactive)
+  (persp-load-state-from-file (concat persp-save-dir "kay")))
+(defun kay/save-my-layout ()
+  (interactive)
+  (persp-save-state-to-file (concat persp-save-dir "kay")))
+
 (custom-set-variables
  '(py-force-py-shell-name-p t)
  '(py-shell-name "python2.7"))
-
-;; emacs中的中文输入法
-(add-to-list 'load-path "~/.emacs.d/site-lisp/eim")
-(autoload 'eim-use-package "eim" "Another emacs input method")
-;; Tooltip 暂时还不好用
-(setq eim-use-tooltip nil)
-
-(register-input-method
- "eim-py" "euc-cn" 'eim-use-package
- "拼音" "汉字拼音输入法" "py.txt")
-
-;; 用 ; 暂时输入英文
-(require 'eim-extra)
-(global-set-key ";" 'eim-insert-ascii)
 
 ;; For GTD
 (setq org-todo-keywords

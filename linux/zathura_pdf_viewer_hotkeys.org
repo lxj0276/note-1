@@ -83,3 +83,5 @@ DEFAULT SETTINGS
        Tab | Shift + Tab
               Tab completion
        ^w     Delete last word
+* 夜晚模式
+set recolor true

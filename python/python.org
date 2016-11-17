@@ -108,3 +108,8 @@ python -i -m pdb dir/src.py
 * python 设计模式
 ** python 实现单例
 [[./codesPy/singleton.py]]
+* 2to3  python
+To translate an entire project from one directory tree to another use:
+#+BEGIN_SRC sh
+  $ 2to3 --output-dir=python3-version/mycode -W -n python2-version/mycode
+#+END_SRC

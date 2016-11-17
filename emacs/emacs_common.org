@@ -281,6 +281,48 @@ flush-lines 命令
   - 公式 ::
  把公式用\(\)包起来，　ｅ.g.: \(E = m ^ 2\) 
 * emacs 的 evil surround 修改包围的字符串
+** examples
+Press cs"' inside
+
+"Hello world!"
+to change it to
+
+'Hello world!'
+Now press cs'<q> to change it to
+
+<q>Hello world!</q>
+To go full circle, press cst" to get
+
+"Hello world!"
+To remove the delimiters entirely, press ds".
+
+Hello world!
+Now with the cursor on "Hello", press ysiw] (iw is a text object).
+
+[Hello] world!
+Let's make that braces and add some space (use } instead of { for no space): cs]{
+
+{ Hello } world!
+Now wrap the entire line in parentheses with yssb or yss).
+
+({ Hello } world!)
+Revert to the original text: ds{ds)
+
+Hello world!
+Emphasize hello: ysiw<em>
+
+<em>Hello</em> world!
+Finally, let's try out visual mode. Press a capital V (for linewise visual mode) followed by S<p class="important">.
+
+<p class="important">
+  <em>Hello</em> world!
+</p>
+Suppose you want to call a function on your visual selection or a text object. You can simply press f instead of the aforementioned keys and are then prompted for a functionname in the minibuffer, like with the tags. So with:
+
+"Hello world!"
+... after selecting the string, then pressing Sf, entering print and pressing return you would get
+
+print("Hello world!")
 ** Add surrounding
 
 You can surround in visual-state with S<textobject> or gS<textobject>. or in normal-state with ys<textobject> or yS<textobject>.

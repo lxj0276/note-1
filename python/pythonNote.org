@@ -1,0 +1,8 @@
+* python 高手之路
+
+1. 当需要暴露 api 给外界时，最好使用 http,并且是无状态的， 比如 REST 风格的架构。容易实现，扩展，部署，理解。
+2. 当内部暴露和使用 api 的时候，http 可能并非最好的协议。kombu 提供了一种基于很多后端的 rpc 机制。
+3. ORM，PDBMS：隔离 ORM 层， 应该抽象出一层用来输出数据操作的函数和方法， 只在这一层中使用 ORM， 方便替换 ORM 和优化。
+** python 标准库
+*** set  frozenset
+There are currently two built-in set types, set and frozenset. The set type is mutable — the contents can be changed using methods like add() and remove(). Since it is mutable, it has no hash value and cannot be used as either a dictionary key or as an element of another set. The frozenset type is immutable and hashable — its contents cannot be altered after it is created; it can therefore be used as a dictionary key or as an element of another set.

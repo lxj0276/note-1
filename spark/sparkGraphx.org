@@ -1,0 +1,2 @@
+[[http://www.cnblogs.com/shishanyuan/p/4747793.html][Spark 入门实战系列--9.Spark 图计算 GraphX 介绍及实例]]
+[[http://www.csdn.net/article/2014-08-07/2821097][快刀初试：Spark GraphX 在淘宝的实践]]
