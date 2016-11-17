@@ -1,3 +1,28 @@
+* grep 查询
+[[http://man.linuxde.net/grep][grep 命令]]
+** find 模糊查找文件名
+find . -name ***
+** grep 递归搜索文件
+*** 在多级目录中对文本进行递归搜索：
+grep "text" . -r -n
+# .表示当前目录。
+
+忽略匹配样式中的字符大小写：
+echo "hello world" | grep -i "HELLO"
+hello
+
+*** 在 grep 搜索结果中包括或者排除指定文件：
+#只在目录中所有的.php 和.html 文件中递归搜索字符"main()"
+grep "main()" . -r --include *.{php,html}
+
+#在搜索结果中排除所有 README 文件
+grep "main()" . -r --exclude "README"
+
+#在搜索结果中排除 filelist 文件列表里的文件
+grep "main()" . -r --exclude-from filelist
+
+grep "text" . -r -n
+# .表示当前目录。
 * if 判断 
 ** 条件表达式
 *** 文件表达式
@@ -8,7 +33,7 @@ if [ -r file  ]    如果文件存在且可读
 if [ -w file  ]    如果文件存在且可写
 if [ -x file  ]    如果文件存在且可执行   
 *** 整数变量表达式
-if [ int1 -eq int2 ]    如果int1等于int2   
+if [ int1 -eq int2 ]    如果 int1 等于 int2   
 if [ int1 -ne int2 ]    如果不等于    
 if [ int1 -ge int2 ]       如果>=
 if [ int1 -gt int2 ]       如果>
@@ -16,33 +41,81 @@ if [ int1 -le int2 ]       如果<=
 if [ int1 -lt int2 ]       如果<
    
 *** 字符串变量表达式
-If  [ $a = $b ]                 如果string1等于string2
+If  [ $a = $b ]                 如果 string1 等于 string2
                                 字符串允许使用赋值号做等号
-if  [ $string1 !=  $string2 ]   如果string1不等于string2       
-if  [ -n $string  ]             如果string 非空(非0），返回0(true)  
-if  [ -z $string  ]             如果string 为空
-if  [ $sting ]                  如果string 非空，返回0 (和-n类似)    
+if  [ $string1 !=  $string2 ]   如果 string1 不等于 string2       
+if  [ -n $string  ]             如果 string 非空(非 0），返回 0(true)  
+if  [ -z $string  ]             如果 string 为空
+if  [ $sting ]                  如果 string 非空，返回 0 (和-n 类似)
 
-* grep 查询
-[[http://man.linuxde.net/grep][grep命令]]
-** grep递归搜索文件
-*** 在多级目录中对文本进行递归搜索：
-grep "text" . -r -n
-# .表示当前目录。
+* 数组操作
+** 定义数组
 
-忽略匹配样式中的字符大小写：
-echo "hello world" | grep -i "HELLO"
-hello
+在 Shell 中，用括号来表示数组，数组元素用“空格”符号分割开。定义数组的一般形式为：
+    array_name=(value1 ... valuen)
+例如：
+array_name=(value0 value1 value2 value3)
+或者
+array_name=(
+value0
+value1
+value2
+value3
+)
 
-*** 在grep搜索结果中包括或者排除指定文件：
-#只在目录中所有的.php和.html文件中递归搜索字符"main()"
-grep "main()" . -r --include *.{php,html}
+还可以单独定义数组的各个分量：
+array_name[0]=value0
+array_name[1]=value1
+array_name[2]=value2
+可以不使用连续的下标，而且下标的范围没有限制。
+** 读取数组
 
-#在搜索结果中排除所有README文件
-grep "main()" . -r --exclude "README"
+读取数组元素值的一般格式是：
+    ${array_name[index]}
+例如：
+valuen=${array_name[2]}
+举个例子：
+#!/bin/sh
+NAME[0]="Zara"
+NAME[1]="Qadir"
+NAME[2]="Mahnaz"
+NAME[3]="Ayan"
+NAME[4]="Daisy"
+echo "First Index: ${NAME[0]}"
+echo "Second Index: ${NAME[1]}"
+运行脚本，输出：
+$./test.sh
+First Index: Zara
+Second Index: Qadir
+** 使用@ 或 * 可以获取数组中的所有元素，例如：
+${array_name[*]}
+${array_name[@]}
+举个例子：
+#!/bin/sh
+NAME[0]="Zara"
+NAME[1]="Qadir"
+NAME[2]="Mahnaz"
+NAME[3]="Ayan"
+NAME[4]="Daisy"
+echo "First Method: ${NAME[*]}"
+echo "Second Method: ${NAME[@]}"
+运行脚本，输出：
+$./test.sh
+First Method: Zara Qadir Mahnaz Ayan Daisy
+Second Method: Zara Qadir Mahnaz Ayan Daisy
+获取数组的长度
 
-#在搜索结果中排除filelist文件列表里的文件
-grep "main()" . -r --exclude-from filelist
+**  #获取数组长度的方法与获取字符串长度的方法相同，例如：
+纯文本复制
+# 取得数组元素的个数
+length=${#array_name[@]}
+# 或者
+length=${#array_name[*]}
+# 取得数组单个元素的长度
+lengthn=${#array_name[n]}
+* split 切割文件
+5000 行切割，制定前缀，后边随机六位数字
 
-grep "text" . -r -n
-# .表示当前目录。
+split -l 5000 file.bcp -d -a 6 file
+* 批量修改文件名
+find . -name "file*" | xargs -i -t mv {} {}.bak

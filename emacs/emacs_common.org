@@ -333,4 +333,11 @@ You can change a surrounding with cs<old-textobject><new-textobject>.
 
 You can delete a surrounding with ds<textobject>.
 * sapcemace 操作
+* vim 搜索忽略大小写
+1. set ic
+2. /search/c
 
+* windows 字体
+(dolist (charset '(kana han cjk-misc bopomofo))
+  (set-fontset-font (frame-parameter nil 'font) charset
+                    (font-spec :family "微软雅黑" :size 11)))
