@@ -20,7 +20,8 @@ edit  -> preferences -> Editor -> Auto-completion
 2. 添加每行 80 线
  Editor -> Line Wrapping -> Edge Markers -> mode -> Border
 
-3.
+* keymaps
+打开项目文件：ctrl+shift+o
 
 * make it ok
 1. 填写 license id 到 wing ide
@@ -125,7 +126,7 @@ edit  -> preferences -> Editor -> Auto-completion
 
      LicenseID='CN123-12345-12345-12345'
      #Copy the Request Code from the dialog
-     RequestCode='RW52L-KLDCW-F76JL-G2KC5'
+     RequestCode='RL51V-5XK2W-VYKYP-G2YK8'
      hasher = sha.new()
      hasher.update(RequestCode)
      hasher.update(LicenseID)

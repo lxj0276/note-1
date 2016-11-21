@@ -106,6 +106,8 @@ Second Method: Zara Qadir Mahnaz Ayan Daisy
 获取数组的长度
 
 **  #获取数组长度的方法与获取字符串长度的方法相同，例如：
+
+
 纯文本复制
 # 取得数组元素的个数
 length=${#array_name[@]}
@@ -113,6 +115,17 @@ length=${#array_name[@]}
 length=${#array_name[*]}
 # 取得数组单个元素的长度
 lengthn=${#array_name[n]}
+** 判断是否满足某些模式
+
+   #+BEGIN_SRC sh
+     var=45-435-345-345
+     if [ $(echo $var | egrep '^[0-9|-]*$') ]; then
+         echo "yes"
+     else
+         echo "no"
+     fi
+   #+END_SRC
+
 * split 切割文件
 5000 行切割，制定前缀，后边随机六位数字
 
