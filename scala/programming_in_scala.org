@@ -1,26 +1,26 @@
 #+OPTIONS: ^:nil
 
-[[http://www.scala-lang.org][scala主网站]] 
-[[http://booksites.artima.com/programming_in_scala][本书p_ i_s]] :也可以下载到本书的源码
+[[http://www.scala-lang.org][scala 主网站]] 
+[[http://booksites.artima.com/programming_in_scala][本书 p_ i_s]] :也可以下载到本书的源码
 [[http://www.artima.com/forums/forum.jsp?forum=282][本书论坛]]
 [[http://booksites.artima.com/programming_in_scala/errata][本书勘误表]]
 * 可伸展的语言 
-  给出了scala的设计，和它后面的理由，历史概要。
-  了解scala的实际思想和背后的原因。
+  给出了 scala 的设计，和它后面的理由，历史概要。
+  了解 scala 的实际思想和背后的原因。
   是面向对象和函数式编程的组合。
 ** 增加新的类型
 ** 增加新的控制结构
-   可以用基于actor的并发编程API来阐明：消息的发送和接受。
+   可以用基于 actor 的并发编程 API 来阐明：消息的发送和接受。
 ** 函数式编程
    函数式编程有两种指导理念：
    1. 函数是头等值
    2. 程序的操作应该把输入值映射为输出值而不是就地修改数据。即方法不应该有副作用。
       
-* scala的入门初探
-  如何使用scala完成若干种基本变成任务，而不牵涉过多关于如何工作的细节。目的：着手敲击执行scala代码。
+* scala 的入门初探
+  如何使用 scala 完成若干种基本变成任务，而不牵涉过多关于如何工作的细节。目的：着手敲击执行 scala 代码。
 ** 变量定义
-   scala有两种变量：val和var.
-   val类似与java中的final变量。var类似与非final变量。
+   scala 有两种变量：val 和 var.
+   val 类似与 java 中的 final 变量。var 类似与非 final 变量。
 ** 函数定义
    函数的每个参数必须带有前缀冒号的类型标注。
    当函数是递归的时候，函数结果类型必须明确的说明。
@@ -32,7 +32,7 @@
 
     或者
     def max2(x: Int, y: Int) = if (x > y) x else y
-** 用foreach和for做枚举
+** 用 foreach 和 for 做枚举
    字面量指直接写在代码里的常量值。
    args.foreach((arg: String) => println(arg))
    或 args.foreach(arg => println(arg))
@@ -43,16 +43,16 @@
    1. 括号及命名参数列表 (x: Int, y: Int)
    2. 右箭头 =>
    3. 函数体 x + y
-* scala的入门再探 next steps in scala
-  更快上手scala，能够开始在简单的脚本任务中使用scala。
+* scala 的入门再探 next steps in scala
+  更快上手 scala，能够开始在简单的脚本任务中使用 scala。
 
-  scala鼓励使用函数式风格。
+  scala 鼓励使用函数式风格。
   两种风格在代码上的区别：
-  + 如果代码包含任何var变量，它可能是指令式风格
-  + 如果代码不包含任何val变量，它可能是函数式风格
-** scala没有重载操作符
+  + 如果代码包含任何 var 变量，它可能是指令式风格
+  + 如果代码不包含任何 var 变量，它可能是函数式风格
+** scala 没有重载操作符
    +, -, *, /可以被用作方法名。
-   1 + 2对应的调用语句是：(1).+(2)
+   1 + 2 对应的调用语句是：(1).+(2)
 ** array
   三个形式定义数组：
 1. 
@@ -73,7 +73,7 @@
     val numNames2 = Array.apply("zero", "one", "two")
     #+END_SRC  
 ** list
-   在scala中::是右操作数：1 :: twoThree对一ing的调用语句为twoThree.::(1)
+   在 scala 中::是右操作数：1 :: twoThree 对一 ing 的调用语句为 twoThree.::(1)
 
    #+BEGIN_SRC scala
      val twoThree = List(2, 3)
@@ -83,10 +83,10 @@
      >> List(1,2,3)
    #+END_SRC
 
-list有可变和不可变的
+list 有可变和不可变的
 
-** tuples元组
-   list只能存储单一的一种类型，tuple可以存储不同的类型。
+** tuples 元组
+   list 只能存储单一的一种类型，tuple 可以存储不同的类型。
    可变不可变。
 
     #+BEGIN_SRC scala
@@ -156,10 +156,10 @@ list有可变和不可变的
 #+END_SRC
 
 * 类和对象 classes and objects 
-  描述面向对象语言的基本建设模块和如何编译运行scala程序教程开始有深度的覆盖scala语言。
+  描述面向对象语言的基本建设模块和如何编译运行 scala 程序教程开始有深度的覆盖 scala 语言。
 
 ** Classes, fields, and methods
-   scala类中属性，方法默认访问级别是public
+   scala 类中属性，方法默认访问级别是 public
 
    #+BEGIN_SRC scala
     class ChecksumAccumulator {
@@ -173,7 +173,7 @@ list有可变和不可变的
     }
    #+END_SRC
 
-   无论何时，当一个函数体前的等号去掉的时候，它的返回类型将被定义为Unit. scala编译器可以把任何类型转换为Unit.
+   无论何时，当一个函数体前的等号去掉的时候，它的返回类型将被定义为 Unit. scala 编译器可以把任何类型转换为 Unit.
    #+BEGIN_SRC scala
      def add(b: Byte): Unit = sum += b
      和
@@ -186,7 +186,7 @@ list有可变和不可变的
      f: ()Unit
    #+END_SRC
 
-   当代码要在多行时可以用()扩起来，也可以把符号放在行尾，scala通常的风格是把操作符放在行尾而不是行首。
+   当代码要在多行时可以用()扩起来，也可以把符号放在行尾，scala 通常的风格是把操作符放在行尾而不是行首。
 
    #+BEGIN_SRC scala
      (x
@@ -200,19 +200,19 @@ list有可变和不可变的
    #+END_SRC
 
 ** singleton object
-   scala没有静态成员。
-   scala定义单例类跟定义类的语法相似，只是关键字改为object \\
+   scala 没有静态成员。
+   scala 定义单例类跟定义类的语法相似，只是关键字改为 object \\
 
-   当单例对象和某个类共享同一个名字的时候，这个单例对象叫做类的companion object.
-   必须把类和类的companion object 定义在同一个源文件中。这个源文件称为这个单例对象的companion class 。 \\
+   当单例对象和某个类共享同一个名字的时候，这个单例对象叫做类的 companion object.
+   必须把类和类的 companion object 定义在同一个源文件中。这个源文件称为这个单例对象的 companion class。 \\
 
-   可以把单例对象当作是java中可能会用到的静态方法工具类。可以用类似的方法调用。
-   类和单例对象间的差别，单例对象不带参数，而类可以。因为单例对象不可new。
+   可以把单例对象当作是 java 中可能会用到的静态方法工具类。可以用类似的方法调用。
+   类和单例对象间的差别，单例对象不带参数，而类可以。因为单例对象不可 new。
    单例对象在第一次被访问的时候才初始化。
 
 ** scala application 的 main 方法
 
-   scala的每个源文件都隐含了对包java.lang，包scala以及单例对象Predef的成员引用。
+   scala 的每个源文件都隐含了对包 java.lang，包 scala 以及单例对象 Predef 的成员引用。
 
    #+BEGIN_SRC scala
     import ChecksumAccumulator.calculate
@@ -225,20 +225,20 @@ list有可变和不可变的
     }
    #+END_SRC
 
-   编译scala源文件可以用两种方式：
+   编译 scala 源文件可以用两种方式：
    1. scalac
       scalac demo.scala demo2.scala
       每次都慢。
    2. fsc
       fsc  demo.scala demo2.scala
-      fsc会起一个后台进程，第一次慢，以后就快了。fsc -shutdown
+      fsc 会起一个后台进程，第一次慢，以后就快了。fsc -shutdown
    
 ** application 特质（trait）
 
-   特质scala.Application
-   首先在单例对象名后面加上 extends Application.然后可以不用写main方法，直接把要执行的代码当在单例对象的花括号之间。
+   特质 scala.Application
+   首先在单例对象名后面加上 extends Application.然后可以不用写 main 方法，直接把要执行的代码当在单例对象的花括号之间。
 
-   trait 不能访问命令行参数，只有线程相对简单以及是单线程的情况下才可集成Application特质。
+   trait 不能访问命令行参数，只有线程相对简单以及是单线程的情况下才可集成 Application 特质。
 
    #+BEGIN_SRC scala
      import ChecksumAccumulator.calculate
@@ -254,7 +254,7 @@ list有可变和不可变的
   基本类型，字面量，可执行的操作，优先级和关联性是如何工作的，副包装器。
   
 ** 基本类型
-   除了String归于java.lang包，其余都是包scala的成员。
+   除了 String 归于 java.lang 包，其余都是包 scala 的成员。
 
     *Byte* 8-bit signed two’s complement integer (-2 7 to 2 7 - 1, inclusive)
     *Short* 16-bit signed two’s complement integer (-2 15 to 2 15 - 1, inclusive)
@@ -268,11 +268,11 @@ list有可变和不可变的
 
 ** 字面量（literal)
    基本类型都可以写成字面量。字面量就是直接写在代码里的常量值。
-   scala的原字符串和符号字面量：
-   + scala为原始字符串引入了一种特殊的语法：三个引号(""")作为开始和结束，类似python中。
+   scala 的原字符串和符号字面量：
+   + scala 为原始字符串引入了一种特殊的语法：三个引号(""")作为开始和结束，类似 python 中。
    + 符号字面量被写成 '<标识符>
 
-     这里的标识符可以是任何字母或数字的标识符。这种字面量被映射成预定义类scala.Symbol实例。
+     这里的标识符可以是任何字母或数字的标识符。这种字面量被映射成预定义类 scala.Symbol 实例。
      符号字面量除了显示名字之外，什么都不能做。
 
         #+BEGIN_SRC scala
@@ -319,10 +319,10 @@ list有可变和不可变的
 ** 对象相等性
    比较两个对象是否相等，可以用==，或者！=
 
-   + scala的==和java中的区别 ::
-     java中对于引用类型，==比较引用相等性，scala的==比较值的相等性。
-     scala比较引用相等性的机制为eq,ne.
-     scala如何编写好的equals方法。
+   + scala 的==和 java 中的区别 ::
+     java 中对于引用类型，==比较引用相等性，scala 的==比较值的相等性。
+     scala 比较引用相等性的机制为 eq,ne.
+     scala 如何编写好的 equals 方法。
 
 * 函数式对象
   面向对象的更深层次，使用函数式（即不可变）有理数作为例子。
@@ -335,23 +335,23 @@ list有可变和不可变的
   + 重载
   + 自引用 :: this
   + 辅助构造器 :: 
-    主构造器是类的唯一入口点。scala中的每个辅助构造器的地一个动作都是调用同类的别的构造器，so辅助构造器都是以 this(...) 形式开头，最后终结于对主构造器的调用。
-  + scala中的constant :: Pi等的常量。scala的常量习惯写法为第一个字母必须大写，驼峰式风格。
+    主构造器是类的唯一入口点。scala 中的每个辅助构造器的地一个动作都是调用同类的别的构造器，so 辅助构造器都是以 this(...) 形式开头，最后终结于对主构造器的调用。
+  + scala 中的 constant :: Pi 等的常量。scala 的常量习惯写法为第一个字母必须大写，驼峰式风格。
   + 隐式转换 :: 
-    当把下一行加入到解释器中时表示将int隐式转换为Rational对象：
+    当把下一行加入到解释器中时表示将 int 隐式转换为 Rational 对象：
     implicit def intToRational(x: Int) = new Rational(x);
     如果要让隐式转换起作用，需要定义在作用范围之内。
 
-  scala把类内部任何即不是字段也不是方法定义的代码编译至主构造器中。
+  scala 把类内部任何即不是字段也不是方法定义的代码编译至主构造器中。
   不可变对象，必须确保对象创建时数据的有效性。先决条件判断的两种方式：
-  + 使用require方法 :: 
-    方法带一个布尔型参数，如果值为false，require将抛出IllegalArgumentException阻止对象被构造
+  + 使用 require 方法 :: 
+    方法带一个布尔型参数，如果值为 false，require 将抛出 IllegalArgumentException 阻止对象被构造
  
   操作符名称来创建方法并定义隐式转换能帮助设计出让客户代码更简洁和易于理解的库。如果无技巧的使用，也会让客户代码变得难以阅读和理解。
   代码要可读，易懂，简洁。
 
-  字母数字标示符java和scala不相同的地方在于常量的定义。java使用全大写下划线分割，scala只要求第一个字母必须大写（然后驼峰规则最好）。
-  例如： MAX_VALUE， 在scala 中MaxValue
+  字母数字标示符 java 和 scala 不相同的地方在于常量的定义。java 使用全大写下划线分割，scala 只要求第一个字母必须大写（然后驼峰规则最好）。
+  例如：MAX_VALUE， 在 scala 中 MaxValue
   #+BEGIN_SRC scala
     class Rational(n: Int, d: Int) {
         require(d != 0)
@@ -421,10 +421,10 @@ list有可变和不可变的
   #+END_SRC
 
 * 内建控制结构
-  if,while,for,try,match及函数调用。
+  if,while,for,try,match 及函数调用。
 ** if
-   使用val，能让代码即容易阅读又容易重构。
-   val的好处：
+   使用 val，能让代码即容易阅读又容易重构。
+   val 的好处：
    + 代码变量不变 :: 节省审查变量作用域的所有代码，以及检查它是否改变的工作。
    + 支持等效推论（equational reasoning) :: 无论何时都可以用表达式代替变量名。
 
@@ -440,12 +440,12 @@ list有可变和不可变的
     #+END_SRC
 
 ** while
-   通常情况下，要质疑对wile循环的使用，如果质疑对var的使用那样。
-   while循环不产生值，通常被纯函数式语言所舍弃，为了让程序发挥作用，while循环通常不是更新var就是执行I/O。
+   通常情况下，要质疑对 wile 循环的使用，如果质疑对 var 的使用那样。
+   while 循环不产生值，通常被纯函数式语言所舍弃，为了让程序发挥作用，while 循环通常不是更新 var 就是执行 I/O。
    如果用函数式风格编写，一般要用递归实现。
 
-   递归的实现：默认的最大公约数函数gcd loop使用了var和while循环。
-   下边的采用了递归而不需要while和var.
+   递归的实现：默认的最大公约数函数 gcd loop 使用了 var 和 while 循环。
+   下边的采用了递归而不需要 while 和 var.
 
    #+BEGIN_SRC scala
       def gcd(x: Long, y: Long): Long =  //返回最大公约数
@@ -454,7 +454,7 @@ list有可变和不可变的
 
 ** for
    可以用来枚举集合类。
-   可以在for中过滤和判断。
+   可以在 for 中过滤和判断。
   
    #+BEGIN_SRC scala
      val filesHere = (new java.io.File("/home/kay")).listFiles
@@ -482,15 +482,15 @@ list有可变和不可变的
          file <- filesHere
          if file.getName.endsWith(".scala");
          line <- fileLines(file)
-         trimmed = line.trim //把结果绑定到变量上，绑定的变量被当作val引入和使用，但不用带val关键字
+         trimmed = line.trim //把结果绑定到变量上，绑定的变量被当作 val 引入和使用，但不用带 val 关键字
          if trimmed.matchs(pattern)
        ) println(file + ": " + trimmed)
 
      grep(".*gcd.*")
    #+END_SRC
 
-   用yield 制造新集合: 只要在for表达式之前加上关键字yield.
-   语法： for {子句} yield {循环体}
+   用 yield 制造新集合: 只要在 for 表达式之前加上关键字 yield.
+   语法：for {子句} yield {循环体}
 
    #+BEGIN_SRC scala
      def scalaFiles =
@@ -501,7 +501,7 @@ list有可变和不可变的
    #+END_SRC
 
 ** try
-   scala中try-catch-finally也产生值。由finally子句计算得到的值，即使有也会被抛弃，finally之用于关闭文件等的清理工作。
+   scala 中 try-catch-finally 也产生值。由 finally 子句计算得到的值，即使有也会被抛弃，finally 之用于关闭文件等的清理工作。
 
    #+BEGIN_SRC scala
       import java.net.URL
@@ -516,11 +516,11 @@ list有可变和不可变的
          }
    #+END_SRC
 
-** match表达式
-   类似于switch语句。
-   基本上match表达式可以用认识的模式（match）做选择。
-   在java中case语句只能是整数类型和枚举常量。在scala中匹配表达式可以是任何类型的常量，都能当初scala里做比较用的case.
-   scala中break是隐含的。并且mactch表达式也可以产生值。
+** match 表达式
+   类似于 switch 语句。
+   基本上 match 表达式可以用认识的模式（match）做选择。
+   在 java 中 case 语句只能是整数类型和枚举常量。在 scala 中匹配表达式可以是任何类型的常量，都能当初 scala 里做比较用的 case.
+   scala 中 break 是隐含的。并且 mactch 表达式也可以产生值。
 
    #+BEGIN_SRC scala
      val firstArg = if (!args.isEmpty) args(0) else ""
@@ -536,11 +536,11 @@ list有可变和不可变的
        println(friend)
    #+END_SRC
 
-** 不再使用break和continue
-   用if代替continue, 用布尔变量代替每个break是最简单的形式; 也可以把循环重写为递归函数(可以省略var变量)。
+** 不再使用 break 和 continue
+   用 if 代替 continue, 用布尔变量代替每个 break 是最简单的形式; 也可以把循环重写为递归函数(可以省略 var 变量)。
 
    #+BEGIN_SRC scala
-       // java的版本
+       // java 的版本
        int i = 0;                // This is Java
        boolean foundIt = false;
        while (i < args.length) {
@@ -555,7 +555,7 @@ list有可变和不可变的
          i = i + 1;
        }
 
-       //用if和布尔判断代替continue和break
+       //用 if 和布尔判断代替 continue 和 break
        var i = 0
        var foundIt = false
 
@@ -567,7 +567,7 @@ list有可变和不可变的
          i = i + 1
        }
 
-     //写成递归函数，可以省略var变量
+     //写成递归函数，可以省略 var 变量
      def searchFrom(i: Int): Int =
          if (i >= args.length) -1
          else if (args(i).startsWith("-")) searchFrom(i + 1) 
@@ -605,7 +605,7 @@ list有可变和不可变的
 * 函数和闭包
   函数式语言的基础建设模块，函数。
   把大程序分割成小的片段。
-  scala提供了很多java中没有的定义函数的方式：
+  scala 提供了很多 java 中没有的定义函数的方式：
   + 作为对象成员的函数
   + 内嵌在函数中的函数
   + 函数字面量和函数值
@@ -613,7 +613,7 @@ list有可变和不可变的
 ** 本地函数
    像定义本地变量一样可以把函数定义在别的函数内部。
    本地函数能够访问包含其函数的参数。
-   嵌套和作用域原则可以应用于所有的scala架构，包括函数。
+   嵌套和作用域原则可以应用于所有的 scala 架构，包括函数。
 
    #+BEGIN_SRC scala
       import scala.io.Source
@@ -637,7 +637,7 @@ list有可变和不可变的
 ** 头等函数
    不仅可以定义和调用函数，还可以把他们写成匿名的字面量（literal),并把他们作为值传递。
    函数字面量和值的区别在于字面量存在于源代码，而函数值作为对象存在于运行期;类似于类（源代码）和对象（运行期）的区别
-   (x: Int) => x + 1  //这个函数可以把任意的x映射为x+1.
+   (x: Int) => x + 1  //这个函数可以把任意的 x 映射为 x+1.
 
    #+BEGIN_SRC scala
      var increase = (x: Int) => x + 1
@@ -671,7 +671,7 @@ list有可变和不可变的
 
 ** 部分应用函数
    部分应用函数是一种表达式，不需要提供函数的所有参数，只需要提供部分或者不提供参数，取而代之用 “_”。
-   foreach需要一个函数作为参数输入
+   foreach 需要一个函数作为参数输入
 
    #+BEGIN_SRC scala
      def sum(a: Int, b: Int, c: Int) = a + b + c
@@ -688,9 +688,9 @@ list有可变和不可变的
 
       (x: Int) => x + more  // 闭包
     #+END_SRC
-    任何以(x: Int) => x + more为模板在运行期创建的函数值将必须捕获对自由变量more的绑定。
+    任何以(x: Int) => x + more 为模板在运行期创建的函数值将必须捕获对自由变量 more 的绑定。
 
-    java的内部类不允许访问外围范围内可以改变的变量。
+    java 的内部类不允许访问外围范围内可以改变的变量。
     闭包在运行期改变的自由变量值，仍然在闭包之外可见。
 
     #+BEGIN_SRC scala
@@ -714,7 +714,7 @@ list有可变和不可变的
 ** 尾递归
    最后一个动作调用自己的函数，成为尾递归。
    尾递归函数将不会为每个调用开辟新的堆栈结构，所有的调用将在一个结构内执行。
-   scala编译器会优化尾递归。
+   scala 编译器会优化尾递归。
 
    函数调用应尽量被实现为优化的尾调用。
 
@@ -725,9 +725,9 @@ list有可变和不可变的
    #+END_SRC
 
 * 控制抽象
-  自定义控制抽象来增强scala的基本控制结构，柯里化和传名参数。
+  自定义控制抽象来增强 scala 的基本控制结构，柯里化和传名参数。
 
-  用高阶函数去重复所有程序源代码中常见的控制模式，使用currying和传名参数使高阶函数简洁。
+  用高阶函数去重复所有程序源代码中常见的控制模式，使用 currying 和传名参数使高阶函数简洁。
   函数分为通用部分（函数体）和非通用部分(参数)
 ** 高阶函数
    高阶函数的好处：减少代码重复；简化客户端代码编写。
@@ -762,16 +762,16 @@ list有可变和不可变的
         }
       #+END_SRC
 
-      在scala中不允许在运行期粘合代码，所以下边的定义不对。不能把方法名当作值传递。
+      在 scala 中不允许在运行期粘合代码，所以下边的定义不对。不能把方法名当作值传递。
       #+BEGIN_SRC scala
-        // 不正确 不允许 粘合method.  file.getName.method(query) 
+        // 不正确 不允许 粘合 method.  file.getName.method(query) 
         def fileMatching(query: String, method) = 
           for(file <- filesHere; if file.getName.method(query)) 
             yield file
       #+END_SRC
 
       + 第一次重构 :: 
-        虽然不能把方法名当作值传递，但是可以通过传递调用方法的函数值达到同样的效果：添加一个matcher参数
+        虽然不能把方法名当作值传递，但是可以通过传递调用方法的函数值达到同样的效果：添加一个 matcher 参数
 
                       #+BEGIN_SRC scala
                         object Files2 {
@@ -838,19 +838,19 @@ list有可变和不可变的
 
    2. 简化客户代码 ::
       类似集合类型特定用途循环方法。
-      exists方法代表了控制抽象。
+      exists 方法代表了控制抽象。
 
       #+BEGIN_SRC scala
         def containsOdd(nums: list[Int]) = nums.exists(_ % 2 == 1)
       #+END_SRC
 
 ** currying(柯里化)
-   currying的函数式编程技巧。
+   currying 的函数式编程技巧。
 
    #+BEGIN_SRC scala
      def plainOldSum(x: Int, y: Int) = x + y
 
-     //currying后
+     //currying 后
      def currentSum(x: Int)(y: Int) = x + y
    #+END_SRC
 
@@ -881,10 +881,10 @@ list有可变和不可变的
    #+END_SRC
 
    *by-name parameter(传名参数)*
-   要实现一个by-name parameter就要让参数的类型开始于 "=>" 而不是 "() =>" 或者 "PrintWriter =>"等。
+   要实现一个 by-name parameter 就要让参数的类型开始于 "=>" 而不是 "() =>" 或者 "PrintWriter =>"等。
 
 * 组合与继承
-  scala更多对面向对象的支持，实践中经常出现。
+  scala 更多对面向对象的支持，实践中经常出现。
   In addition to these topics, we’ll discuss abstract classes, parameterless methods, extending classes, overriding methods and fields, parametric fields, invoking superclass constructors, polymorphism and dynamic binding, final members and classes, and factory objects and methods.
 
 ** 抽象类
@@ -897,14 +897,14 @@ list有可变和不可变的
    #+END_SRC
 
 ** 定义无参数方法
-   1. 无参数方法，在scala中非常普通: def height: Int
+   1. 无参数方法，在 scala 中非常普通: def height: Int
    2. 空括号方法，带有空括号的方法定义: def height(): Int
    统一访问原则(uniform access principle): 客户代码不应由属性是通过字段实现还是方法实现而受到影响。
    惯例：无论何时，只要方法没有参数，并且方法仅能通过读取所包含对象的属性去访问可变状态，就使用无参数方法。
 
-   原则上，scala的函数调用可以省略所有的空括号。然后，在调用的方法超出其调用者对象的属性时，推荐仍然写一对空括号。例如：如果方法执行了I/O,或写入可重复赋值的变量（var），或读取不是调用者字段的var，总之，无论是直接还是非直接使用可变对象，都应该添加空括号。
+   原则上，scala 的函数调用可以省略所有的空括号。然后，在调用的方法超出其调用者对象的属性时，推荐仍然写一对空括号。例如：如果方法执行了 I/O,或写入可重复赋值的变量（var），或读取不是调用者字段的 var，总之，无论是直接还是非直接使用可变对象，都应该添加空括号。
 
-   scala鼓励使用将不带参数且没有副作用的方法定义为无参数方法的风格。
+   scala 鼓励使用将不带参数且没有副作用的方法定义为无参数方法的风格。
    但是永远不要定义没有括号的带副作用的方法。
 
    如果调用的函数执行了操作就使用括号，如果仅提供对某个属性的访问，就省略分号。
@@ -931,27 +931,27 @@ list有可变和不可变的
        ae: ArrayElement = ArrayElement@d94e60
    #+END_SRC
 
-   scala和java的命名空间的不同：
-   1. java有四个命名空间（字段，方法，类型和包）
-   2. scala有两个命名空间 \\
+   scala 和 java 的命名空间的不同：
+   1. java 有四个命名空间（字段，方法，类型和包）
+   2. scala 有两个命名空间 \\
       + 值（字段，方法，包，单例对象）
       + 类型（类和特质名）
-   scala把字段和方法放进统一个命名空间，所以可以实现使用val重写无参数方法（在java中无法做到）。
+   scala 把字段和方法放进统一个命名空间，所以可以实现使用 val 重写无参数方法（在 java 中无法做到）。
 
    #+BEGIN_SRC scala
       abstract class Element {
          def contents: Array[String]
        }
 
-     // 改变contents的实现从一个方法变为一个字段
+     // 改变 contents 的实现从一个方法变为一个字段
       class ArrayElement(conts: Array[String]) extends Element {
          val contents: Array[String] = conts
        }
    #+END_SRC
 
 ** 定义参数化字段
-   类的参数同样可以使用var做前缀，这时字段可以被重新赋值。
-   参数化字段也可以添加如private, protected, override这类的修饰符。
+   类的参数同样可以使用 var 做前缀，这时字段可以被重新赋值。
+   参数化字段也可以添加如 private, protected, override 这类的修饰符。
 
    #+BEGIN_SRC scala
       class Cat {
@@ -981,14 +981,14 @@ list有可变和不可变的
        }
    #+END_SRC
 
-** override修饰符
-   scala要求以下三点：
-   1. 若子类成员重写了父类的具体成员时，则必须带有override修饰符；
+** override 修饰符
+   scala 要求以下三点：
+   1. 若子类成员重写了父类的具体成员时，则必须带有 override 修饰符；
    2. 若成员实现的是同名的抽象成员时，这个修饰符是可选的；
    3. 若成员并未重写或实现什么其他基类里的成员，则禁用这个修饰符。
 
-** 定义final成员
-   需要定义为final的情况：
+** 定义 final 成员
+   需要定义为 final 的情况：
    + 要确保一个成员不被子类重写
    + 要确保整个类不会有子类
 
@@ -1003,7 +1003,7 @@ list有可变和不可变的
    #+BEGIN_SRC scala
        def beside(that: Element): Element = {
          val contents = new Array[String](this.contents.length)
-         for (i <- 0 until this.contents.length)  //until与to类似，只是不包含尾部：0 to (this.contents.length - 1)
+         for (i <- 0 until this.contents.length)  //until 与 to 类似，只是不包含尾部：0 to (this.contents.length - 1)
            contents(i) = this.contents(i) + that.contents(i)
          new ArrayElement(contents)
        }
@@ -1015,8 +1015,8 @@ list有可变和不可变的
          ) yield line1 + line2
        )
 
-     // zip操作的含义
-       Array(1, 2, 3) zip Array("a", "b") // result为：Array((1, "a"), (2, "b"))
+     // zip 操作的含义
+       Array(1, 2, 3) zip Array("a", "b") // result 为：Array((1, "a"), (2, "b"))
    #+END_SRC
 
 ** 定义工厂对象
@@ -1056,17 +1056,17 @@ list有可变和不可变的
 
    #+END_SRC
 
-* scala的层级
-  继承层级，以及scala的全体方法及底层类型
-  在scala中，每个类都继承自Any的超类，在层级的低端还有两个通用的子类：Null和Nothing.
+* scala 的层级
+  继承层级，以及 scala 的全体方法及底层类型
+  在 scala 中，每个类都继承自 Any 的超类，在层级的低端还有两个通用的子类：Null 和 Nothing.
   Null is a subtype of all reference types; its only instance is the null reference. Since Null is not a subtype of value types, null is not a member of any such type. For instance, it is not possible to assign null to a variable of type scala.Int.
   Nothing is a subtype of every other type (including scala.Null); there exist no instances of this type.
-  Any有两个子类：AnyVal和AnyRef。
-  AnyVal是每个内建值类的父类。有9个内建值类：Byte, Short, Char, Int, Long, Float, Double, Boolean, Unit.
-  Unit 对应于java中的void,Unit只有一个实例，写为().
-  Int可以隐式转换到RichInt上，方法min,max,util,to,abs等都定义在scala.runtime.RichInt上，所以Int也可以用。
+  Any 有两个子类：AnyVal 和 AnyRef。
+  AnyVal 是每个内建值类的父类。有 9 个内建值类：Byte, Short, Char, Int, Long, Float, Double, Boolean, Unit.
+  Unit 对应于 java 中的 void,Unit 只有一个实例，写为().
+  Int 可以隐式转换到 RichInt 上，方法 min,max,util,to,abs 等都定义在 scala.runtime.RichInt 上，所以 Int 也可以用。
 
-  Nothing的一个应用，在scala标准库中Predef对象有一个error方法，定义如下：
+  Nothing 的一个应用，在 scala 标准库中 Predef 对象有一个 error 方法，定义如下：
 
   #+BEGIN_SRC scala
      def error(message: String): Nothing =
@@ -1074,7 +1074,7 @@ list有可变和不可变的
 
      def divide(x: Int, y: Int): Int = 
         if (y != 0) x / y 
-        else error("can't divide by zero")  // 因为Nothing是任意类的子类，所以可以把Nothing赋值给Int，所以返回值仍为Int
+        else error("can't divide by zero")  // 因为 Nothing 是任意类的子类，所以可以把 Nothing 赋值给 Int，所以返回值仍为 Int
   #+END_SRC
 
 * 特质(trait)
@@ -1086,20 +1086,20 @@ list有可变和不可变的
   
   特质和其他语言中多重继承的区别？
 
-** trait的工作方式
+** trait 的工作方式
 
-    trait的定义除了使用关键字trait之外，与类的定义无异。但是trait不能定义可变参数。
-    trait被定义之后，可以用extends或with关键字，把它混入到类中。
-    如果想把特质混入显示扩展超类的类中，可以用extends指明待扩展的超类，用with混入特质。
+    trait 的定义除了使用关键字 trait 之外，与类的定义无异。但是 trait 不能定义可变参数。
+    trait 被定义之后，可以用 extends 或 with 关键字，把它混入到类中。
+    如果想把特质混入显示扩展超类的类中，可以用 extends 指明待扩展的超类，用 with 混入特质。
 
     可以用特质的定义做任何类定义能做的事，除了以下两点不同之外语法也相同：
     1. 特质不能有任何“类”参数（传入给类的主构造器的参数）
-    2. 在特质中，super的调用是动态绑定的。而不论在哪里，类的super调用都是静态绑定的. \\
-       特质中的super调用是线性的。
+    2. 在特质中，super 的调用是动态绑定的。而不论在哪里，类的 super 调用都是静态绑定的. \\
+       特质中的 super 调用是线性的。
        class Cat extends Animal with Furry with Fourlegged  的调用顺序为： \\
        Cat, FourLegged, Furry, Animal, AnyRef, Any
        
-       如果这些类和特质中任何一个通过super调用了方法，那么被调用的实现将是它线性化的右侧的一个实现。
+       如果这些类和特质中任何一个通过 super 调用了方法，那么被调用的实现将是它线性化的右侧的一个实现。
        
     #+BEGIN_SRC scala
         trait Philosophical {
@@ -1117,11 +1117,11 @@ list有可变和不可变的
         }
     #+END_SRC
 
-** Ordered特质
-   利用ordered特质定义<,>,<=,>=操作。Ordered特质没有定义equals方法，需要自己定义。
+** Ordered 特质
+   利用 ordered 特质定义<,>,<=,>=操作。Ordered 特质没有定义 equals 方法，需要自己定义。
    有两件事情要做：
-   + 混入Ordered特质（需要在混入的时候设定类型参数）。
-   + 定义compare方法来比较两个对象。
+   + 混入 Ordered 特质（需要在混入的时候设定类型参数）。
+   + 定义 compare 方法来比较两个对象。
 
      #+BEGIN_SRC scala
         class Rational(n: Int, d: Int) extends Ordered[Rational] {
@@ -1132,11 +1132,11 @@ list有可变和不可变的
 
      #+END_SRC
 
-** trait用来做可堆叠的改变
-   trait可以改变类的方法。trait是可堆叠的。
-   trait在声明为抽象的方法中可以有super调用，而这种调用 在普通的类中是非法的。因为trait的super调用是动态绑定的。
-   super调用在实现可堆叠改动的特质来说常用到，为了告诉编译器目的是什么，还必须对这种方法打上abstract override的标志，这种标志在类中也是非法的。
-   trait的混入次序是非常重要的，越靠近右侧的特质越先起作用。右侧特质的方法先被调用，如果这个方法调用了super,他调用其左侧特质的方法。
+** trait 用来做可堆叠的改变
+   trait 可以改变类的方法。trait 是可堆叠的。
+   trait 在声明为抽象的方法中可以有 super 调用，而这种调用 在普通的类中是非法的。因为 trait 的 super 调用是动态绑定的。
+   super 调用在实现可堆叠改动的特质来说常用到，为了告诉编译器目的是什么，还必须对这种方法打上 abstract override 的标志，这种标志在类中也是非法的。
+   trait 的混入次序是非常重要的，越靠近右侧的特质越先起作用。右侧特质的方法先被调用，如果这个方法调用了 super,他调用其左侧特质的方法。
    应时刻关注是否有机会以可堆叠的改变方式安排代码。
 
    #+BEGIN_SRC scala
@@ -1160,7 +1160,7 @@ list有可变和不可变的
        }
 
        scala> val queue = (new BasicIntQueue
-            |     with Incrementing with Filtering)  // 匿名类用两个trait堆叠修改方法。
+            |     with Incrementing with Filtering)  // 匿名类用两个 trait 堆叠修改方法。
        queue: BasicIntQueue with Incrementing with Filtering...
 
        scala> queue.put(-1); queue.put(0); queue.put(1)
@@ -1173,22 +1173,22 @@ list有可变和不可变的
 
    #+END_SRC
 
-** 什么时候用trait
+** 什么时候用 trait
    1. 如果行为不重复，做成具体类。
-   2. 要在多个不相关的类中重用，做成trait。只有trait可以混入到不同的类层级中。
-   3. 如果希望从java代码中继承，就使用抽象类。
+   2. 要在多个不相关的类中重用，做成 trait。只有 trait 可以混入到不同的类层级中。
+   3. 如果希望从 java 代码中继承，就使用抽象类。
       
 * 包和引用
-  讨论大项目中的事物：顶层包，引用语句，访问控制修饰符(如protected,private).
+  讨论大项目中的事物：顶层包，引用语句，访问控制修饰符(如 protected,private).
   减小耦合的方式之一：使用模块化风格编写代码；将程序分为若干小模块，把每块分为内部和外部。当必须改变模块的外部（即模块的接口）时，才需要和工作于其他模块的开发人员交互。
   使用对象的模块化编程比分割包更灵活。
 
 ** 包
    可以用两种方式把代码放在命名包中：
-   + 通过package子句放在文件顶端的方式把整个文件内容放进包里。
-   + 可以在package子句之后把要放到包中的定义用花括号括起来 :: 
+   + 通过 package 子句放在文件顶端的方式把整个文件内容放进包里。
+   + 可以在 package 子句之后把要放到包中的定义用花括号括起来 :: 
      可以把类的测试与原始代码放在同一个文件，但在不同的包里。
-        scala在所有用户可创建的包之外提供了名为_root_的包，任何能写出来的顶层包都被当作_root_包的成员。
+        scala 在所有用户可创建的包之外提供了名为_root_的包，任何能写出来的顶层包都被当作_root_包的成员。
      
         #+BEGIN_SRC scala
           // first 
@@ -1210,20 +1210,20 @@ list有可变和不可变的
         #+END_SRC
 
 ** 引用
-   包和其他成员的引用用import子句。
+   包和其他成员的引用用 import 子句。
 
-   scala的import语句和java的主要差异：
-   + 在scala中引用可以出现在任何地方。
+   scala 的 import 语句和 java 的主要差异：
+   + 在 scala 中引用可以出现在任何地方。
    + 可以指的是（单例或正统的）对象和包。
    + 可以重命名或隐藏一些被引用的成员。
 
    引用选择器可以包括以下模式：
-   + 简单名x。 :: 把x包含进引用名集。
-   + 重命名子句x => y ::  import java.sql.{Date => sDate}
-   + 隐藏子句x => _。 :: 把x排除在引用名集之外  import Fruits.{Pear => _, _}
+   + 简单名 x。 :: 把 x 包含进引用名集。
+   + 重命名子句 x => y ::  import java.sql.{Date => sDate}
+   + 隐藏子句 x => _。 :: 把 x 排除在引用名集之外  import Fruits.{Pear => _, _}
    + 全包括 _ 。 :: 如果存在全包括，那么必须是引用选择的最后一个。
      
-   scala隐式为每个源文件添加三个引用：
+   scala 隐式为每个源文件添加三个引用：
    + import java.lang._
    + import scala._
    + import Predef._
@@ -1240,18 +1240,18 @@ list有可变和不可变的
          // easy access to all members of Fruits
          import bobsdelights.Fruits._
 
-         // 重命名Apple为McIntosh
+         // 重命名 Apple 为 McIntosh
          import Fruits.(Apple => McIntosh)
 
-         //importFruits下除了Apple的所有成员
+         //importFruits 下除了 Apple 的所有成员
          import Notebooks._
          import Fruits.{Apple => _, _}
      #+END_SRC
 
 ** 访问修饰符
-   包，类和对象的成员可以用访问修饰符private和protected标记。没有标记的为公开的。
-   标记为private的成员仅在包含了成员定义的类或者对象内部可见，内部类也应用同样的规则，外部类不能调用内部类的private引用。
-   protected保护成员只能在类和类的子类中被访问，在同一包中的其他类也不能访问。
+   包，类和对象的成员可以用访问修饰符 private 和 protected 标记。没有标记的为公开的。
+   标记为 private 的成员仅在包含了成员定义的类或者对象内部可见，内部类也应用同样的规则，外部类不能调用内部类的 private 引用。
+   protected 保护成员只能在类和类的子类中被访问，在同一包中的其他类也不能访问。
 
    #+BEGIN_SRC scala
       class Outer {
@@ -1279,10 +1279,10 @@ list有可变和不可变的
    #+END_SRC
 
 *** 保护的作用域
-    scala中访问修饰符可以通过使用限定词强调。
-    如：private[x], protected[x] 表示直到x的私有或者保护；x指待某个所属的包，类或单例对象。
+    scala 中访问修饰符可以通过使用限定词强调。
+    如：private[x], protected[x] 表示直到 x 的私有或者保护；x 指待某个所属的包，类或单例对象。
 
-    scala还有一种比private更严格的访问修饰符private[this].被它标记的仅能在包含了定义的同一个对象中被访问。
+    scala 还有一种比 private 更严格的访问修饰符 private[this].被它标记的仅能在包含了定义的同一个对象中被访问。
 
     #+BEGIN_SRC scala
       package bobsrockets {
@@ -1305,20 +1305,20 @@ list有可变和不可变的
     #+END_SRC
 
 *** 可见性和伴生性
-    scala中代替静态成员的是，可以拥有包含成员的单例的伴生对象。
+    scala 中代替静态成员的是，可以拥有包含成员的单例的伴生对象。
     类的所有访问权限都对伴生对象开放，反过来也如此。对象可以访问所以它的伴生类的私有成员。
 
 * 断言和单元测试
-  scala的断言机制，各种可以为scala编写测试的工具。
+  scala 的断言机制，各种可以为 scala 编写测试的工具。
   断言可以直接混合在生产代码中，也可以放在外部的单元测试中。
-  不仅可以用java社区流行的测试工具：JUnit和TestNG；
-  还可以用scala的测试工具：ScalaTest, ScalaCheck,specs。
+  不仅可以用 java 社区流行的测试工具：JUnit 和 TestNG；
+  还可以用 scala 的测试工具：ScalaTest, ScalaCheck,specs。
 
 ** 断言
    assert, ensuring.
-   assert和ensuring可以使用JVM的-ea 和 -da 命令行标志开放和禁止。
+   assert 和 ensuring 可以使用 JVM 的-ea 和 -da 命令行标志开放和禁止。
 
-   assert可以带一个参数或者两个参数。
+   assert 可以带一个参数或者两个参数。
    ensuring 放发带一个函数做参数。
 
    #+BEGIN_SRC scala
@@ -1344,8 +1344,8 @@ list有可变和不可变的
 ** 单元测试
    JUnit, TestNG, ScalaTest, ScalaCheck, specs
 *** ScalaTest
-    简单扩展org.scalatest.Suite类
-    Suite代表一个测试集，测试方法名以test开头。可以直接在scala解释器中通过调用execute方法运行Suite.
+    简单扩展 org.scalatest.Suite 类
+    Suite 代表一个测试集，测试方法名以 test 开头。可以直接在 scala 解释器中通过调用 execute 方法运行 Suite.
 
 * 样本类和模式匹配
   是在编写正规的非封装的数据结构时用到的工具，尤其对树型递归数据很有用
@@ -1675,7 +1675,7 @@ The extra patterns mean that scala patterns support deep matches.
    #+END_SRC
 
 * 集合类型
-  如何使用scala集合类型：列表，数组，元组集（tuple）及映射表
+  如何使用 scala 集合类型：列表，数组，元组集（tuple）及映射表
 ** Sequences
 *** Lists
     fast addition and removal of items to the beginnig of the list bu t they do not provide fast access to arbitrary indexes.
@@ -1787,7 +1787,7 @@ The extra patterns mean that scala patterns support deep matches.
    Tuples are great when you combine data that has no meaning beyond "and A and B".
    However, whenever the combination has some meaning , or you want to and some mehod to the combination, it is better to go ahead and create a class.
 * 有状态的对象 (stateful objects)
-  什么是有状态（可变）的对象，scala提供语法层面表达他们的术语。
+  什么是有状态（可变）的对象，scala 提供语法层面表达他们的术语。
   包括一个在离散事件模拟上的案例研究，用来演示一些有状态对象的动作
 ** what make an object stateful?
   For a stateful object, the result of a method call or field access may depend on what operations are previously performed on the object.
@@ -1814,8 +1814,8 @@ The extra patterns mean that scala patterns support deep matches.
   #+END_SRC
 
   State and vars usually go hand in hand, but a class might be stateful without defining or inheriting any vars because it forwards method calls to other objects that have mutable state.
-  在scala中字段不可以随意省略"=_"初始化器。如果：
-   var celsius: Float = _ 写为 var celsius: Float ，将定义为抽象变量，而不是未初始化的变量。
+  在 scala 中字段不可以随意省略"=_"初始化器。如果：
+   var celsius: Float = _ 写为 var celsius: Float，将定义为抽象变量，而不是未初始化的变量。
   #+BEGIN_SRC scala
      class Thermometer {
 
@@ -2029,12 +2029,12 @@ Besides + , there is also a prefix - , which indicates contravariant subtyping. 
      trait Queue[T] {...}
    + 协变 :: 
      trait Queue[+T] {...}
-     正常类型参数前+号表明这个参数的子类型化是协变（弹性）的。比如String是AnyRef的子类型，那么Queue[String]将当作Queue[AnyRed]的子类型。
+     正常类型参数前+号表明这个参数的子类型化是协变（弹性）的。比如 String 是 AnyRef 的子类型，那么 Queue[String]将当作 Queue[AnyRed]的子类型。
    + 逆变 :: 
      trait Queue[-T] {...}
-     -号表明参数的子类型化是逆变的,如果T是类型S的子类型，那么隐含Queue[S]是Queue[T]的子类型。
+     -号表明参数的子类型化是逆变的,如果 T 是类型 S 的子类型，那么隐含 Queue[S]是 Queue[T]的子类型。
      
-   超类型：语法"U >: T"，定义了T为U的下界。
+   超类型：语法"U >: T"，定义了 T 为 U 的下界。
    超类型和子类型的关系是自反的，亦类型对于自身来讲，既是超类型，也是子类型。
 
    #+BEGIN_SRC scala
@@ -2043,7 +2043,7 @@ Besides + , there is also a prefix - , which indicates contravariant subtyping. 
    #+END_SRC
 
    类型驱动设计。
-   里氏替代原则(Liskov Substitution Principle, LSP): 如果能在需要类型U 的值的地方替换成类型T 的值，那么类型T 是类型U 的子类型的假设就是安全的。
+   里氏替代原则(Liskov Substitution Principle, LSP): 如果能在需要类型 U 的值的地方替换成类型 T 的值，那么类型 T 是类型 U 的子类型的假设就是安全的。
 
 * 抽象成员
   能够声明为抽象的有方法，字段，类型。
@@ -2053,10 +2053,10 @@ Besides + , there is also a prefix - , which indicates contravariant subtyping. 
   这两个特性有助于程序员忽略掉源码中那些能由编译器推导出来的繁琐的细节的特性。
 
 * 实现列表
-  描述list类的实现。实现本身也展示了若干scala特性的应用。
+  描述 list 类的实现。实现本身也展示了若干 scala 特性的应用。
 
-* 重访for表达式
-  解释for表达式如何翻译成对map,flatMap,filter,foreach的访问。
+* 重访 for 表达式
+  解释 for 表达式如何翻译成对 map,flatMap,filter,foreach 的访问。
 
 * Extractors(抽取器)
   展示了如何使用模式匹配任何类，而不仅仅是用例类。
@@ -2064,31 +2064,32 @@ Besides + , there is also a prefix - , which indicates contravariant subtyping. 
 * 注解
   通过注解使用语言的扩展部分。示范若干标准注解以及建立自己的注解
 
-* 使用XML
-  处理XML。包括创建，解析以及解析之后处理等一系列惯用方式。
+* 使用 XML
+  处理 XML。包括创建，解析以及解析之后处理等一系列惯用方式。
 
 * 使用对象的模块化编程
   说明消除了分离式模块系统的使用需求。
 
 * 对象相等性
-  指出若干在编写equals方法时要考虑的情况。
+  指出若干在编写 equals 方法时要考虑的情况。
   说明了若干应避免的误区。
 
-* 结合scala和java
-  在同一项目中捆绑使用java和scala时会碰到的状况，以及建议的解决方法。
+* 结合 scala 和 java
+  在同一项目中捆绑使用 java 和 scala 时会碰到的状况，以及建议的解决方法。
 
-* actor和并发
-  如何使用actor并发库。
-  尽管使用java平台的同步原语和来自与scala程序的库，但actor能帮助避免死锁和资源竞争这些传统的并发问题。
+* actor 和并发
+  如何使用 actor 并发库。
+  尽管使用 java 平台的同步原语和来自与 scala 程序的库，但 actor 能帮助避免死锁和资源竞争这些传统的并发问题。
 
 * 连接符解析(跳过了）
-  演示如何使用scala的解析器连接符来创建解析器。
+  演示如何使用 scala 的解析器连接符来创建解析器。
 
-* GUI编程
-  简化基于swing的GUI编程。
+* GUI 编程
+  简化基于 swing 的 GUI 编程。
 
-* SCells试算表
-  通过一个完整的试算表的实现，集中演示了scala的一切。
+* SCells 试算表
+  通过一个完整的试算表的实现，集中演示了 scala 的一切。
 
 * FQA
-  case类的用法，模式
+  1. case 类的用法，模式
+  2. scala 符号字面量的用法及作用。
