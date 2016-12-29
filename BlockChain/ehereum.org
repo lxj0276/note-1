@@ -1,0 +1,12 @@
+ETHEREUM: A SECURE DECENTRALISED GENERALISED TRANSACTION LEDGER FINAL DRAFT - UNDER REVIEW
+
+* Introduction
+We can call this paradigm a transactional singleton machine with shared-state.
+
+Furthermore it provides a plurality of such resources, each with a distinct state and operating code but able to interact through a message-passing framework with others.
+
+A trustful object messaging compute framework.
+
+
+Driving Factors. There are many goals of this project; one key goal is to facilitate transactions between consenting individuals who would otherwise have no means to trust one another. 
+This may be due to geographical separation, interfacing difficulty, or perhaps the incompatibility, incompetence, unwillingness, expense, uncertainty, inconvenience or corruption of existing legal systems.By specifying a state change system through a rich and unambiguous language, and furthermore architecting a system such that we can reasonably expect that an agreement will be thus enforced autonomously, we can provide a means to this end.                                
