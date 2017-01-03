@@ -1,12 +1,271 @@
 ETHEREUM: A SECURE DECENTRALISED GENERALISED TRANSACTION LEDGER FINAL DRAFT - UNDER REVIEW
 
-* Introduction
+* 1. Introduction
 We can call this paradigm a transactional singleton machine with shared-state.
 
 Furthermore it provides a plurality of such resources, each with a distinct state and operating code but able to interact through a message-passing framework with others.
 
 A trustful object messaging compute framework.
 
-
 Driving Factors. There are many goals of this project; one key goal is to facilitate transactions between consenting individuals who would otherwise have no means to trust one another. 
 This may be due to geographical separation, interfacing difficulty, or perhaps the incompatibility, incompetence, unwillingness, expense, uncertainty, inconvenience or corruption of existing legal systems.By specifying a state change system through a rich and unambiguous language, and furthermore architecting a system such that we can reasonably expect that an agreement will be thus enforced autonomously, we can provide a means to this end.                                
+
+* 2. The Blockchain Paradigm
+ Ethereum, can be viewed as a transaction-based state machine.
+
+The state can include such information as account balances, reputations, trust arrangements, data pertaining to information of the physical world; in short, anything that can currently be represented by a computer is admissible.
+
+A valid state transition is one which comes about through a transaction. Formally:
+(1)                  σ t+1 ≡ Υ(σ t , T ) 
+where Υ is the Ethereum state transition function. In Ethereum, Υ, together with σ are considerably more powerful then any existing comparable system; Υ allows components to carry out arbitrary computation, while σ allows components to store arbitrary state between transactions. 
+
+Mining is the process of dedicating effort (working) to bolster one series of series of transactions ( a block) over any other potential competitior block.
+Formally, we expand to:
+(2)            σ t+1   ≡    Π(σ t , B)
+
+(3)               B    ≡    (..., (T0 , T1 , ...))
+(4)         Π(σ, B)    ≡    Ω(B, Υ(Υ(σ, T0 ), T1 )...)
+ Where Ω is the block-finalisation state transition function (a function that rewards a nominated party); B is this block, which includes a series of transactions amongst some other components; and Π is the block-level state- transition function.
+ This is the basis of the blockchain paradigm, a model that forms the backbone of not only Ethereum, but all decentralised consensus-based transaction systems to date.
+** value: Wei
+Throughout the present work, any reference to value, should be assumed to be counted in Wei.
+** Which History? 
+To avoid multiple states of the system coexist, we use in order to generate consensus is a simplifiedversion of the GHOST protocol introduced by Sompolinsky and Zohar.
+* Convensions
+The two sets of highly structured, ‘top-level’, state values, are denoted with bold lowercase Greek letters. They fall into those of world-state, which are denoted σ (or a variant thereupon) and those of machine-state, μ.
+
+Functions operating on highly structured values are denoted with an upper-case greek letter, e.g. Υ, the Ethereum state transition function.
+
+For most functions, an uppercase letter is used, e.g. C, the general cost function. These may be subscripted to denote specialised variants, e.g. C SSTORE , the cost function for the SSTORE operation.
+
+Tuples are typically denoted with an upper-case letter, e.g. T , is used to denote an Ethereum transaction. This symbol may, if accordingly defined, be subscripted to refer to an individual component, e.g. T n , denotes the nonce of said transaction.
+
+Scalars and fixed-size byte sequences (or, synonymously, arrays) are denoted with a normal lower-case let- ter, e.g. n is used in the document to denote a transaction nonce.
+
+Arbitrary-length sequences are typically denoted as a bold lower-case letter, e.g. o is used to denote the byte-sequence given as the output data of a message call. For particularly important values, a bold uppercase letter may be used.
+
+Throughout, we assume scalars are positive integers and thus belong to the set P. The set of all byte sequences is B, formally defined in Appendix B.Thus the set of all byte sequences of length 32 is named B 32 and the set of all positive integers smaller than 2 256 is named P 256 .
+
+Square brackets are used to index into and reference individual components or subsequences of sequences,e.g. μ m [0..31] denotes the first 32 items of the machine’s memory.
+
+When considering variants of existing values, I follow the rule that within a given scope for definition, if we assume that the unmodified ‘input’ value be denoted by the placeholder  then the modified and utilisable value is denoted as  0 , and intermediate values would be  ∗ ,  ∗∗ &c.
+
+When considering the use of existing functions, given a function f , the function f ∗ denotes a similar, element-wise version of the function mapping instead between sequences.
+
+I define a number of useful functions throughout. One of the more common is `, which evaluates to the last item in the given sequence:
+(5)   `(x) ≡ x[kxk − 1]
+* Blocks, State and Transactions
+Having introduced the basic concepts behind Ethereum, we will discuss the meaning of a transaction, a block and the state in more detail.
+** World State
+The world state (state), is a mapping between addresses (160-bit identifiers) and account states (a data structure serialised as RLP, see Appendix B). Though not stored on the blockchain, it is assumed that the implementation will maintain this mapping in a modified Merkle Patricia tree (trie, see Appendix D).
+
+The account state comprises the following four fields:
+
+- nonce :: A scalar value equal to the number of transactions sent from this address or, in the case of accounts with associated code, the number of contract-creations made by this account.
+     For account of address a in state σ, this would be formally denoted σ[a] n .
+- balance :: A scalar value equal to the number of Wei owned by this address.
+     Formally denoted σ[a] b . storageRoot: A 256-bit hash of the root node of a Merkle Patricia tree that encodes the storage contents of the account (a mapping between 256-bit integer values), encoded into the trie as a mapping from the Keccak 256-bit hash of the 256-bit integer keys to the RLP-encoded 256-bit integer values. The hash is formally denoted σ[a] s .
+- codeHash :: The hash of the EVM code of this account
+     —this is the code that gets executed should this address receive a message call; it is immutable and thus, unlike all other fields, cannot be changed after construction. All such code fragments are contained in the state database under their corresponding hashes for later retrieval.
+      This hash is formally denoted σ[a] c , and thus the code may be denoted as b, given that KEC (b) = σ[a] c .
+
+Since I typically wish to refer not to the trie’s root hash but to the underlying set of key/value pairs stored within, I define a convenient equivalence:
+∗ (6) TRIE L I (σ[a] s ) ≡ σ[a] s
+
+The collapse function for the set of key/value pairs in the trie, L ∗ I , is defined as the element-wise transformation of the base function L I , given as:
+(7) L I (k, v) ≡ KEC (k), RLP (v)
+where:
+(8) k ∈ B 32 ∧ v ∈ P
+It shall be understood that σ[a] s is not a ‘physical’ member of the account and does not contribute to its later serialisation. If the codeHash field is the Keccak-256 hash of the empty string, i.e. σ[a] c = KEC () , then the node represents a simple account, sometimes referred to as a “non-contract” account.
+Thus we may define a world-state collapse function L S :
+(9)                LS (σ) ≡ {p(a) : σ[a] 6= ∅}
+where
+(10)      p(a) ≡ (KEC(a), RLP (σ[a]n , σ[a]b , σ[a]s , σ[a])))
+   This function, LS , is used alongside the trie function to provide a short identity (hash) of the world state. We assume:
+(11)         ∀a : σ[a] = ∅ ∨ (a ∈ B20 ∧ v(σ[a]))
+where v is the account validity function:
+(12)       v(x) ≡ xn ∈ P256 ∧xb ∈ P256 ∧xs ∈ B32 ∧xc ∈ B
+** The Transactions
+There are two types of transactions: those which result in message calls and those which result in the creation of new accounts with associated code (known informally as ‘contract creation’). Both types specify a number of common fields:
+1. nonce
+2. gasPrice
+3. gasLimit
+4. to
+5. value
+6. v, r, s
+
+Additionally, a contract creation transaction contains:
+- init :: An unlimited size byte array specifying the EVM-code for the account initialisation procedure, formally T i .
+* 10. Blocktree to Blockchain
+In order to have consensus over which path it is, conceptually we identify the path that has had the most computation done upon it, or, the heaviest path.
+
+Since a block header includes the difficulty, the header alone is enough to validate the computation done. Any block contributes toward the total computation or total difficulty of a chain.
+
+Thus we define the total difficulty of block B recursively as:
+ (136)                      Bt   ≡   Bt0 + Bd
+ (137)                      B0   ≡   P (BH )
+
+As such given a block B, Bt is its total difficulty, B 0 is its parent block and Bd is its difficulty.
+*   Appendix B
+This is a serialisation method for encoding arbitrarily structured binary data (byte arrays).
+   We define the set of possible structures T:
+(156)                               T   ≡   L∪B
+(157)                               L   ≡   {t : t = (t[0], t[1], ...) ∧ ∀n<ktk t[n] ∈ T}
+(158)                               B   ≡   {b : b = (b[0], b[1], ...) ∧ ∀n<kbk b[n] ∈ Y}
+   Where Y is the set of bytes. Thus B is the set of all sequences of bytes (otherwise known as byte-arrays, and a leaf if
+imagined as a tree), L is the set of all tree-like (sub-)structures that are not a single leaf (a branch node if imagined as
+a tree) and T is the set of all byte-arrays and such structural sequences.
+   We define the RLP function as RLP through two sub-functions, the first handling the instance when the value is a
+byte array, the second when it is a sequence of further values:
+                                                           
+                                                             Rb (x) if x ∈ B
+(159)                                            RLP(x) ≡   
+                                                             Rl (x) otherwise
+                                                           
+   If the value to be serialised is a byte-array, the RLP s erialisation takes one of three forms:
+        • If the byte-array contains solely a single byte and that single byte is less than 128, then the input is exactly
+          equal to the output.
+        • If the byte-array contains fewer than 56 bytes, then the output is equal to the input prefixed by the byte equal
+          to the length of the byte array plus 128.
+        • Otherwise, the output is equal to the input prefixed by the minimal-length byte-array which when interpreted
+          as a big-endian integer is equal to the length of the input byte array, which is itself prefixed by the number of
+          bytes required to faithfully encode this length value plus 183.
+   Formally, we define Rb :
+                                                  
+                                                    x
+                                                                                               if kxk = 1 ∧ x[0] < 128
+(160)                            Rb (x)       ≡     (128 + kxk) · x                             else if kxk < 56
+                                                                   
+                                                    183 + BE(kxk) · BE(kxk) · x                otherwise
+                                                  
+
+                                                                                n<kbk−1
+                                                                                  X
+(161)                            BE(x)        ≡   (b0 , b1 , ...) : b0 ne 0 ∧             bn · 256kbk−1−n
+                                                                                 n=0
+(162)               (a) · (b, c) · (d, e)     =   (a, b, c, d, e)
+   Thus BE is the function that expands a positive integer value to a big-endian byte array of minimal length and the
+dot operator performs sequence concatenation.
+   If instead, the value to be serialised is a sequence of other items then the RLP serialisation takes one of two forms:
+        • If the concatenated serialisations of each contained item is less than 56 bytes in length, then the output is equal
+          to that concatenation prefixed by the byte equal to the length of this byte array plus 192.
+        • Otherwise, the output is equal to the concatenated serialisations prefixed by the minimal-length byte-array
+          which when interpreted as a big-endian integer is equal to the length of the concatenated serialisations byte
+          array, which is itself prefixed by the number of bytes required to faithfully encode this length value plus 247.
+   Thus we finish by formally defining Rl :
+                                    
+                                       (192 + ks(x)k) · s(x)                                        if ks(x)k < 56
+(163)                  Rl (x) ≡                              
+                                        247 + BE(ks(x)k) · BE(ks(x)k) · s(x)                        otherwise
+
+(164)                       s(x)     ≡       RLP(x0 ) · RLP(x1 )...
+   If RLP is used to encode a scalar, defined only as a positive integer (P or any x for Px ), it must be specified as the
+shortest byte array such that the big-endian interpretation of it is equal. Thus the RLP of some positive integer i is
+defined as:
+(165)                                                    RLP(i : i ∈ P) ≡ RLP(BE(i))
+   When interpreting RLP data, if an expected fragment is decoded as a scalar and leading zeroes are found in the byte
+sequence, clients are required to consider it non-canonical and treat it in the same manner as otherwise invalid RLP
+data, dismissing it completely.
+   There is no specific canonical encoding format for signed or floating-point values.
+ 
+* Formally
+** valid state transition
+(1)                σ t+1 ≡ Υ(σ t , T ) 
+where Υ is the Ethereum state transition function.  In Ethereum, Υ, together with σ are considerably more powerful then any existing comparable system; Υ allows components to carry out arbitrary computation, while σ allows components to store arbitrary state between transactions. 
+** Mining is the process of dedicating effort (working) to bolster one series of series of transactions ( a block) over any other potential competitior block.
+Formally, we expand to:
+(2)            σ t+1   ≡    Π(σ t , B)
+
+(3)               B    ≡    (..., (T0 , T1 , ...))
+(4)         Π(σ, B)    ≡    Ω(B, Υ(Υ(σ, T0 ), T1 )...)
+ Where Ω is the block-finalisation state transition function (a function that rewards a nominated party); B is this block, which includes a series of transactions amongst some other components; and Π is the block-level state- transition function.
+ This is the basis of the blockchain paradigm, a model that forms the backbone of not only Ethereum, but all decentralised consensus-based transaction systems to date.
+** evaluates to the last item in the given sequence:
+(5)   `(x) ≡ x[kxk − 1]
+** Trie functions 
+Since I typically wish to refer not to the trie’s root hash but to the underlying set of key/value pairs stored within, I define a convenient equivalence:
+∗ (6) TRIE L I (σ[a] s ) ≡ σ[a] s
+
+The collapse function for the set of key/value pairs in the trie, L ∗ I , is defined as the element-wise transformation of the base function L I , given as:
+(7) L I (k, v) ≡ KEC (k), RLP (v)
+where:
+(8) k ∈ B 32 ∧ v ∈ P
+
+It shall be understood that σ[a] s is not a ‘physical’ member of the account and does not contribute to its later serialisation. If the codeHash field is the Keccak-256 hash of the empty string, i.e. σ[a] c = KEC () , then the node represents a simple account, sometimes referred to as a “non-contract” account.
+Thus we may define a world-state collapse function L S :
+(9)                LS (σ) ≡ {p(a) : σ[a] 6= ∅}
+where
+(10)      p(a) ≡ (KEC(a), RLP (σ[a]n , σ[a]b , σ[a]s , σ[a])))
+   This function, LS , is used alongside the trie function to provide a short identity (hash) of the world state. We assume:
+(11)         ∀a : σ[a] = ∅ ∨ (a ∈ B20 ∧ v(σ[a]))
+where v is the account validity function:
+(12)       v(x) ≡ xn ∈ P256 ∧xb ∈ P256 ∧xs ∈ B32 ∧xc ∈ B
+
+** Total difficulty
+Thus we define the total difficulty of block B recursively as:
+
+(136)                      Bt   ≡   Bt0 + Bd
+(137)                      B0   ≡   P (BH )
+
+As such given a block B, Bt is its total difficulty, B 0 is its parent block and Bd is its difficulty.
+** Appendix B. Recursive Length Prefix
+   This is a serialisation method for encoding arbitrarily structured binary data (byte arrays).
+   We define the set of possible structures T:
+(156)                               T   ≡   L∪B
+(157)                               L   ≡   {t : t = (t[0], t[1], ...) ∧ ∀n<ktk t[n] ∈ T}
+(158)                               B   ≡   {b : b = (b[0], b[1], ...) ∧ ∀n<kbk b[n] ∈ Y}
+   Where Y is the set of bytes. Thus B is the set of all sequences of bytes (otherwise known as byte-arrays, and a leaf if
+imagined as a tree), L is the set of all tree-like (sub-)structures that are not a single leaf (a branch node if imagined as
+a tree) and T is the set of all byte-arrays and such structural sequences.
+   We define the RLP function as RLP through two sub-functions, the first handling the instance when the value is a
+byte array, the second when it is a sequence of further values:
+                                                           
+                                                             Rb (x) if x ∈ B
+(159)                                            RLP(x) ≡   
+                                                             Rl (x) otherwise
+                                                           
+   If the value to be serialised is a byte-array, the RLP s erialisation takes one of three forms:
+        • If the byte-array contains solely a single byte and that single byte is less than 128, then the input is exactly
+          equal to the output.
+        • If the byte-array contains fewer than 56 bytes, then the output is equal to the input prefixed by the byte equal
+          to the length of the byte array plus 128.
+        • Otherwise, the output is equal to the input prefixed by the minimal-length byte-array which when interpreted
+          as a big-endian integer is equal to the length of the input byte array, which is itself prefixed by the number of
+          bytes required to faithfully encode this length value plus 183.
+   Formally, we define Rb :
+                                                  
+                                                    x
+                                                                                               if kxk = 1 ∧ x[0] < 128
+(160)                            Rb (x)       ≡     (128 + kxk) · x                             else if kxk < 56
+                                                                   
+                                                    183 + BE(kxk) · BE(kxk) · x                otherwise
+                                                  
+
+                                                                                n<kbk−1
+                                                                                  X
+(161)                            BE(x)        ≡   (b0 , b1 , ...) : b0 ne 0 ∧             bn · 256kbk−1−n
+                                                                                 n=0
+(162)               (a) · (b, c) · (d, e)     =   (a, b, c, d, e)
+   Thus BE is the function that expands a positive integer value to a big-endian byte array of minimal length and the
+dot operator performs sequence concatenation.
+   If instead, the value to be serialised is a sequence of other items then the RLP serialisation takes one of two forms:
+        • If the concatenated serialisations of each contained item is less than 56 bytes in length, then the output is equal
+          to that concatenation prefixed by the byte equal to the length of this byte array plus 192.
+        • Otherwise, the output is equal to the concatenated serialisations prefixed by the minimal-length byte-array
+          which when interpreted as a big-endian integer is equal to the length of the concatenated serialisations byte
+          array, which is itself prefixed by the number of bytes required to faithfully encode this length value plus 247.
+   Thus we finish by formally defining Rl :
+                                    
+                                       (192 + ks(x)k) · s(x)                                        if ks(x)k < 56
+(163)                  Rl (x) ≡                              
+                                        247 + BE(ks(x)k) · BE(ks(x)k) · s(x)                        otherwise
+
+(164)                       s(x)     ≡       RLP(x0 ) · RLP(x1 )...
+   If RLP is used to encode a scalar, defined only as a positive integer (P or any x for Px ), it must be specified as the
+shortest byte array such that the big-endian interpretation of it is equal. Thus the RLP of some positive integer i is
+defined as:
+(165)                                                    RLP(i : i ∈ P) ≡ RLP(BE(i))
+   When interpreting RLP data, if an expected fragment is decoded as a scalar and leading zeroes are found in the byte
+sequence, clients are required to consider it non-canonical and treat it in the same manner as otherwise invalid RLP
+data, dismissing it completely.
+   There is no specific canonical encoding format for signed or floating-point values.
