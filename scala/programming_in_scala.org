@@ -1306,7 +1306,7 @@ list 有可变和不可变的
 
 *** 可见性和伴生性
     scala 中代替静态成员的是，可以拥有包含成员的单例的伴生对象。
-    类的所有访问权限都对伴生对象开放，反过来也如此。对象可以访问所以它的伴生类的私有成员。
+    类的所有访问权限都对伴生对象开放，反过来也如此。对象可以访问它的伴生类的私有成员。
 
 * 断言和单元测试
   scala 的断言机制，各种可以为 scala 编写测试的工具。
@@ -1678,7 +1678,7 @@ The extra patterns mean that scala patterns support deep matches.
   如何使用 scala 集合类型：列表，数组，元组集（tuple）及映射表
 ** Sequences
 *** Lists
-    fast addition and removal of items to the beginnig of the list bu t they do not provide fast access to arbitrary indexes.
+    fast addition and removal of items to the beginnig of the list but they do not provide fast access to arbitrary indexes.
 *** Arrays
     allow to hold a sequence of elements and efficiently access an element at an arbitrary position, both to get or update the element.
 *** List buffers
@@ -1852,7 +1852,7 @@ The extra patterns mean that scala patterns support deep matches.
        }
      }
    #+END_SRC
-   It is also possible and sometimes useful, to fefine a gette and a setter without an associated field.
+   It is also possible and sometimes useful, to define a gette and a setter without an associated field.
 
    #+BEGIN_SRC scala
      class Thermometer {
@@ -2047,10 +2047,258 @@ Besides + , there is also a prefix - , which indicates contravariant subtyping. 
 
 * 抽象成员
   能够声明为抽象的有方法，字段，类型。
+  In this chapter we'll describe all four kinds of abstract member: vals, vars, methods, and types.
+  Along the way we'll discuss pre-initialized fields, lazy vals, path-dependent types, and enumerations.
 
+  #+BEGIN_SRC scala
+    trait Abstract {
+      type T
+      def transform(x: T): T
+      val initial: T
+      var current: T
+    }
+
+
+    class Concrete extends Abstract {
+      type T = String
+      def transform(x: String) = x + x
+      val initial = "hi"
+      var current = initial
+    }
+  #+END_SRC
+** abstract vals
+
+   #+BEGIN_SRC scala
+     abstract class Fruit {val v: String // `v' for value
+       def m: String // `m' for method
+     }
+     abstract class Apple extends Fruit {
+       val v: String
+       val m: String // OK to override a `def' with a `val'
+     }
+     abstract class BadApple extends Fruit {
+       def v: String // ERROR: cannot override a `val' with a `def'
+       def m: String
+     }
+   #+END_SRC
+** abstrat vars
+
+   #+BEGIN_SRC scala
+     trait AbstractTime {
+       var hour: Int
+       var minute: Int
+     }
+   #+END_SRC
+** Lazy vals
+  Thus, lazy vals can free you as a programmer from having to think hard how to arrange val definitions to ensure that everything is defined when it is needed.
+   #+BEGIN_SRC scala
+     object Demo {
+       val x = { println("initializing x"); "done" }
+     }
+         // scala> Demo
+         // initializing x
+         // res3: Demo.type = Demo$@2129a843
+         // scala> Demo.x
+         // res4: String = done
+       // As you can see, the moment you use Demo, its x field becomes initialized. The initialization of xforms
+       // part of the initialization of Demo. The situation changes, however, if you define the x field to be lazy:
+     object Demo {
+       lazy val x = { println("initializing x"); "done" }
+     }
+         // scala> Demo
+         // res5: Demo.type = Demo$@5b1769c
+         // scala> Demo.x
+         // initializing x
+         // res6: String = done
+   #+END_SRC
+
+   #+BEGIN_SRC scala
+     trait LazyRationalTrait {
+       val numerArg: Int
+       val denomArg: Int
+       lazy val numer = numerArg / g
+       lazy val denom = denomArg / g
+       override def toString = numer + "/" + denom
+       private lazy val g = {
+         require(denomArg != 0)
+         gcd(numerArg, denomArg)
+       }
+       private def gcd(a: Int, b: Int): Int =
+         if (b == 0) a else gcd(b, a % b)
+     }
+   #+END_SRC
+** abstract types
+
+   #+BEGIN_SRC scala
+     class Food
+     abstract class Animal {
+       def eat(food: Food)
+     }
+     class Grass extends Food
+     class Cow extends Animal {
+       override def eat(food: Grass) = {} // This won't compile,
+     }
+       // but if it did,...
+     class Fish extends Food
+
+     val bessy: Animal = new Cow
+
+     bessy eat (new Fish)
+       // ...you could feed fish to cows.
+
+     class Food
+     abstract class Animal {
+       type SuitableFood <: Food
+       def eat(food: SuitableFood)
+     }
+   #+END_SRC
+** enumerations
+  Scala does not need special syntax for enumerations. Instead, there's a class in its standard library, scala.Enumeration.
+
+  #+BEGIN_SRC scala
+    object Color extends Enumeration {
+      val Red = Value
+      val Green = Value
+      val Blue = Value
+    }
+  #+END_SRC
+
+  #+BEGIN_SRC scala
+    object Direction extends Enumeration {
+      val North = Value("North")
+      val East = Value("East")
+      val South = Value("South")
+      val West = Value("West")
+    }
+  #+END_SRC
+** conclusion
+  when designing a class, make everything that is not yet known into an abstract member. 
+  It does not matter whether the unknown is a type, method, variable or value. In Scala, all of these
+can be declared abstract.
 * 隐式转换和参数
-  不懂
   这两个特性有助于程序员忽略掉源码中那些能由编译器推导出来的繁琐的细节的特性。
+** implicit conversions  
+
+   #+BEGIN_SRC scala
+     val button = new JButton
+     button.addActionListener(
+       new ActionListener {
+         def actionPerformed(event: ActionEvent) = {}
+       )
+         println("pressed!")
+     }
+
+     // then mismatch
+     button.addActionListener( // Type mismatch!
+       (_: ActionEvent) => println("pressed!")
+     )
+
+     // implicit
+     implicit def function2ActionListener(f: ActionEvent => Unit) =
+       new ActionListener {
+         def actionPerformed(event: ActionEvent) = f(event)
+       }
+
+     // call directly
+     button.addActionListener(
+       function2ActionListener(
+         (_: ActionEvent) => println("pressed!")
+       )
+     )
+
+     // call implicit
+     // Now this works
+     button.addActionListener(
+       (_: ActionEvent) => println("pressed!")
+     )
+   #+END_SRC
+** RULES FOR IMPLICITS
+  Marking rule: Only definitions marked implicit are available.
+
+  #+BEGIN_SRC scala
+    implicit def intToString(x: Int): String = ...
+  #+END_SRC
+
+
+  Scope rule: An inserted implicit conversion must be in scope as a single identifier, or be associated with the source or target type of the conversion.
+  convert available as an implicit, you would need to import it, which would make it available as a single identifier. Once imported, the compiler would be free to apply it as convert(x) + y. In fact, it is common for libraries to include a Preamble object including a number of useful implicit conversions. Code that uses the library can then do a single "import Preamble._" to access the library's implicit conversions.
+
+  One-at-a-time rule: Only one implicit is inserted.
+
+  Explicits-first rule: Whenever code type checks as it is written, no implicits are attempted.
+
+  There are three places implicits are used in the language: conversions to an expected type, conversions of the receiver of a selection, and implicit parameters.
+  #+BEGIN_SRC scala
+    object MyConversions {
+      implicit def stringWrapper(s: String):
+          IndexedSeq[Char] = ...
+      implicit def intToString(x: Int): String = ...
+    }
+
+    import MyConversions.stringWrapper
+      ... // code making use of stringWrapper
+  #+END_SRC
+** IMPLICIT PARAMETERS
+
+   #+BEGIN_SRC scala
+     object Greeter {
+       def greet(name: String)(implicit prompt: PreferredPrompt) = {
+         println("Welcome, " + name + ". The system is ready.")
+         println(prompt.preference)
+       }
+     }
+   #+END_SRC
+
+   #+BEGIN_SRC scala
+     def maxListOrdering[T](elements: List[T])
+                        (ordering: Ordering[T]): T =
+       elements match {
+         case List() =>
+           throw new IllegalArgumentException("empty list!")
+         case List(x) => x
+         case x :: rest =>
+           val maxRest = maxListOrdering(rest)(ordering)
+           if (ordering.gt(x, maxRest)) x
+           else maxRest
+     }
+   #+END_SRC
+
+   #+BEGIN_SRC scala
+     def maxList[T](elements: List[T])
+                (implicit ordering: Ordering[T]): T =
+       elements match {
+         case List() =>
+           throw new IllegalArgumentException("empty list!")
+         case List(x) => x
+         case x :: rest =>
+           val maxRest = maxList(rest)
+             // (ordering) is implicit
+           if (ordering.gt(x, maxRest)) x // this ordering is
+           else maxRest
+             // still explicit
+     }
+   #+END_SRC
+
+   #+BEGIN_SRC scala
+     def maxList[T](elements: List[T])
+                (implicit ordering: Ordering[T]): T =
+       elements match {
+         case List() =>
+           throw new IllegalArgumentException("empty list!")
+         case List(x) => x
+         case x :: rest =>
+           val maxRest = maxList(rest)
+             // (ordering) is implicit
+           if (ordering.gt(x, maxRest)) x // this ordering is
+           else maxRest
+             // still explicit
+     }
+   #+END_SRC
+
+
+
+
+
 
 * 实现列表
   描述 list 类的实现。实现本身也展示了若干 scala 特性的应用。
