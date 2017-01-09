@@ -96,6 +96,8 @@ There are two types of transactions: those which result in message calls and tho
 
 Additionally, a contract creation transaction contains:
 - init :: An unlimited size byte array specifying the EVM-code for the account initialisation procedure, formally T i .
+** The Block
+
 * 10. Blocktree to Blockchain
 In order to have consensus over which path it is, conceptually we identify the path that has had the most computation done upon it, or, the heaviest path.
 
@@ -106,7 +108,7 @@ Thus we define the total difficulty of block B recursively as:
  (137)                      B0   ≡   P (BH )
 
 As such given a block B, Bt is its total difficulty, B 0 is its parent block and Bd is its difficulty.
-*   Appendix B
+* Appendix B
 This is a serialisation method for encoding arbitrarily structured binary data (byte arrays).
    We define the set of possible structures T:
 (156)                               T   ≡   L∪B
