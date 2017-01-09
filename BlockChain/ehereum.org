@@ -31,7 +31,7 @@ Formally, we expand to:
 Throughout the present work, any reference to value, should be assumed to be counted in Wei.
 ** Which History? 
 To avoid multiple states of the system coexist, we use in order to generate consensus is a simplifiedversion of the GHOST protocol introduced by Sompolinsky and Zohar.
-* Convensions
+* 3. Convensions
 The two sets of highly structured, ‘top-level’, state values, are denoted with bold lowercase Greek letters. They fall into those of world-state, which are denoted σ (or a variant thereupon) and those of machine-state, μ.
 
 Functions operating on highly structured values are denoted with an upper-case greek letter, e.g. Υ, the Ethereum state transition function.
@@ -54,7 +54,7 @@ When considering the use of existing functions, given a function f , the functio
 
 I define a number of useful functions throughout. One of the more common is `, which evaluates to the last item in the given sequence:
 (5)   `(x) ≡ x[kxk − 1]
-* Blocks, State and Transactions
+* 4. Blocks, State and Transactions
 Having introduced the basic concepts behind Ethereum, we will discuss the meaning of a transaction, a block and the state in more detail.
 ** World State
 The world state (state), is a mapping between addresses (160-bit identifiers) and account states (a data structure serialised as RLP, see Appendix B). Though not stored on the blockchain, it is assumed that the implementation will maintain this mapping in a modified Merkle Patricia tree (trie, see Appendix D).
@@ -85,18 +85,159 @@ where
 (11)         ∀a : σ[a] = ∅ ∨ (a ∈ B20 ∧ v(σ[a]))
 where v is the account validity function:
 (12)       v(x) ≡ xn ∈ P256 ∧xb ∈ P256 ∧xs ∈ B32 ∧xc ∈ B
+** Homestead
+We denote with the symbol N_H, defined thus N_H ≡ 1,150,000.
+The protocol was upgraded at this block, so this symbol appeas in some equations to account for the changes.
 ** The Transactions
 There are two types of transactions: those which result in message calls and those which result in the creation of new accounts with associated code (known informally as ‘contract creation’). Both types specify a number of common fields:
-1. nonce
-2. gasPrice
-3. gasLimit
-4. to
-5. value
-6. v, r, s
+1. nonce (T_n)
+2. gasPrice (T_p)
+3. gasLimit (T_g)
+4. to (T_t)
+5. value (T_v)
+6. v (T_w), r (T_r), s (T_s)
 
 Additionally, a contract creation transaction contains:
-- init :: An unlimited size byte array specifying the EVM-code for the account initialisation procedure, formally T i .
+- init :: T_i. An unlimited size byte array specifying the EVM-code for the account initialisation procedure, formally T i .
+- data :: T_d. An unlimited size byte array specifying the input data of the message call, formally T d .Incontrast, a message calll transaction is contained.
 ** The Block
+The block in Ethereum is the collection of relevant pieces of information (known as the block header ), H, together with information corresponding to the comprised transactions, T, and a set of other block headers U that are known to have a parent equal to the present block’s parent’s parent (such blocks are known as ommers^2 ). 
+
+The block header contains several pieces of information:
+- parentHash :: H_p
+- ommersHash :: H_o
+- beneficiary :: H_c
+- stateRoot :: H_r
+- transactionsRoot :: H_t
+- receiptsRoot :: H_e
+- logsBloom :: H_b
+- difficulty :: H_d
+- number :: H_i
+- gasLimit :: H_l
+- gasUsed :: H_g
+- timestamp :: H_s
+- extraData :: H_x
+- mixHash :: H_m
+- nonce :: H_n
+The other two components in the block are simply a list of ommer block headers (of the same format as above) and a series of the transactions.
+B ≡ (B H , B T , B U )
+*** Transaction Receipt
+Each receipt, denoted B R [i] for the ith transaction) is placed in an index-keyed trie and the root recorded in the header as H e .
+
+The transaction receipt is a tuple of four items comprising the post-transaction state, R σ , the cumulative gas used in the block containing the transaction receipt as of immediately after the transaction has happened, R u , the set of logs created through execution of the transaction, R l and the Bloom filter composed from information in those logs, R b :
+R ≡ (R σ , R u , R b , R l )
+
+The function L R trivially prepares a transaction receipt for being transformed into an RLP-serialised byte array:
+(20) L R (R) ≡ (TRIE(L S (R σ )), R u , R b , R l )
+thus the post-transaction state, R σ is encoded into a trie structure, the root of which forms the first item.
+*** Holistic Validity
+We can assert a block’s validity if and only if it satisfies several conditions: it must be in- ternally consistent with the ommer and transaction block hashes and the given transactions B T (as specified in sec 11), when executed in order on the base state σ (derived from the final state of the parent block), result in a new state of the identity H r.
+*** Serialisation
+The function L B and L H are the preparation functions for a block and block header respec- tively. Much like the transaction receipt preparation func- tion L R , we assert the types and order of the structure for when the RLP transformation is required:
+(32) L H (H) ≡ ( H p , H o , H c , H r , H t , H e , H b , H d , H i , H l , H g , H s , H x , H m , H n )
+
+(33) L B (B) ≡ L H (B H ), L ∗ T (B T ), L ∗ H (B U )
+*** Block Header Validity.
+* 5. Gas and payment
+* 6. Transaction Execution
+It defines the state transition function Υ. It is assumed that any transactions executed first pass the initial tests of intrinsic validity. These include:
+(1) The transaction is well-formed RLP, with no additional trailing bytes;
+(2) the transaction signature is valid;
+(3) the transaction nonce is valid (equivalent to the sender account’s current nonce);
+(4) the gas limit is no smaller than the intrinsic gas, g 0 , used by the transaction;
+(5) the sender account balance contains at least the cost, v 0 , required in up-front payment.
+
+Formally, we consider the function Υ, with T being a transaction and σ the state:
+(59) σ 0 = Υ(σ, T )
+** Substate
+Throughout transaction execution, we accrue certain information that is acted upon immediately following the transaction. We call this transaction substate, and represent it as A, which is a tuple:
+(60) A ≡ (A s , A l , A r )
+- A_s :: a set of accounts that will be discarded following the transaction’s completion.
+- A_l :: log series.
+- A_r :: refund balance.
+
+For brevity, we define the empty substate A 0 to have no suicides, no logs and a zero refund balance:
+(61) A 0 ≡ (∅, (), 0)
+
+** Execution
+* 7. Contract creation
+There are a number of intrinsic parameters used when creating an account: sender (s), original transactor (o), available gas (g), gas price (p), endowment (v) together with an arbitrary length byte array, i, the initialisation EVM code and finally the present depth of the message-call/contract-creation stack (e).
+
+We define the creation function formally as the function Λ, which evaluates from these values, together with the state σ to the tuple containing the new state, remaining gas and accrued transaction substate (σ 0 , g 0 , A), as in section 6:
+(81) (σ 0 , g 0 , A) ≡ Λ(σ, s, o, g, p, v, i, e)
+
+The address of the new account is defined as being the rightmost 160 bits of the Keccak hash of the RLP encoding of the structure containing only the sender and the nonce. Thus we define the resultant address for the new
+account a: search (82) in paper.
+
+The account’s nonce is initially defined as zero, the balance as the value passed, the storage as empty and the code hash as the Keccak 256-bit hash of the empty string; the sender’s balance is also reduced by the value passed.
+
+As such, the code execution function Ξ evaluates to a tuple of the resultant state σ ∗∗ , available gas remaining g ∗∗ , the accrued substate A and the body code of the account o.
+(87) (σ ∗∗ , g ∗∗ , A, o) ≡ Ξ(σ ∗ , g, I)
+
+where I contains the parameters of the execution environment as defined in section 9, that is:
+(88) I a ≡ a
+(89) I o ≡ o
+(90) I p ≡ p
+(91) I d ≡ ()
+(92) I s ≡ s
+(93) I v ≡ v
+(94) I b ≡ i
+(95) I e ≡ e
+
+The gas remaining will be zero in any such exceptional condition, i.e. if the creation was conducted as the reception of a transaction, then this doesn’t affect payment of the intrinsic cost of contract creation; it is paid regardless.
+However, the value of the transaction is not transferred to the aborted contract’s address when we are Out-of-Gas.
+
+If such an exception does not occur, then the remainng gas is refunded to the originator and the now-altered state is allowed to persist.
+
+Note that the intention from block N H onwards (Homestead) is that the result is either a successfully created new contract with its endowment, or no new contract with no transfer of value. Before Homestead, if there is not enough gas to pay c, an account at the new contract’s address is created, along with all the initialisation side-effects, and the value is transferred, but no contract code is deployed.
+** Subtleties
+Note that while the initialisation code is executing, the newly created address exists but with no intrinsic body code.
+Thus any message call received by it during this time causes no code to be executed.
+If the initialisation execution ends with a SUICIDE instruction, the matter is moot since the account will be deleted before the transaction is completed. For a normal STOP code, or if the code returned is otherwise empty, then the state is left with a zombie account, and any remaining balance will be locked into the account forever.
+* 8. Message Call
+In the case of executing a message call, several parameters are required: sender (s), transaction originator (o), recipient (r), the account whose code is to be executed (c, usually the same as recipient), available gas (g), value (v) and gas price (p) together with an arbitrary length byte array, d, the input data of the call and finally the present depth of the message-call/contract-creation stack (e).
+** TODO finish this chapter
+* 9. Execution Model
+The execution model specif i es how the system state is altered given a series of bytecode instructions and a small tuple of environmental data. 
+** 9.1. Basics
+The EVM is a simple stack-based architecture. The word size of the machine (and thus size of stack item) is 256-bit. This was chosen to facilitate the Keccak-256 hash scheme and elliptic-curve computations.The memory model is a simple word-addressed byte array. The stack has a maximum size of 1024.
+
+Rather than storing program code in generally-accessible memory or storage, it is stored separately in a virtual ROM interactable only through a specialised instruction.
+
+The machine can have exceptional execution for several reasons, including stack underf l ows and invalid instructions.Like the out-of-gas (OOG) exception, they do not leave state changes intact.  
+** Fees overview
+Fees (denominated in gas) are charged under three distinct circumstances, all three as prerequisite to the execution of an operation. The first and most common is the fee intrinsic to the computation of the operation (see Appendix G).Secondly, gas may be deducted in order to form the payment for a subordinate message call or contract creation; this forms part of the payment forCREATE,CALLandCALLCODE. Finally, gas may be paid due to an increase in the usage of the memory.
+
+Over an account’s execution, the total fee for memory-usage payable is proportional to smallest multiple of 32 bytes that are required such that all memory indices (whether for read or write) are included in the range. 
+That said, implementations must be able to manage this eventuality.
+
+in fact, this refund is effectively paid up-front since the initial usage of a storage location costs substantially more than normal usage.
+** 9.3. Execution Environment
+In addition to the system state σ, and the remaining gas for computation g, there are several pieces of important information used in the execution environment that the execution agent must provide; these are contained in the tuple I.
+
+• Ia, the address of the account which owns the code that is executing.
+• Io, the sender address of the transaction that originated this execution.
+• Ip, the price of gas in the transaction that originated this execution.
+• Id, the byte array that is the input data to this execution; if the execution agent is a transaction, this would be the transaction data.
+• Is, the address of the account which caused the code to be executing; if the execution agent is a transaction, this would be the transaction sender.
+• Iv, the value, in Wei, passed to this account as part of the same procedure as execution; if the execution agent is a transaction, this would be the transaction value.
+• Ib, the byte array that is the machine code to be executed.
+• IH, the block header of the present block.
+• Ie, the depth of the present message-call or contract-creation (i.e.the number ofCALLs or CREATEs being executed at present).
+
+The execution model defines the function Ξ, which can compute the resultant state σ0, the remaining gas g0, the suicide list s, the log series l, the refunds r and the resultant output, o, given these def initions:
+(115)(σ0,g0,s,l,r,o) ≡ Ξ(σ,g,I)
+** 9.4. Execution Overview
+We must now def i ne the Ξ function. In most practical implementations this will be modelled as an iterative progression of the pair comprising the full system state, σ and the machine state, µ.
+Formally, we def i ne it recursively with a function X. This uses an iterator function O (which def i nes the result of a single cycle of the state machine) together with functions Z which determines if the present state is an exceptional halting state of the machine and H, specifying the output data of the instruction if and only if the present state is a normal halting state of the machine.
+The empty sequence, denoted (), is not equal to the empty set, denoted ∅; this is important when interpreting the output of H, which evaluates to ∅ when execution is to continue but a series (potentially empty) when execution should halt.
+*** Machine state
+The machine state µ is def i ned as the tuple (g,pc,m,i,s) which are the gas available, the program counter pc ∈ P256, the memory contents, the active number of words in memory (counting continuously from position 0), and the stack contents.The memory contents µmare a series of zeroes of size 2^256.
+*** Exceptional Halting
+The exceptional halting function Z is def i ned as: (126)
+*** 9.4.3. Jump Destination Validity.
+*** 9.5. The Execution Cycle
+Stack items are added or removed from the left-most, lower-indexed portion of the series; all other items remain unchanged
 
 * 10. Blocktree to Blockchain
 In order to have consensus over which path it is, conceptually we identify the path that has had the most computation done upon it, or, the heaviest path.
@@ -108,6 +249,15 @@ Thus we define the total difficulty of block B recursively as:
  (137)                      B0   ≡   P (BH )
 
 As such given a block B, Bt is its total difficulty, B 0 is its parent block and Bd is its difficulty.
+* 11. Block Finalisation
+** Mining proof-of-work
+For both reasons, there are two important goals of the proof-of-work function; firstly, it should be as accessible as possible to as many people as possible. 
+
+Secondly, it should not be possible to make super-linear profits, and especially not so with a high initial barrier.
+
+Two directions exist for ASIC resistance; firstly make it sequential memory-hard, i.e. engineer the function such that the determination of the nonce requires a lot of memory and bandwidth such that the memory cannot be used in parallel to discover multiple nonces simultaneously.
+The second is to make the type of computation it would need to do general-purpose; the meaning of “specialised hardware” for a general-purpose task set is, naturally, general purpose hardware and as such commodity desktop computers are likely to be pretty close to “specialised hardware” for the task. For Ethereum 1.0 we have chosen the first path.
+
 * Appendix B
 This is a serialisation method for encoding arbitrarily structured binary data (byte arrays).
    We define the set of possible structures T:
@@ -271,3 +421,1070 @@ defined as:
 sequence, clients are required to consider it non-canonical and treat it in the same manner as otherwise invalid RLP
 data, dismissing it completely.
    There is no specific canonical encoding format for signed or floating-point values.
+* word
+** punctuate ['pʌŋ(k)tʃʊeɪt]
+*** Basic Explains
+  - vt. 不时打断；强调；加标点于
+  - vi. 加标点
+
+*** Web References
+  - punctuate :: 加标点; 不时介入; 加标点于
+  - punctuate rate :: 正点率
+  - Punctuate stripping :: 点式抽剥术
+
+** incentive [ɪn'sentɪv]
+*** Basic Explains
+- n. 动机；刺激
+- adj. 激励的；刺激的
+
+*** Web References
+- incentive :: 刺激; 诱因; 鼓励
+- Incentive Tour :: 奖励旅游; 奖勵旅游; 主要指公司会议 I
+- Volume Incentive :: 箱扣; 以量化奖励
+
+** nominate ['nɒmɪneɪt]
+
+*** Basic Explains
+- vt. 推荐；提名；任命；指定
+
+*** Web References
+- Nominate :: 提名; 任命; 推荐
+- nominate willmigerl :: 指定
+- nominate surveyor :: 指定的验船师
+
+** dedicate ['dedɪkeɪt]
+
+*** Basic Explains
+- vt. 致力；献身；题献
+
+*** Web References
+- Dedicate :: 奉献; 献给; 献身
+- to dedicate :: 贡献; 奉献
+- Hereby Dedicate :: 特此奉献
+
+** bolster ['bəʊlstə]
+
+*** Basic Explains
+- n. 支持；长枕
+- vt. 支持；支撑
+- n. (Bolster)人名；(英)博尔斯特
+
+*** Web References
+- bolster :: 长枕; 长枕套; 垫板
+- anchor bolster :: 锚架; 锚链孔唇口; 锚承架
+- hawse bolster :: 锚链管孔磨材; 锚链孔唇口; 锚链枕垫
+
+** potential [pəˈtenʃl]
+
+*** Basic Explains
+- n. 潜能；可能性；[电] 电势
+- adj. 潜在的；可能的；势的
+
+*** Web References
+- potential :: 潜在的; 潜力; 潜能
+- Potential well :: 势阱; 势阱; 位阱
+- potential temperature :: 位温; 位温; 位势温度
+** competitor [kəm'petɪtə]
+
+*** Basic Explains
+- n. 竞争者，对手
+
+*** Web References
+- Competitor :: 竞争者; 对手; 竞争对手
+- strategic competitor :: 战略竞争者; 战略竞争对手; 战略竞争者
+- Predatory competitor :: 非常强大的竞争对手; 掠夺性竞争对手
+** transition [træn'zɪʃ(ə)n; trɑːn-; -'sɪʃ-]
+
+*** Basic Explains
+- n. 过渡；转变；[分子生物] 转换；变调
+
+*** Web References
+- transition :: 过渡; 转变; 转换
+- Glass transition :: 玻璃转化温度; 玻璃化转变; 玻璃相变
+- transition economy :: 转轨经济; 转型经济; 属过渡形经济
+** transaction [træn'zækʃ(ə)n; trɑːn-; -'sæk-]
+
+*** Basic Explains
+- n. 交易；事务；办理；会报，学报
+
+*** Web References
+- Transaction :: 交易; 事务; 事务处理
+- Transaction cost :: 交易成本; 交易费用; 交易成本
+- accounting transaction :: 会计事项; 帐务交易; 会计业务
+** canonical [kə'nɒnɪk(ə)l]
+
+*** Basic Explains
+- n. 牧师礼服
+- adj. 依教规的；权威的；牧师的
+
+*** Web References
+- canonical :: 典型; 标准; 典范
+- Canonical XML :: Canonical XML; Canonical XML
+- Canonical ensemble :: 正则系综; 正则系综; 正则总体
+** radically ['rædɪkəlɪ]
+
+*** Basic Explains
+- adv. 根本上；彻底地；以激进的方式
+
+*** Web References
+- radically :: 根本地; 极端地; 彻底地
+- More Radically :: 更为激进
+- radically dielectric :: 径向绝缘
+** incompatible [ɪnkəm'pætɪb(ə)l]
+
+*** Basic Explains
+- n. 互不相容的人或事物
+- adj. 不相容的；矛盾的；不能同时成立的
+
+*** Web References
+- incompatible :: 不调和的; 不和适宜的; 不兼容
+- incompatible termini :: 不匹配末端
+- incompatible elements :: 不相容元素; 不相容元素的
+** uncertainty [ʌn'sɜːt(ə)ntɪ; -tɪntɪ]
+
+*** Basic Explains
+- n. 不确定，不可靠
+
+*** Web References
+- Uncertainty :: 不确定性; 不确定性; 不确定
+- uncertainty principle :: 不确定性原理; 测不准原理; 不确定性原理
+- measurement uncertainty :: 测量不确定度; 测量不确定度; 量测不确定度
+** consensus [kən'sensəs]
+
+*** Basic Explains
+- n. 一致；舆论；合意
+
+*** Web References
+- Consensus :: 共识; 一致; 一致同意
+- Washington Consensus :: 华盛顿共识; 华盛顿共识; 华盛顿共鸣
+- Beijing Consensus :: 北京共识; 北京共识; 北京共識
+** conceptually [kən'sɛptʃʊəli]
+
+*** Basic Explains
+- adv. 概念地
+
+*** Web References
+- conceptually :: 概念地; 从概念上讲; 概念性
+- conceptually driven :: 概念驱动; 又称为概念导向
+- conceptually designing :: 概念设计
+** equivalent [ɪ'kwɪv(ə)l(ə)nt]
+
+*** Basic Explains
+- n. 等价物，相等物
+- adj. 等价的，相等的；同意义的
+
+*** Web References
+- equivalent :: 相等的; 等值; 折合
+- equivalent load :: 当量载荷; 当量负荷; 等效负载
+- Equivalent equation :: 等价方程式; 同解方程; 等价方程
+** akin [ə'kɪn]
+
+*** Basic Explains
+- adj. 类似的；同类的；同族的
+- n. (Akin)人名；(土、瑞典、尼日利)阿金；(匈)奥金；(英)埃金
+
+*** Web References
+- akin :: 类似的; 急性肾损伤网络(Acute Kidney Injury Network); 同族的
+- akin to :: 有亲密关系的; 同类; 类似于
+- Akin Konizi :: 阿金·考尼兹
+** toward [tə'wɔːd; twɔːd; tɔːd]
+
+*** Basic Explains
+- prep. 向；对于；为了；接近
+- adj. 即将来到的，进行中的
+- n. (Toward)人名；(英)特沃德
+
+*** Web References
+- Toward :: 朝着; 向着; 表示动作行为所向
+- Toward Point :: 指向点; 趋向于点
+- toward south :: 向南
+** cryptographically [kriptə'græfikli]
+
+*** Basic Explains
+- adv. 密码地；用暗号地
+
+*** Web References
+- cryptographically :: 密码地
+- cryptographically sound :: 密码学可靠性
+- Cryptographically Generated Addresses :: 地址加密生成 CGA; 加密产生地址技术; 加密产生地址(CGA)
+** reasonable ['riːz(ə)nəb(ə)l]
+
+*** Basic Explains
+- adj. 合理的，公道的；通情达理的
+
+*** Web References
+- Reasonable :: 合理; 讲道理的; 正当的
+- Reasonable arrangements :: 合理安排; 径流系数; 合理安排
+- reasonable man :: 理性人; 明理的人; 合理人
+** doubt [daʊt]
+
+*** Basic Explains
+- n. 怀疑；疑问；疑惑
+- v. 怀疑；不信；恐怕；拿不准
+
+*** Web References
+- Doubt :: 怀疑; 圣诉; 疑惑
+- Reasonable doubt :: 合理怀疑; 合理的怀疑; 合理怀疑
+- doubt  v :: 怀疑; 疑惑
+** expend [ɪk'spend; ek-]
+
+*** Basic Explains
+- vt. 花费；消耗；用光；耗尽
+
+*** Web References
+- expend :: 消费; 花费; 消耗
+- Expend Appearance :: 扩展轮廓
+- expend vt :: 花费
+** determination [dɪ,tɜːmɪ'neɪʃ(ə)n]
+
+*** Basic Explains
+- n. 决心；果断；测定
+
+*** Web References
+- Determination :: 决心; 测定; 决定
+- cell determination :: 细胞决定; 指决定分化状态细胞的向特定方向分化的过程; 细胞决议
+- Determination method :: 测定方法; 检测方法; 确定方法
+** enforce [ɪn'fɔːs; en-]
+
+*** Basic Explains
+- vt. 实施，执行；强迫，强制
+
+*** Web References
+- enforce :: 实施; 强制; 执行
+- Enforce restriction :: 强化约束; 强化束缚; 巩固约束
+- enforce upon :: 强迫
+** credence ['kriːd(ə)ns]
+
+*** Basic Explains
+- n. 信任；凭证；祭器台（等于 credence table，credenza）
+
+*** Web References
+- credence :: 信任; 相信; 科利登
+- Credence good :: 后经验品; 后经验品; 信任商品
+- credence goods :: 信任品; 信用品; 相信品
+** notion ['nəʊʃ(ə)n]
+
+*** Basic Explains
+- n. 概念；见解；打算
+
+*** Web References
+- notion :: 概念; 意图; 想法
+- absolute notion :: 绝对概念
+- common notion :: 普通观念; 共同概念
+** barrier ['bærɪə]
+
+*** Basic Explains
+- n. 障碍物，屏障；界线
+- vt. 把…关入栅栏
+- n. (Barrier)人名；(法)巴里耶
+
+*** Web References
+- barrier :: 障碍; 栅栏; 同步屏障
+- tariff barrier :: 关税壁垒; 关税; 关税普遍优惠制
+- Barrier Bay :: 冰障湾
+** funded [fʌndɪd]
+
+*** Basic Explains
+- v. 提供资金；积存；提供资金偿付的本息（fund 的过去式）
+- adj. 提供资金的
+
+*** Web References
+- Funded :: 中资; 备资; 得到资助
+- funded profession :: 原本职业
+- funded work :: 资助工作
+** adversary ['ædvəs(ə)rɪ]
+
+*** Basic Explains
+- n. 对手；敌手
+
+*** Web References
+- Adversary :: 敌手; 对手; 敌对者
+- adversary grade :: 逆坡
+- Your Adversary :: 认清你的仇敌
+** troublesome ['trʌb(ə)ls(ə)m]
+
+*** Basic Explains
+- adj. 麻烦的；讨厌的；使人苦恼的
+
+*** Web References
+- troublesome :: 麻烦; 棘手; 令人烦恼的
+- Troublesome Goblins :: 哥布林
+- Troublesome Defaults :: 三角债
+** plague [pleɪg]
+
+*** Basic Explains
+- n. 瘟疫；灾祸；麻烦；讨厌的人
+- vt. 折磨；使苦恼；使得灾祸
+
+*** Web References
+- plague :: 瘟疫; 鼠疫; 鼠疫
+- Capacitor plague :: 电容灾难; 电容灾难
+- Plague Inc :: 瘟疫公司; 反人类制造病毒; 安卓版
+** resistant [rɪ'zɪstənt]
+
+*** Basic Explains
+- n. 抵抗者
+- adj. 抵抗的，反抗的；顽固的
+
+*** Web References
+- resistant :: 抵抗的; 有抵抗力的; 耐久的
+- oil resistant :: 耐油性; 抗油的; 耐油
+- flame resistant :: 耐燃性; 耐火的; 耐燃物
+** proverbial [prə'vɜːbɪəl]
+
+*** Basic Explains
+- adj. 谚语的；众所周知的；谚语式的
+
+*** Web References
+- proverbial :: 谚语的; 有口皆碑; 众所周知的
+- proverbial a :: 格言般的; 公认的
+- proverbial metaphor :: 谚语型隐喻
+** simultaneously [,sɪml'teɪnɪəslɪ]
+
+*** Basic Explains
+- adv. 同时地
+
+*** Web References
+- simultaneously :: 同时地; 同; 并举
+- Receiving Simultaneously :: 节点集同步接收
+- Simultaneously Proposed :: 同时提出
+** determination [dɪ,tɜːmɪ'neɪʃ(ə)n]
+
+*** Basic Explains
+- n. 决心；果断；测定
+
+*** Web References
+- Determination :: 决心; 测定; 决定
+- cell determination :: 细胞决定; 指决定分化状态细胞的向特定方向分化的过程; 细胞决议
+- Determination method :: 测定方法; 检测方法; 确定方法
+** general-purpose ['dʒenərəl'pə:pəs]
+
+*** Basic Explains
+- adj. 多用途的；一般用途的
+
+*** Web References
+- general-purpose :: 通用的; 多种用途的; 一般用途
+- General-purpose application :: 通用运用程序; 通用运用步伐; 一般应用
+- general -purpose vehicle :: 通用货车; 短轴距货车
+** commodity [kə'mɒdɪtɪ]
+
+*** Basic Explains
+- n. 商品，货物；日用品
+
+*** Web References
+- commodity :: 商品; 日用品; 商品经济
+- Primary Commodity :: 初级产品; 初级商品; 低级产物
+- commodity market :: 商品市场; 金属交易市场; 商品～市场
+** nonce [nɒns]
+
+*** Basic Explains
+- n. 目前；特定场合；强奸犯
+- adj. 临时的；特定场合的
+
+*** Web References
+- Nonce :: Cryptographic nonce; Nonce cryptographique; 随机数
+- nonce borrowing :: 临时借用
+- The Nonce :: 表演者
+** externally [eks'tə:nəli]
+
+*** Basic Explains
+- adv. 外部地；外表上，外形上
+
+*** Web References
+- externally :: 外表上; 外部地; 在外部
+- Externally Competitive :: 外部竞争力
+- externally locked :: 外部锁定
+** synonymously [nil]
+
+*** Basic Explains
+- 同义
+
+*** Web References
+- synonymously :: 同义
+- synonymously lexical extension :: 同义延长
+- be used synonymously together with :: 同义连用
+** occasion [ə'keɪʒ(ə)n]
+
+*** Basic Explains
+- n. 时机，机会；场合；理由
+- vt. 引起，惹起
+
+*** Web References
+- OCCASION :: 场合; 时机; 之际
+- on occasion :: 有时; 间或; 不时地
+- purchase occasion :: 购买时机
+** relevant [ˈreləvənt]
+
+*** Basic Explains
+- adj. 相关的；切题的；中肯的；有重大关系的；有意义的，目的明确的
+
+*** Web References
+- Relevant :: 相关的; 勒勒旺; 有关的
+- relevant failure :: 关联失效; 非关联失效; 关联故障
+- relevant range :: 相关范围; 企业业务量的范围; 关范围
+** correspond [kɒrɪ'spɒnd]
+
+*** Basic Explains
+- vi. 符合，一致；相应；通信
+
+*** Web References
+- correspond :: 通信; 相当; 相符
+- to correspond :: 对应; 符合
+- correspond development :: 协调发展; 相容协调发展
+** comprise [kəm'praɪz]
+
+*** Basic Explains
+- vt. 包含；由…组成
+
+*** Web References
+- comprise :: 包含; 包括; 构成
+- comprise vt :: 构成; 包含
+- nient comprise :: 未列入
+** portion ['pɔːʃ(ə)n]
+
+*** Basic Explains
+- n. 部分；一份；命运
+- vt. 分配；给…嫁妆
+
+*** Web References
+- Portion :: 一部分; 部分; 很大一部分
+- capital portion :: 资本部分
+- test portion :: 试分; 试料; 试份
+** beneficiary [benɪ'fɪʃ(ə)rɪ]
+
+*** Basic Explains
+- n. [金融] 受益人，受惠者；封臣
+- adj. 拥有封地的；受圣俸的
+
+*** Web References
+- Beneficiary :: 受益人; 收款人; 受惠者
+- Beneficiary bank :: 收款行; 受款银行; 收款银行
+- beneficiary living :: 现存受益人
+** finalisation [nil]
+
+*** Basic Explains
+- n. 最终确定；定稿
+
+*** Web References
+- finalisation :: 最终确定
+- contract finalisation :: 合约决算
+** cumulative ['kjuːmjʊlətɪv]
+
+*** Basic Explains
+- adj. 累积的
+
+*** Web References
+- cumulative :: 累积的; 累加; 积累的
+- cumulative frequecy :: 累积频数; 累积频率
+- Cumulative Index :: 累积索引; 累积引患上; 累积索引
+** trivially ['triviəli]
+
+*** Basic Explains
+- adv. 琐细地；平凡地；无能地
+
+*** Web References
+- trivially :: 无能地; 琐细地; 平凡地
+- CrowdGame Trivially :: 问答游戏
+- Trivially distributed file system :: 的转录衍生片段
+** holistic [həʊ'lɪstɪk; hɒ-]
+
+*** Basic Explains
+- adj. 整体的；全盘的
+
+*** Web References
+- Holistic :: 整体的; 全人; 整体性
+- Holistic Marketing :: 全面营销; 全方位营销; 全方位行销
+- holistic governance :: 整体性治理; 整体治理; 全局治理
+** derive [dɪ'raɪv]
+
+*** Basic Explains
+- vt. 源于；得自；获得
+- vi. 起源
+- n. (Derive)人名；(法)德里夫
+
+*** Web References
+- derive :: 派生; 导出; 起源
+- derive circuit :: 分支电路; 分支电路，分路; 驱动电路
+- Derive activity :: 引导业务
+** pairwise ['peə,waɪz]
+
+*** Basic Explains
+- adj. 成对发生的
+- adv. 成对地；成双地
+
+*** Web References
+- pairwise :: 两两的; 成对地; 成双成对地
+- PairWise Approach :: 文档对方法; 文档对办法
+- pairwise comparison :: 成对比较; 两两比较; 成偶比对
+** rigorous ['rɪg(ə)rəs]
+
+*** Basic Explains
+- adj. 严格的，严厉的；严密的；严酷的
+
+*** Web References
+- Rigorous :: 严谨; 严格的; 严厉的
+- rigorous examination :: 精确检验
+- Rigorous training :: 严格训练
+** transmission [trænz'mɪʃ(ə)n; trɑːnz-; -ns-]
+
+*** Basic Explains
+- n. 传动装置，[机] 变速器；传递；传送；播送
+
+*** Web References
+- Transmission :: 传输; 传动; 变速器
+- Allison Transmission :: Allison Transmission; アリソン・トランスミッション; Allison Transmission
+- Transmission coefficient :: 透射系数; 透射系数; 透过系数
+** homeostasis [,hɒmɪə(ʊ)'steɪsɪs; ,həʊm-]
+
+*** Basic Explains
+- n. [生理] 体内平衡；[自] 内稳态
+
+*** Web References
+- homeostasis :: 稳态; 体内平衡; 内稳态
+- Immunologic homeostasis :: 免疫稳定; 免疫自稳; 免疫稳态
+- iron homeostasis :: 铁稳态; 铁营养; 含铁量
+** lengthening [ləŋkθəniŋ]
+
+*** Basic Explains
+- v. 延长（lengthen 的 ing 形式）；使加长；放长
+
+*** Web References
+- lengthening :: 加长; 纤长; 延长
+- lengthening inductance :: 加感线圈
+- corwn lengthening :: 牙冠延长术
+** proportional [prə'pɔːʃ(ə)n(ə)l]
+
+*** Basic Explains
+- n. [数] 比例项
+- adj. 比例的，成比例的；相称的，均衡的
+
+*** Web References
+- Proportional :: 正比; 成比例; 比例的
+- proportional limit :: 比例极限; 比例限界; 比限
+- proportional error :: 比例误差; 相对误差; 比例偏差
+** malicious [mə'lɪʃəs]
+
+*** Basic Explains
+- adj. 恶意的；恶毒的；蓄意的；怀恨的
+
+*** Web References
+- malicious :: 怀恶意的; 恶意的; 恶毒的
+- Malicious prosecution :: 恶意起诉; 诬告; 恶意起诉
+- MALICIOUS SOFTWARE :: 恶意软件; 恶意软体; 流氓软件
+** approximately [ə'prɒksɪmətlɪ]
+
+*** Basic Explains
+- adv. 大约，近似地；近于
+
+*** Web References
+- approximately :: 近似的; 大约; 大概
+- approximately linear :: 近似直线; 近似线性; 接近线性关系
+- approximately zero :: 示零偏量
+** accodingly
+
+*** Translation
+- 摘要
+** revert [rɪ'vɜːt]
+
+*** Basic Explains
+- n. 恢复原状者
+- vt. 使回复原状
+- vi. 回复；重提；返祖遗传；归还
+- n. (Revert)人名；(西)雷韦特；(法)勒韦尔
+
+*** Web References
+- Revert :: 恢复; 回复; 复原
+- svn revert :: 查看更改; 第五种方法
+- RVRT Revert :: 回转
+** homestead ['həʊmsted]
+
+*** Basic Explains
+- n. 宅地；家园；田产
+
+*** Web References
+- Homestead :: 霍姆斯特德 (佛罗里达州); 家园; 宅基地
+- Mobile Homestead :: 移动的房屋; 移动的家园
+- rural homestead :: 农村宅基地; 宅基地
+** compatibility [kəm,pætɪ'bɪlɪtɪ]
+
+*** Basic Explains
+- n. [计] 兼容性
+
+*** Web References
+- Compatibility :: 兼容性; 相容性; 配合度
+- Backward compatibility :: 向下兼容; 向下兼容; 向后兼容
+- Compatibility testing :: 相容性测试; 兼容性测试; 相容性测试
+** frontier ['frʌntɪə; frʌn'tɪə]
+
+*** Basic Explains
+- n. 前沿；边界；国境
+- adj. 边界的；开拓的
+- n. (Frontier)人名；(法)弗龙捷
+
+*** Web References
+- Frontier :: 福尔昂特尔 (北达科他州); 边境; 国境
+- Frontier Works :: フロンティアワークス; Frontier Works; Frontier Works
+- Frontier County :: 弗兰蒂尔县 (内布拉斯加州); 弗兰蒂尔县; 边镇
+** upgrade [ʌp'greɪd]
+
+*** Basic Explains
+- n. 升级；上升；上坡
+- vt. 使升级；提升；改良品种
+- adj. 向上的
+- adv. 往上
+
+*** Web References
+- Upgrade :: 升级; 升级; 提升
+- Upgrade Packages :: 自定义升级; 自界说进级; 自定义进级
+- Upgrade Ballista :: 升级弓箭
+** dissemination [dɪ,semɪ'neɪʃn]
+
+*** Basic Explains
+- n. 宣传；散播；传染（病毒）
+
+*** Web References
+- Dissemination :: 散布; 传播; 分发
+- information dissemination :: 信息传播; 信息传递; 资讯发布
+- news dissemination :: 资讯发布; 发放; 信息发布
+** endowment [ɪn'daʊm(ə)nt; en-]
+
+*** Basic Explains
+- n. 捐赠；捐助；捐款；天资
+
+*** Web References
+- endowment :: 禀赋; 储蓄保险; 天赋
+- ideological endowment :: 意识形态拥有量; 态领有量; 较大的意识形态拥有量
+- Resource endowment :: 资源禀赋; 资源禀赋; 天赋资源
+** deliver [dɪ'lɪvə]
+
+*** Basic Explains
+- n. 投球
+- vt. 交付；发表；递送；释放；给予（打击）；给…接生
+- vi. 实现；传送；履行；投递
+
+*** Web References
+- deliver :: 投递; 交付; 发出
+- Deliver Me :: 拯救我; 忏魂曲; 给我
+- Deliver pamphlets :: 派传单; 派宣传单
+** inclusion [ɪn'kluːʒ(ə)n]
+
+*** Basic Explains
+- n. 包含；内含物
+
+*** Web References
+- inclusion :: 夹杂物; 杂质; 内含物
+- Inclusion body :: 包涵体; 包含体; 内含体
+- skin inclusion :: 表皮折叠; 表皮折迭; 皮面折叠
+** transactor [træn'zæktə, -'sæk-, trɑ:n-]
+
+*** Basic Explains
+- n. 办理人；做交易的人；处理者
+
+*** Web References
+- transactor :: 处理者; 做交易的人; 办理人
+- ELECTRIC TRANSACTOR :: 电动执行器
+- Data Transactor :: 数据传输单元
+** lowering ['lauəriŋ]
+
+*** Basic Explains
+- adj. 使低劣的；昏暗的；减少体力的
+
+*** Web References
+- Lowering :: 降下人或物; 放绳下降; 卑劣的
+- Lowering off :: 放绳下降; 放绳降落
+- powered lowering :: 动力下降
+** intrinsic [ɪn'trɪnsɪk]
+
+*** Basic Explains
+- adj. 本质的，固有的
+
+*** Web References
+- intrinsic :: 固有的; 内在; 本征的
+- intrinsic equation :: 内蕴方程; 内禀方程; 本性方程式
+- Intrinsic 31 :: 内在三一
+** trailing ['treɪlɪŋ]
+
+*** Basic Explains
+- n. 拖尾；泥浆彩饰
+- v. 尾随（trail 的 ing 形式）
+- adj. 后面的；拖尾的；牵引的；被拖动的；蔓延的
+
+*** Web References
+- trailing :: 泥釉彩饰法; 后续; 拖尾
+- Trailing edge :: 后缘; 后缘; 后沿
+- trailing antenna :: 下垂天线; 拖曳天线; 下垂天线，拖曳天线
+** equivalent [ɪ'kwɪv(ə)l(ə)nt]
+
+*** Basic Explains
+- n. 等价物，相等物
+- adj. 等价的，相等的；同意义的
+
+*** Web References
+- equivalent :: 相等的; 等值; 折合
+- equivalent load :: 当量载荷; 当量负荷; 等效负载
+- Equivalent equation :: 等价方程式; 同解方程; 等价方程
+** up-front ['ʌpfrʌnt]
+
+*** Basic Explains
+- adj. 预先的；坦率的
+
+*** Web References
+- Up-Front :: Up-Front Group; 直爽的; 预付的
+- Up-front English :: 前沿英语
+- up-front cost :: 先期投入; 前端费
+** accrued [ə'krʊd]
+
+*** Basic Explains
+- v. 积累（accrue 的过去分词）；形成
+- adj. [会计] 应计的；增值的；权责已发生的
+
+*** Web References
+- Accrued :: 应计的; 权责已发生的; 增值的
+- accrued item :: 应计; 应计项目; 前期债务
+- Accrued wages :: 应付工资; 应计工资; 应计未付工资
+** irrevocable [ɪ'revəkəb(ə)l]
+
+*** Basic Explains
+- adj. 不可改变的；不能取消的；不能挽回的
+
+*** Web References
+- irrevocable :: 不可撤销的; 不可撤消的; 不能取消的
+- Irrevocable credit :: 不可撤销信用证; 不可撤消信用证; 不可撤消的信用证
+- irrevocable adjective :: 不可撤销的
+** deterministic [dɪ,tɜːmɪ'nɪstɪk]
+
+*** Basic Explains
+- adj. 确定性的；命运注定论的
+
+*** Web References
+- Deterministic :: 确定性; 确定的; 决定性的
+- deterministic schedule :: 确定性计划; 确定性排程; 确定性调度
+- deterministic test :: 确定性测试; 确定测试
+** deduct [dɪ'dʌkt]
+
+*** Basic Explains
+- vt. 扣除，减去；演绎
+
+*** Web References
+- deduct :: 扣除; 减去; 可推论的
+- deduct craigslist :: 可推论的
+- deduct  verb :: 扣除
+** original [ə'rɪdʒɪn(ə)l; ɒ-]
+
+*** Basic Explains
+- n. 原件；原作；原物；原型
+- adj. 原始的；最初的；独创的；新颖的
+
+*** Web References
+- Original :: 原始; 有独创性的; 原来
+- Glashütte Original :: 格拉苏蒂; 格拉苏蒂; 格拉苏蒂原创
+- Glashutte Original :: 格拉苏蒂; 格拉苏蒂原创; 格拉苏第
+** legitimately [li'dʒitimitli]
+
+*** Basic Explains
+- adv. 合理地；正当地
+
+*** Web References
+- legitimately :: 合法地; 正当地
+- legitimately exercise :: 正当行使
+- Again Quite Legitimately :: 另外合法居住
+** cap [kæp]
+
+*** Basic Explains
+- n. 盖；帽子
+- vt. 覆盖；胜过；给…戴帽；加盖于
+- vi. 脱帽致意
+- n. (Cap)人名；(法、德、罗)卡普；(塞、捷)察普
+
+*** Web References
+- Cap :: 帽子; 海岬; 便帽
+- shower cap :: 浴帽; 淋浴时用的塑胶浴帽; 淋浴帽
+- Cap Spartel :: 斯帕特尔角
+** endowment [ɪn'daʊm(ə)nt; en-]
+
+*** Basic Explains
+- n. 捐赠；捐助；捐款；天资
+
+*** Web References
+- endowment :: 禀赋; 储蓄保险; 天赋
+- ideological endowment :: 意识形态拥有量; 态领有量; 较大的意识形态拥有量
+- Resource endowment :: 资源禀赋; 资源禀赋; 天赋资源
+** mutate [mjuː'teɪt]
+
+*** Basic Explains
+- vt. 改变，使突变
+- vi. 变化，产生突变
+
+*** Web References
+- mutate :: 变异; 突变; 变种
+- Or Mutate :: 或者说变异
+- Mutate All :: 变化所有量
+** internal [ɪn'tɜːn(ə)l]
+
+*** Basic Explains
+- adj. 内部的；内在的；国内的
+
+*** Web References
+- Internal :: 内部; 内置; 内在的
+- internal audit :: 内部审计; 内部审核; 内部稽核
+- Internal auditor :: 内部审计员; 内部审计师; 内部审计
+** quasi [ˈkweɪzaɪ; ˈkweɪsaɪ; ˈkwɑːzi]
+
+*** Basic Explains
+- adj. 准的；类似的；外表的
+- adv. 似是；有如
+
+*** Web References
+- Quasi :: 恰如; 准; 类似
+- Quasi money :: 准货币
+- Quasi contractus :: 准契约
+** facilitate [fə'sɪlɪteɪt]
+
+*** Basic Explains
+- vt. 促进；帮助；使容易
+
+*** Web References
+- facilitate :: 使容易; 促进; 使便利
+- facilitate willmigerl :: 助长; 方便; 便利
+- facilitate communication :: 促进沟通; 方便联系; 沟通
+** volatile ['vɒlətaɪl]
+
+*** Basic Explains
+- n. 挥发物；有翅的动物
+- adj. [化学] 挥发性的；不稳定的；爆炸性的；反复无常的
+- n. (Volatile)人名；(意)沃拉蒂莱
+
+*** Web References
+- volatile :: 挥发性; 易挥发的; 挥发
+- Variable volatile :: Volatile 变量
+- volatile oil :: 挥发油; 齐墩果烷; 精油
+** underflow ['ʌndəfləʊ]
+
+*** Basic Explains
+- n. [水文] 底流；[计] 下溢
+
+*** Web References
+- underflow :: 下溢; 潜流; 低溢
+- Floating underflow :: 浮点数下溢错误
+- density underflow :: 高密度底流
+** intact [ɪn'tækt]
+
+*** Basic Explains
+- adj. 完整的；原封不动的；未受损伤的
+
+*** Web References
+- intact :: 完整的; 原封不动的; 完整无缺的
+- Packing Intact :: 包装完整; 包装完备; 包装完好
+- intact forest :: 原始森林
+** halt [hɔːlt]
+
+*** Basic Explains
+- n. 停止；立定；休息
+- vt. 使停止；使立定
+- vi. 停止；立定；踌躇，犹豫
+- n. (Halt)人名；(德、芬)哈尔特
+
+*** Web References
+- halt :: 停止; 叫停; 高加速寿命试验(Highly Accelerated Life Test)
+- halt signal :: 停止信号
+- HALT Mode :: 省电模式; 停机状态; 停机模
+** spawning ['spɔ:niŋ]
+
+*** Basic Explains
+- n. 产卵；增殖
+- v. 播种，产卵；大量生成（spawn 的现在分词）
+
+*** Web References
+- Spawning :: 产卵; 播种; 大量生成
+- hole spawning :: 穴播
+- spawning site :: 产卵场
+** circumstance [ˈsɜːkəmstəns; ˈsɜːkəmstɑːns; ˈsɜːkəmstæns]
+
+*** Basic Explains
+- n. 环境，情况；事件；境遇
+
+*** Web References
+- circumstance :: 环境; 情况; 境遇
+- with circumstance :: 详细
+- circumstance crime :: 情节犯
+** prerequisite [priː'rekwɪzɪt]
+
+*** Basic Explains
+- n. 先决条件
+- adj. 首要必备的
+
+*** Web References
+- prerequisite :: 先决条件; 前提; 首要的
+- Prerequisite Tree :: 必备树; 条件树; 必备树
+- prerequisite marriage :: 先决条件的婚姻; 婚姻前提; 结婚必备
+** subordinate
+
+*** Translation
+- 下属
+** eventuality [ɪ,ven(t)ʃʊ'ælɪtɪ]
+
+*** Basic Explains
+- n. 可能性；可能发生的事；不测的事
+
+*** Web References
+- eventuality :: 不测事件; 可能发生的事; 可能性
+- eventuality predicate :: 事件谓词
+- public eventuality :: 公共事件
+** nuanced ['njuːɑːnst]
+
+*** Basic Explains
+- adj. 微妙的；具有细微差别的
+- v. 精确细腻地表演；细致入微地描绘（nuance 的过去分词）
+
+*** Web References
+- Nuanced :: 细致入微; 有细微差别的; 具有细微差别的
+- nuanced emotions :: 微妙情感
+- Sometimes Nuanced :: 时而细致入微
+** substantially [səb'stænʃ(ə)lɪ]
+
+*** Basic Explains
+- adv. 实质上；大体上；充分地
+
+*** Web References
+- Substantially :: 大幅度; 幅度; 大幅
+- substantially equivalent :: 实质相当; 实质上相同; 实质等同
+- substantially similar :: 实质相似; 实质类似
+** datum [ˈdeɪtəm ; ˈdɑːtəm]
+
+*** Basic Explains
+- n. 数据，资料
+- n. [测]基点，基线，基面； 论据，作为论据的事实
+- n. [数]已知数
+- n. （pl.）data
+
+*** Web References
+- datum :: 基准; 数据; 基准面
+- Root datum :: 根资料; 根资料
+- Geodetic Datum :: 大地基准; 测地基准点; 大地基准面
+** rightward ['raɪtwəd]
+
+*** Basic Explains
+- adj. 向右的；政治右倾的
+- adv. 在右边；政治右倾
+
+*** Web References
+- rightward :: 向右; 右对齐; 向右的
+- rightward welding :: 右焊法; 右向焊
+- rightward movement :: 向右移动
+** coefficient [,kəʊɪ'fɪʃ(ə)nt]
+
+*** Basic Explains
+- n. [数] 系数；率；协同因素
+- adj. 合作的；共同作用的
+
+*** Web References
+- Coefficient :: 系数; 协同因素; 保障系数
+- UEFA coefficient :: 欧洲足联积分排名
+- diffusion coefficient :: 扩散系数; 扩散率; 分散系数
+** substantially [səb'stænʃ(ə)lɪ]
+
+*** Basic Explains
+- adv. 实质上；大体上；充分地
+
+*** Web References
+- Substantially :: 大幅度; 幅度; 大幅
+- substantially equivalent :: 实质相当; 实质上相同; 实质等同
+- substantially similar :: 实质相似; 实质类似
+** pertaining [pɜː'teɪnɪŋ]
+
+*** Basic Explains
+- n. 关于（pertain 的 ing 形式）
+- adj. 附属的；与…有关的
+
+*** Web References
+- Pertaining :: 附属; 关于; 有关系的
+- Pertaining Delighted :: 有关高兴
+- pertaining to :: 适合; 属于; 关于
+** instruction [ɪn'strʌkʃ(ə)n]
+
+*** Basic Explains
+- n. 指令，命令；指示；教导；用法说明
+
+*** Web References
+- Instruction :: 指令; 指示; 指令
+- WASHING INSTRUCTION :: 洗水指示; 洗水指令; 注意事项
+- insurance instruction :: 投保通知; 投保须知; 投保关照
+** mnemonics [nɪ'mɒnɪks; niː-]
+
+*** Basic Explains
+- n. 记忆术
+
+*** Web References
+- mnemonics :: 记忆术; 助记术; 助记符
+- topological mnemonics :: 位相记忆术; 位置记忆术
+- spelling mnemonics :: 拼写记忆法
+** deplete [dɪ'pliːt]
+
+*** Basic Explains
+- vt. 耗尽，用尽；使衰竭，使空虚
+
+*** Web References
+- deplete :: 耗尽; 使空竭; 弄空
+- deplete  of :: 弄空
+- deplete ozone :: 大大减少臭氧
+** deposit [dɪ'pɒzɪt]
+
+*** Basic Explains
+- n. 存款；押金；订金；保证金；沉淀物
+- vt. 使沉积；存放
+- vi. 沉淀
+
+*** Web References
+- deposit :: 存款; 押金; 定金
+- legal deposit :: 法定送存; 法定送样本; 出版物法定缴存
+- Placer deposit :: 漂砂沉积; 砂积矿床; 漂砂沉积
+** intention [ɪn'tenʃ(ə)n]
+
+*** Basic Explains
+- n. 意图；目的；意向；愈合
+
+*** Web References
+- intention :: 意图; 意向; 意思表示
+- paradoxical intention :: 矛盾意向; 矛盾意向法; 矛盾疗法
+- purchasing intention :: 购买意图; 购买意向; 购买意向强弱
+** onward ['ɒnwəd]
+
+*** Basic Explains
+- adj. 向前的；前进的
+- adv. 向前；在前面
+
+*** Web References
+- onward :: 向前的; 翁屋得; 前进
+- Onward ticket :: 去程机票; 员工自理; 自理
+- Ever Onward :: 永远向前
+** subtleties ['sʌtltiz]
+
+*** Basic Explains
+- n. 微妙；阴险；敏锐（subtlety 的复数）
+
+*** Web References
+- subtleties :: 微妙; 阴险
+- Buddhism subtleties :: 禅机
+- metaphysical subtleties :: 形而上的微妙性
+** moot [muːt]
+
+*** Basic Explains
+- n. 大会；辩论会；假设案件
+- adj. 无实际意义的；未决议的
+- vt. 提出…供讨论
+- n. (Moot)人名；(英)穆特
+
+*** Web References
+- Moot :: 摸拟; 未决议的; 无实际意义的
+- Moot Court :: 模拟法庭; 模仿法庭; 假设法庭
+- Moot Hall :: 凯西克会议
+** differentiate [,dɪfə'renʃɪeɪt]
+
+*** Basic Explains
+- vt. 区分，区别
+- vi. 区分，区别
+
+*** Web References
+- differentiate :: 辨别; 区别; 区分
+- Differentiate analysis :: 判别分析; 判别分析
+- Differentiate Instruction :: 差异教学; 差异教学
