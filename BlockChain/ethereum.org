@@ -196,7 +196,8 @@ Thus any message call received by it during this time causes no code to be execu
 If the initialisation execution ends with a SUICIDE instruction, the matter is moot since the account will be deleted before the transaction is completed. For a normal STOP code, or if the code returned is otherwise empty, then the state is left with a zombie account, and any remaining balance will be locked into the account forever.
 * 8. Message Call
 In the case of executing a message call, several parameters are required: sender (s), transaction originator (o), recipient (r), the account whose code is to be executed (c, usually the same as recipient), available gas (g), value (v) and gas price (p) together with an arbitrary length byte array, d, the input data of the call and finally the present depth of the message-call/contract-creation stack (e).
-** TODO finish this chapter
+
+Throughout the present work, it is assumed that if σ 1 [r] was originally undefined, it will be created as an account with no code or state and zero balance and nonce.
 * 9. Execution Model
 The execution model specif i es how the system state is altered given a series of bytecode instructions and a small tuple of environmental data. 
 ** 9.1. Basics
@@ -250,6 +251,24 @@ Thus we define the total difficulty of block B recursively as:
 
 As such given a block B, Bt is its total difficulty, B 0 is its parent block and Bd is its difficulty.
 * 11. Block Finalisation
+   The process of finalising a block involves four stages:
+(1) Validate (or, if mining, determine) ommers;
+(2) validate (or, if mining, determine) transactions;
+(3) apply rewards;
+(4) verify (or, if mining, compute a valid) state and
+nonce.
+** Ommer Validation
+   The validation of ommer headers means nothing more than verifying that each ommer header is both a valid header and satisfies the relation of N th-generation ommer to the present block where N ≤ 6. The maximum of ommer headers is two.
+** Transaction Validation
+   The given gasUsed must correspond faithfully to the transactions listed: B H u , the total gas used in the block, must be equal to the accumulated gas used according to the final transaction:
+ B H g = `(R) u
+** Reward Application
+   The application of rewards to a block involves raising the balance of the accounts of the beneficiary address of the block and each ommer by a certain amount.
+** State & Nonce Validation
+   We may now define the function, Γ, that maps a block B to its initiation state:
+(146)
+And finally define Φ, the block transition function, which maps an incomplete block B to a complete block B 0
+
 ** Mining proof-of-work
 For both reasons, there are two important goals of the proof-of-work function; firstly, it should be as accessible as possible to as many people as possible. 
 
@@ -257,6 +276,16 @@ Secondly, it should not be possible to make super-linear profits, and especially
 
 Two directions exist for ASIC resistance; firstly make it sequential memory-hard, i.e. engineer the function such that the determination of the nonce requires a lot of memory and bandwidth such that the memory cannot be used in parallel to discover multiple nonces simultaneously.
 The second is to make the type of computation it would need to do general-purpose; the meaning of “specialised hardware” for a general-purpose task set is, naturally, general purpose hardware and as such commodity desktop computers are likely to be pretty close to “specialised hardware” for the task. For Ethereum 1.0 we have chosen the first path.
+
+* 12. Implementing Contracts
+  There are several patterns of contracts engineering that allow particular useful behaviours; two of these that I will briefly discuss are data feeds and random numbers.
+
+** Data Feeds
+ A data feed contract is one which provides a single service: it gives access to information from the external world within Ethereum. The accuracy and timeliness of this information is not guaranteed and it is the task of a secondary contract author—the contract that utilises the data feed—to determine how much trust can be placed in any single data feed.
+
+** Random Numbers
+   Providing random numbers within a deterministic system is, naturally, an impossible task. However, we can approximate with pseudo-random numbers by utilising data which is generally unknowable at the time of transacting. Such data might include the block’s hash, the block’s timestamp and the block’s beneficiary address. In order to make it hard for malicious miner to control those values, one should use the BLOCKHASH operation in order to use hashes of the previous 256 blocks as pseudo-random numbers.
+* 13. Future Directions
 
 * Appendix B
 This is a serialisation method for encoding arbitrarily structured binary data (byte arrays).
@@ -1488,3 +1517,108 @@ data, dismissing it completely.
 - differentiate :: 辨别; 区别; 区分
 - Differentiate analysis :: 判别分析; 判别分析
 - Differentiate Instruction :: 差异教学; 差异教学
+** aside from [nil]
+
+*** Basic Explains
+- 除…以外
+
+*** Web References
+- aside from :: 除; 以外; 此外
+- turn aside away from :: 离开
+- aside  from :: 除……外; 除……以外
+** preliminary [prɪ'lɪmɪn(ə)rɪ]
+
+*** Basic Explains
+- n. 准备；预赛；初步措施
+- adj. 初步的；开始的；预备的
+
+*** Web References
+- Preliminary :: 初步; 初始的; 预赛
+- preliminary treatment :: 预处理; 前处理; 预备处理
+- preliminary adjustment :: 预调整; 初调; 初步调整
+** collision [kə'lɪʒ(ə)n]
+
+*** Basic Explains
+- n. 碰撞；冲突；（意见，看法）的抵触；（政党等的）倾轧
+
+*** Web References
+- Collision :: 碰撞; 冲突; 撞车
+- Elastic collision :: 弹性碰撞; 弹性碰撞; 弹性撞击
+- collision insurance :: 碰撞保险; 碰撞险; 碰垫保险
+** malicious [mə'lɪʃəs]
+
+*** Basic Explains
+- adj. 恶意的；恶毒的；蓄意的；怀恨的
+
+*** Web References
+- malicious :: 怀恶意的; 恶意的; 恶毒的
+- Malicious prosecution :: 恶意起诉; 诬告; 恶意起诉
+- MALICIOUS SOFTWARE :: 恶意软件; 恶意软体; 流氓软件
+** trivial ['trɪvɪəl]
+
+*** Basic Explains
+- adj. 不重要的，琐碎的；琐细的
+
+*** Web References
+- Trivial :: 平凡 (数学); 琐碎的; 微不足道的
+- Trivial Pursuit :: 棋盘问答; 打破砂锅问到底; 追根究底
+- trivial name :: 惯用名; 俗名; 种名
+** consolidation [kən,sɒlɪ'deɪʃən]
+
+*** Basic Explains
+- n. 巩固；合并；团结
+
+*** Web References
+- Consolidation :: 巩固; 合并; 固结
+- secondary consolidation :: 次固结; 二次固结; 次压密
+- vertical consolidation :: 纵向合并; 纵的合并; 垂直合并
+** eventually [ɪ'ventʃʊəlɪ]
+
+*** Basic Explains
+- adv. 最后，终于
+
+*** Web References
+- eventually :: 最后; 终究; 终于
+- Eventually results :: 最终处理结果
+- Eventually reach :: 最终会到达
+** traverse ['trævəs; trə'vɜːs]
+
+*** Basic Explains
+- n. 穿过；横贯；横木
+- vt. 穿过；反对；详细研究；在…来回移动
+- vi. 横越；旋转；来回移动
+- adj. 横贯的
+- n. (Traverse)人名；(英)特拉弗斯；(法)特拉韦尔斯
+
+*** Web References
+- Traverse :: 枕木; 摇臂; 雪佛兰
+- connecting traverse :: 附合导线; 吊钩梁; 连接横杆
+- traverse point :: 导线点; 横动针片
+** consolidation [kən,sɒlɪ'deɪʃən]
+
+*** Basic Explains
+- n. 巩固；合并；团结
+
+*** Web References
+- Consolidation :: 巩固; 合并; 固结
+- secondary consolidation :: 次固结; 二次固结; 次压密
+- vertical consolidation :: 纵向合并; 纵的合并; 垂直合并
+** recast [riː'kɑːst]
+
+*** Basic Explains
+- n. 重铸；重做的事物
+- vt. 重铸；彻底改动
+
+*** Web References
+- recast :: 重铸; 重浇〔混凝土; 重作
+- recast membrane :: 铸膜; 再铸膜
+- recast factors :: 预报因子
+** adhesion [əd'hiːʒ(ə)n]
+
+*** Basic Explains
+- n. 粘附；支持；固定
+
+*** Web References
+- adhesion :: 附着力; 沾黏; 粘附
+- Adhesion coefficient :: 附着系数; 粘着系数; 粘附系数
+- adhesion test :: 黏着测试; 附着力试验; 粘着测试
