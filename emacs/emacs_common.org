@@ -150,6 +150,10 @@ comtommize-group
 * emacs 显示行号
 (require 'linum)
 (global-linum-mode t)
+* emacs 自动换行
+  toggle-truncate-lines
+  # 进入 outline-mode，Emacs 会自动做好的。
+
 * emacs 自绑定快捷键
 ** python 快速跳入跳出方法 
 (global-set-key (kbd "C-c .") 'jedi:goto-definition)
