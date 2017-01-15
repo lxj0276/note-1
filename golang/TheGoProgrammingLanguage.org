@@ -1,0 +1,684 @@
+* warning
+- 5.6.1. 警告：捕获迭代变量 ::
+     函数值中记录的是循环变量的内存地址，而不是循环变量某一时刻的值。for 循环语句引入了新的词法块，循环变量 dir 在这个词法块中被声明。以 dir 为例，后续的迭代会不断更新 dir 的值，当删除操作执行时，for 循环已完成，dir 中存储的值等于最后一次迭代的值。这意味着，每次对 os.RemoveAll 的调用删除的都是相同的目录。
+
+     通常，为了解决这个问题，我们会引入一个与循环变量同名的局部变量，作为循环变量的副本。比如下面的变量 dir，虽然这看起来很奇怪，但却很有用。
+     #+BEGIN_SRC go
+       var rmdirs []func()
+       for _, d := range tempDirs() {
+         dir := d // NOTE: necessary!
+         os.MkdirAll(dir, 0755) // creates parent directories too
+         rmdirs = append(rmdirs, func() {
+           os.RemoveAll(dir)
+         })
+       }
+       // ...do some work…
+       for _, rmdir := range rmdirs {
+         rmdir() // clean up
+       }
+
+
+      // wrong
+      var rmdirs []func()
+      for _, dir := range tempDirs() {
+        os.MkdirAll(dir, 0755)
+        rmdirs = append(rmdirs, func() {
+          os.RemoveAll(dir) // NOTE: incorrect!
+        })
+      }
+     #+END_SRC
+
+-  :: 
+* note
+** defer
+你只需要在调用普通函数或方法前加上关键字 defer，就完成了 defer 所需要的语法。当 defer 语句被执行时，跟在 defer 后面的函数会被延迟执行。直到包含该 defer 语句的函数执行完毕时，defer 后的函数才会被执行，不论包含 defer 语句的函数是通过 return 正常结束，还是由于 panic 导致的异常结束。你可以在一个函数中执行多条 defer 语句，它们的执行顺序与声明顺序相反。
+
+defer 语句经常被用于处理成对的操作，如打开、关闭、连接、断开连接、加锁、释放锁。通过 defer 机制，不论函数逻辑多复杂，都能保证在任何执行路径下，资源被释放。释放资源的 defer 应该直接跟在请求资源的语句后。在下面的代码中，一条 defer 语句替代了之前的所有 resp.Body.Close
+
+调试复杂程序时，defer 机制也常被用于记录何时进入和退出函数。
+
+#+BEGIN_SRC go
+  func bigSlowOperation() {
+    defer trace("bigSlowOperation")() // don't forget the extra parentheses
+    // ...lots of work…
+    time.Sleep(10 * time.Second) // simulate slow operation by sleeping
+  }
+  func trace(msg string) func() {
+    start := time.Now()
+    log.Printf("enter %s", msg)
+    return func() { 
+      log.Printf("exit %s (%s)", msg,time.Since(start)) 
+    }
+  }
+
+#+END_SRC
+
+在循环体中的 defer 语句需要特别注意，因为只有在函数执行完毕后，这些被延迟的函数才会执行。下面的代码会导致系统的文件描述符耗尽，因为在所有文件都被处理之前，没有文件会被关闭。
+一种解决方法是将循环体中的 defer 语句移至另外一个函数。在每次循环时，调用这个函数。
+#+BEGIN_SRC go
+  for _, filename := range filenames {
+    f, err := os.Open(filename)
+    if err != nil {
+      return err
+    }
+    defer f.Close() // NOTE: risky; could run out of file
+    descriptors
+    // ...process f…
+  }
+
+#+END_SRC
+
+#+BEGIN_SRC go
+  for _, filename := range filenames {
+    if err := doFile(filename); err != nil {
+      return err
+    }
+  }
+  func doFile(filename string) error {
+    f, err := os.Open(filename)
+    if err != nil {
+      return err
+    }
+    defer f.Close()
+    // ...process f…
+  }
+
+#+END_SRC
+
+虽然 Go 的 panic 机制类似于其他语言的异常，但 panic 的适用场景有一些不同。由于 panic 会引起程序的崩溃，因此 panic 一般用于严重错误，如程序内部的逻辑不一致。勤奋的程序员认为任何崩溃都表明代码中存在漏洞，所以对于大部分漏洞，我们应该使用 Go 提供的错误机制，而不是 panic，尽量避免程序的崩溃。在健壮的程序中，任何可以预料到的错误，如不正确的输入、错误的配置或是失败的 I/O 操作都应该被优雅的处理，最好的处理方式，就是使用 Go 的错误机制。
+
+将 panic 机制类比其他语言异常机制的读者可能会惊讶，runtime.Stack 为何能输出已经被释放函数的信息？在 Go 的 panic 机制中，延迟函数的调用在释放堆栈信息之前。
+
+通常来说，不应该对 panic 异常做任何处理，但有时，也许我们可以从异常中恢复，至少我们可以在程序崩溃前，做一些操作。
+如果在 deferred 函数中调用了内置函数 recover，并且定义该 defer 语句的函数发生了 panic 异常，recover 会使程序从 panic 中恢复，并返回 panic value。导致 panic 异常的函数不会继续运行，但能正常返回。在未发生 panic 时调用 recover，recover 会返回 nil。
+不加区分的恢复所有的 panic 异常，不是可取的做法；因为在 panic 之后，无法保证包级变量的状态仍然和我们预期一致。比如，对数据结构的一次重要更新没有被完整完成、文件或者网络连接没有被关闭、获得的锁没有被释放。此外，如果写日志时产生的 panic 被不加区分的恢复，可能会导致漏洞被忽略。
+基于以上原因，安全的做法是有选择性的 recover。换句话说，只恢复应该被恢复的 panic 异常，此外，这些异常所占的比例应该尽可能的低。为了标识某个 panic 是否应该被恢复，我们可以将 panic value 设置成特殊类型。在 recover 时对 panic value 进行检查，如果发现 panic value 是特殊类型，就将这个 panic 作为 errror 处理，如果不是，则按照正常的 panic 进行处理（在下面的例子中，我们会看到这种方式）。
+
+#+BEGIN_SRC go
+  // soleTitle returns the text of the first non-empty title element
+  // in doc, and an error if there was not exactly one.
+  func soleTitle(doc *html.Node) (title string, err error) {
+    type bailout struct{}
+    defer func() {
+      switch p := recover(); p {
+      case nil:       // no panic
+      case bailout{}: // "expected" panic
+        err = fmt.Errorf("multiple title elements")
+      default:
+        panic(p) // unexpected panic; carry on panicking
+      }
+    }()
+    // Bail out of recursion if we find more than one nonempty title.
+    forEachNode(doc, func(n *html.Node) {
+      if n.Type == html.ElementNode && n.Data == "title" &&
+        n.FirstChild != nil {
+        if title != "" {
+          panic(bailout{}) // multiple titleelements
+        }
+        title = n.FirstChild.Data
+      }
+    }, nil)
+    if title == "" {
+      return "", fmt.Errorf("no title element")
+    }
+    return title, nil
+  }
+#+END_SRC
+
+** method
+一个对象其实也就是一个简单的值或者一个变量，在这个对象中会包含一些方法，而一个方法则是一个一个和特殊类型关联的函数。一个面向对象的程序会用方法来表达其属性和对应的操作，这样使用这个对象的用户就不需要直接去操作对象，而是借助方法来做这些事情。早期的面向对象语言留下的遗产将调用一个方法称为“向一个对象发送消息”。
+OOP 编程的两个关键点，封装和组合。
+
+*** 声明
+在函数声明时，在其名字之前放上一个变量，即是一个方法。这个附加的参数会将该函数附加到这种类型上，即相当于为这种类型定义了一个独占的方法。
+
+#+BEGIN_SRC  go
+  package geometry
+
+  import "math"
+
+  type Point struct{ X, Y float64 }
+
+  // traditional function
+  func Distance(p, q Point) float64 {
+    return math.Hypot(q.X-p.X, q.Y-p.Y)
+  }
+
+  // same thing, but as a method of the Point type
+  func (p Point) Distance(q Point) float64 {
+    return math.Hypot(q.X-p.X, q.Y-p.Y)
+  }
+#+END_SRC
+
+*** 基于指针对象的方法
+当这个接受者变量本身比较大时，我们就可以用其指针而不是对象来声明方法，如下：
+
+#+BEGIN_SRC go
+  func (p *Point) ScaleBy(factor float64) {
+    p.X *= factor
+    p.Y *= factor
+  }
+#+END_SRC
+在每一个合法的方法调用表达式中，也就是下面三种情况里的任意一种情况都是可以的： 
+1. 不论是接收器的实际参数和其接收器的形式参数相同，比如两者都是类型 T 或者都是类型`*T`：
+#+BEGIN_SRC go
+  Point{1, 2}.Distance(q) //  Point
+  pptr.ScaleBy(2)         // *Point
+#+END_SRC
+2. 或者接收器形参是类型 T，但接收器实参是类型`*T`，这种情况下编译器会隐式地为我们取变量的地址：
+#+BEGIN_SRC go
+  p.ScaleBy(2) // implicit (&p)
+#+END_SRC
+3. 或者接收器形参是类型`*T`，实参是类型 T。编译器会隐式地为我们解引用，取到指针指向的实际变量：
+#+BEGIN_SRC go
+  pptr.Distance(q) // implicit (*pptr)
+#+END_SRC
+
+In a word, there has two points:
+1. 不管你的 method 的 receiver 是指针类型还是非指针类型，都是可以通过指针/非指针类型进行调用的，编译器会帮你做类型转换。
+2. 在声明一个 method 的 receiver 该是指针还是非指针类型时，你需要考虑两方面的内部，第一方面是这个对象本身是不是特别大，如果声明为非指针变量时，调用会产生一次拷贝；第二方面是如果你用指针类型作为 receiver，那么你一定要注意，这种指针类型指向的始终是一块内存地址，就算你对其进行了拷贝。熟悉 C 或者 C 艹的人这里应该很快能明白。
+*** 通过嵌入结构体来扩展类型
+对于 Point 中的方法我们也有类似的用法，我们可以把 ColoredPoint 类型当作接收器来调用 Point 里的方法，即使 ColoredPoint 里没有声明这些方法
+
+然后这种类型的值便会拥有 Point 和 RGBA 类型的所有方法，以及直接定义在 ColoredPoint 中的方法。当编译器解析一个选择器到方法时，比如 p.ScaleBy，它会首先去找直接定义在这个类型里的 ScaleBy 方法，然后找被 ColoredPoint 的内嵌字段们引入的方法，然后去找 Point 和 RGBA 的内嵌字段引入的方法，然后一直递归向下找。如果选择器有二义性的话编译器会报错，比如你在同一级里有两个同名的方法。
+
+方法只能在命名类型(像 Point)或者指向类型的指针上定义，但是多亏了内嵌，有些时候我们给匿名 struct 类型来定义方法也有了手段。
+
+尽管方法对于 OOP 编程来说至关重要，但他们只是 OOP 编程里的半边天。为了完成 OOP，我们还需要接口。
+#+BEGIN_SRC go
+  import "image/color"
+
+  type Point struct{ X, Y float64 }
+
+  type ColoredPoint struct {
+    Point
+    Color color.RGBA
+  }
+#+END_SRC
+*** 接口
+很多面向对象的语言都有相似的接口概念，但 Go 语言中接口类型的独特之处在于它是满足隐式实现的。也就是说，我们没有必要对于给定的具体类型定义所有满足的接口类型；简单地拥有一些必需的方法就足够了。
+
+#+BEGIN_SRC go
+  package io
+  type Reader interface {
+    Read(p []byte) (n int, err error)
+  }
+  type Closer interface {
+    Close() error
+  }
+
+  type ReadWriter interface {
+    Reader
+    Writer
+  }
+  type ReadWriteCloser interface {
+    Reader
+    Writer
+    Closer
+  }
+#+END_SRC
+*** 建议
+当设计一个新的包时，新手 Go 程序员总是先创建一套接口，然后再定义一些满足它们的具体类型。这种方式的结果就是有很多的接口，它们中的每一个仅只有一个实现。不要再这么做了。这种接口是不必要的抽象；它们也有一个运行时损耗。你可以使用导出机制(§6.6)来限制一个类型的方法或一个结构体的字段是否在包外可见。接口只有当有两个或两个以上的具体类型必须以相同的方式进行处理时才需要。
+
+当一个接口只被一个单一的具体类型实现时有一个例外，就是由于它的依赖，这个具体类型不能和这个接口存在在一个相同的包中。这种情况下，一个接口是解耦这两个包的一个好方式。
+
+因为在 Go 语言中只有当两个或更多的类型实现一个接口时才使用接口，它们必定会从任意特定的实现细节中抽象出来。结果就是有更少和更简单方法（经常和 io.Writer 或 fmt.Stringer 一样只有一个）的更小的接口。当新的类型出现时，小的接口更容易满足。对于接口设计的一个好的标准就是 ask only for what you need（只考虑你需要的东西）
+
+我们完成了对 methods 和接口的学习过程。Go 语言对面向对象风格的编程支持良好，但这并不意味着你只能使用这一风格。不是任何事物都需要被当做成一个对象；独立的函数有它们自己的用处，未封装的数据类型也是这样。
+** Goroutines 和 Channels
+#+BEGIN_SRC go
+  f()    // call f(); wait for it to return
+  go f() // create a new goroutine that calls f(); don't wait
+#+END_SRC
+
+如果说 goroutine 是 Go 语言程序的并发体的话，那么 channels 则是它们之间的通信机制。一个 channel 是一个通信机制，它可以让一个 goroutine 通过它给另一个 goroutine 发送值信息。每个 channel 都有一个特殊的类型，也就是 channels 可发送数据的类型。一个可以发送 int 类型数据的 channel 一般写为 chan int。
+
+和 map 类似，channel 也对应一个 make 创建的底层数据结构的引用。当我们复制一个 channel 或用于函数参数传递时，我们只是拷贝了一个 channel 引用，因此调用者和被调用者将引用同一个 channel 对象。和其它的引用类型一样，channel 的零值也是 nil。
+
+一个 channel 有发送和接受两个主要操作，都是通信行为。一个发送语句将一个值从一个 goroutine 通过 channel 发送到另一个执行接收操作的 goroutine。发送和接收两个操作都使用`<-`运算符。在发送语句中，`<-`运算符分割 channel 和要发送的值。在接收语句中，`<-`运算符写在 channel 对象之前。一个不使用接收结果的接收操作也是合法的。
+
+Channel 还支持 close 操作，用于关闭 channel，随后对基于该 channel 的任何发送操作都将导致 panic 异常。对一个已经被 close 过的 channel 进行接收操作依然可以接受到之前已经成功发送的数据；如果 channel 中已经没有数据的话将产生一个零值的数据。
+
+以最简单方式调用 make 函数创建的是一个无缓存的 channel，但是我们也可以指定第二个整型参数，对应 channel 的容量。如果 channel 的容量大于零，那么该 channel 就是带缓存的 channel。
+
+#+BEGIN_SRC go
+  ch := make(chan int) // ch has type 'chan int'
+
+  ch <- x  // a send statement
+  x = <-ch // a receive expression in an assignment statement
+  <-ch     // a receive statement; result is discarded
+
+  close(ch)
+
+  ch = make(chan int)    // unbuffered channel
+  ch = make(chan int, 0) // unbuffered channel
+  ch = make(chan int, 3) // buffered channel with capacity 3
+#+END_SRC
+
+基于 channels 发送消息有两个重要方面。首先每个消息都有一个值，但是有时候通讯的事实和发生的时刻也同样重要。当我们更希望强调通讯发生的时刻时，我们将它称为**消息事件**。有些消息事件并不携带额外的信息，它仅仅是用作两个 goroutine 之间的同步，这时候我们可以用`struct{}`空结构体作为 channels 元素的类型，虽然也可以使用 bool 或 int 类型实现同样的功能，`done <- 1`语句也比`done <- struct{}{}`更短。
+
+没有办法直接测试一个 channel 是否被关闭，但是接收操作有一个变体形式：它多接收一个结果，多接收的第二个结果是一个布尔值 ok，ture 表示成功从 channels 接收到值，false 表示 channels 已经被关闭并且里面没有值可接收。使用这个特性，我们可以修改 squarer 函数中的循环代码，当 naturals 对应的 channel 被关闭并没有值可接收时跳出循环，并且也关闭 squares 对应的 channel.
+
+没有办法直接测试一个 channel 是否被关闭，但是接收操作有一个变体形式：它多接收一个结果，多接收的第二个结果是一个布尔值 ok，ture 表示成功从 channels 接收到值，false 表示 channels 已经被关闭并且里面没有值可接收。使用这个特性，我们可以修改 squarer 函数中的循环代码，当 naturals 对应的 channel 被关闭并没有值可接收时跳出循环，并且也关闭 squares 对应的 channel.
+
+#+BEGIN_SRC go
+  func main() {
+    naturals := make(chan int)
+    squares := make(chan int)
+
+    // Counter
+    go func() {
+      for x := 0; x < 100; x++ {
+        naturals <- x
+      }
+      close(naturals)
+    }()
+
+    // Squarer
+    go func() {
+      for x := range naturals {
+        squares <- x * x
+      }
+      close(squares)
+    }()
+
+    // Printer (in main goroutine)
+    for x := range squares {
+      fmt.Println(x)
+    }
+  }
+#+END_SRC
+
+其实你并不需要关闭每一个 channel。只要当需要告诉接收者 goroutine，所有的数据已经全部发送时才需要关闭 channel。不管一个 channel 是否被关闭，当它没有被引用时将会被 Go 语言的垃圾自动回收器回收。（不要将关闭一个打开文件的操作和关闭一个 channel 操作混淆。对于每个打开的文件，都需要在不使用的使用调用对应的 Close 方法来关闭文件。）
+
+试图重复关闭一个 channel 将导致 panic 异常，试图关闭一个 nil 值的 channel 也将导致 panic 异常。关闭一个 channels 还会触发一个广播机制.
+
+为了表明这种意图并防止被滥用，Go 语言的类型系统提供了单方向的 channel 类型，分别用于只发送或只接收的 channel。类型`chan<- int`表示一个只发送 int 的 channel，只能发送不能接收。相反，类型`<-chan int`表示一个只接收 int 的 channel，只能接收不能发送。（箭头`<-`和关键字 chan 的相对位置表明了 channel 的方向。）这种限制将在编译期检测。
+
+#+BEGIN_SRC go
+  func counter(out chan<- int) {
+    for x := 0; x < 100; x++ {
+      out <- x
+    }
+    close(out)
+  }
+
+  func squarer(out chan<- int, in <-chan int) {
+    for v := range in {
+      out <- v * v
+    }
+    close(out)
+  }
+
+  func printer(in <-chan int) {
+    for v := range in {
+      fmt.Println(v)
+    }
+  }
+
+  func main() {
+    naturals := make(chan int)
+    squares := make(chan int)
+    go counter(naturals)
+    go squarer(squares, naturals)
+    printer(squares)
+  }
+#+END_SRC
+
+调用 counter(naturals)将导致将`chan int`类型的 naturals 隐式地转换为`chan<- int`类型只发送型的 channel。调用 printer(squares)也会导致相似的隐式转换，这一次是转换为`<-chan int`类型只接收型的 channel。任何双向 channel 向单向 channel 变量的赋值操作都将导致该隐式转换。这里并没有反向转换的语法：也就是不能将一个类似`chan<- int`类型的单向型的 channel 转换为`chan int`类型的双向型的 channel。
+
+下面的例子展示了一个使用了带缓存 channel 的应用。它并发地向三个镜像站点发出请求，三个镜像站点分散在不同的地理位置。它们分别将收到的响应发送到带缓存 channel，最后接收者只接收第一个收到的响应，也就是最快的那个响应。因此 mirroredQuery 函数可能在另外两个响应慢的镜像站点响应之前就返回了结果。（顺便说一下，多个 goroutines 并发地向同一个 channel 发送数据，或从同一个 channel 接收数据都是常见的用法。）
+
+如果我们使用了无缓存的 channel，那么两个慢的 goroutines 将会因为没有人接收而被永远卡住。这种情况，称为 goroutines 泄漏，这将是一个 BUG。和垃圾变量不同，泄漏的 goroutines 并不会被自动回收，因此确保每个不再需要的 goroutine 能正常退出是重要的。
+
+关于无缓存或带缓存 channels 之间的选择，或者是带缓存 channels 的容量大小的选择，都可能影响程序的正确性。无缓存 channel 更强地保证了每个发送操作与相应的同步接收操作；但是对于带缓存 channel，这些操作是解耦的。同样，即使我们知道将要发送到一个 channel 的信息的数量上限，创建一个对应容量大小的带缓存 channel 也是不现实的，因为这要求在执行任何接收操作之前缓存所有已经发送的值。如果未能分配足够的缓冲将导致程序死锁。
+
+Channel 的缓存也可能影响程序的性能。想象一家蛋糕店有三个厨师，一个烘焙，一个上糖衣，还有一个将每个蛋糕传递到它下一个厨师在生产线。在狭小的厨房空间环境，每个厨师在完成蛋糕后必须等待下一个厨师已经准备好接受它；这类似于在一个无缓存的 channel 上进行沟通。
+
+如果在每个厨师之间有一个放置一个蛋糕的额外空间，那么每个厨师就可以将一个完成的蛋糕临时放在那里而马上进入下一个蛋糕在制作中；这类似于将 channel 的缓存队列的容量设置为 1。只要每个厨师的平均工作效率相近，那么其中大部分的传输工作将是迅速的，个体之间细小的效率差异将在交接过程中弥补。如果厨师之间有更大的额外空间——也是就更大容量的缓存队列——将可以在不停止生产线的前提下消除更大的效率波动，例如一个厨师可以短暂地休息，然后再加快赶上进度而不影响其他人。
+
+另一方面，如果生产线的前期阶段一直快于后续阶段，那么它们之间的缓存在大部分时间都将是满的。相反，如果后续阶段比前期阶段更快，那么它们之间的缓存在大部分时间都将是空的。对于这类场景，额外的缓存并没有带来任何好处。
+
+生产线的隐喻对于理解 channels 和 goroutines 的工作机制是很有帮助的。例如，如果第二阶段是需要精心制作的复杂操作，一个厨师可能无法跟上第一个厨师的进度，或者是无法满足第三阶段厨师的需求。要解决这个问题，我们可以雇佣另一个厨师来帮助完成第二阶段的工作，他执行相同的任务但是独立工作。这类似于基于相同的 channels 创建另一个独立的 goroutine。
+
+启动了所有的 goroutine，每一个文件名对应一个，如何等待它们一直到执行完毕? 没有什么直接的办法能够等待 goroutine 完成，但是我们可以改变 goroutine 里的代码让其能够将完成情况报告给外部的 goroutine 知晓，使用的方式是向一个共享的 channel 中发送事件。
+
+Look at the code of gopl.io/ch8/thumbnail.
+
+#+BEGIN_SRC go
+  // makeThumbnails4 makes thumbnails for the specified files in parallel.
+  // It returns an error if any step failed.
+  func makeThumbnails4(filenames []string) error {
+    errors := make(chan error)
+
+    for _, f := range filenames {
+      go func(f string) {
+        _, err := thumbnail.ImageFile(f)
+        errors <- err
+      }(f)
+    }
+
+    for range filenames {
+      if err := <-errors; err != nil {
+        return err // NOTE: incorrect: goroutine leak!
+      }
+    }
+
+    return nil
+  }
+  // 这个程序有一个微妙的 bug。当它遇到第一个非 nil 的 error 时会直接将 error 返回到调用方，使得没有一个 goroutine 去排空 errors channel。这样剩下的 worker goroutine 在向这个 channel 中发送值时，都会永远地阻塞下去，并且永远都不会退出。这种情况叫做 goroutine 泄露(§8.4.4)，可能会导致整个程序卡住或者跑出 out of memory 的错误。
+
+  // 最简单的解决办法就是用一个具有合适大小的 buffered channel，这样这些 worker goroutine 向 channel 中发送错误时就不会被阻塞。(一个可选的解决办法是创建一个另外的 goroutine，当 main goroutine 返回第一个错误的同时去排空 channel)
+#+END_SRC
+
+#+BEGIN_SRC go
+  // makeThumbnails6 makes thumbnails for each file received from the channel.
+  // It returns the number of bytes occupied by the files it creates.
+  func makeThumbnails6(filenames <-chan string) int64 {
+    sizes := make(chan int64)
+    var wg sync.WaitGroup // number of working goroutines
+    for f := range filenames {
+      wg.Add(1)
+      // worker
+      go func(f string) {
+        defer wg.Done()
+        thumb, err := thumbnail.ImageFile(f)
+        if err != nil {
+          log.Println(err)
+          return
+        }
+        info, _ := os.Stat(thumb) // OK to ignore error
+        sizes <- info.Size()
+      }(f)
+    }
+
+    // closer
+    go func() {
+      wg.Wait()
+      close(sizes)
+    }()
+
+    var total int64
+    for size := range sizes {
+      total += size
+    }
+    return total
+#+END_SRC
+注意 Add 和 Done 方法的不对称。Add 是为计数器加一，必须在 worker goroutine 开始之前调用，而不是在 goroutine 中；否则的话我们没办法确定 Add 是在"closer" goroutine 调用 Wait 之前被调用。并且 Add 还有一个参数，但 Done 却没有任何参数；其实它和 Add(-1)是等价的。我们使用 defer 来确保计数器即使是在出错的情况下依然能够正确地被减掉。上面的程序代码结构是当我们使用并发循环，但又不知道迭代次数时很通常而且很地道的写法。
+
+sizes channel 携带了每一个文件的大小到 main goroutine，在 main goroutine 中使用了 range loop 来计算总和。观察一下我们是怎样创建一个 closer goroutine，并让其在所有 worker goroutine 们结束之后再关闭 sizes channel 的。两步操作：wait 和 close，必须是基于 sizes 的循环的并发。考虑一下另一种方案：如果等待操作被放在了 main goroutine 中，在循环之前，这样的话就永远都不会结束了，如果在循环之后，那么又变成了不可达的部分，因为没有任何东西去关闭这个 channel，这个循环就永远都不会终止。
+
+** 基于共享变量的并发
+*** 竞争条件
+这个程序包含了一个特定的竞争条件，叫作数据竞争。无论任何时候，只要有两个 goroutine 并发访问同一变量，且至少其中的一个是写操作的时候就会发生数据竞争。
+
+如果数据竞争的对象是一个比一个机器字(译注：32 位机器上一个字=4 个字节)更大的类型时，事情就变得更麻烦了，比如 interface，string 或者 slice 类型都是如此。下面的代码会并发地更新两个不同长度的 slice：
+
+#+BEGIN_SRC go
+  var x []int
+  go func() { x = make([]int, 10) }()
+  go func() { x = make([]int, 1000000) }()
+  x[999999] = 1 // NOTE: undefined behavior; memory corruption possible!
+#+END_SRC
+
+最后一个语句中的 x 的值是未定义的；其可能是 nil，或者也可能是一个长度为 10 的 slice，也可能是一个长度为 1,000,000 的 slice。但是回忆一下 slice 的三个组成部分：指针(pointer)、长度(length)和容量(capacity)。如果指针是从第一个 make 调用来，而长度从第二个 make 来，x 就变成了一个混合体，一个自称长度为 1,000,000 但实际上内部只有 10 个元素的 slice。这样导致的结果是存储 999,999 元素的位置会碰撞一个遥远的内存位置，这种情况下难以对值进行预测，而且 debug 也会变成噩梦。这种语义雷区被称为未定义行为，对 C 程序员来说应该很熟悉；幸运的是在 Go 语言里造成的麻烦要比 C 里小得多。
+
+
+我们来重复一下数据竞争的定义，因为实在太重要了：数据竞争会在两个以上的 goroutine 并发访问相同的变量且至少其中一个为写操作时发生。根据上述定义，有三种方式可以避免数据竞争：
+1. 第一种方法是不要去写变量。如果我们在创建 goroutine 之前的初始化阶段，就初始化了 map 中的所有条目并且再也不去修改它们，那么任意数量的 goroutine 并发访问 Icon 都是安全的，因为每一个 goroutine 都只是去读取而已。
+2. 第二种避免数据竞争的方法是，避免从多个 goroutine 访问变量。这也是前一章中大多数程序所采用的方法。
+    由于其它的 goroutine 不能够直接访问变量，它们只能使用一个 channel 来发送给指定的 goroutine 请求来查询更新变量。这也就是 Go 的口头禅“不要使用共享数据来通信；使用通信来共享数据”。一个提供对一个指定的变量通过 channel 来请求的 goroutine 叫做这个变量的监控(monitor)goroutine。例如 broadcaster goroutine 会监控(monitor)clients map 的全部访问。
+3. 第三种避免数据竞争的方法是允许很多 goroutine 去访问变量，但是在同一个时刻最多只有一个 goroutine 在访问。这种方式被称为“互斥”，在下一节来讨论这个主题。
+
+*** sync.Mutex 互斥锁
+在 8.6 节中，我们使用了一个 buffered channel 作为一个计数信号量，来保证最多只有 20 个 goroutine 会同时执行 HTTP 请求。同理，我们可以用一个容量只有 1 的 channel 来保证最多只有一个 goroutine 在同一时刻访问一个共享变量。一个只能为 1 和 0 的信号量叫做二元信号量(binary semaphore)。
+
+#+BEGIN_SRC go
+  var (
+    sema    = make(chan struct{}, 1) // a binary semaphore guarding balance
+    balance int
+  )
+
+  func Deposit(amount int) {
+    sema <- struct{}{} // acquire token
+    balance = balance + amount
+    <-sema // release token
+  }
+
+  func Balance() int {
+    sema <- struct{}{} // acquire token
+    b := balance
+    <-sema // release token
+    return b
+  }
+#+END_SRC
+这种互斥很实用，而且被 sync 包里的 Mutex 类型直接支持。它的 Lock 方法能够获取到 token(这里叫锁)，并且 Unlock 方法会释放这个 token：
+
+#+BEGIN_SRC go
+  import "sync"
+
+  var (
+    mu      sync.Mutex // guards balance
+    balance int
+  )
+
+  func Deposit(amount int) {
+    mu.Lock()
+    balance = balance + amount
+    mu.Unlock()
+  }
+
+  func Balance() int {
+    mu.Lock()
+    b := balance
+    mu.Unlock()
+    return b
+  }
+#+END_SRC
+
+由于在存款和查询余额函数中的临界区代码这么短--只有一行，没有分支调用--在代码最后去调用 Unlock 就显得更为直截了当。在更复杂的临界区的应用中，尤其是必须要尽早处理错误并返回的情况下，就很难去(靠人)判断对 Lock 和 Unlock 的调用是在所有路径中都能够严格配对的了。 * Go 语言里的 defer 简直就是这种情况下的救星 * ：我们用 defer 来调用 Unlock，临界区会隐式地延伸到函数作用域的最后，这样我们就从“总要记得在函数返回之后或者发生错误返回时要记得调用一次 Unlock”这种状态中获得了解放。Go 会自动帮我们完成这些事情。
+
+#+BEGIN_SRC go
+  func Balance() int {
+    mu.Lock()
+    defer mu.Unlock()
+    return balance
+  }
+#+END_SRC
+
+#+BEGIN_SRC go
+  // NOTE: not atomic!
+  // 函数终于给出了正确的结果，但是还有一点讨厌的副作用。当过多的取款操作同时执行时，balance 可能会瞬时被减到 0 以下。这
+  func Withdraw(amount int) bool {
+    Deposit(-amount)
+    if Balance() < 0 {
+      Deposit(amount)
+      return false // insufficient funds
+    }
+    return true
+  }
+
+  // NOTE: incorrect!
+  // Deposit 会调用 mu.Lock()第二次去获取互斥锁，但因为 mutex 已经锁上了，而无法被重入.
+  // 也就是说没法对一个已经锁上的 mutex 来再次上锁--这会导致程序死锁，没法继续执行下去，Withdraw 会永远阻塞下去。
+  func Withdraw(amount int) bool {
+    mu.Lock()
+    defer mu.Unlock()
+    Deposit(-amount)
+    if Balance() < 0 {
+      Deposit(amount)
+      return false // insufficient funds
+    }
+    return true
+  }
+#+END_SRC
+上述代码的一个通用的解决方案是将一个函数分离为多个函数，比如我们把 Deposit 分离成两个：一个不导出的函数 deposit，这个函数假设锁总是会被保持并去做实际的操作，另一个是导出的函数 Deposit，这个函数会调用 deposit，但在调用前会先去获取锁。同理我们可以将 Withdraw 也表示成这种形式：
+
+#+BEGIN_SRC go
+  func Withdraw(amount int) bool {
+    mu.Lock()
+    defer mu.Unlock()
+    deposit(-amount)
+    if balance < 0 {
+      deposit(amount)
+      return false // insufficient funds
+    }
+    return true
+  }
+
+  func Deposit(amount int) {
+    mu.Lock()
+    defer mu.Unlock()
+    deposit(amount)
+  }
+
+  func Balance() int {
+    mu.Lock()
+    defer mu.Unlock()
+    return balance
+  }
+
+  // This function requires that the lock be held.
+  func deposit(amount int) { balance += amount }
+#+END_SRC
+封装(§6.6), 用限制一个程序中的意外交互的方式，可以使我们获得数据结构的不变性。因为某种原因，封装还帮我们获得了并发的不变性。当你使用 mutex 时，确保 mutex 和其保护的变量没有被导出(在 go 里也就是小写，且不要被大写字母开头的函数访问啦)，无论这些变量是包级的变量还是一个 struct 的字段。
+*** sync.RWMutex 读写锁
+在这种场景下我们需要一种特殊类型的锁，其允许多个只读操作并行执行，但写操作会完全互斥。这种锁叫作“多读单写”锁(multiple readers, single writer lock)，Go 语言提供的这样的锁是 sync.RWMutex：
+
+#+BEGIN_SRC go
+  var mu sync.RWMutex
+  var balance int
+  func Balance() int {
+    mu.RLock() // readers lock
+    defer mu.RUnlock()
+    return balance
+  }
+#+END_SRC
+
+RWMutex 只有当获得锁的大部分 goroutine 都是读操作，而锁在竞争条件下，也就是说，goroutine 们必须等待才能获取到锁的时候，RWMutex 才是最能带来好处的。RWMutex 需要更复杂的内部记录，所以会让它比一般的无竞争锁的 mutex 慢一些。
+*** 内存同步
+"同步"不仅仅是一堆 goroutine 执行顺序的问题；同样也会涉及到内存的问题。
+
+在现代计算机中可能会有一堆处理器，每一个都会有其本地缓存(local cache)。为了效率，对内存的写入一般会在每一个处理器中缓冲，并在必要时一起 flush 到主存。这种情况下这些数据可能会以与当初 goroutine 写入顺序不同的顺序被提交到主存。像 channel 通信或者互斥量操作这样的原语会使处理器将其聚集的写入 flush 并 commit，这样 goroutine 在某个时间点上的执行结果才能被其它处理器上运行的 goroutine 得到。
+
+#+BEGIN_SRC go
+  // 考虑一下下面代码片段的可能输出：
+  var x, y int
+  go func() {
+    x = 1 // A1
+    fmt.Print("y:", y, " ") // A2
+  }()
+  go func() {
+    y = 1                   // B1
+    fmt.Print("x:", x, " ") // B2
+  }()
+#+END_SRC
+因为两个 goroutine 是并发执行，并且访问共享变量时也没有互斥，会有数据竞争，所以程序的运行结果没法预测的话也请不要惊讶。我们可能希望它能够打印出下面这四种结果中的一种，相当于几种不同的交错执行时的情况：
+y:0 x:1
+x:0 y:1
+x:1 y:1
+y:1 x:1
+然而实际的运行时还是有些情况让我们有点惊讶：
+x:0 y:0
+y:0 x:0
+但是根据所使用的编译器，CPU，或者其它很多影响因子，这两种情况也是有可能发生的。那么这两种情况要怎么解释呢？
+
+在一个独立的 goroutine 中，每一个语句的执行顺序是可以被保证的；也就是说 goroutine 是顺序连贯的。但是在不使用 channel 且不使用 mutex 这样的显式同步操作时，我们就没法保证事件在不同的 goroutine 中看到的执行顺序是一致的了。尽管 goroutine A 中一定需要观察到 x=1 执行成功之后才会去读取 y，但它没法确保自己观察得到 goroutine B 中对 y 的写入，所以 A 还可能会打印出 y 的一个旧版的值。
+
+尽管去理解并发的一种尝试是去将其运行理解为不同 goroutine 语句的交错执行，但看看上面的例子，这已经不是现代的编译器和 cpu 的工作方式了。因为赋值和打印指向不同的变量，编译器可能会断定两条语句的顺序不会影响执行结果，并且会交换两个语句的执行顺序。如果两个 goroutine 在不同的 CPU 上执行，每一个核心有自己的缓存，这样一个 goroutine 的写入对于其它 goroutine 的 Print，在主存同步之前就是不可见的了。
+
+所有并发的问题都可以用一致的、简单的既定的模式来规避。所以可能的话，将变量限定在 goroutine 内部；如果是多个 goroutine 都需要访问的变量，使用互斥条件来访问。
+*** sync.Once 初始化
+#+BEGIN_SRC go
+  var loadIconsOnce sync.Once
+  var icons map[string]image.Image
+  // Concurrency-safe.
+  func Icon(name string) image.Image {
+    loadIconsOnce.Do(loadIcons)
+    return icons[name]
+  }
+#+END_SRC
+如果初始化成本比较大的话，那么将初始化延迟到需要的时候再去做就是一个比较好的选择。
+
+#+BEGIN_SRC go
+  var icons map[string]image.Image
+
+  func loadIcons() {
+    icons = map[string]image.Image{
+      "spades.png":   loadIcon("spades.png"),
+      "hearts.png":   loadIcon("hearts.png"),
+      "diamonds.png": loadIcon("diamonds.png"),
+      "clubs.png":  loadIcon("clubs.png"),
+    }
+  }
+
+  // NOTE: not concurrency-safe!
+  func Icon(name string) image.Image {
+    if icons == nil {
+      loadIcons() // one-time initialization
+    }
+    return icons[name]
+  }
+#+END_SRC
+直觉会告诉我们最差的情况是 loadIcons 函数被多次访问会带来数据竞争。当第一个 goroutine 在忙着 loading 这些 icons 的时候，另一个 goroutine 进入了 Icon 函数，发现变量是 nil，然后也会调用 loadIcons 函数。
+
+/也就是说对并发的直觉总是不能被信任的!/
+
+不过这种直觉是错误的。(我们希望现在你从现在开始能够构建自己对并发的直觉，也就是说对并发的直觉总是不能被信任的！)回忆一下 9.4 节。因为缺少显式的同步，编译器和 CPU 是可以随意地去更改访问内存的指令顺序，以任意方式，只要保证每一个 goroutine 自己的执行顺序一致。其中一种可能 loadIcons 的语句重排是下面这样。它会在填写 icons 变量的值之前先用一个空 map 来初始化 icons 变量。
+
+#+BEGIN_SRC go
+  func loadIcons() {
+    icons = make(map[string]image.Image)
+    icons["spades.png"] = loadIcon("spades.png")
+    icons["hearts.png"] = loadIcon("hearts.png")
+    icons["diamonds.png"] = loadIcon("diamonds.png")
+    icons["clubs.png"] = loadIcon("clubs.png")
+  }
+#+END_SRC
+
+因此，一个 goroutine 在检查 icons 是非空时，也并不能就假设这个变量的初始化流程已经走完了(译注：可能只是塞了个空 map，里面的值还没填完，也就是说填值的语句都没执行完呢)。
+
+
+最简单且正确的保证所有 goroutine 能够观察到 loadIcons 效果的方式，是用一个 mutex 来同步检查。使用互斥访问 icons 的代价就是没有办法对该变量进行并发访问，即使变量已经被初始化完毕且再也不会进行变动。这里我们可以引入一个允许多读的锁：
+
+#+BEGIN_SRC go
+  var mu sync.RWMutex // guards icons
+  var icons map[string]image.Image
+  // Concurrency-safe.
+  func Icon(name string) image.Image {
+    mu.RLock()
+    if icons != nil {
+      icon := icons[name]
+      mu.RUnlock()
+      return icon
+    }
+    mu.RUnlock()
+
+    // acquire an exclusive lock
+    mu.Lock()
+    if icons == nil { // NOTE: must recheck for nil
+      loadIcons()
+    }
+    icon := icons[name]
+    mu.Unlock()
+    return icon
+  }
+#+END_SRC
+
+上面的模板使我们的程序能够更好的并发，但是有一点太复杂且容易出错。幸运的是，sync 包为我们提供了一个专门的方案来解决这种一次性初始化的问题：sync.Once。概念上来讲，一次性的初始化需要一个互斥量 mutex 和一个 boolean 变量来记录初始化是不是已经完成了；互斥量用来保护 boolean 变量和客户端数据结构。Do 这个唯一的方法需要接收初始化函数作为其参数。让我们用 sync.Once 来简化前面的 Icon 函数吧：
+
+#+BEGIN_SRC go
+  var loadIconsOnce sync.Once
+  var icons map[string]image.Image
+  // Concurrency-safe.
+  func Icon(name string) image.Image {
+    loadIconsOnce.Do(loadIcons)
+    return icons[name]
+  }
+#+END_SRC
+
+每一次对 Do(loadIcons)的调用都会锁定 mutex，并会检查 boolean 变量。在第一次调用时，变量的值是 false，Do 会调用 loadIcons 并会将 boolean 设置为 true。随后的调用什么都不会做，但是 mutex 同步会保证 loadIcons 对内存(这里其实就是指 icons 变量啦)产生的效果能够对所有 goroutine 可见。用这种方式来使用 sync.Once 的话，我们能够避免在变量被构建完成之前和其它 goroutine 共享该变量。
+*** 竞争条件检测
+Go 的 runtime 和工具链为我们装备了一个复杂但好用的动态分析工具，竞争检查器(the race detector)。
+
+只要在 go build，go run 或者 go test 命令后面加上-race 的 flag，就会使编译器创建一个你的应用的“修改”版或者一个附带了能够记录所有运行期对共享变量访问工具的 test，并且会记录下每一个读或者写共享变量的 goroutine 的身份信息。另外，修改版的程序会记录下所有的同步事件，比如 go 语句，channel 操作，以及对`(*sync.Mutex).Lock`，`(*sync.WaitGroup).Wait`等等的调用。(完整的同步事件集合是在 The Go Memory Model 文档中有说明，该文档是和语言文档放在一起的。译注：https://golang.org/ref/mem)
