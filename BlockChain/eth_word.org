@@ -1,0 +1,198 @@
+* jurisdictions [nil]
+
+** Basic Explains
+  - n. 司法管辖区；行政辖区（jurisdiction 的复数）
+
+** Web References
+  - jurisdictions :: 司法管辖区; 各国信息; 管辖区域
+  - government jurisdictions :: 一些国家; 一些政府的辖区
+  - applicable jurisdictions :: 适用司法管辖区
+* impacted [ɪm'pæktɪd]
+
+** Basic Explains
+- v. 装紧；挤满（impact 的过去分词）
+- adj. 压紧的；结实的；嵌入的；（人口）稠密的
+
+** Web References
+- impacted :: 嵌入的; 结实的; 压紧的
+- impacted tooth :: 阻生牙; 阻生齿; 埋伏牙
+- impacted molar :: 阻生牙; 智齿; 磨牙阻生
+* regulatory ['reɡjulətəri]
+
+** Basic Explains
+- adj. 管理的；控制的；调整的
+
+** Web References
+- Regulatory :: 监督管理; 调整的; 标准
+- Regulatory mechanism :: 法规机制; 调节机制; 调控机制
+- regulatory gene :: 调节基因; 调控基因; 相关调控基因
+* inquiries [nil]
+
+** Basic Explains
+- n. [计] 询问；打听（inquiry 的复数）
+
+** Web References
+- Inquiries :: 问讯处; 咨询电话; 询盘
+- Making Inquiries :: 询盘; 询问
+- Business inquiries :: 商业询价
+* regulatory ['reɡjulətəri]
+
+** Basic Explains
+- adj. 管理的；控制的；调整的
+
+** Web References
+- Regulatory :: 监督管理; 调整的; 标准
+- Regulatory mechanism :: 法规机制; 调节机制; 调控机制
+- regulatory gene :: 调节基因; 调控基因; 相关调控基因
+* impede [ɪm'piːd]
+
+** Basic Explains
+- vt. 阻碍；妨碍；阻止
+
+** Web References
+- Impede :: 妨碍; 阻碍; 阻止
+- abet impede :: 协助
+- impede abet :: 阻止
+* insufficient [ɪnsə'fɪʃ(ə)nt]
+
+** Basic Explains
+- adj. 不足的，不充足的
+- n. 不足
+
+** Web References
+- insufficient :: 不足的; 不充分的; 不够的
+- Insufficient Underfilling :: 底部填充不充分
+- insufficient demand :: 需求不足; 内需不足
+* infrastructure ['ɪnfrəstrʌktʃə]
+
+** Basic Explains
+- n. 基础设施；公共建设；下部构造
+
+** Web References
+- Infrastructure :: 基础设施; 基础设施; 基础设施
+- Critical infrastructure :: 维生管线; 关键基础设施; 基础建设
+- Converged Infrastructure :: 融合式基础架构; 融合基础设施; 融合基础架构
+* exploitable [ɪks'plɔɪtəbl]
+
+** Basic Explains
+- adj. 可开发的；可利用的
+
+** Web References
+- exploitable :: 可利用的; 可开发的; 可开采
+- exploitable reserve :: 可采储量; 可采蕴藏量
+- exploitable resources :: 开采资源; 可采资源; 可采资源量
+* dampen ['dæmp(ə)n]
+
+** Basic Explains
+- vt. 抑制；使…沮丧；使…潮湿
+- vi. 潮湿；丧气
+
+** Web References
+- dampen :: 使潮湿; 抑制; 使沮丧
+- dampen pipe :: 消音器
+- dampen scorch :: 使潮湿; 使潮湿烧焦
+* incoherence [,ɪnkəʊ'hɪərəns]
+
+** Basic Explains
+- n. 不连贯，无条理
+
+** Web References
+- Incoherence :: 不连贯; 非相干性; 不相干性
+- spin incoherence :: 自旋非相干性; 自旋不相干性
+- reduced incoherence :: 减小非相关; 减小非相干
+* dramatically [drə'mætɪkəlɪ]
+
+** Basic Explains
+- adv. 戏剧地；引人注目地
+- adv. 显著地，剧烈地
+
+** Web References
+- Dramatically :: 戏剧的; 引人注目地; 戏剧性地
+- decreased dramatically :: 大幅下降; 急剧下降
+- Changing dramatically :: 发生巨大的改变
+* scenario [sɪ'nɑːrɪəʊ]
+
+** Basic Explains
+- n. 方案；情节；剧本；设想
+
+** Web References
+- Scenario :: 情境; 戏剧的情节; 情节
+- usage scenario :: 使用场景; 使用方案; 使用方式情节
+- development scenario :: 发展方案
+* dampen ['dæmp(ə)n]
+
+** Basic Explains
+- vt. 抑制；使…沮丧；使…潮湿
+- vi. 潮湿；丧气
+
+** Web References
+- dampen :: 使潮湿; 抑制; 使沮丧
+- dampen pipe :: 消音器
+- dampen scorch :: 使潮湿; 使潮湿烧焦
+* revenue ['revənjuː]
+
+** Basic Explains
+- n. 税收，国家的收入；收益
+
+** Web References
+- Revenue :: 收入; 岁入; 税收
+- Sales revenue :: 产品销售收入; 销货收入; 销售收入
+- fiscal revenue :: 财政收入; 财政岁入; 财政支出
+* incoherence [,ɪnkəʊ'hɪərəns]
+
+** Basic Explains
+- n. 不连贯，无条理
+
+** Web References
+- Incoherence :: 不连贯; 非相干性; 不相干性
+- spin incoherence :: 自旋非相干性; 自旋不相干性
+- reduced incoherence :: 减小非相关; 减小非相干
+* integrity [ɪn'tegrɪtɪ]
+
+** Basic Explains
+- n. 完整；正直；诚实；廉正
+
+** Web References
+- Integrity :: 诚信; 正直; 完整性
+- Entity integrity :: 实体完整性; 实体完整性; 在一个基本表中
+- fire integrity :: 整体着火性; 抗火完整性; 耐火完整性
+* endeavor [ɪn'devə]
+
+** Basic Explains
+- n. 努力；尽力（等于 endeavour）
+- vi. 努力；尽力（等于 endeavour）
+- vt. 努力；尽力（等于 endeavour）
+
+** Web References
+- endeavor :: 努力; 努力做; 尝试
+- endeavor to :: 尽力; 争做; 努力
+- endeavor in :: 致力于
+* dispute [dɪ'spjuːt; 'dɪspjuːt]
+
+** Basic Explains
+- n. 辩论；争吵
+- vt. 辩论；怀疑；阻止；抗拒
+- vi. 争论
+
+** Web References
+- Dispute :: 纠纷; 争端; 争执
+- Territorial dispute :: 领土纠纷; 领土纠纷; 领土争端
+- beyond dispute :: 不容争议的; 没有争论余地的; 无可争议
+* thereof [ðeər'ɒv]
+
+** Basic Explains
+- adv. 它的；由此；在其中；关于…；将它
+
+** Web References
+- thereof :: 在其中; 关于; 由此
+- products thereof :: 制品; 该产品; 及其产品
+- application thereof :: 应用; 应用前景
+* arbitration [ɑːbɪ'treɪʃ(ə)n]
+
+** Basic Explains
+- n. 公断，仲裁
+
+** Web References
+- Arbitration :: 仲裁; 公断; 仲裁申请书
+- Arbitration Law :: 仲裁法; 仲裁法学; 仲裁法
+- arbitration commission :: 仲裁委员会; 仲裁委
