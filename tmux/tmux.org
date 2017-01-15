@@ -1,3 +1,57 @@
 [[http://www.kancloud.cn/kancloud/tmux/62468][tmux 介绍]]
 + prefix z :: 把当前 pane 最大化/恢复
-+ prefix q :: tmux 会显示每个 pane 的序号，按这个序号就可以跳过去了（按慢了可不行，得在数字消失前按）。 
++ prefix q :: tmux 会显示每个 pane 的序号，按这个序号就可以跳过去了（按慢了可不行，得在数字消失前按）。
+* tmux shortcuts
+bind-key    -T prefix C-b              send-prefix                                                                                                        [40/40]
+bind-key -r -T prefix C-h              select-window -t :-
+bind-key -r -T prefix C-l              select-window -t :+
+bind-key    -T prefix C-o              rotate-window
+bind-key    -T prefix C-z              suspend-client
+bind-key    -T prefix Space            next-layout
+bind-key    -T prefix !                break-pane
+bind-key    -T prefix "                split-window
+bind-key    -T prefix #                list-buffers
+bind-key    -T prefix $                command-prompt -I #S "rename-session '%%'"
+bind-key    -T prefix %                split-window -h
+bind-key    -T prefix &                confirm-before -p "kill-window #W? (y/n)" kill-window
+bind-key    -T prefix '                command-prompt -p index "select-window -t ':%%'"
+bind-key    -T prefix (                switch-client -p
+bind-key    -T prefix )                switch-client -n
+bind-key    -T prefix ,                command-prompt -I #W "rename-window '%%'"
+bind-key    -T prefix -                split-window -v
+bind-key    -T prefix .                command-prompt "move-window -t '%%'"
+bind-key    -T prefix 0                select-window -t :=0
+bind-key    -T prefix 1                select-window -t :=1
+bind-key    -T prefix 2                select-window -t :=2
+bind-key    -T prefix 3                select-window -t :=3
+bind-key    -T prefix 4                select-window -t :=4
+bind-key    -T prefix 5                select-window -t :=5
+bind-key    -T prefix 6                select-window -t :=6
+bind-key    -T prefix 7                select-window -t :=7
+bind-key    -T prefix 8                select-window -t :=8
+bind-key    -T prefix 9                select-window -t :=9
+bind-key    -T prefix :                command-prompt
+bind-key    -T prefix ;                last-pane
+bind-key    -T prefix =                choose-buffer
+bind-key    -T prefix ?                list-keys
+bind-key    -T prefix D                choose-client
+bind-key -r -T prefix H                resize-pane -L 5
+bind-key -r -T prefix J                resize-pane -D 5
+bind-key -r -T prefix K                resize-pane -U 5
+bind-key -r -T prefix L                resize-pane -R 5
+bind-key    -T prefix M                select-pane -M
+bind-key    -T prefix P                pipe-pane -o "cat >>~/#tmux.log" ; display-message "Toggled logging to ~/#tmux.log"
+bind-key    -T prefix [                copy-mode
+bind-key    -T prefix ]                paste-buffer
+bind-key    -T prefix c                new-window
+bind-key    -T prefix d                detach-client
+bind-key    -T prefix f                command-prompt "find-window '%%'"
+bind-key    -T prefix h                select-pane -L
+bind-key    -T prefix i                display-message
+bind-key    -T prefix j                select-pane -D
+bind-key    -T prefix k                select-pane -U
+bind-key    -T prefix l                select-pane -R
+bind-key    -T prefix m                select-pane -m
+bind-key    -T prefix n                next-window
+bind-key    -T prefix o                select-pane -t :.+
+bind-key    -T prefix p                previous-window
