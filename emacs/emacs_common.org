@@ -345,3 +345,15 @@ You can delete a surrounding with ds<textobject>.
 (dolist (charset '(kana han cjk-misc bopomofo))
   (set-fontset-font (frame-parameter nil 'font) charset
                     (font-spec :family "微软雅黑" :size 11)))
+* emacs 拉丁，希腊字母
+输入 M-x 命令，可以查看完整的 entities 
+org-entities-help 
+在 letters 里面可以看到拉丁和希腊字符。
+
+编辑 org 文档时执行： 
+C-c C-x \
+这个快捷键会调用命令： 
+org-toggle-pretty-entities
+会在 org-mode 中显示特殊字符和数学公式
+
+e.g.: $$e^{i\pi} + 1 = 0$$
