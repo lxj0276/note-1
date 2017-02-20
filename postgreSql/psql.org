@@ -1,0 +1,5 @@
+* psql 连接
+  psql: could not connect to server: No such file or directory Is the server running locallly and acception connections on Unix domain socket "/tmp/.s.PGSQL.5432"
+
+1. export PGHOST=localhost
+2. psql <-p port> -U user 
