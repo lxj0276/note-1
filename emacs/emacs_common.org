@@ -357,3 +357,6 @@ org-toggle-pretty-entities
 会在 org-mode 中显示特殊字符和数学公式
 
 e.g.: $$e^{i\pi} + 1 = 0$$
+* emacs gtd
+[[http://doc.norang.ca/org-mode.html#GettingOrgModeWithGit][Org Mode - Organize Your Life In Plain Text!]]
+[[http://blog.csdn.net/lishuo_OS_DS/article/details/8069484][Emacs 下日程管理 GTD]]
