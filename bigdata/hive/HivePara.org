@@ -1,0 +1,12 @@
+* hive 运行日志
+/tmp/hdfs/hive.log
+* hive 设置 job 名字
+1. set mapred.job.name=***(一个 sql 可能会有多个 job，但是名字相同，分不出 stage)
+2. 在最前边加上注释（可以得到 stage-%d)
+
+Instead of using set mapred.job.name you can add a comment in the beginning of the query with a more helpful name like this :
+-- this is a more helpful name
+
+SELECT field, other_field ....
+
+Then, in the jobtracker you'll see -- this is a more helpful name ..... (Stage-%d)"

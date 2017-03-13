@@ -1,0 +1,3 @@
+[[https://blogs.oracle.com/dataintegration/entry/oracle_goldengate_for_big_data][Oracle GoldenGate for Big Data 12.2.0.1 is Generally Available Now!]]
+
+[[https://www.qcloud.com/community/article/164816001481011932][基于 OGG 的 Oracle 与 Hadoop 集群准实时同步介绍]]
