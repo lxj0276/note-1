@@ -1,0 +1,127 @@
+* leason 2
+** 常用非线性激励函数
+   1. sigmoid
+
+   2. tahn
+
+   3. relu
+* leason 3
+
+1. relu
+
+2. 卷积是如何运算的
+
+3. 局部卷积更能体现本局部的特性
+
+4. 步长对特征图的扫描间隔对特征图的影响: 会影响最后输出的维度
+   7*7 -> step 1 -> 5*5
+   7*7 -> step 2 -> 3*3
+
+5. 为了保证前后尺寸相同, 需要 pad(边界扩充),加入合适的 pad,可以使输入输出的 size 相同
+
+6. 卷积层: 参数多,计算少
+   卷积网络: 参数少, 计算多
+
+7. 卷积神经网络的正向反向推导
+
+8. 机器学习现在是先实践, 然后再推理
+
+* leason 4
+  1. hog, lbp
+
+  2. AlexNet
+     FC: 全链接层
+     回归用 sigmoid, 分类用 softmax
+
+  3. 卷积层和池化层是怎么联系的
+
+  4. 参数很大怎么保证不过拟合: 有些参数可以不更新, 比较低的 layer 不更新参数.
+
+* leason 5: 目标分类, 迁移学习
+  1. 迁移学习的原理(用现有模型, 进行一些改变)
+
+  2. 根据问题的特点, 设计能够解决特定结构的神经网络.
+
+  3. 当同时可以考虑深度和宽度设计的时候时, 先考虑深度的设计, 两层 3*3 的 filter 跟一个 5*5 的, 如果层数变多, 则参数变少.
+
+  4. 如何设计神经网络
+    - 明确研究问题
+    - 已有的解决方案特点，借鉴地方，不足 3. 突破点在哪里，还是重复就足够了
+    - 想法在网络结构中实现
+    - 训练结果反馈调整
+
+* leason 6: 目标分类, 目标探测
+  1. 8:30 左右
+
+  2. edgebox 
+
+  3. bbox: bounding box
+
+  4. RCNN: 区域 CNN.
+
+  5. 根据问题的特点, 设计能够解决特定结构的神经网络.
+
+
+
+
+
+
+
+
+
+* questions
+  1. sigmoid 如何求导数
+
+  2. 什么是卷积层, 什么是卷积核, 怎么设计卷积核.
+
+  3. dlib 人脸关键点, 对准
+
+* resources
+** packages
+   1. tflearn
+
+   2. scikit-image
+
+** 常见卷积核
+   - Sharpen
+   - Blur
+   - Edge enhance
+   - Edge detect
+   - Emboss
+   [[https://docs.gimp.org/en/plug-in-convmatrix.html][Convolution Matrix]]
+
+** bagging, boosting
+*** bagging
+    Bootstrap aggregating, also called bagging, is a machine learning ensemble meta-algorithm designed to improve the stability and accuracy of machine learning algorithms used in statistical classification and regression. It also reduces variance and helps to avoid overfitting.
+
+    Only algorithms that are provable boosting algorithms in the probably approximately correct learning formulation can accurately be called boosting algorithms.
+
+    Given a standard training set D of size n, bagging generates m new training sets {\displaystyle D_{i}} D_{i}, each of size n′, by sampling from D uniformly and with replacement.
+
+    Bagging leads to "improvements for unstable procedures" (Breiman, 1996), which include, for example, artificial neural networks, classification and regression trees, and subset selection in linear regression (Breiman, 1994). 
+
+    bagging：bootstrap aggregating 的缩写。让该学习算法训练多轮，每轮的训练集由从初始的训练集中随机取出的 n 个训练样本组成，某个初始训练样本在某轮训练集中可以出现多次或根本不出现，训练之后可得到一个预测函数序列 h_1，⋯ ⋯h_n，最终的预测函数 H 对分类问题采用投票方式，对回归问题采用简单平均方法对新示例进行判别。
+*** boosting
+    Boosting is a machine learning ensemble meta-algorithm for primarily reducing bias, and also variance[1] in supervised learning, and a family of machine learning algorithms which convert weak learners to strong ones.
+
+    The main variation between many boosting algorithms is their method of weighting training data points and hypotheses. AdaBoost is very popular and perhaps the most significant historically as it was the first algorithm that could adapt to the weak learners. However, there are many more recent algorithms such as LPBoost, TotalBoost, BrownBoost, xgboost, MadaBoost, LogitBoost, and others. Many boosting algorithms fit into the AnyBoost framework,[9] which shows that boosting performs gradient descent in function space using a convex cost function.
+  
+    Examples of supervised classifiers are Naive Bayes classifier, SVM, mixtures of Gaussians, neural network, etc. However, research has shown that object categories and their locations in images can be discovered in an unsupervised manner as well.
+
+    其中主要的是 AdaBoost（Adaptive Boosting）。初始化时对每一个训练例赋相等的权重 1／n，然后用该学算法对训练集训练 t 轮，每次训练后，对训练失败的训练例赋以较大的权重，也就是让学习算法在后续的学习中集中对比较难的训练例进行学习，从而得到一个预测函数序列 h_1,⋯, h_m , 其中 h_i 也有一定的权重，预测效果好的预测函数权重较大，反之较小。最终的预测函数 H 对分类问题采用有权重的投票方式，对回归问题采用加权平均的方法对新示例进行判别。
+（类似 Bagging 方法，但是训练是串行进行的，第 k 个分类器训练时关注对前 k-1 分类器中错分的文档，即不是随机取，而是加大取这些文档的概率。)
+
+    Bagging 与 Boosting 的区别：二者的主要区别是取样方式不同。Bagging 采用均匀取样，而 Boosting 根据错误率来取样，因此 Boosting 的分类精度要优于 Bagging。Bagging 的训练集的选择是随机的，各轮训练集之间相互独立，而 Boostlng 的各轮训练集的选择与前面各轮的学习结果有关；Bagging 的各个预测函数没有权重，而 Boosting 是有权重的；Bagging 的各个预测函数可以并行生成，而 Boosting 的各个预测函数只能顺序生成。对于象神经网络这样极为耗时的学习方法。Bagging 可通过并行训练节省大量时间开销。
+bagging 和 boosting 都可以有效地提高分类的准确性。在大多数数据集中，boosting 的准确性比 bagging 高。在有些数据集中，boosting 会引起退化--- Overfit。
+Boosting 思想的一种改进型 AdaBoost 方法在邮件过滤、文本分类方面都有很好的性能。
+
+    gradient boosting（又叫 Mart, Treenet)：Boosting 是一种思想，Gradient Boosting 是一种实现 Boosting 的方法，它主要的思想是，每一次建立模型是在之前建立模型损失函数的梯度下降方向。损失函数(loss function)描述的是模型的不靠谱程度，损失函数越大，则说明模型越容易出错。如果我们的模型能够让损失函数持续的下降，则说明我们的模型在不停的改进，而最好的方式就是让损失函数在其梯度（Gradient)的方向上下降。
+
+
+
+
+
+** 资料 (会议)
+   arxiv.org
+
+   ICCV, ECCV, CVPR, ICML, NIPS, ACL, KDD

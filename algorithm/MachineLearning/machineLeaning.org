@@ -1,3 +1,4 @@
+
 #+OPTIONS: ^:nil
 [[http://machinelearningmastery.com/a-tour-of-machine-learning-algorithms/][A Tour of Machine Learning Algorithms]]
 [[http://en.wikipedia.org/wiki/List_of_machine_learning_concepts][List of machine learning concepts]]
@@ -33,7 +34,10 @@ file:~/note/Pictures/MLPictures/costFunction2.png
 * 学习方式
 根据数据类型的不同，对一个问题的建模有不同的方式。在机器学习或者人工智能领域，人们首先会考虑算法的学习方式。
 ** 监督式学习(Supervised Learning)
+从给定的训练数据集中学习出一个函数，当新的数据到来时，可以根据这个函数预测结果。监督学习的训练集需要包括输入和输出，也可以说是特征和目标。训练集中的目标是由人标注的。常见的监督式学习算法包括回归分析和统计分类。
+
 [[https://en.wikipedia.org/wiki/Supervised_learning][Supervised learning]]
+
 [[https://zh.wikipedia.org/wiki/%25E7%259B%25A3%25E7%259D%25A3%25E5%25BC%258F%25E5%25AD%25B8%25E7%25BF%2592][監督式學習]]
 
 Input data is called training data and has a known label or result such as spam/not-spam or a stock price at a time.
@@ -116,9 +120,14 @@ file:../../Pictures/MLPictures/svm3.png
 
 **** 决策树(Decision Tree)
 ** 非监督式学习(Unsupervised Learning)
+与监督学习相比，训练集没有人为标注的结果。
+
 Input data is not labelled and does not have a known result. A model is prepared by deducing structures present in the input data.
+
 在非监督式学习中，数据并不被特别标识，学习模型是为了推断出数据的一些内在结构。
+
 应用场景关联规则的学习以及聚类等。常见算法包括 Apriori 算法以及 k-Means 算法。
+
 非监督式学习与统计学上的密度估计关系更紧密.
 *** 应用场景
 数据聚类
@@ -181,9 +190,13 @@ k-均值算法的性能会受到所选相似性度量方法的影响，常用的
 2. 另一种做法是所有簇中选择 SSE 最大的簇进行划分，直到簇数目达到用户指定的数目为止.
 ** 半监督式学习(Semi-Supervised Learning)
 Input data is a mixture of labelled and unlabelled examples. There is a desired prediction problem but the model must learn the structures to organize the data as well as make predictions.
+
 应用场景：分类问题，回归问题
+
 算法包括一些对常用监督式学习算法的延伸，这些算法首先试图对未标识数据进行建模，在此基础上再对标识的数据进行预测。如图论推理算法（Graph Inference）或者拉普拉斯支持向量机（Laplacian SVM.）等。
 ** 强化学习(Reinforcement Learning)
+这种学习模式下，输入数据作为对模型的反馈，不像监督模型那样，输入数据仅仅是作为一个检查模型对错的方式，在强化学习下，输入数据直接反馈到模型，模型必须对此立刻作出调整。常见的强化学习算法有时间差学习。
+
 Input data is provided as stimulus to a model from an environment to which the model must respond and react.
 在强化学习下，输入数据直接反馈到模型，模型必须对此立刻作出调整。常见的应用场景包括动态系统以及机器人控制等。常见算法包括 Q-Learning 以及时间差学习（Temporal difference learning）.
 
@@ -242,7 +255,7 @@ file:~/note/Pictures/MLPictures/xiefangcha1.png
 最小二乘法还可用于曲线拟合。
 
 其他一些优化问题也可通过最小化能量或最大化熵用最小二乘法来表达。
-* 算法类似性
+* 算法类似性 1
 根据算法的功能和形式的类似性，我们可以把算法分类
 ** 回归算法（regression）
 回归算法是试图采用对误差的衡量来探索变量之间的关系的一类算法。
@@ -291,6 +304,13 @@ file:~/note/Pictures/MLPictures/xiefangcha1.png
 集成算法用一些相对较弱的学习模型独立地就同样的样本进行训练，然后把结果整合起来进行整体预测。集成算法的主要难点在于究竟集成哪些独立的较弱的学习模型以及如何把学习结果整合起来。
 
 常见的算法包括：Boosting，Bootstrapped Aggregation（Bagging），AdaBoost，堆叠泛化（Stacked Generalization，Blending），梯度推进机（Gradient Boosting Machine, GBM），随机森林（Random Forest）。
+* 算法类似性 2
+1. 决策树学习：根据数据的属性采用树状结构建立决策模型。决策树模型常常用来解决分类和回归问题。常见的算法包括 CART (Classification And Regression Tree)、ID3、C4.5、随机森林 (Random Forest) 等。
+2. 回归算法：试图采用对误差的衡量来探索变量之间的关系的一类算法。常见的回归算法包括最小二乘法 (Least Square)、逻辑回归 (Logistic Regression)、逐步式回归 (Stepwise Regression) 等。
+3. 聚类算法：通常按照中心点或者分层的方式对输入数据进行归并。所有的聚类算法都试图找到数据的内在结构，以便按照最大的共同点将数据进行归类。常见的聚类算法包括 K-Means 算法以及期望最大化算法 (Expectation Maximization) 等。
+4. 人工神经网络：模拟生物神经网络，是一类模式匹配算法。通常用于解决分类和回归问题。人工神经网络算法包括感知器神经网络 (Perceptron Neural Network) 、反向传递 (Back Propagation) 和深度学习等。
+5. 集成算法：用一些相对较弱的学习模型独立地就同样的样本进行训练，然后把结果整合起来进行整体预测。集成算法的主要难点在于究竟集成哪些独立的较弱的学习模型以及如何把学习结果整合起来。这是一类非常强大的算法，同时也非常流行。常见的算法包括 Boosting、Bagging、AdaBoost、随机森林 (Random Forest) 等。
+
 * 概念
 ** 泛化能力
 学习的目的是学到隐含在数据对背后的规律，对具有同一规律的学习集以外的数据，经过训练的算法也能给出合适的输出，该能力称为泛化能力。
@@ -298,6 +318,9 @@ file:~/note/Pictures/MLPictures/xiefangcha1.png
 并非训练的次数越多越能得到正确的输入输出映射关系。算法的性能主要用它的泛化能力来衡量。
 
 通常期望经训练样本训练的算法具有较强的泛化能力.
+* 算法
+** 决策树
+
 * Ten Examples of Machine Learning Problems
 1. Spam Detection  \\
  Given email in an inbox, identify those email messages that are spam and those that are not.Having a model of this problem would allow a program to leave non-spam emails in the inbox and move spam emails to a spam folder.

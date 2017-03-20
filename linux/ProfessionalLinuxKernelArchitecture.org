@@ -1,3 +1,28 @@
+* 内核数据结构
+** 链表
+linux 内核的标准链表是环形双向链表. 
+如果要随机访问数据, 一般不适用链表.
+适用链表的理想情况是: 需要便利所有的数据或需要动态加入和删除数据时.
+*** 单向链表
+    #+BEGIN_SRC C++
+      struct list_element {
+        void *data;
+        struct list_element *next;
+      }
+    #+END_SRC
+
+*** 双向链表
+    #+BEGIN_SRC C++
+      struct list_element {
+        void *data;
+        struct list_element *next;
+        struct list_element *prev;
+      }
+    #+END_SRC
+** 队列
+** 映射
+** 二叉树
+*** 环形链表
 * 第 1 章 简介和概述 
 1.1 内核的任务 
 1.2 实现策略 

@@ -1,0 +1,8 @@
+* 工作中 md5 udf 命令
+  add jar hdfs:///user/hive/udfs/md5.jar;
+  create temporary function md5 as 'com.lakala.udf.Md5';
+
+  select md5("data") from dual;
+
+* set hive on spark 
+** hive.execution.engine=spark

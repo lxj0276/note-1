@@ -1,0 +1,2 @@
+* cost function in gradient descent algorithm 
+cost funciton J(\Theta_0 , \Theta_1 ) 对\Theta_i 求导后的结果是如何推导的。
