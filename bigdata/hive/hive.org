@@ -4,3 +4,5 @@
 
   select md5("data") from dual;
 
+* set hive on spark 
+** hive.execution.engine=spark
