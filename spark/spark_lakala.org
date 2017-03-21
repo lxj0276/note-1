@@ -1,0 +1,10 @@
+* hive on spark
+  1. 将执行时间较长的 sql 运行在 spark 上,调节参数.
+  2. 用 spark 改写一些 hive 语句, 查看效果.
+* graphX
+  1. 用 graphX 做分布式图计算的需求.
+* spark streaming
+  1. spark streaming 做实时需求.
+  2. spark streaming 做实时算法训练模型.
+* spark ml
+* spark 做一些特殊的数据清洗(用 hive 比较难弄得数据清洗)
