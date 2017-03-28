@@ -5,4 +5,14 @@
   select md5("data") from dual;
 
 * set hive on spark 
+** first Enabling Hive on Spark
+  By default, Hive on Spark is not enabled. To enable Hive on Spark, perform the following steps in Cloudera Manager.
+
+  Go to the Hive service.
+  Click the Configuration tab.
+  Enter Enable Hive on Spark in the Search field.
+  Check the box for Enable Hive on Spark (Unsupported).
+  Locate the Spark On YARN Service and click SPARK_ON_YARN.
+  Click Save Changes to commit the changes.
 ** hive.execution.engine=spark
+** set hive.execution.engine=spark

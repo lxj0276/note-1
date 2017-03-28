@@ -124,3 +124,5 @@ One of the harder things about Spark is understanding the scope and life cycle o
 In general, closures - constructs like loops or locally defined methods, should not be used to mutate some global state. Spark does not define or guarantee the behavior of mutations to objects referenced from outside of closures. Some code that does this may work in local mode, but that’s just by accident and such code will not behave as expected in distributed mode. Use an Accumulator instead if some global aggregation is needed. 
 
 To ensure well-defined behavior in these sorts of scenarios one should use an Accumulator. Accumulators in Spark are used specifically to provide a mechanism for safely updating a variable when execution is split up across worker nodes in a cluster. The Accumulators section of this guide discusses these in more detail.
+* 高可用性技术
+流式计算框架的高可用性是通过状态备份和故障恢复策略实现的。当故障发生后，系统根据预先定义的策略进行数据的重放和恢复。按照实现策略，可以被细分为被动等待 (passive standby)、主动等待 (active standby) 和上游备份 (upstream backup) 这 3 种策略。

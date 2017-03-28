@@ -202,3 +202,57 @@ linux 将虚拟地址空间划分为两个部分: 内核空间和用户空间. �
 * 附录 D 系统启动 
 * 附录 E ELF 二进制格式 
 * 附录 F 内核开发过程 
+* c language
+** What does 'unsigned temp:3' in a struct or union mean?
+This construct specifies the length in bits for each field.
+
+The advantage of this is that you can control the sizeof(op), if you're careful. the size of the structure will be the sum of the sizes of the fields inside.
+
+In your case, size of op is 32 bits (that is, sizeof(op) is 4).
+
+The size always gets rounded up to the next multiple of 8 for every group of unsigned xxx:yy; construct.
+
+That means:
+
+#+BEGIN_SRC C
+  struct A
+  {
+    unsigned a: 4;    //  4 bits
+    unsigned b: 4;    // +4 bits, same group, (4+4 is rounded to 8 bits)
+    unsigned char c;  // +8 bits
+  };
+  //                    sizeof(A) = 2 (16 bits)
+
+  struct B
+  {
+    unsigned a: 4;    //  4 bits
+    unsigned b: 1;    // +1 bit, same group, (4+1 is rounded to 8 bits)
+    unsigned char c;  // +8 bits
+    unsigned d: 7;    // + 7 bits
+  };
+  //                    sizeof(B) = 3 (4+1 rounded to 8 + 8 + 7 = 23, rounded to 24)
+#+END_SRC
+** what does __rcu stands for in linux?
+Read-copy-update is an algorithm that enables concurrent access to readers of a data structure without having to lock the structure. It can be read about here.
+
+If the kernel is built with the CONFIG_SPARSE_RCU_POINTER config option, __rcu is defined in include/linux/compiler.h as
+
+# define __rcu          __attribute__((noderef, address_space(4)))
+This is an annotation for a the Sparse code analysis tool that can warn about certain things the programmer may have overlooked. How this is relevant to RCU is explained in Documentation/RCU/checklist.txt:
+
+__rcu sparse checks: tag the pointer to the RCU-protected data structure with __rcu, and sparse will warn you if you access that pointer without the services of one of the variants of rcu_dereference().
+rcu_dereference() returns a pointer that can be safely dereferenced by the code and documents the programmer's intention to protect the pointer with the RCU mechanism, enabling tools like Sparse to check for programming errors and omissions.
+[[https://www.ibm.com/developerworks/cn/linux/l-rcu/][Linux 2.6 内核中新的锁机制--RCU]]
+** What are the implications of the linux __user macro?
+
+   #+BEGIN_SRC C
+     # define __user         __attribute__((noderef, address_space(1)))
+   #+END_SRC
+It allows tools like sparse to tell kernel developers that they're possibly using an untrusted pointer (or a pointer that may be invalid in the current virtual address mapping) improperly.
+** unoin
+   [[http://c.biancheng.net/cpp/html/2932.html][C 语言共用体（Union）]]
+结构体和共用体的区别在于：结构体的各个成员会占用不同的内存，互相之间没有影响；而共用体的所有成员占用同一段内存，修改一个成员会影响其余所有成员。
+1、union 中可以定义多个成员，union 的大小由最大的成员的大小决定。 
+2、union 成员共享同一块大小的内存，一次只能使用其中的一个成员。 
+3、对某一个成员赋值，会覆盖其他成员的值（也不奇怪，因为他们共享一块内存。但前提是成员所占字节数相同，当成员所占字节数不同时只会覆盖相应字节上的值，比如对 char 成员赋值就不会把整个 int 成员覆盖掉，因为 char 只占一个字节，而 int 占四个字节）
+4、联合体 union 的存放顺序是所有成员都从低地址开始存放的。
