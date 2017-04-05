@@ -478,3 +478,33 @@ res1: java.lang.Object with LazyRationalTrait = 1/2
      scala> Direction(1)
      res15: Direction.Value = East
    #+END_SR
+* What does the "self =>" stand for
+You can use self, or t , or  any other word what you what to use.
+
+#+BEGIN_SRC scala
+  abstract class Thing { t =>
+    type A
+    type G <: Group { type A = t.A }
+    val group: G
+  }
+#+END_SRC
+
+The default naming for class itself is this. You may replace it with t by t =>
+
+It is useful if your class contains subclasses and you need access to enclosing self reference.
+
+Without t => in your example you would write something like this:
+
+#+BEGIN_SRC scala
+  abstract class Thing {
+    type G <: Group { type A = this.A }
+  }
+#+END_SRC
+
+Group { type A = this.A } is a subtype so this would reference to group specialization itself not to a thing object. Probably you get not what you mean to get. If you need access to Thing self reference you should resolve name conflict by assigning self reference another name
+
+#+BEGIN_SRC scala
+  abstract class Thing { another_this = >
+    type G <: Group { type A = another_this.A}
+  }
+#+END_SRC

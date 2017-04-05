@@ -2299,7 +2299,6 @@ can be declared abstract.
 
 
 
-
 * 实现列表
   描述 list 类的实现。实现本身也展示了若干 scala 特性的应用。
 
@@ -2337,6 +2336,32 @@ can be declared abstract.
 
 * SCells 试算表
   通过一个完整的试算表的实现，集中演示了 scala 的一切。
+
+* Exception(异常)
+It’s important to note that Scala’s philosophy regarding checked exceptions is different than Java’s. Scala doesn’t require that methods declare that exceptions can be thrown, and it also doesn’t require calling methods to catch them. 
+  #+BEGIN_SRC scala
+    import java.io._
+    object CopyBytes extends App {
+      var in = None: Option[FileInputStream] var out = None: Option[FileOutputStream]
+      try {
+        in = Some(new FileInputStream("/tmp/Test.class"))
+        out = Some(new FileOutputStream("/tmp/Test.class.copy")) var c = 0
+        while ({c = in.get.read; c != −1}) {
+          out.get.write(c)
+        }
+      } catch {
+        case e: IOException => e.printStackTrace
+      } finally {
+        println("entered finally ...") if (in.isDefined) in.get.close if (out.isDefined) out.get.close
+      } }
+  #+END_SRC
+
+  #+BEGIN_SRC scala
+    @throws(classOf[IOException]) @throws(classOf[LineUnavailableException]) @throws(classOf[UnsupportedAudioFileException]) def playSoundFileWithJavaAudio {
+      // exception throwing code here ...
+    }
+  #+END_SRC
+
 
 * FQA
   1. case 类的用法，模式
