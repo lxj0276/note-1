@@ -1,0 +1,76 @@
+[[http://python.jobbole.com/86236/][Anaconda 使用总结]]
+
+* 环境管理
+# 创建一个名为 python36 的环境，指定 Python 版本是 3.4（不用管是 3.4.x，conda 会为我们自动寻找 3.4.x 中的最新版本）
+conda create --name python36 python=3.6
+ 
+# 安装好后，使用 activate 激活某个环境
+activate python36 # for Windows
+source activate python36 # for Linux & Mac
+# 激活后，会发现 terminal 输入的地方多了 python36 的字样，实际上，此时系统做的事情就是把默认 2.7 环境从 PATH 中去除，再把 3.4 对应的命令加入 PATH
+ 
+# 此时，再次输入
+python --version
+# 可以得到`Python 3.4.5 :: Anaconda 4.1.1 (64-bit)`，即系统已经切换到了 3.4 的环境
+ 
+# 如果想返回默认的 python 2.7 环境，运行
+deactivate python36 # for Windows
+source deactivate python36 # for Linux & Mac
+ 
+# 删除一个已有的环境
+conda remove --name python36 --all
+
+# 在当前环境下安装 anaconda 包集合
+conda install anaconda
+ 
+# 结合创建环境的命令，以上操作可以合并为
+conda create -n python36 python=3.4 anaconda
+# 也可以不用全部安装，根据需求安装自己需要的 package 即可
+* Conda 的包管理
+# 安装 scipy
+conda install scipy
+# conda 会从从远程搜索 scipy 的相关信息和依赖项目，对于 python 3.4，conda 会同时安装 numpy 和 mkl（运算加速的库）
+ 
+# 查看已经安装的 packages
+conda list
+# 最新版的 conda 是从 site-packages 文件夹中搜索已经安装的包，不依赖于 pip，因此可以显示出通过各种方式安装的包
+
+# 查看当前环境下已安装的包
+conda list
+ 
+# 查看某个指定环境的已安装包
+conda list -n python36
+ 
+# 查找 package 信息
+conda search numpy
+ 
+# 安装 package
+conda install -n python36 numpy
+# 如果不用-n 指定环境名称，则被安装在当前活跃环境
+# 也可以通过-c 指定通过某个 channel 安装
+ 
+# 更新 package
+conda update -n python36 numpy
+ 
+# 删除 package
+conda remove -n python36 numpy
+
+
+
+# 更新 conda，保持 conda 最新
+conda update conda
+ 
+# 更新 anaconda
+conda update anaconda
+ 
+# 更新 python
+conda update python
+# 假设当前环境是 python 3.4, conda 会将 python 升级为 3.4.x 系列的当前最新版本
+
+* 设置国内镜像
+# 添加 Anaconda 的 TUNA 镜像
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+# TUNA 的 help 中镜像地址加有引号，需要去掉
+ 
+# 设置搜索时显示通道地址
+conda config --set show_channel_urls yes
