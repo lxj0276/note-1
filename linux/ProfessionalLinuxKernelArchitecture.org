@@ -229,3 +229,25 @@ It allows tools like sparse to tell kernel developers that they're possibly usin
 2、union 成员共享同一块大小的内存，一次只能使用其中的一个成员。 
 3、对某一个成员赋值，会覆盖其他成员的值（也不奇怪，因为他们共享一块内存。但前提是成员所占字节数相同，当成员所占字节数不同时只会覆盖相应字节上的值，比如对 char 成员赋值就不会把整个 int 成员覆盖掉，因为 char 只占一个字节，而 int 占四个字节）
 4、联合体 union 的存放顺序是所有成员都从低地址开始存放的。
+** What means the dot before variable name in struct?
+
+   #+BEGIN_SRC C
+     /* Why is there a dot before the variable name? */
+     static struct tty_operations serial_ops = {
+       .open = tiny_open,
+       .close = tiny_close,
+       .write = tiny_write,
+       .write_room = tiny_write_room,
+       .set_termios = tiny_set_termios,
+     };
+   #+END_SRC
+
+   [[http://gcc.gnu.org/onlinedocs/gcc/Designated-Inits.html][Designated Initializers]]
+
+   #+BEGIN_SRC C
+     struct point { int x, y; };
+
+     struct point p = { .y = yvalue, .x = xvalue };
+     /* is equivalent to */
+     struct point p = { xvalue, yvalue };
+   #+END_SRC
