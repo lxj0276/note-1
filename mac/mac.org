@@ -1,0 +1,2 @@
+* mac 下打开/usr
+shift+command+d,然后输入要打开的目录

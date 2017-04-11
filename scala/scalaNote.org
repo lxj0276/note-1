@@ -145,6 +145,20 @@
      import scala.sys.process._
      "ls".!!
    #+END_SRC
+
+** scala 中 sealed 关键字
+   通常用在 case class，case class 有两个特点：1、不用 new，用括号即可产生实例 2、构造器参数默认是 val.
+
+  用 sealed 修饰这样做的目的是告诉 scala 编译器在检查模式匹配的时候，让 scala 知道这些 case 的所有情况，scala 就能够在编译的时候进行检查，看你写的代码是否有没有漏掉什么没 case 到，减少编程的错误。
+   1. sealed 关键字表示，其修饰的 trait 只能在当前文件里头被继承
+
+      #+BEGIN_SRC scala
+        sealed trait Answer
+        case object Yes extends Answer
+        case object No extends Answer
+      #+END_SRC
+
+   2. sealed abstract 表示，其修饰的 class，只能在当前文件里头被继承
    
 * abstract members
   Besides methods, you can also declare abstract fields and even abstract types as members of classes and traits.
@@ -478,3 +492,33 @@ res1: java.lang.Object with LazyRationalTrait = 1/2
      scala> Direction(1)
      res15: Direction.Value = East
    #+END_SR
+* What does the "self =>" stand for
+You can use self, or t , or  any other word what you what to use.
+
+#+BEGIN_SRC scala
+  abstract class Thing { t =>
+    type A
+    type G <: Group { type A = t.A }
+    val group: G
+  }
+#+END_SRC
+
+The default naming for class itself is this. You may replace it with t by t =>
+
+It is useful if your class contains subclasses and you need access to enclosing self reference.
+
+Without t => in your example you would write something like this:
+
+#+BEGIN_SRC scala
+  abstract class Thing {
+    type G <: Group { type A = this.A }
+  }
+#+END_SRC
+
+Group { type A = this.A } is a subtype so this would reference to group specialization itself not to a thing object. Probably you get not what you mean to get. If you need access to Thing self reference you should resolve name conflict by assigning self reference another name
+
+#+BEGIN_SRC scala
+  abstract class Thing { another_this = >
+    type G <: Group { type A = another_this.A}
+  }
+#+END_SRC

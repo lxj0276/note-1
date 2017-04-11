@@ -1,0 +1,4 @@
+* FQA
+** python can not import cx_Oracle. pythonimporterror: libclntsh.so.11.1: cannot open shared object file
+首先找到 libclntsh.so.11.1 文件所在目录/a/b, 然后加入到下列变量中.
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/a/b

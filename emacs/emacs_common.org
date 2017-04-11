@@ -159,7 +159,6 @@ comtommize-group
 (global-set-key (kbd "C-c .") 'jedi:goto-definition)
 (global-set-key (kbd "C-c ,") 'jedi:goto-definition-pop-marker)
 (global-set-key (kbd "C-c ?") 'jedi:show-doc)
-=======
 * emacs 快速启动
 ** emacs -q
 不加载任何配置启动
@@ -360,3 +359,9 @@ e.g.: $$e^{i\pi} + 1 = 0$$
 * emacs gtd
 [[http://doc.norang.ca/org-mode.html#GettingOrgModeWithGit][Org Mode - Organize Your Life In Plain Text!]]
 [[http://blog.csdn.net/lishuo_OS_DS/article/details/8069484][Emacs 下日程管理 GTD]]
+* emacs 导出目录到 html
+** [[http://guidao.github.io/emacs_blog.html][使用 org-mode 写 blog]]
+   1. 设置 org-publish-project-alist
+   2. ycmd 配置在.spacemacs 中, 指定(setq ycmd-server-command '("python" "~/SourceCodes/YouCompleteMe/third_party/ycmd/ycmd"))
+   3. 配置 eclim(For java scala)
+** [[https://v5b7.com/editor/emacs/org_batch_export_html_file/org_batch_export_html_file.html][org 文件批量导出为 HTML]]

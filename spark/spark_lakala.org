@@ -1,23 +1,65 @@
-* 基于历史数据的交互式查询(impala)
-* spark 数据处理 然后写入到 es, hbase 等
-* spark 做一些特殊的数据清洗(用 hive 比较难弄得数据清洗)
-当处理日志的半结构化或者非结构化数据时, 对其进行清洗和转换操作时，需要结合 SQL 查询以及复杂的过程式逻辑处理，这部分工作虽然可以由 Hive SQL 结合 Python 脚本来完成。这种方式存在效率问题，当数据量比较大的时候，流程的运行时间较长，这些 ETL 流程通常处于比较上游的位置，会直接影响到一系列下游的完成时间以及各种重要数据报表的生成。
-如果用 spark 配合 sparkSQL 会是比较好的选择.
-* hive on spark(复杂的批量处理)
-  1. 将执行时间较长的 sql 运行在 spark 上,调节参数.
-  2. 用 spark 改写一些 hive 语句, 查看效果.
-* graphX
-  1. 用 graphX 做分布式图计算的需求.
-* spark streaming
+# -*- mode: org; -*-
+
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://www.pirilampo.org/styles/readtheorg/css/htmlize.css"/>
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://www.pirilampo.org/styles/readtheorg/css/readtheorg.css"/>
+
+#+HTML_HEAD: <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+#+HTML_HEAD: <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+#+HTML_HEAD: <script type="text/javascript" src="http://www.pirilampo.org/styles/lib/js/jquery.stickytableheaders.js"></script>
+#+HTML_HEAD: <script type="text/javascript" src="http://www.pirilampo.org/styles/readtheorg/js/readtheorg.js"></script>
+优先级用 A, B, C, D 代替, 从 A 往后优先级依次降低.
+* hive on spark(耗时的离线批量处理) :A
+  1. 将执行时间较长的 hive 运行在 spark 上,调节执行参数.
+  2. 用 spark sql 改写一些 hive 语句, 查看效果.
+* spark streaming :A
   1. spark streaming 做实时需求.
-  2. spark streaming 做实时算法训练模型.
-* spark ml
+  2. spark streaming 做实时算法训练模型. :C
+* spark 数据处理, 然后写入到 es, hbase 等,做 hdfs, hive, es, hbase 等的数据对接工具 :B
+* spark 做一些特殊的数据清洗(用 hive 比较难弄的复杂的数据数据清洗) :B
+当处理日志的半结构化或者非结构化数据时, 对其进行清洗和转换操作时，需要结合 SQL 查询以及复杂的过程式逻辑处理，这部分工作虽然可以由 Hive SQL 结合 Python 或 shell 脚本来完成。这种方式存在效率问题，当数据量比较大的时候，流程的运行时间较长，这些 ETL 流程通常处于比较上游的位置，会直接影响到一系列下游的完成时间以及各种重要数据报表的生成。
+如果用 spark 配合 sparkSQL 会是比较好的选择.
+* graphX :B
+  用 graphX 做分布式图计算的需求.
+* spark ml :C
+  基于 spark ml 做一些模型(配合征信,金融,商服等需求)
+* 基于历史数据的快速交互式查询(可用 impala 代替) :D
 * Spark 适用场景：
 Spark 是基于内存的迭代计算框架，适用于需要多次操作特定数据集的应用场合。需要反复操作的次数越多，所需读取的数据量越大，受益越大，数据量小但是计算密集度较大的场合，受益就相对较小。
-由于 RDD 的特性，Spark 不适用那种异步细粒度更新状态的应用，例如 web 服务的存储或者是增量的 web 爬虫和索引。就是对于那种增量修改的应用模型不适合。
 数据量不是特别大，但是要求近实时统计分析需求
 * Spark 不适用场景：
 内存 hold 不住的场景，在内存不足的情况下，Spark 会下放到磁盘，会降低应有的性能
 有高实时性要求的流式计算业务，例如实时性要求毫秒级
 由于 RDD 设计上的只读特点，所以 Spark 对于待分析数据频繁变动的情景很难做（并不是不可以），比如题主例子里的搜索，假设你的数据集在频繁变化（不停增删改），而且又需要结果具有很强的一致性（不一致时间窗口很小），那么就不合适了。
-流线长或文件流量非常大的数据集不适合。你会发现你的内存不够用，集群压力大时一旦一个 task 失败会导致他前面一条线所有的前置任务全部重跑，然后恶性循环会导致更多的 task 失败，整个 sparkapp 效率极低。就不如 MapReduce 啦！
+流线长或文件流量非常大的数据集不适合。你会发现你的内存不够用，集群压力大时一旦一个 task 失败会导致他前面一条线所有的前置任务全部重跑，然后恶性循环会导致更多的 task 失败，整个 sparkapp 效率极低。就不如 MapReduce！
+
+
+* 讨论
+1. 数据提取,合并
+   数据提取, 主题提取
+
+   清洗, 提取, 入库
+   离线
+
+   通讯录数据
+
+
+业务主题
+
+预统计
+
+streaming 数据丢失, 重复消费问题
+
+
+spark 安全(控制资源, 文件-数据): 限定能干什么
+** 立项
+*** hive on spark(金融, 征信 运行时间长)
+*** streaming
+   1. 基于 avs 日志做用户分析(app)
+
+   2. 探针数据
+*** graghX
+   1. 通讯录(讨论一个项目)
+
+
+
+app url    
