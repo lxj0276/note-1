@@ -145,6 +145,20 @@
      import scala.sys.process._
      "ls".!!
    #+END_SRC
+
+** scala 中 sealed 关键字
+   通常用在 case class，case class 有两个特点：1、不用 new，用括号即可产生实例 2、构造器参数默认是 val.
+
+  用 sealed 修饰这样做的目的是告诉 scala 编译器在检查模式匹配的时候，让 scala 知道这些 case 的所有情况，scala 就能够在编译的时候进行检查，看你写的代码是否有没有漏掉什么没 case 到，减少编程的错误。
+   1. sealed 关键字表示，其修饰的 trait 只能在当前文件里头被继承
+
+      #+BEGIN_SRC scala
+        sealed trait Answer
+        case object Yes extends Answer
+        case object No extends Answer
+      #+END_SRC
+
+   2. sealed abstract 表示，其修饰的 class，只能在当前文件里头被继承
    
 * abstract members
   Besides methods, you can also declare abstract fields and even abstract types as members of classes and traits.

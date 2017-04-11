@@ -2298,7 +2298,6 @@ can be declared abstract.
 
 
 
-
 * 实现列表
   描述 list 类的实现。实现本身也展示了若干 scala 特性的应用。
 
