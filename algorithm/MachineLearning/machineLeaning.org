@@ -1,4 +1,3 @@
-
 #+OPTIONS: ^:nil
 [[http://machinelearningmastery.com/a-tour-of-machine-learning-algorithms/][A Tour of Machine Learning Algorithms]]
 [[http://en.wikipedia.org/wiki/List_of_machine_learning_concepts][List of machine learning concepts]]
@@ -342,3 +341,7 @@ file:~/note/Pictures/MLPictures/xiefangcha1.png
  Given the pattern of behaviour by a user during a trial period and the past behaviours of all users, identify those users that will convert to the paid version of the product and those that will not. A model of this decision problem would allow a program to trigger customer interventions to persuade the customer to covert early or better engage in the trial.
 10. Shape Detection  \\
  Given a user hand drawing a shape on a touch screen and a database of known shapes, determine which shape the user was trying to draw. A model of this decision would allow a program to show the platonic version of that shape the user drew to make crisp diagrams. The Instaviz iPhone app does this.
+* Machine Learning Zoubo video
+** onehot 编码(编码中有且只有一个是 1)
+   当数据可以只有 0, 1 表示(比如男女的时候), onehot 编码可以志勇一列就表示出来了.
+   有 N 个值得 onehot 编码, 可以用 N-1 个 feture 就表示出来了.
