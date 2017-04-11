@@ -4,8 +4,8 @@
 ** 查询
    sed -n "/abc/p" test.txt
    grep "abc" test.txt
-** hive中替换None为0
-要先确定哪些字段需要被替换,然后前边加上if(
+** hive 中替换 None 为 0
+要先确定哪些字段需要被替换,然后前边加上 if(
 sed "s/\bif(\([^ |^,]*\)/if(\1 = \'None\', 0, \1)/" aaa.txt
 sed "s/\bif(\([^ |^,]*\),2)/if(\1,2) = null, 0, \1,2))/"
 
@@ -16,7 +16,7 @@ sed -i 's/\(.*\)╪/\1/' test
 ** 替换╪为制表符号
 sed -i "s/╪/\\t/g" src_goods_channel_relation_his2015-04-28
 
-** vim或sed删除文本文件中所有的中文字符
+** vim 或 sed 删除文本文件中所有的中文字符
 vim:
 http://www.douban.com/group/topic/9735267/
 :%s/\v[^\x00-\xff]+//g 
@@ -24,3 +24,7 @@ http://www.douban.com/group/topic/9735267/
 sed：
 http://7056824.blog.51cto.com/69854/178940
 LANG=C sed -r "s/[\x81-\xFE][\x40-\xFE]//
+** 路径上下文替换及插入
+   1. sed -i "s/mapred.job.name=\$SCRIPT_ID/mapred.job.name=\$JOB_ID/g" `grep "set mapred.job.name=\$SCRIPT_ID" -rl /home/hdfs
+   2. find . -name "*.sh" | xargs -i -t sed -i '2 i\cd /home/hdfs' {} 
+   3. find . -name "*.sql" | xargs -i -t sed -i '2 i\cd /home/hdfs' {}
