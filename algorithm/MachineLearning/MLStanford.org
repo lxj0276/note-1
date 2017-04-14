@@ -1,2 +1,11 @@
 * What is Machine Learning
-* TODO hahah
+* Gradient Descent
+最小二乘法（又称最小平方法）是一种数学优化技术。它通过最小化误差的平方和寻找数据的最佳函数匹配。
+经过推导， 当 cost function J(\Theta)最小时，\Theta 的取值为：$$\Theta=(X^T X)^-1 X^T y$$
+
+  对于不同的初始值\Theta_i 可能会得到不同的局部最小值。
+  - 随机梯度下降
+  - 批量梯度下降
+
+** 局部加权线性回归
+在要预测点附近给定的权值比较大， 然后在预测点附近线性回归训练模型， 得到参数。
