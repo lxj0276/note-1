@@ -171,7 +171,7 @@ github: wiibrew
 ** LSTM-GRU(Gated Recurrent Unit) 
 http://wiseodd.github.io/techblog/2016/08/12/lstm-backprop/
 ** word2vec
-* 卷积网络+递归网络
+* l8 卷积网络+递归网络
 提纲:
   1. CNN+RNN
   2. 图片标注
