@@ -1,0 +1,56 @@
+* simple structure
+#+BEGIN_SRC scala
+@DeveloperApi
+class JobProgressListener(conf: SparkConf) extends SparkListener with Logging {
+  // Define a handful of type aliases so that data structures' types can serve as documentation.
+  // These type aliases are public because they're used in the types of public fields:
+  type JobId = Int
+  type JobGroupId = String
+  type StageId = Int
+  type StageAttemptId = Int
+  type PoolName = String
+  type ExecutorId = String
+
+  // Application:
+  @volatile var startTime = -1L
+  @volatile var endTime = -1L
+
+  // Jobs:
+  val activeJobs = new HashMap[JobId, JobUIData]
+  val completedJobs = ListBuffer[JobUIData]()
+  val failedJobs = ListBuffer[JobUIData]()
+  val jobIdToData = new HashMap[JobId, JobUIData]
+  val jobGroupToJobIds = new HashMap[JobGroupId, HashSet[JobId]]
+
+  // Stages:
+  val pendingStages = new HashMap[StageId, StageInfo]
+  val activeStages = new HashMap[StageId, StageInfo]
+  val completedStages = ListBuffer[StageInfo]()
+  val skippedStages = ListBuffer[StageInfo]()
+  val failedStages = ListBuffer[StageInfo]()
+  val stageIdToData = new HashMap[(StageId, StageAttemptId), StageUIData]
+  val stageIdToInfo = new HashMap[StageId, StageInfo]
+  val stageIdToActiveJobIds = new HashMap[StageId, HashSet[JobId]]
+  val poolToActiveStages = HashMap[PoolName, HashMap[StageId, StageInfo]]()
+  // Total of completed and failed stages that have ever been run.  These may be greater than
+  // `completedStages.size` and `failedStages.size` if we have run more stages or jobs than
+  // JobProgressListener's retention limits.
+  var numCompletedStages = 0
+  var numFailedStages = 0
+  var numCompletedJobs = 0
+  var numFailedJobs = 0
+
+  // Misc:
+  val executorIdToBlockManagerId = HashMap[ExecutorId, BlockManagerId]()
+
+  def blockManagerIds: Seq[BlockManagerId] = executorIdToBlockManagerId.values.toSeq
+
+  var schedulingMode: Option[SchedulingMode] = None
+
+  // To limit the total memory usage of JobProgressListener, we only track information for a fixed
+  // number of non-active jobs and stages (there is no limit for active jobs and stages):
+
+  val retainedStages = conf.getInt("spark.ui.retainedStages", SparkUI.DEFAULT_RETAINED_STAGES)
+  val retainedJobs = conf.getInt("spark.ui.retainedJobs", SparkUI.DEFAULT_RETAINED_JOBS)
+  val retainedTasks = conf.get(UI_RETAINED_TASKS)
+#+END_SRC

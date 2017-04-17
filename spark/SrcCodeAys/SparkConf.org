@@ -1,0 +1,31 @@
+* simple structure
+  Once a SparkConf object is passed to Spark, it is cloned and can no longer be modified by the user. Spark does not support modifying the configuration at runtime.
+#+BEGIN_SRC scala
+class SparkConf(loadDefaults: Boolean) extends Cloneable with Logging with Serializable {
+  import SparkConf._
+  /** Create a SparkConf that loads defaults from system properties and the classpath */
+  def this() = this(true)
+
+  private val settings = new ConcurrentHashMap[String, String]()
+
+  @transient private lazy val reader: ConfigReader = {
+    val _reader = new ConfigReader(new SparkConfigProvider(settings))
+    _reader.bindEnv(new ConfigProvider {
+      override def get(key: String): Option[String] = Option(getenv(key))
+    })
+    _reader
+  }
+
+  if (loadDefaults) {
+    loadFromSystemProperties(false)
+  }
+  private[spark] def loadFromSystemProperties(silent: Boolean): SparkConf = {
+    // Load any spark.* system properties
+    for ((key, value) <- Utils.getSystemProperties if key.startsWith("spark.")) {
+      set(key, value, silent)
+    }
+    this
+  }
+
+}
+#+END_SRC
