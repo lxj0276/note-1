@@ -1,2 +1,8 @@
 * mac 下打开/usr
 shift+command+d,然后输入要打开的目录
+* mac
+[[https://github.com/hzlzh/Best-App][收集&推荐优秀的 Apps/硬件/技巧/周边等]]
+
+* software needed
+  Caskroom/cask/sourcetree
+  Caskroom/cask/spectacle  -- window ops(left, right..)
