@@ -1,0 +1,12 @@
+* 框架
+  - vue :: A progressive, incrementally-adoptable JavaScript framework for building UI on the web. 
+  - react :: A declarative, efficient, and flexible JavaScript library for building user interfaces.
+  - bootstrap :: The most popular HTML, CSS, and JavaScript framework for developing responsive, mobile first projects on the web.
+  - angular :: One framework. Mobile & desktop.
+  - zepto :: Zepto.js is a minimalist JavaScript library for modern browsers, with a jQuery-compatible API
+  - meteor :: Meteor, the JavaScript App Platform
+  - create-react-app :: Create React apps with no build configuration.
+
+
+* 构建
+前端工程构建工具的话：gulp 和 grunt ,个人比较喜欢 gulp，简单粗暴
