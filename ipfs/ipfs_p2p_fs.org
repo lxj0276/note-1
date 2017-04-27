@@ -1,0 +1,2 @@
+* Abstract
+  The InterPlanetary File System (IPFS) is a peer-to-peer dis- tributed file system that seeks to connect all computing de- vices with the same system of files.

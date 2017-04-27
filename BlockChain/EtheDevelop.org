@@ -1,0 +1,31 @@
+* Tools
+  1. truffle  [[https://truffle.readthedocs.io/en/latest/][truffle docs]]
+  2. ether.camp  [[https://live.ether.camp][live.ether.camp]]   kayfire99@gmail.com
+  3. go to the web https://github.com/ethereum/solidity ; then click  "Solidity in your browser" [[https://ethereum.github.io/browser-solidity/][Solidity in your browser]]
+  4. [[https://github.com/iurimatias/embark-framework][embark]]
+  5. web3.js
+  
+  demo:
+    github.com/armova/Basic-Truffle-Dapp
+
+** truffle
+  [[https://truffle.readthedocs.io/en/latest/][truffle docs]]
+*** ethereum client
+   There are many Ethereum clients to choose from. We recommend using different clients when developing and deploying.
+   - Developing :: EthereumJS TestRPC: https://github.com/ethereumjs/testrpc
+   - Deploying :: Geth (go-ethereum): https://github.com/ethereum/go-ethereum WebThree (cpp-ethereum): https://github.com/ethereum/webthree-umbrella More: https://www.ethereum.org/cli
+** important webs
+  1. [[http://dapps.ethercasts.com][STATE OF THE ÐAPPS]]
+  2. [[https://github.com/ipfs/ipfs][ipfs]]
+  
+
+
+* Old Internet(centralized)
+  1. blind trust
+  2. no ownership
+  3. bad for innovation
+  4. bad for security
+* Decentralization Internet
+* webs
+  1. [[http://dapps.ethercasts.com/][dapps listing]]
+  2. [[https://etherscan.io/][ethereum dapp browser]]
