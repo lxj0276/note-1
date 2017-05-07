@@ -24,7 +24,9 @@ http://www.douban.com/group/topic/9735267/
 sed：
 http://7056824.blog.51cto.com/69854/178940
 LANG=C sed -r "s/[\x81-\xFE][\x40-\xFE]//
-** 路径上下文替换及插入
+** 路径上下文替换及插入,修改文件名
    1. sed -i "s/mapred.job.name=\$SCRIPT_ID/mapred.job.name=\$JOB_ID/g" `grep "set mapred.job.name=\$SCRIPT_ID" -rl /home/hdfs
    2. find . -name "*.sh" | xargs -i -t sed -i '2 i\cd /home/hdfs' {} 
    3. find . -name "*.sql" | xargs -i -t sed -i '2 i\cd /home/hdfs' {}
+   4. find . -name "*.sh" | xargs -i -t mv {} {}.bcp  # 在文件后边加上.bcp
+   5. for f in *.py; do mv $f h_$f; done
