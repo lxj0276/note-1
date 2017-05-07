@@ -218,3 +218,24 @@ Control + Shift + Tab 编辑窗口标签和工具窗口之间切换（如果在�
 
 Command + Shift +8 竖编辑模式
 
+* 添加常用快捷键
+  ⌘ Command
+  ⇧ Shift
+  ⌥ Option
+  ⌃ Control
+  ↩︎ Return/Enter
+  ⌫ Delete
+  ⌦ 向前删除键（Fn+Delete）
+  ↑ 上箭头
+  ↓ 下箭头
+  ← 左箭头
+  → 右箭头
+  ⇞ Page Up（Fn+↑）
+  ⇟ Page Down（Fn+↓）
+  Home Fn + ←
+  End Fn + →
+  ⇥ 右制表符（Tab 键）
+  ⇤ 左制表符（Shift+Tab）
+  ⎋ Escape (Esc)
+  - 抽取变量 :: Option + Command + V
+
