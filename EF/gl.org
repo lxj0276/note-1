@@ -1,0 +1,9 @@
+* Describing someone
+
+Hair: dark, blond, curly, straight
+Height: tall, short
+Clothes: smart, casual, suit, jacket, trousers, jeans
+Other: glasses/spectacles
+
+
+He likes smoking very much
