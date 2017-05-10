@@ -345,3 +345,5 @@ file:~/note/Pictures/MLPictures/xiefangcha1.png
 ** onehot 编码(编码中有且只有一个是 1)
    当数据可以只有 0, 1 表示(比如男女的时候), onehot 编码可以志勇一列就表示出来了.
    有 N 个值得 onehot 编码, 可以用 N-1 个 feture 就表示出来了.
+* FQA
+  SVD

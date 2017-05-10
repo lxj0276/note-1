@@ -126,3 +126,12 @@ In general, closures - constructs like loops or locally defined methods, should 
 To ensure well-defined behavior in these sorts of scenarios one should use an Accumulator. Accumulators in Spark are used specifically to provide a mechanism for safely updating a variable when execution is split up across worker nodes in a cluster. The Accumulators section of this guide discusses these in more detail.
 * 高可用性技术
 流式计算框架的高可用性是通过状态备份和故障恢复策略实现的。当故障发生后，系统根据预先定义的策略进行数据的重放和恢复。按照实现策略，可以被细分为被动等待 (passive standby)、主动等待 (active standby) 和上游备份 (upstream backup) 这 3 种策略。
+* What to Expect for Big Data and Apache Spark in 2017
+  - Hardware :: compute bottleneck
+    Spark Effort: project tungesten:
+      Opetimize Apache Spark's CPU and memory usage, via:
+        1. Binary storage format
+        2. Runtime code generation
+  - Users :: democratizing access to big data
+  - Applications :: production apps
+
