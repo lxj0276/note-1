@@ -1,0 +1,31 @@
+* 基本的机器学习算法
+  lr 决策树 rf gbdt 问的最多，还有 xgboost em svm kmeans knn 神经网络等
+* 基本的数据结构算法
+  链表 二叉树 数组
+  排序 查找 递归 动态规划
+  编程之美 july 博客
+** 链表
+   [[http://wuchong.me/blog/2014/03/25/interview-link-questions/][面试精选：链表问题集锦]]
+
+*** 链表节点的定义
+   #+BEGIN_SRC C
+     struct Node{
+       int data;
+       Node* next;
+     };
+   #+END_SRC
+
+*** 给定链表的头指针和一个节点指针,在 O(1)时间删除链表节点
+
+    #+BEGIN_SRC C
+      //O(1)时间删除链表节点，从无头单链表中删除节点
+      void deleteRandomNode(Node *cur)
+      {
+        assert(cur != NULL);
+        assert(cur->next != NULL);    //不能是尾节点, 如果是尾节点, 可以考虑直接把当前节点赋为 null
+        Node* pNext = cur->next;
+        cur->data = pNext->data;
+        cur->next = pNext->next;
+        delete pNext;
+      }
+    #+END_SRC
