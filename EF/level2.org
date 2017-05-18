@@ -1944,6 +1944,10 @@ B: No, they haven't.	泰勒一家买票了吗？
  | laggage                | 行李, 皮箱                        |
  | pack                   | 背包, 包裹, 包装挑选              |
  | domestic               | adj. 国内的, 家庭的 n. 国货, 佣人 |
+ | shuttle                | 穿梭班机﹑ 公共汽车               |
+ | express train          | 特快列车                          |
+ | rental car             | 租车                              |
+ | limousine              | 大型豪华轿车                      |
  |                        |                                   |
 * level 4
 ** unit 1
