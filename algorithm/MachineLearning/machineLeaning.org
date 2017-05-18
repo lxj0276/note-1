@@ -310,6 +310,101 @@ file:~/note/Pictures/MLPictures/xiefangcha1.png
 4. 人工神经网络：模拟生物神经网络，是一类模式匹配算法。通常用于解决分类和回归问题。人工神经网络算法包括感知器神经网络 (Perceptron Neural Network) 、反向传递 (Back Propagation) 和深度学习等。
 5. 集成算法：用一些相对较弱的学习模型独立地就同样的样本进行训练，然后把结果整合起来进行整体预测。集成算法的主要难点在于究竟集成哪些独立的较弱的学习模型以及如何把学习结果整合起来。这是一类非常强大的算法，同时也非常流行。常见的算法包括 Boosting、Bagging、AdaBoost、随机森林 (Random Forest) 等。
 
+* 算法集锦及优缺点
+  *请参考下边第一个网站*
+[[http://www.jiqizhixin.com/article/2327][机器学习算法集锦：从贝叶斯到深度学习及各自优缺点]]
+[[https://static.coggle.it/diagram/WHeBqDIrJRk-kDDY]]
+
+** 正则化算法（Regularization Algorithms）
+它是另一种方法（通常是回归方法）的拓展，这种方法会基于模型复杂性对其进行惩罚，它喜欢相对简单能够更好的泛化的模型。
+例子：
+岭回归（Ridge Regression）
+最小绝对收缩与选择算子（LASSO）
+GLASSO
+弹性网络（Elastic Net）
+最小角回归（Least-Angle Regression）
+
+优点：
+其惩罚会减少过拟合
+总会有解决方法
+
+缺点：
+惩罚会造成欠拟合
+很难校准
+** 集成算法（Ensemble Algorithms）
+集成方法是由多个较弱的模型集成模型组，其中的模型可以单独进行训练，并且它们的预测能以某种方式结合起来去做出一个总体预测。
+该算法主要的问题是要找出哪些较弱的模型可以结合起来，以及结合的方法。这是一个非常强大的技术集，因此广受欢迎。
+
+例子:
+Boosting
+Bootstrapped Aggregation（Bagging）
+AdaBoost
+层叠泛化（Stacked Generalization）（blending）
+梯度推进机（Gradient Boosting Machines，GBM）
+梯度提升回归树（Gradient Boosted Regression Trees，GBRT）
+随机森林（Random Forest）
+
+优点：
+当先最先进的预测几乎都使用了算法集成。它比使用单个模型预测出来的结果要精确的多
+
+缺点：
+需要大量的维护工作
+
+** 决策树算法（Decision Tree Algorithm）
+决策树学习使用一个决策树作为一个预测模型，它将对一个 item（表征在分支上）观察所得映射成关于该 item 的目标值的结论（表征在叶子中）。
+
+树模型中的目标是可变的，可以采一组有限值，被称为分类树；在这些树结构中，叶子表示类标签，分支表示表征这些类标签的连接的特征。
+例子：
+分类和回归树（Classification and Regression Tree，CART）
+Iterative Dichotomiser 3（ID3）
+C4.5 和 C5.0（一种强大方法的两个不同版本）
+
+优点：
+容易解释
+非参数型
+
+缺点：
+趋向过拟合
+可能或陷于局部最小值中
+没有在线学习
+** 回归（Regression）
+回归是用于估计两种变量之间关系的统计过程。当用于分析因变量和一个 多个自变量之间的关系时，该算法能提供很多建模和分析多个变量的技巧。具体一点说，回归分析可以帮助我们理解当任意一个自变量变化，另一个自变量不变时，因变量变化的典型值。最常见的是，回归分析能在给定自变量的条件下估计出因变量的条件期望。
+
+回归算法是统计学中的主要算法，它已被纳入统计机器学习。
+例子：
+普通最小二乘回归（Ordinary Least Squares Regression，OLSR）
+线性回归（Linear Regression）
+逻辑回归（Logistic Regression）
+逐步回归（Stepwise Regression）
+多元自适应回归样条（Multivariate Adaptive Regression Splines，MARS）
+本地散点平滑估计（Locally Estimated Scatterplot Smoothing，LOESS）
+
+优点：
+直接、快速
+知名度高
+
+缺点：
+要求严格的假设
+需要处理异常值
+
+
+** 人工神经网络（Artificial Neural Network）
+
+** 深度学习（Deep Learning）
+
+** 支持向量机（Support Vector Machine）
+
+** 降维算法（Dimensionality Reduction Algorithms）
+
+** 聚类算法（Clustering Algorithms）
+
+** 基于实例的算法（Instance-based Algorithms）
+
+** 贝叶斯算法（Bayesian Algorithms）
+
+** 关联规则学习算法（Association Rule Learning Algorithms）
+
+** 图模型（Graphical Models）
 * 概念
 ** 泛化能力
 学习的目的是学到隐含在数据对背后的规律，对具有同一规律的学习集以外的数据，经过训练的算法也能给出合适的输出，该能力称为泛化能力。
