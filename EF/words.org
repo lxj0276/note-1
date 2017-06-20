@@ -1,0 +1,85 @@
+** words
+ | En                     | Zh                                                                     |
+ |------------------------+------------------------------------------------------------------------|
+ | boarding pass          | 登机牌                                                                 |
+ | international terminal | 国际航站楼                                                             |
+ | laggage                | 行李, 皮箱                                                             |
+ | pack                   | 背包, 包裹, 包装挑选                                                   |
+ | domestic               | adj. 国内的, 家庭的 n. 国货, 佣人                                      |
+ | shuttle                | 穿梭班机﹑ 公共汽车                                                    |
+ | express train          | 特快列车                                                               |
+ | rental car             | 租车                                                                   |
+ | limousine              | 大型豪华轿车                                                           |
+ | jet lag                | 时差                                                                   |
+ | customs                | 海关                                                                   |
+ | Falls                  | 瀑布                                                                   |
+ | gorgeous               | adj. 华丽的，灿烂的；极好的                                            |
+ | jet lag                | 时差感，飞行时差反应                                                   |
+ | parrot                 | 鹦鹉                                                                   |
+ | snake                  | 蛇                                                                     |
+ | goldfish               | 金鱼                                                                   |
+ | rabbit                 | 兔子                                                                   |
+ | lizard                 | 蜥蜴                                                                   |
+ | turtle                 | 海龟                                                                   |
+ | whales                 | 鲸鱼                                                                   |
+ | penguins               | 企鹅                                                                   |
+ | seals                  | 海豹                                                                   |
+ | zebras                 | 斑马                                                                   |
+ | elephants              | 大象                                                                   |
+ | cheetah                | 印度豹                                                                 |
+ | dolphin                | 海豚                                                                   |
+ | entertaining           | adj. 令人愉快的                                                        |
+ | ugly                   | adj. 丑陋的；邪恶的；令人厌恶的                                        |
+ | glaciers               | 冰川                                                                   |
+ | bush                   | 灌木                                                                   |
+ | grass                  | 草地                                                                   |
+ | stream                 | 溪流, 小溪                                                             |
+ | trail                  | 崎岖小路                                                               |
+ | redwood                | n. [植]红木树，红杉；红树木材                                          |
+ | oak                    | n. 橡树；橡木色；橡木家具                                              |
+ | pine                   | vi. 渴望，痛苦；憔悴 n. [林] 松树；凤梨，菠萝 vt. 为…悲哀；adj. 松木的 |
+ | embarrassed            | 尴尬                                                                   |
+ | disaster               | 灾难                                                                   |
+ | pothole                | 坑洞                                                                   |
+ | ambulance              | 救护车                                                                 |
+ | broken arm             | 断臂                                                                   |
+ | reservation            | 预订                                                                   |
+ | caesar salad           | 凯撒沙拉                                                               |
+ | mushroom soup          | 蘑菇汤                                                                 |
+ | steak and baked potato | 牛排和烤土豆                                                           |
+ | chocolate mousse       | 巧克力慕斯                                                             |
+ | lemon sorbet           | 柠檬冰沙                                                               |
+ | shrimp cocktail        | 鲜虾盅                                                                 |
+ | fresh oysters          | 生蚝                                                                   |
+ | shoot                  | 拍摄                                                                   |
+ | brilliant              | 卓越的                                                                 |
+ | original               | 原创的                                                                 |
+ | remark                 | 翻拍, 改编                                                             |
+ | popcorn                | n. 爆米花，爆玉米花                                                    |
+ | dreadful               | 可怕的                                                                 |
+ | sandals                | 凉鞋                                                                   |
+ | baggy jeans            | 宽松牛仔裤                                                             |
+ | baseball cap           | 棒球帽                                                                 |
+ | makeup                 | 化妆品                                                                 |
+ | plastic handbag        | 塑料手袋                                                               |
+ | outfit                 | 服装                                                                   |
+ | polyester              | 涤纶                                                                   |
+ | jacket                 | 外套                                                                   |
+ | suit                   | 套装                                                                   |
+ | tie                    | 领带                                                                   |
+ | necklace               | 项链                                                                   |
+ | sandals                | 凉鞋                                                                   |
+ | nasty                  | 难看的                                                                 |
+ | sew                    | 缝制                                                                   |
+ | stylish                | adj. 时髦的；现代风格的；潇洒的                                        |
+ | skirt                  | 裙子                                                                   |
+ | leather                | 皮革                                                                   |
+ | natural fabrics        | 天然面料                                                               |
+ | silk                   | 丝                                                                     |
+ | cotton                 | 绵                                                                     |
+ | woolens                | 毛织品                                                                 |
+ | navy blue              | 海军蓝                                                                 |
+ | beige                  | 淡棕色, 米黄色                                                         |
+ | wool                   | 羊毛, 毛线, 毛织物                                                     |
+ | polyester              | 聚酯                                                                   |
+ |                        |                                                                        |
