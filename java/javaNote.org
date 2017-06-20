@@ -22,6 +22,7 @@ ClassLoader.loadClass(className)实际上调用的是 ClassLoader.loadClass(name
 #+END_SRC
 
 原来，Driver 在 static 块中会注册自己到 java.sql.DriverManager。而 static 块就是在 Class 的初始化中被执行。所以这个地方就只能用 Class.forName(className)。
-* 深入理解JVM
+* 深入理解 JVM
 * java 内存溢出
-
+* See code examples that show how to use a popular API, you can use JavaSED.com.
+  http://www.javased.com/
