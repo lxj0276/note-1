@@ -415,6 +415,18 @@ C4.5 和 C5.0（一种强大方法的两个不同版本）
 * 算法
 ** 决策树
 
+* 机器学习性能评估指标[fn:1] 
+** 分类
+   - accuracy(准确率)
+   - Precision(精确率)
+   - recall
+   - F1 score
+   - ROC curve
+   - PR curve
+   - AUC
+** 回归
+   - MAE
+   - MSE
 * Ten Examples of Machine Learning Problems
 1. Spam Detection  \\
  Given email in an inbox, identify those email messages that are spam and those that are not.Having a model of this problem would allow a program to leave non-spam emails in the inbox and move spam emails to a spam folder.
@@ -442,3 +454,7 @@ C4.5 和 C5.0（一种强大方法的两个不同版本）
    有 N 个值得 onehot 编码, 可以用 N-1 个 feture 就表示出来了.
 * FQA
   SVD
+
+* Footnotes
+
+[fn:1] [[http://charleshm.github.io/2016/03/Model-Performance/][机器学习性能评估指标]]
