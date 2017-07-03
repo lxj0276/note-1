@@ -230,6 +230,30 @@
     AIC/BIC
 * 回归
 lasso 可以用来降维
+lasso 相当于做了特征选择
+L2 性能好, L1 有特征选择能力
+L1 正则是 lasso(绝对值)
+L2 正则是 ridge 回归
+
+当带超参数的时候, 留一部分数据来做验证(比如加入超参数λ时, 用验证数据来确定超参数λ的最优取值):交叉验证(为了选择超参)
+
+BGD(batch gradient descent): 批量梯度下降
+SGD(stochastic gradient descent):随机梯度下降: 可以做 online 学习
+MGD(mini-batch gradient descent):一般叫做 SGD, 实际用的比较多:可以做 online 学习
+
+判定:
+  - MSE :: 误差平方和
+  - R^2 :: 1 - RSS / TSS (TSS: Total Sum of Squares; RSS: Residual Sum of Squares). R^2 有可能为负
+
+局部加权的线性回归(LWR: Locally Weighted linear Regression): 在线性模型中加入非线性激励
+
+Logistic 回归的函数式怎么来的: ln(p/1-p) = Θx ==> p=1/1+e^(Θx)
+Logistic 回归是对数的线性回归 (对数是线性的)
+
+- Question :: 逻辑回归的似然函数和损失函数, 及其作用????
+
+
+
    线性回归
      高斯分布
      最大似然估计 MLE
@@ -244,9 +268,9 @@ lasso 可以用来降维
      特征选择
 ** 假设
     假设具有三个性质:
-     内涵性
-     简化性
-     发散性
+     内涵性: 就是根据常理应该是正确的, 假设往往是正确的但不一定 总是正确.
+     简化性: 假设只是接近真实，往往需要做若干简化.
+     发散性: 在某个简化的假设下推导得到的结论，不一定只有在假设成立时结论才成立。
 *** 假设的内涵性
    所谓假设，就是根据常理应该是正确的。
     如假定一个人的身高位于区间[150cm,220cm]， 这能够使得大多数情况都是对的，但很显然有 些篮球运动员已经不属于这个区间。所以，假 设的第一个性质:假设往往是正确的但不一定 总是正确。
@@ -275,6 +299,9 @@ graphviz
   1. gini 系数的理论意义是什么
   2. 决策树剪枝到只有 1 个结点是什么意思
 * 提升及 xgboost 实践
+  可否对决策树加上权值?
+  回溯线性搜索
+  拟牛顿
 ** Adaboost 和 GBDT 的区别
    Adboost 是 GBDT 的一个特例或者 GBDT 是对 Adboost 进行推广.
    最主要的区别在于两者如何识别模型的问题。AdaBoost 用错分数据点来识别问题，通过调整错分数据点的权重来改进模型。Gradient Boosting 通过负梯度来识别问题，通过计算负梯度来改进模型。
@@ -294,9 +321,10 @@ graphviz
   1. Hessian 矩阵
   2. 正定, 半正定矩阵
   3. 动态规划
-  4. LASSO
-  5. 从概率论的角度:
+  4. crf
+  5. bn
+  6. LASSO
+  7. 从概率论的角度:
      - Least Square 的解析解可以用 Gaussian 分布及最大似然估计求得
      - Ridge 回归可以用 Gaussian 分布和最大后验估计解释
      - Lasso 回归可以用 Laplace 分布和最大后验估计解释
-  6. 
