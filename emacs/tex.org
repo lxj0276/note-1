@@ -3,13 +3,12 @@
 书签不会乱码
    #+BEGIN_SRC latex
 \documentclass[hyperref, UTF-8]{ctexart}
-\usepackage{lastpage}%获得总页数
+\usepackage{lastpage}
 \usepackage{fancyhdr}
 \pagestyle{fancy}
-\renewcommand{\headrulewidth}{0.4pt} %改为 0pt 即可去掉页眉下面的横线
-\renewcommand{\footrulewidth}{0.4pt} %改为 0pt 即可去掉页脚上面的横线
-%以下命令中 L--左侧 R--右侧 C--中间 O--奇数页 E--偶数页
-\fancyhead[LE,RO]{change to title}
+\renewcommand{\headrulewidth}{0.4pt} 
+\renewcommand{\footrulewidth}{0.4pt}
+\fancyhead[LE,RO]{same as title}
 \fancyhead[LE,LO]{\thepage}
 \fancyfoot[CE,CO]{\leftmark}
 \fancyfoot[LE,RO]{\thepage\ of \pageref{LastPage}}
@@ -21,8 +20,7 @@
             CJKbookmarks
             ]{hyperref}
 %\usepackage[center]{titlesec} 
-\usepackage{amssymb}
-\author{H.~Partl\and{key}}
+\author{kay}
 \title{Minimalism}
 \makeindex
 \begin{document}
@@ -38,26 +36,21 @@ hello, world. 你好, 世界
 书签会乱码
   #+BEGIN_SRC latex
 \documentclass[a4paper]{article}
-% 生成带链接的目录
 \usepackage[colorlinks,
             linkcolor=red,
             anchorcolor=blue,
             citecolor=green,
-            CJKbookmarks  % 链接目录支持中文
+            CJKbookmarks
             ]{hyperref}
-% section 居中
 %\usepackage[center]{titlesec} 
 
-% 支持中文
 \usepackage{CJK}
-\author{H.~Partl\and{key}}
+\author{kay}
 \title{Minimalism}
 
 \begin{document}
-% generates the title
 \maketitle
 \tableofcontents
-% 支持中文
 \begin{CJK*}{UTF8}{gbsn}
 hello, world!
 你好, 世界
