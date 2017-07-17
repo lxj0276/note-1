@@ -1,0 +1,109 @@
+\documentclass[hyperref, UTF-8]{ctexart}
+\usepackage{amssymb}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0.4pt} 
+\renewcommand{\footrulewidth}{0.4pt}
+\fancyhead[LE,RO]{Machine Learning Optimizition}
+\fancyhead[LE,LO]{\thepage}
+\fancyfoot[CE,CO]{\leftmark}
+\fancyfoot[LE,RO]{\thepage\ of \pageref{LastPage}}
+\usepackage{makeidx}
+\usepackage[colorlinks,
+            linkcolor=red,
+            anchorcolor=blue,
+            citecolor=green,
+            CJKbookmarks
+            ]{hyperref}
+%\usepackage[center]{titlesec} 
+\author{kay}
+\title{Machine Learning Optimizition}
+\makeindex
+\begin{document}
+\maketitle
+\tableofcontents
+\section{Introduction}
+Overall, this paper attempts to provide answers for the following questions.
+\begin{enumerate}
+\item{How do optimization problems arise in machine learning applications and
+    what makes them challenging?}
+\item{What have been the most successful optimization methods for large-scale
+    machine learning and why?}
+\item{what recent advances have been made in the design of algorithms and what
+    are open questions in this research area?}
+\end{enumerate}
+For answer question one, use text classification(involves \emph{convex}
+optimization problems); for answer question two, use speech or image
+recognition(involves \emph{highly nonlinear and nonconver} problems)
+
+In this paper, disguss: (i) noise reduction methods that attempt to borrow from
+the strengths of batch methods, such as their fast convergence rates and ability
+to exploit parallelism; (ii) methods that incorporate approximate second-order
+derivative information with the goal of dealing with nonlinearity and
+ill-conditioning; and (iii) methods for solving regularized problems designed to
+avoid overfitting and allow for the use of high-dimensional models.
+\section{Machine Learning Case Studies}
+We focus on two cases that involve very large datasets and for which the number of model parameters to be optimized is also large. 
+\subsection{Text Classification via Convex Optimization}
+Splitting the examples into three disjoint subsets: a \emph{training set}, a \emph{validation set}, and a \emph{testing set}. 
+The generalized performance of each of these remaining candidates is then estimated using the validation set, the best performing of which is chosen as the selected function. The testing set is only used to estimate the generalized performance of this selected function.
+Convex optimization problem:
+\begin{equation}
+  \min_{(\omega,\tau)\in \mathbb{R}^d\times \mathbb{R}}\frac{1}{n}\sum_{i=1}^{n}\ell(h(x_i;\omega,\tau),y_i) + \frac{\lambda}{2}\parallel\omega\parallel_2^2
+\end{equation}
+This problem may be solved multiple times for a given training set with various values of $\lambda$ > 0, with the ultimate solution ($\omega${$\ast$},$\tau${$\ast$}) being the one that yields the best performance on a validation set.
+\subsection{Perceptual Tasks via Deep Neural Networks}
+Canonical fully connected layer performs the computation
+\begin{equation}
+  x_i^{(j)} = \mathrm{ s }(\mathrm{ W }_j x_i^{(j-1)}+b_j) \in \mathbb{R}^{d_j}
+\end{equation}
+Choice of a loss function $\ell$ leading to
+\begin{equation}
+  \min_{\omega\in\mathbb{R}^d} \frac{1}{n} \sum_{i=1}^n \ell(h(x_i;\omega), y_i)
+\end{equation}
+
+
+\section{DML Optimization}
+\subsection{BGD}
+BGD(batch gradient descent)
+\begin{eqnarray*}
+  \hat{g} \leftarrow + \frac{1}{n} \nabla_{\theta}\sum_i
+  \mathbf{L}(f(x_i;\theta),y_i) \\
+  \theta \leftarrow \theta - \epsilon \hat{g}
+\end{eqnarray*}
+优点: 由于每一步都利用了训练集中的所有数据,因此当损失函数达到最小值以后,能够保证此时计算出的梯度为0,换句话说,就是能够收敛.因此,使用BGD时不需要逐渐减小学习速率ϵk. \\
+缺点: 由于每一步都要使用所有数据,因此随着数据集的增大,运行速度会越来越慢.
+\subsection{SGD}
+SGD(Stochastic Gradient Descent), 一般指Mini-batch Gradient Descent
+\begin{eqnarray*}
+  g_t = \nabla_{\theta_{t-1}}f(\theta_{t-1})  \\
+  \Delta{\theta_t} = -\eta\times g_t
+\end{eqnarray*}
+$\eta$是学习率, $g_t$是梯度SGD完全依赖于当前batch的梯度, $\eta$可理解为允许当前
+batch的梯度多大程度影响参数更新.
+
+缺点：
+\begin{itemize}
+\item 选择合适的learning rate比较困难 - 对所有的参数更新使用同样的learning rate。对于稀疏数据或者特征，有时我们可能想更新快一些对于不经常出现的特征，对于常出现的特征更新慢一些，这时候SGD就不太能满足要求了
+\item SGD容易收敛到局部最优，并且在某些情况下可能被困在鞍点
+\item 由于是抽取,因此不可避免的,得到的梯度肯定有误差.因此学习速率需要逐渐减小.否
+  则模型无法收敛, 一般选择线性衰减:  \\ $\eta{_k}=(1−\alpha)\eta_0+\alpha\eta_{\tau}$  \\
+  $\alpha=\frac{k}{\tau}$
+\end{itemize}
+\subsection{Momentum}
+momentum是模拟物理里动量的概念，积累之前的动量来替代真正的梯度。公式如下:
+\begin{eqnarray*}
+  m_t = \mu \times m_{t-1} + g_t  \\
+  \Delta\theta_t = -\eta \times m_t
+\end{eqnarray*}
+其中$\mu$是动量因子 \\
+特点：
+\begin{itemize}
+\item 下降初期时，使用上一次参数更新，下降方向一致，乘上较大的$\mu$能够进行很好的加速
+\item 下降中后期时，在局部最小值来回震荡的时候，gradient$\to$0，$\mu$使得更新幅度增大，跳出陷阱
+\item 在梯度改变方向的时候，$\mu$能够减少更新 总而言之，momentum项能够在相关方向加速SGD，抑制振荡，从而加快收敛
+\end{itemize}
+
+
+\end{document}
