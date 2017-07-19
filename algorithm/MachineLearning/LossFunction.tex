@@ -1,0 +1,68 @@
+\documentclass[hyperref, UTF-8]{ctexart}
+\usepackage{amssymb}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0.4pt} 
+\renewcommand{\footrulewidth}{0.4pt}
+\fancyhead[LE,RO]{Machine Learning Loss Function}
+\fancyhead[LE,LO]{\thepage}
+\fancyfoot[CE,CO]{\leftmark}
+\fancyfoot[LE,RO]{\thepage\ of \pageref{LastPage}}
+\usepackage{makeidx}
+\usepackage[colorlinks,
+            linkcolor=red,
+            anchorcolor=blue,
+            citecolor=green,
+            CJKbookmarks
+            ]{hyperref}
+%\usepackage[center]{titlesec} 
+\author{kay}
+\title{Machine Learning Optimizition}
+\makeindex
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Introduction}
+
+损失函数是经验风险函数的核心部分，也是结构风险函数重要组成部分。模型的结构风险函数包括了经验风险项和正则项，通常可以表示成如下式子：
+\begin{displaymath}
+  \theta{^\star} = arg \min{_\theta} \frac{1}{N}\sum{i=1}^N \mathit{L} (y_i,
+  f(x_i; \theta)) + \lambda \Theta(\theta)
+\end{displaymath}
+其中，前面的均值函数表示的是经验风险函数，L代表的是损失函数，后面的$\Theta$是正
+则化项（regularizer）或者叫惩罚项（penalty term）
+
+\subsection{Loss Functions Comparison}
+Given a prediction (p) and a label (y), a loss function loss function
+$\ell(p,y)$ measures the discrepancy between the algorithm's prediction and the
+desired output.   \\
+\begin{tabular}{|c|c|c|c|}
+  \hline
+  Loss & Function & Minimizer & Example usage \\ \hline
+  Squared & $\frac{1}{2}(p-y)^2$ & Expectation(mean) & Regression Expected return on stock \\  \hline
+\end{tabular}
+
+\section{Gold Standard Loss}
+Gold Standard又称0-1误差，其结果又称为犯错与不犯错,用途比较广(比如PLA模型)，其损失函数也是相当的简单:
+\begin{displaymath}
+  y = \left \{
+      \begin{array}{ll}
+        0 & if ~ m \geqslant 0  \\
+        1 &  if ~ m \leqslant 0 
+      \end{array}  \right.
+\end{displaymath}
+
+\section{Hinge Loss}
+
+\section{Log Loss}
+Cross entropy Loss is a type of Log Loss.
+
+\section{Squared Loss}
+
+\section{Exponential Loss}
+
+
+
+\end{document}
