@@ -1,0 +1,6 @@
+https://arxiv.org/pdf/1606.04838.pdf
+
+Overall, this paper attempts to provide answers for the following questions.
+  1. How do optimization problems arise in machine learning applications and what makes them challenging?
+  2. What have been the most successful optimization methods for large-scale machine learning and why?
+  3. What recent advances have been made in the design of algorithms and what are open questions in this research area?
