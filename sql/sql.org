@@ -14,3 +14,4 @@ Data Manipulation Language (DML) statements are used for managing data within sc
  5. CALL - call a PL/SQL or Java subprogram    
  6. EXPLAIN PLAN - explain access path to data 
  7. LOCK TABLE - control concurrency
+* 
