@@ -33,7 +33,7 @@ def heapSort(A):
 def maxHeapify(B, start, end):
     """
     最大堆调整：将堆的末端子节点作调整，使得子节点永远小于父节点
-    start为当前需要调整最大堆的位置，end为调整边界
+    start为当前需要调整最大堆的位置，end为调整边ub'bb界
     """
     root = start
     while True:
