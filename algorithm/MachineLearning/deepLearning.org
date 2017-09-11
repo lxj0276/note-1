@@ -57,6 +57,9 @@
   Dropout: Each time before updating the parameters, each neuron has p% to dropout(The structure of the network is changed.
   If the dropout rate at training is p%, all the weights times (1-p)%.
   M neurons when dropout have 2^M possible networks.
+* leason 2
+** 常用非线性激励函数
+   1. sigmoid
 
   CNN(Convolutinal Neural Network): widely used in image processing.
   Why CNN for Image:
@@ -160,9 +163,6 @@
 
 
 
-
-
-
 ** l9 生成对抗网络
    提纲: 
      - 生成对抗网络(GAN)基础
@@ -219,7 +219,6 @@
 
 **** DCGAN 结构细节
      1. 没有 pooling，stride conv 或 deconv
-     2. 运用 batchnorm
      3. 不要 FC
      4. 非线性激励 ReLU(G), LeakyReLU (D).
 **** DCGAN 模型研究
@@ -239,7 +238,6 @@
 **** DCGAN 总结
      1. GAN 同深度 CNN 网络结合
      2. 噪声输入有着重要作用，可以实现有意义运算
-     3. 对输入信号实际意义可以有更深研究，定性 输出有可能
 *** 条件 GAN(conditional GAN, cGAN)
     用一些信息对 GAN 的生成图片进行范围约束
     信息的类型:文字;图片

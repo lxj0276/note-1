@@ -682,3 +682,14 @@ y:0 x:0
 Go 的 runtime 和工具链为我们装备了一个复杂但好用的动态分析工具，竞争检查器(the race detector)。
 
 只要在 go build，go run 或者 go test 命令后面加上-race 的 flag，就会使编译器创建一个你的应用的“修改”版或者一个附带了能够记录所有运行期对共享变量访问工具的 test，并且会记录下每一个读或者写共享变量的 goroutine 的身份信息。另外，修改版的程序会记录下所有的同步事件，比如 go 语句，channel 操作，以及对`(*sync.Mutex).Lock`，`(*sync.WaitGroup).Wait`等等的调用。(完整的同步事件集合是在 The Go Memory Model 文档中有说明，该文档是和语言文档放在一起的。译注：https://golang.org/ref/mem)
+** 格式化输出
+| format                   |     meaning                                                                           |
+|--------------------------+---------------------------------------------------------------------------------------|
+| %d                       | decimal integer                                                                       |
+| %x, %o, %b %f, %g, %e %t | integer in hexadecimal, octal, binary                                                 |
+| %c                       | floating-point number: 3.141593 3.141592653589793 3.141593e+00 boolean: true or false |
+| %s                       | rune (Unicode code point)                                                             |
+| %q                       | string                                                                                |
+| %v                       | 	quoted string "abc" or rune 'c'                                                     |
+| %T                       | any value in a natural format                                                         |
+| %%                       | type of any value, literal percent sign (no operand)                                  |

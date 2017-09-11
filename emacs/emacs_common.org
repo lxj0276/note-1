@@ -336,10 +336,6 @@ You can change a surrounding with cs<old-textobject><new-textobject>.
 
 You can delete a surrounding with ds<textobject>.
 * sapcemace 操作
-* vim 搜索忽略大小写
-1. set ic
-2. /search/c
-
 * windows 字体
 (dolist (charset '(kana han cjk-misc bopomofo))
   (set-fontset-font (frame-parameter nil 'font) charset
@@ -433,3 +429,6 @@ e.g.: $$e^{i\pi} + 1 = 0$$
   dH 删除直到屏幕上第一行的内容 
   dG 删除直到工作缓存区结尾的内容 
   d1G 删除直到工作缓存区开始的内容
+** vim 搜索忽略大小写
+1. set ic
+2. /search/c

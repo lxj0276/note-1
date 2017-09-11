@@ -63,23 +63,115 @@ desired output.   \\
 Gold Standard又称0-1误差，其结果又称为犯错与不犯错,用途比较广(比如PLA模型)，其损失函数也是相当的简单:
 \begin{displaymath}
   y = \left \{
+  \mathbf{L}(y, f(x)) = \left \{
       \begin{array}{ll}
         0 & if ~ m \geqslant 0  \\
         1 &  if ~ m \leqslant 0 
+        1, & if ~ y\neq f(x) \\
+        0, &  if ~ y = f(x) 
       \end{array}  \right.
 \end{displaymath}
 
 0-1损失是一个非凸的函数，在求解的过程中，存在很多的不足，通常在实际的使用中将0-1损失函数作为一个标准，选择0-1损失函数的代理函数作为损失函数。
+$\mathbf{L}(\hat{y}, y) = \mathit{I}(\hat{y} \neq y)$, where $\mathit{I}$ is the
+\href{https://en.wikipedia.org/wiki/Indicator_function}{ indicator notation }\cite{loss}.
 
 \section{Hinge Loss}
+\begin{eqnarray*}
+  y_i X_i \cdot \mathbf{W} \geq 1 - \epsilon{_i}, \quad \epsilon_i \geq 0 \quad
+  \forall{A}  \\
+  => \quad \epsilon_i \geq 1 - y_iX_i\cdot \mathbf{W}, \quad \epsilon_i \geq 0
+  \quad \forall{A}  \\
+  => \quad \epsilon_i \geq max{0, 1-y_iX_i\cdot\mathbf{W}}, \quad \forall{A}
+\end{eqnarray*}
+Hinge损失函数的标准形式: 
+\begin{displaymath}
+  L(y)= max(0, 1-y\hat{y}),\quad y=\pm{1}
+\end{displaymath}
+SVM损失函数:
+\begin{displaymath}
+  \min_{\omega,b}\frac{1}{C}\left( \frac{1}{2} \parallel\omega\parallel^2 + C
+  \sum_{i}^N \epsilon_i \right)
+\end{displaymath}
+\subsection{Huber Loss}
+
 
 \section{Log Loss}
 Cross entropy Loss is a type of Log Loss.
+For discrete $\mathit{p}$ and $\mathit{q}$ this means~\cite{logloss}:
+\begin{displaymath}
+  H(p, q) = - \sum_{x}p(x)\log{ q(x) }
+\end{displaymath}
+For situation for continuous distributions:
+\begin{displaymath}
+  -\int_XP(x)\log{Q(x)} dr(x) = E_p[-logQ]
+\end{displaymath}
 
-\section{Squared Loss}
+\subsection{Logistic Function}
+The logistic regression model thus predicts an output $y \in \{0, 1\}$, given an
+input vector $\mathbf {x}$ ~\cite{logloss}. The probability is modeled using the logistic function $g(z)=1/(1+e^{-z})$. Namely, the probability of finding the output  $y=1$ is given by
+\begin{displaymath}
+  q_{y=1}\ = \ \hat{y}\ \equiv \ g(\mathbf{w} \cdot \mathbf{x})
+\end{displaymath}
+where the vector of weights $\mathbf {w}$  is optimized through some appropriate
+algorithm such as \emph{gradient descent}. Similarly, the complementary probability of
+finding the output $y=0$ is simply given by $q_{{y=0}}\ =\ 1-{\hat  {y}}$.
 
+We can use cross entropy to get a measure for similarity between $p$ and $q$:
+\begin{displaymath}
+H(p,q)\ =\ -\sum _{i}p_{i}\log q_{i}\ =\ -y\log {\hat {y}}-(1-y)\log(1-{\hat {y}})
+\end{displaymath}
+
+Suppose we have $N$ samples with each sample labeled by $n=1,\dots ,N$. The loss function is then given by:
+\begin{displaymath}
+ L(\mathbf {w} )\ =\ {\frac {1}{N}}\sum _{n=1}^{N}H(p_{n},q_{n})\ =\ -{\frac
+   {1}{N}}\sum _{n=1}^{N}\ {\bigg [}y_{n}\log {\hat
+   {y}}_{n}+(1-y_{n})\log(1-{\hat {y}}_{n}){\bigg ]}
+\end{displaymath}
+where ${\hat  {y}}_{n}\equiv g({\mathbf  {w}}\cdot {\mathbf  {x}}_{n})$, with $g(z)$ the logistic function as before.
+
+The logistic loss is sometimes called cross-entropy loss. It is also known as log loss (In this case, the binary label is often denoted by {-1,+1}).
+\section{Squared Error}
+The MSE is a measure of the quality of an estimator—it is always non-negative, and values closer to zero are better.~\cite{mseloss}
+
+The MSE is the second moment (about the origin) of the error, and thus
+incorporates both the variance of the estimator and its bias.
+
+If $\hat{Y}$ is a vector of $n$ predictions, and $Y$ is the vector of observed values corresponding to the inputs to the function which generated the predictions, then the MSE of the predictor can be estimated by
+\begin{displaymath}
+ {MSE}={\frac  {1}{n}}\sum_{{i=1}}^{n}({\hat  {Y_{i}}}-Y_{i})^{2}
+\end{displaymath}
+I.e., the MSE is the mean \begin{math}\left({\frac {1}{n}}\sum_{i=1}^{n}\right)\end{math} of the square of the errors ($({\hat  {Y_{i}}}-Y_{i})^{2}$).
+
+The MSE can be written as the sum of the variance of the estimator and the
+squared bias of the estimator:
+\begin{displaymath}
+{MSE} ({\hat {\theta }})= {Var} ({\hat {\theta }})+ {Bias} ({\hat {\theta }},\theta )^{2}.  
+\end{displaymath}
 \section{Exponential Loss}
 
+\section{Absolute Loss}
 
+\section{Perceptron Loss}
+感知机损失是对0-1损失设了一个阈值
+\begin{displaymath}
+  \ell{( y_i, \hat{y_i} )} = \left\{
+      \begin{array}{ll}
+        1,&|y_i - \hat{y_i}| > t \\
+        2,& |{y_i = \hat{y_i}}| \leq t
+      \end{array} 
+\right.
+\end{displaymath}
+其中t是一个超参数阈值，如在PLA(Perceptron Learning Algorithm,感知机算法).
+
+\begin{thebibliography}{99}
+\bibitem{loss}
+  \href{https://en.wikipedia.org/wiki/Loss_function#0-1_loss_function}{0-1 loss
+    function wikipedia}
+\bibitem{logloss}
+  \href{https://en.wikipedia.org/wiki/Cross_entropy#Cross-entropy_error_function_and_logistic_regression}{Cross
+    entropy wiki}
+\bibitem{mseloss} \href{https://en.wikipedia.org/wiki/Mean_squared_error}{Mean squared error}
+\end{thebibliography}
 
 \end{document}

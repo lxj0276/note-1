@@ -1,0 +1,5 @@
+* Machine Learning Basics
+  Most deep learning algorithms are based on an optimization algorithm called stochastic gradient descent. 
+
+  When performing a regression task, should we penalize the system more if it frequently makes medium-sized mistakes or if it rarely makes
+very large mistakes? These kinds of design choices depend on the application.

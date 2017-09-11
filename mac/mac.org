@@ -1,6 +1,5 @@
 * mac 下打开/usr
 shift+command+d,然后输入要打开的目录
-
 * mac office
  [[http://www.jianshu.com/p/2172835cfb17][在 Mac 上安装 office2016]] 
 
@@ -27,10 +26,6 @@ shift+command+d,然后输入要打开的目录
     6. user_order <<nothing>|relevance|date|views|rating> user upload list result ordering, leave blank for the same as order setting
     7. set window_pos <top|bottom>-<left|right> - set player window position
     8. set window_size <number>x<number> - set player window width & height
-
-                 
-    
- 
 * accounts
   [[http://www.ipadmalaysialabs.com/how-to-create-a-us-apple-id/][US iTunes Store Access (Part 1) – How to Create a US Apple ID]]
 
@@ -46,3 +41,4 @@ shift+command+d,然后输入要打开的目录
   - mps-youtube :: terminal youtube 
   - sketchbook :: 画图
 
+* mac 下打开多个相同的软件 open -n /Applications/xxx.app

@@ -1,0 +1,32 @@
+\documentclass[hyperref, UTF-8]{ctexart}
+\usepackage{amssymb}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0.4pt} 
+\renewcommand{\footrulewidth}{0.4pt}
+\fancyhead[LE,RO]{Machine Learning Optimizition}
+\fancyhead[LE,LO]{\thepage}
+\fancyfoot[CE,CO]{\leftmark}
+\fancyfoot[LE,RO]{\thepage\ of \pageref{LastPage}}
+\usepackage{makeidx}
+\usepackage[colorlinks,
+            linkcolor=red,
+            anchorcolor=blue,
+            citecolor=green,
+            CJKbookmarks
+            ]{hyperref}
+%\usepackage[center]{titlesec} 
+\author{kay}
+\title{Machine Learning Optimizition}
+\makeindex
+\begin{document}
+\maketitle
+\tableofcontents
+
+
+
+\section{Machine Learning Basics}
+Most deep learning algorithms are based on an optimization algorithm called stochastic gradient descent. 
+
+\end{document}

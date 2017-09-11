@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 # coding=utf-8
 '''
-快速排序
+快速排序(unstable sort, In-place sort)
+[Best: O(N lg N), Avg: O(N lg N), Worst:O(N^2)]
 介绍：
 它是由冒泡排序改进而来的。
 快速排序通常明显比同为Ο(n log n)的其他算法更快，因此常被采用，而且快排采用了分治法的思想，所以在很多笔试面试中能经常看到快排的影子。可见掌握快排的重要性。
@@ -19,37 +20,38 @@
 '''
 
 
-def quickSort(A):
-    return quick(A, 0, len(A) - 1)
+def quick_sort(array):
+    return quick(array, 0, len(array) - 1)
 
 
-def quick(B, left, right):
+def quick(array, left, right):
     # 快排函数，ary为待排序数组，left为待排序的左边界，right为右边界
     if left >= right:
-        return B
-    key = B[left]  # 取最左边的为基准
-    lp = left  # 左指针
-    rp = right  # 右指针
-    while lp < rp:  # 从两边交替向中间扫描，直到lp=rp为止
-        while B[rp] >= key and lp < rp:  # 必须从右边开始查找小于key的值，否则错误
-            rp = rp - 1
-        while B[lp] <= key and lp < rp:
-            lp = lp + 1
-        B[lp], B[rp] = B[rp], B[lp]
+        return
+    lp = left
+    rp = right
+    key = array[left]
+    while lp < rp:
+        while array[rp] >= key and lp < rp:
+            rp -= 1
+        while array[lp] <= key and lp < rp:
+            lp += 1
 
-    B[left], B[lp] = B[lp], B[left]
-    quick(B, left, lp-1)
-    quick(B, rp+1, right)
-    return B
+        array[lp], array[rp] = array[rp], array[lp]
+
+    array[lp], array[left] = array[left], array[lp]
+    quick(array, left, lp-1)
+    quick(array, rp+1, right)
+    return array
 
 
 if __name__ == "__main__":
     ar = [10, 14, 73, 23, 13, 27, 94, 33, 39, 25, 59, 94, 65, 82, 45]
     cr = [3, 1, 5, 7, 2, 4, 9, 6]
     print ar
-    br = quickSort(ar)
+    br = quick_sort(ar)
     print br
     print ar
 
     print cr
-    print quickSort(cr)
+    print quick_sort(cr)
