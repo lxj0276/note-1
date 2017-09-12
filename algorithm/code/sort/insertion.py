@@ -2,9 +2,18 @@
 # -*- coding: utf-8 -*-
 # coding=utf-8
 '''
-插入排序
+
+插入排序 (stable sort, In-place sort(不占用额外内存))
 
 介绍：
+mark first element as sorted
+for each unsorted element X
+  'extract' the element X
+  for j = lastSortedIndex down to 0
+    if current element j > X
+      move sorted element to the right by 1
+    break loop and insert X here
+
 插入排序的工作原理是，对于每个未排序数据，在已排序序列中从后向前扫描，找到相应位置并插入。
 步骤：
 1.从第一个元素开始，该元素可以认为已经被排序
@@ -21,6 +30,33 @@
 * 稳定性。  
      理解性记忆比死记硬背要好。因此，我们来分析下。稳定性，就是有两个相同的元素，排序先后的相对位置是否变化，主要用在排序时有多个排序规则的情况下。在插入排序中，K1是已排序部分中的元素，当K2和K1比较时，直接插到K1的后面(没有必要插到K1的前面，这样做还需要移动！！)，因此，插入排序是稳定的。
 '''
+
+def sort(array):
+    """ insert sort"""
+    length = len(array)
+    for i in range(1, length):
+        j = i - 1
+        while  j >= 0 and array[i] < array[j]:
+            array[i], array[j] = array[j], array[i]
+            j = j - 1
+            i = i - 1
+            print i, j
+
+    return array
+
+
+def sort2(array):
+    """ insert sort"""
+    length = len(array)
+    for i in range(1, length):
+        j = i - 1
+        temp = array[i]
+        while  j >= 0 and temp < array[j]:
+            array[j+1] = array[j]
+            j = j - 1
+        array[j+1] = temp
+
+    return array
 
 
 def insertSort(ary):
@@ -40,7 +76,7 @@ def insertSort(ary):
 
 
 if __name__ == "__main__":
-    befArray = [3, 1, 5, 7, 2, 4, 9, 6]
-    print (befArray)
-    aftArray = insertSort(befArray)
-    print (aftArray)
+    bef_array = [3, 1, 5, 7, 2, 4, 9, 6]
+    print (bef_array)
+    aft_array = insertSort(bef_array)
+    print (aft_array)

@@ -25,6 +25,21 @@
 \tableofcontents
 
 \section{Introduction}
+In mathematical optimization, a loss function or cost function is a function
+that maps an event or values of one or more variables onto a real number
+intuitively representing some "cost" associated with the event. in statistics,
+typically a loss function is used for parameter estimation. In classification,
+it is the penalty for an incorrect classification of an example. In actuarial
+science, it is used in an insurance context to model benefits paid over
+premiums. In optimal control the loss is the penalty for failing to achieve a
+desired value. In financial risk management the function is mapped to a monetary
+loss.\cite{lfwiki} 
+\subsection{Definition}
+Given a set A of possible actions, a decision rule is a function $\delta : \mathcal{X} \rightarrow \mathbf{A}$.
+
+A loss function is a real lower-bounded function L on $\theta \times mathrm{A}$
+for some $\theta \in \Theta$. The value $L(\theta, \delta(X))$ is the cost of
+action $\delta{(\mathit{X})}$ under parameter $\theta$. 
 
 损失函数是经验风险函数的核心部分，也是结构风险函数重要组成部分。模型的结构风险函数包括了经验风险项和正则项，通常可以表示成如下式子：
 \begin{displaymath}
@@ -47,13 +62,17 @@ desired output.   \\
 \section{Gold Standard Loss}
 Gold Standard又称0-1误差，其结果又称为犯错与不犯错,用途比较广(比如PLA模型)，其损失函数也是相当的简单:
 \begin{displaymath}
+  y = \left \{
   \mathbf{L}(y, f(x)) = \left \{
       \begin{array}{ll}
+        0 & if ~ m \geqslant 0  \\
+        1 &  if ~ m \leqslant 0 
         1, & if ~ y\neq f(x) \\
         0, &  if ~ y = f(x) 
       \end{array}  \right.
 \end{displaymath}
 
+0-1损失是一个非凸的函数，在求解的过程中，存在很多的不足，通常在实际的使用中将0-1损失函数作为一个标准，选择0-1损失函数的代理函数作为损失函数。
 $\mathbf{L}(\hat{y}, y) = \mathit{I}(\hat{y} \neq y)$, where $\mathit{I}$ is the
 \href{https://en.wikipedia.org/wiki/Indicator_function}{ indicator notation }\cite{loss}.
 

@@ -1,247 +1,332 @@
-* l1 深度学习总体介绍
-  提纲:
-    1. 深度学习:传统到现在
-    2. 深度学习应用特点
-    3. 深度学习框架比较
-    4. TensorFlow 介绍
-    5. 一些基本深度学习概念
-  期待目标:
-    1. 了解深度学习发展
-    2. 清楚深度学习能力范围
-    3. 知道常见深度学习框架
-    4. 会安装/运行/简单调试 TensorFlow，了 解 TF 运行方式
-    5. 了解:神经元，卷积核，分类，回归等基本概念
+* Deep Learning ppt
+  Loss can be the distance between the network output and target.
 
+  Find a function in function set and find the network parameters that minimize total loss L.
+
+  Gradient Descent: Pick an initial value for w, compute ∂L/∂w.
+    If negative --> Increase w,
+    If positive --> Decrease w.
+    w = w - η∂L/∂w. Repeat until ∂L/∂w is approximately small.
+
+  Any continuous function f can be realized by a network with one hidden layer(given *enough* hidden neurons). Then why "Deep" neural network not "Fat" neural network?
+  Using multiple layers of neurons to represent some funcitons are much simpler(less parameters) and much modularization, can use little data reach fine result.
+
+  Square Error And Cross Entropy, which one is better?
+    When using softmax output layer, choose cross entropy
+
+  Mini-batch and Epoch.
+    Pick the 1_st batch, update parameters once, then pick the n_st batch updata parameters once , until all mini-batches have been picked, then one epoch is over. Repeat the above process.
+
+  Mini-batch vs oraginal batch:
+    Mini-batch is Faster, it has better performance. Mini-batch is better, has high accuracy.
+
+  Shuffle the training examples for each epoch, this is default of Keras.
+
+  Deeper usually does not imply better.
+    Vanishing Gradient Problem: When the back layer has larger gradients, learns very fast and is already converge, but the front layer has smaller gradients, learns very slow and is almost random.
+
+  Relu(Rectified Linear Unit), reasons:
+    - fast to compute
+    - biological reason
+    - infinite sigmoid with different biases
+    - vanishing gradient problem
+    - do not have smaller gradients
+
+  Set the learning rate η carefully.
+    If learning rate is too large, total loss may not decrease after each update
+    If learning rate is too small, training would be too slow
+    1. Popular & Simple idea: Reduce the learning reate by some factor every few epochs.
+       - At the beginning, we are far from the destination, so we use larger learning rate.
+       - After several epochs, we are close to the destination, so we reduce the learning rate.
+       - E.g. η^t = η/sqr(t+1)
+    2. Learning rate cannot be ont-size-fits-all
+       Giving different parameters different learning rates.
+
+  Adagrad:
+    - Learning rate is smaller and smaller for all parameters
+    - Smaller derivatives, larger learning rate, and vice versa.
+
+  Momentum: Still not guarantee reaching global minima, but give some hope...
+    Movement = Negative of ∂L/∂W + Momentum
+
+  Adam: RMSProp(Advanced Adagrad + Momentum)
+
+  Weight Decay: Out brain prunes out the useless link between neurons, doing the same thing to the machine's brain improves the performance.
+  Weight decay is one kind of regularization.
+
+  Dropout: Each time before updating the parameters, each neuron has p% to dropout(The structure of the network is changed.
+  If the dropout rate at training is p%, all the weights times (1-p)%.
+  M neurons when dropout have 2^M possible networks.
 * leason 2
 ** 常用非线性激励函数
    1. sigmoid
 
-   2. tahn
+  CNN(Convolutinal Neural Network): widely used in image processing.
+  Why CNN for Image:
+    - When processing image, the first layer of fully connected network would be very large.
+    - Some patterns are much smaller than the whole image.(convolution)
+    - The same patterns appear in different regions.(convolution)
+    - Subsampling the pixels will not change the object.(max pooling)
 
-   3. relu
-* leason 3
-1. relu
+  RNN(Recurrent Neural Network): Neural Network with momery
+    The same network is used again and again.
+    LSTM(Long Short-term Memory): Special Neuron -- 4 inputs, 1 output
+      out = h(c^')f(z_0); where c^' = g(x)f(x_i) + cf(z_f)
+    1. Input and output are both sequences with the same length.
+    2. Many to one.
+    3. Many to Many(Output is shorter)
+    4. Many to Many(both input and output are sequences, but the output is shorter): CTC(Connectionist Temporal Classification)
+    5. Many to Many(No Limitation --> machine translation)
+    6. One to Many(Input an image, but output a sequence of words)
 
-2. 卷积是如何运算的
+  Supervised Learning
+    - UItra Deep Network
+      UItra deep network is the ensemble of many networks with different depth.
+    - Attention Model
+* Deep Learning leason 
+** l1 深度学习总体介绍
+   提纲:
+     1. 深度学习:传统到现在
+     2. 深度学习应用特点
+     3. 深度学习框架比较
+     4. TensorFlow 介绍
+     5. 一些基本深度学习概念
+   期待目标:
+     1. 了解深度学习发展
+     2. 清楚深度学习能力范围
+     3. 知道常见深度学习框架
+     4. 会安装/运行/简单调试 TensorFlow，了 解 TF 运行方式
+     5. 了解:神经元，卷积核，分类，回归等基本概念
 
-3. 局部卷积更能体现本局部的特性
+** leason 2
+*** 常用非线性激励函数
+    1. sigmoid
 
-4. 步长对特征图的扫描间隔对特征图的影响: 会影响最后输出的维度
-   7*7 -> step 1 -> 5*5
-   7*7 -> step 2 -> 3*3
+    2. tahn
 
-5. 为了保证前后尺寸相同, 需要 pad(边界扩充),加入合适的 pad,可以使输入输出的 size 相同
+    3. relu
+** leason 3
+ 1. relu
 
-6. 卷积层: 参数多,计算少
-   卷积网络: 参数少, 计算多
+ 2. 卷积是如何运算的
 
-7. 卷积神经网络的正向反向推导
+ 3. 局部卷积更能体现本局部的特性
 
-8. 机器学习现在是先实践, 然后再推理
+ 4. 步长对特征图的扫描间隔对特征图的影响: 会影响最后输出的维度
+    7*7 -> step 1 -> 5*5
+    7*7 -> step 2 -> 3*3
 
-* leason 4
-  1. hog, lbp
+ 5. 为了保证前后尺寸相同, 需要 pad(边界扩充),加入合适的 pad,可以使输入输出的 size 相同
 
-  2. AlexNet
-     FC: 全链接层
-     回归用 sigmoid, 分类用 softmax
+ 6. 卷积层: 参数多,计算少
+    卷积网络: 参数少, 计算多
 
-  3. 卷积层和池化层是怎么联系的
+ 7. 卷积神经网络的正向反向推导
 
-  4. 参数很大怎么保证不过拟合: 有些参数可以不更新, 比较低的 layer 不更新参数.
+ 8. 机器学习现在是先实践, 然后再推理
 
-* leason 5: 目标分类, 迁移学习
-  1. 迁移学习的原理(用现有模型, 进行一些改变)
+** leason 4
+   1. hog, lbp
 
-  2. 根据问题的特点, 设计能够解决特定结构的神经网络.
+   2. AlexNet
+      FC: 全链接层
+      回归用 sigmoid, 分类用 softmax
 
-  3. 当同时可以考虑深度和宽度设计的时候时, 先考虑深度的设计, 两层 3*3 的 filter 跟一个 5*5 的, 如果层数变多, 则参数变少.
+   3. 卷积层和池化层是怎么联系的
 
-  4. 如何设计神经网络
-    - 明确研究问题
-    - 已有的解决方案特点，借鉴地方，不足 3. 突破点在哪里，还是重复就足够了
-    - 想法在网络结构中实现
-    - 训练结果反馈调整
+   4. 参数很大怎么保证不过拟合: 有些参数可以不更新, 比较低的 layer 不更新参数.
 
-* leason 6: 目标分类, 目标探测
-  1. 8:30 左右
+** leason 5: 目标分类, 迁移学习
+   1. 迁移学习的原理(用现有模型, 进行一些改变)
 
-  2. edgebox 
+   2. 根据问题的特点, 设计能够解决特定结构的神经网络.
 
-  3. bbox: bounding box
+   3. 当同时可以考虑深度和宽度设计的时候时, 先考虑深度的设计, 两层 3*3 的 filter 跟一个 5*5 的, 如果层数变多, 则参数变少.
 
-  4. RCNN: 区域 CNN.
+   4. 如何设计神经网络
+     - 明确研究问题
+     - 已有的解决方案特点，借鉴地方，不足 3. 突破点在哪里，还是重复就足够了
+     - 想法在网络结构中实现
+     - 训练结果反馈调整
 
-  5. 根据问题的特点, 设计能够解决特定结构的神经网络.
+** leason 6: 目标分类, 目标探测
+   1. 8:30 左右
+
+   2. edgebox 
+
+   3. bbox: bounding box
+
+   4. RCNN: 区域 CNN.
+
+   5. 根据问题的特点, 设计能够解决特定结构的神经网络.
 
 
 
 
+** l9 生成对抗网络
+   提纲: 
+     - 生成对抗网络(GAN)基础
+     - 深度 GAN
+     - 条件 GAN
+     - InfoGAN
+     - Wasserstein GAN
+     - 实例: 图片生成器
 
+   期待目标:
+    1. 了解 GAN 基本原理，生成网络与判别网络合作方式
+    2. 理解深度，条件，解析 GAN 对基本 GAN 网络的扩展
+    3. 明白 WassGAN 在原理上的进步
+    4. 实例学习，学会用图片条件 GAN 得到想要的图片生成器
 
+*** GAN 基础
+    监督学习
+    - D :: 判别网络
+    - G :: 生成网络
+    - Loss :: 判断是真实模型的概率: 是/否真值
 
-* l9 生成对抗网络
-  提纲: 
-    - 生成对抗网络(GAN)基础
-    - 深度 GAN
-    - 条件 GAN
-    - InfoGAN
-    - Wasserstein GAN
-    - 实例: 图片生成器
+   数学原理: [[https://arxiv.org/pdf/1406.2661.pdf][Generative Adversarial Nets]] 
 
-  期待目标:
-   1. 了解 GAN 基本原理，生成网络与判别网络合作方式
-   2. 理解深度，条件，解析 GAN 对基本 GAN 网络的扩展
-   3. 明白 WassGAN 在原理上的进步
-   4. 实例学习，学会用图片条件 GAN 得到想要的图片生成器
-
-** GAN 基础
-   监督学习
-   - D :: 判别网络
-   - G :: 生成网络
-   - Loss :: 判断是真实模型的概率: 是/否真值
-
-  数学原理: [[https://arxiv.org/pdf/1406.2661.pdf][Generative Adversarial Nets]] 
-
-  训练过程描述:
-    1. 初始状态:生成数据同真实数据差距明显，容易判别
-    2. 训练过程:对是否真实判断得到的 loss 引导生成模型更新，差距减少
-    3. 最终状态:生成数据同真实数据相似，无法识别
+   训练过程描述:
+     1. 初始状态:生成数据同真实数据差距明显，容易判别
+     2. 训练过程:对是否真实判断得到的 loss 引导生成模型更新，差距减少
+     3. 最终状态:生成数据同真实数据相似，无法识别
  
-  假设前提:判别模型 D，生成模型 G 具有学习能力，能够收敛
+   假设前提:判别模型 D，生成模型 G 具有学习能力，能够收敛
  
-  简单模型:
-    - G :: relu + sigmoid nn
-    - D :: maxout
+   简单模型:
+     - G :: relu + sigmoid nn
+     - D :: maxout
 
-  优点:
-    1. 不需要大量 label 数据，1.数据直接生成，没有 loss 来源于 D 判定
-    2. 产生大量生成数据用 于训练，接近无监督学 习
-    3. 可以和深度神经网络 结合
+   优点:
+     1. 不需要大量 label 数据，1.数据直接生成，没有 loss 来源于 D 判定
+     2. 产生大量生成数据用 于训练，接近无监督学 习
+     3. 可以和深度神经网络 结合
   
-  缺点:
-    1. 数据直接生成, 没有推导过程
-    2. 生成器，判别器需要配合共同训练难度较大
-    3. 容易出现训练失败
+   缺点:
+     1. 数据直接生成, 没有推导过程
+     2. 生成器，判别器需要配合共同训练难度较大
+     3. 容易出现训练失败
     
 
-  可能性:
-    1. 连接神经网络扩展
-    2. 输入不仅是噪声信号
-    3. 时域信号生成
-** 深度 GAN(Deep Convolutional GAN, DCGAN)
-   卷积神经网络+GAN
+   可能性:
+     1. 连接神经网络扩展
+     2. 输入不仅是噪声信号
+     3. 时域信号生成
+*** 深度 GAN(Deep Convolutional GAN, DCGAN)
+    卷积神经网络+GAN
 
-   变化:生成器 G;判别器 D(conv feat ->1)
+    变化:生成器 G;判别器 D(conv feat ->1)
 
-*** DCGAN 结构细节
-    1. 没有 pooling，stride conv 或 deconv
-    2. 运用 batchnorm
-    3. 不要 FC
-    4. 非线性激励 ReLU(G), LeakyReLU (D).
-*** DCGAN 模型研究
-    D 用作特征提取工具
+**** DCGAN 结构细节
+     1. 没有 pooling，stride conv 或 deconv
+     3. 不要 FC
+     4. 非线性激励 ReLU(G), LeakyReLU (D).
+**** DCGAN 模型研究
+     D 用作特征提取工具
 
-    特征来源:D model 各层特征 -> 28672 维向量
+     特征来源:D model 各层特征 -> 28672 维向量
 
-    L2 SVM training
+     L2 SVM training
 
-    用 ImageNet 数据训练 D，G，高效特征表达
+     用 ImageNet 数据训练 D，G，高效特征表达
 
-    特征分析: 改变部分噪声参数值
-*** DCGAN 特征研究
-    向量运算
-      噪声输入运算，生成不同图片
-      方向插值，生成中间朝向数据
-*** DCGAN 总结
-    1. GAN 同深度 CNN 网络结合
-    2. 噪声输入有着重要作用，可以实现有意义运算
-    3. 对输入信号实际意义可以有更深研究，定性 输出有可能
-** 条件 GAN(conditional GAN, cGAN)
-   用一些信息对 GAN 的生成图片进行范围约束
-   信息的类型:文字;图片
-   训练过程输入: 随机信息+约束信息特征
+     特征分析: 改变部分噪声参数值
+**** DCGAN 特征研究
+     向量运算
+       噪声输入运算，生成不同图片
+       方向插值，生成中间朝向数据
+**** DCGAN 总结
+     1. GAN 同深度 CNN 网络结合
+     2. 噪声输入有着重要作用，可以实现有意义运算
+*** 条件 GAN(conditional GAN, cGAN)
+    用一些信息对 GAN 的生成图片进行范围约束
+    信息的类型:文字;图片
+    训练过程输入: 随机信息+约束信息特征
 
-   文字作为条件, 训练过程输入: 随机信息+约束信息特征
+    文字作为条件, 训练过程输入: 随机信息+约束信息特征
 
-   文字+位置约束 Where and what?
+    文字+位置约束 Where and what?
 
-  约束条件是图片-生成相关的图片
-  映射关系无限可能
-  图片分割
-  轮廓生成
-  热图生成
-  图片补全
-  高精度生成
-*** 模型结构
-    随机输入同图片结合，G 学习图片到转化图片的映射 关系，D 判断生成图片和真实 图片是否一致
+   约束条件是图片-生成相关的图片
+   映射关系无限可能
+   图片分割
+   轮廓生成
+   热图生成
+   图片补全
+   高精度生成
+**** 模型结构
+     随机输入同图片结合，G 学习图片到转化图片的映射 关系，D 判断生成图片和真实 图片是否一致
 
-    - G :: 反池化，反卷积结构(deconv)
-    - D(PatchGAN) :: 图片整体优化会造成生成的图片边界模糊，高 频信息难以估计。 解决方案:判别器关注在 local 区域
-* 增强学习
-  提纲:
-    1. 增强学习基础
-    2. DQN 深度增强学习
-    3. DQN 改进模型
-    4. A3C 模型
-    5. 实例学习, 自动游戏机器人
+     - G :: 反池化，反卷积结构(deconv)
+     - D(PatchGAN) :: 图片整体优化会造成生成的图片边界模糊，高 频信息难以估计。 解决方案:判别器关注在 local 区域
+** 增强学习
+   提纲:
+     1. 增强学习基础
+     2. DQN 深度增强学习
+     3. DQN 改进模型
+     4. A3C 模型
+     5. 实例学习, 自动游戏机器人
 
-  期待目标:
-    1. 了解增强学习的基本组成
-    2. 简单任务中 Q-learning 如何实现最优策略
-    3. DQN 工作原理, 训练过程用到的调整策略, 优化方式, 特殊设计的用途
-    4. 基本 DQN 存在的问题
+   期待目标:
+     1. 了解增强学习的基本组成
+     2. 简单任务中 Q-learning 如何实现最优策略
+     3. DQN 工作原理, 训练过程用到的调整策略, 优化方式, 特殊设计的用途
+     4. 基本 DQN 存在的问题
 
-** 什么是增强学习
-   - Agent :: 要学习的正能程序
-   - Policy :: 程序知道所处某状态后采取行为的策略(复杂情况 DL , 简单情况 lookup table)
-   - Environment :: 只能程序交互的空间, 接受 action 产生状态变化, 返回 reward, 可以使真实世界, 游戏模拟器, 棋牌等
-** InfoGAN
-  DCGAN 中,随机参数 z 的值有一定实际意义,如果有 text label 可以学习这种约束关系,如果没有 label 数据, 能否自动学会确定映射关系?
+*** 什么是增强学习
+    - Agent :: 要学习的正能程序
+    - Policy :: 程序知道所处某状态后采取行为的策略(复杂情况 DL , 简单情况 lookup table)
+    - Environment :: 只能程序交互的空间, 接受 action 产生状态变化, 返回 reward, 可以使真实世界, 游戏模拟器, 棋牌等
+*** InfoGAN
+   DCGAN 中,随机参数 z 的值有一定实际意义,如果有 text label 可以学习这种约束关系,如果没有 label 数据, 能否自动学会确定映射关系?
 
-  InfoGAN: 自动学习 z 中部分变量意义
-    1. Z 分为两部分,c 和 z
-    2. c 代表数据分布某种物理意义,z 随机信号
+   InfoGAN: 自动学习 z 中部分变量意义
+     1. Z 分为两部分,c 和 z
+     2. c 代表数据分布某种物理意义,z 随机信号
 
-  DCGAN-InfoGAN-cGAN
+   DCGAN-InfoGAN-cGAN
 
-  DCGAN,InfoGAN 没有额外数据标注
+   DCGAN,InfoGAN 没有额外数据标注
 
-  DCGAN z 对生成数据控制作用不确定,需要尝试观察 InfoGAN 没有额外标注,能够学到 c 与生成图片关系。 引入 Mutual Info 概念。参与目标函数的确定,关系越紧密 I 越高,训练过程使 Mutual Info 高,实现生成图片同 c 的联系。
+   DCGAN z 对生成数据控制作用不确定,需要尝试观察 InfoGAN 没有额外标注,能够学到 c 与生成图片关系。 引入 Mutual Info 概念。参与目标函数的确定,关系越紧密 I 越高,训练过程使 Mutual Info 高,实现生成图片同 c 的联系。
 
-  InfoGAN 结果:
-    确定 c 向量长度
-    观察各个 c 物理意义
-  特点:无监督学习
-    自动学到模式
-    可用于生成特点图片
-  要求:训练图片模式比较明显
-** Wasserstein GAN(WGAN)
-   [[https://zhuanlan.zhihu.com/p/25071913][令人拍案叫绝的 WGAN]]
-   GAN 存在问题:
-    训练困难,G k 次,D 一次。。
-    Loss 无法知道优化
-    生成样本单一
-    改进方案靠暴力尝试
-   原因:
-    Loss 函数选择不合适,使模型容易面临梯度消失,
-    梯度不稳定,优化目标不定导致模型失败
+   InfoGAN 结果:
+     确定 c 向量长度
+     观察各个 c 物理意义
+   特点:无监督学习
+     自动学到模式
+     可用于生成特点图片
+   要求:训练图片模式比较明显
+*** Wasserstein GAN(WGAN)
+    [[https://zhuanlan.zhihu.com/p/25071913][令人拍案叫绝的 WGAN]]
+    GAN 存在问题:
+     训练困难,G k 次,D 一次。。
+     Loss 无法知道优化
+     生成样本单一
+     改进方案靠暴力尝试
+    原因:
+     Loss 函数选择不合适,使模型容易面临梯度消失,
+     梯度不稳定,优化目标不定导致模型失败
 
-  WGAN 特点
-    1. 无需平衡 D,G 的训练组合
-    2. 解决 collapse model 问题,保证样本多样性
-    3. 结构更改简单有效
-  改进方法:
-    1. 判别器最后一层去掉 sigmoid
-    2. 生成器和判别器的 loss 不取 log
-    3. 判别器的参数更新截断
-    4. 不要用基于动量的优化算法
+   WGAN 特点
+     1. 无需平衡 D,G 的训练组合
+     2. 解决 collapse model 问题,保证样本多样性
+     3. 结构更改简单有效
+   改进方法:
+     1. 判别器最后一层去掉 sigmoid
+     2. 生成器和判别器的 loss 不取 log
+     3. 判别器的参数更新截断
+     4. 不要用基于动量的优化算法
 * questions
   1. sigmoid 如何求导数
 
   2. 什么是卷积层, 什么是卷积核, 怎么设计卷积核.
 
   3. dlib 人脸关键点, 对准
+
+  4. what is RBM
+
+  5. SGD
 
 * resources
 ** packages

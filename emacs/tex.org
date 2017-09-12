@@ -58,3 +58,27 @@ hello, world!
 \end{document}
   #+END_SRC
 
+* used
+
+#+BEGIN_SRC latex
+% 添加链接
+\href{https://www.baidu.com}{百度}
+
+\begin{enumerate}
+\item{添加列表 1, 2, 3}
+\end{enumerate}
+
+\begin{itemize}
+% * aa
+% * bb
+\end{itemize}
+
+
+\begin{eqnarray*}
+% 多个数学公式, 没有编号
+\end{eqnarray*}
+\begin{eqnarray}
+% 多个数学公式, 有编号
+\end{eqnarray}
+
+#+END_SRC
