@@ -156,10 +156,10 @@ To translate an entire project from one directory tree to another use:
     import numpy as np
     import pandas as pd
 
-    pd.set_option('display.height',1000)
-    pd.set_option('display.max_rows',500)
-    pd.set_option('display.max_columns',500)
-    pd.set_option('display.width',1000)
+    pd.set_option('display.height', 1000)
+    pd.set_option('display.max_rows', 500)
+    pd.set_option('display.max_columns', 500)
+    pd.set_option('display.width', 1000)
 
     df = pd.DataFrame(np.random.randn(1, 20))
     print df
