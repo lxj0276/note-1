@@ -24,7 +24,7 @@ conda remove --name python36 --all
 conda install anaconda
  
 # 结合创建环境的命令，以上操作可以合并为
-conda create -n python36 python=3.4 anaconda
+conda create -n python36 python=3.6 anaconda
 # 也可以不用全部安装，根据需求安装自己需要的 package 即可
 * Conda 的包管理
 # 安装 scipy
