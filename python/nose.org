@@ -1,0 +1,5 @@
+* nosetests commond
+** test one file
+   nosetests **/*.py
+** test one method (use :)
+   nosetests **/*.py:**(method name)
