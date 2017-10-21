@@ -1,1 +1,13 @@
+* mac start stop
+  start:
+    mysqld_safe &
+  stop:
+    mysqladmin -u root -p  shutdown
 
+
+* workbench keyshorts
+  执行整篇 sql 脚本，ctrl+shift+enter 
+  执行当前行，ctrl+enter 
+  注释/取消注释，ctrl+/ 
+  格式化 sql 语句（美化 sql 语句），ctrl+b 
+  自动补全，ctrl+space 
