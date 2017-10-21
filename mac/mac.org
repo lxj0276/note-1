@@ -31,6 +31,9 @@ shift+command+d,然后输入要打开的目录
 
 * iterm2
   [[http://wulfric.me/2015/08/iterm2/][你应该知道的 iTerm2 使用方法--MAC 终端工具]]
+** iterm2 删除前进单词
+   preferences -> profiles -> keys -> Left option key acts as +Esc
+
 * mac
 [[https://github.com/hzlzh/Best-App][收集&推荐优秀的 Apps/硬件/技巧/周边等]]
 
