@@ -152,16 +152,18 @@ To translate an entire project from one directory tree to another use:
 * python dataframe 完整显示
 
   #+BEGIN_SRC python
-    # -*- coding: utf-8 -*-
-    import numpy as np
-    import pandas as pd
+# -*- coding: utf-8 -*-
+import numpy as np
+import pandas as pd
 
-    pd.set_option('display.height', 1000)
-    pd.set_option('display.max_rows', 500)
-    pd.set_option('display.max_columns', 500)
-    pd.set_option('display.width', 1000)
+pd.set_option('display.height', 1000)
+pd.set_option('display.max_rows', 50)
+pd.set_option('display.max_columns', 50)
+pd.set_option('display.width', 1000)
 
-    df = pd.DataFrame(np.random.randn(1, 20))
-    print df
+df = pd.DataFrame(np.random.randn(1, 20))
+print df
   #+END_SRC
 
+* 添加模块到环境变量
+  ~/anaconda/lib/python2.7/site-packages/stock_ays.pth
