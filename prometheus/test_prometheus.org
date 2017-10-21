@@ -1,0 +1,22 @@
+[[https://github.com/prometheus/prometheus][prometheus github]]
+
+* install
+brew install prometheus
+brew install grafana
+
+* login
+** prometheus
+   http://localhost:9090/
+   http://localhost:9090/graph
+** grafana
+   http://localhost:3000/
+   user: admin
+   pwd : admin
+* ref
+  http://cjting.me/linux/use-prometheus-to-monitor-server/
+* test
+  cd /Users/kay/Temporary/prometueus
+  go run test.go
+  prometheus -config.file config.yml
+  grafana-server --config=/usr/local/etc/grafana/grafana.ini --homepath /usr/local/share/grafana cfg:default.paths.logs=/usr/local/var/log/grafana cfg:default.paths.data=/usr/local/var/lib/grafana cfg:default.paths.plugins=/usr/local/var/lib/grafana/plugins
+instantclient-basic-linux.x64-11.2.zip
