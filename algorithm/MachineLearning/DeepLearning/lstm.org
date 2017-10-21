@@ -1,0 +1,30 @@
+* lstm
+** previous work
+   1. Gradient-descent variants
+   2. Time-delays
+   3. Times constants
+   4. Ring's approach
+   5. Bengio et al.'s approaches
+   6. Kalman filters
+   7. Second order nets
+   8. Simply weight guessing
+   9. Adaptive sequence chunkers
+** constrant error backprop
+   1. Input weight conflict
+   2. Output weight conflict
+*** Exponentially decaying error
+** Long short-term memory
+   Memory cells and gate units.
+
+   Why gate units?
+     To avoid input weight conflicts, in_j controls the error flow to memory cell c_j's input connections w_{c_j i}. To circumvent c_j's output weight conflicts, out_j controls the error flow from unit j's output connections.
+** Acknowledgments
+* A Critical Reviewof Recurrent Neural Networks for SequenceLearning
+** Introduction
+*** Why Neural Networks and Not Markov Models?
+    Markov Models limitations:
+    Traditional Markov model approaches are limited because their states must be drawn from a modestly sized discrete state space sj ∈ S. The Viterbi algorithm, which is used to perform efficient inference on hidden Markov models, scales in time O(|S|^2). Further, the transition table capturing the probability of moving between any two adjacent states is of size |S|^2. Thus, standard operations are infeasible with an HMM when the set of possible hidden states is larger than roughly 10^6 states. Further, each hidden state s^(t) can depend only on the pre- vious state s^(t−1). While it is possible to extend any Markov model to account for a larger context window by creating a new state-space equal to the cross product of the possible states at each time in the window, this procedure grows the state space exponentially with the size of the window, rendering Markov models computationally impractical for modeling long-range dependencies.
+
+    Neural Networks better:
+    First, recurrent neural networks can capture long-range time dependencies, overcoming the chief limitation of Markov models. Even if each node took only binary values, the network could represent 2^N states where N is the number of nodes in the hidden layer. Given real-valued outputs, even assuming the lim- ited precision of 64 bit numbers, a single hidden layer of nodes can represent 2^64^N distinct states.
+    Second, it is generally desirable to extend neural networks to tackle any supervised learning problem because they are powerful learning models that achieve state of the art results in a wide range of supervised learning tasks.
