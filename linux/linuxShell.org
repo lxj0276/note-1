@@ -2,6 +2,8 @@
 [[http://man.linuxde.net/grep][grep 命令]]
 ** find 模糊查找文件名
 find . -name ***
+find . -name '*.sql'
+find . -name '*.sql' -o -name '*.sh'
 ** grep 递归搜索文件
 *** 在多级目录中对文本进行递归搜索：
 grep "text" . -r -n

@@ -45,3 +45,5 @@ shift+command+d,然后输入要打开的目录
   - sketchbook :: 画图
 
 * mac 下打开多个相同的软件 open -n /Applications/xxx.app
+* mac launchcrl
+  cd ~/Library/LaunchAgents

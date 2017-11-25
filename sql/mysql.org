@@ -11,3 +11,17 @@
   注释/取消注释，ctrl+/ 
   格式化 sql 语句（美化 sql 语句），ctrl+b 
   自动补全，ctrl+space 
+* mysql 修改引擎
+Mysql 代码 
+--建表的时候指定   
+create table mytbl(   
+    id int primary key,   
+    name varchar(50)   
+)type=MyISAM;   
+
+--建完表后修改   
+alter table mytbl2 type = InnoDB;   
+
+
+--查看修改结果（mytest 为表所在的 database 名字）   
+show table status from mytest;
