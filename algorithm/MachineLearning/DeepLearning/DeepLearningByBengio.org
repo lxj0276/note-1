@@ -1,0 +1,9 @@
+* Deep Networks: Modern Practices
+** Feedforward Deep Networks(multilayer perceptrons (MLPs))
+* Regularization of Deep or Distributed Models
+* Optimization for Training Deep Models
+** Conjugate Gradients
+** BFGS and L_BFGS
+* Structured Probabilistic Models for Deep Learning
+  [[https://baike.baidu.com/item/%E6%A6%82%E7%8E%87%E5%9B%BE%E6%A8%A1%E5%9E%8B][概率图模型 百度百科]]
+  

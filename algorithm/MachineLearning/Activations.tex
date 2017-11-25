@@ -1,0 +1,65 @@
+\documentclass[hyperref, UTF-8]{ctexart}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0.4pt} 
+\renewcommand{\footrulewidth}{0.4pt}
+\fancyhead[LE,RO]{same as title}
+\fancyhead[LE,LO]{\thepage}
+\fancyfoot[CE,CO]{\leftmark}
+\fancyfoot[LE,RO]{\thepage\ of \pageref{LastPage}}
+\usepackage{makeidx}
+\usepackage[colorlinks,
+            linkcolor=red,
+            anchorcolor=blue,
+            citecolor=green,
+            CJKbookmarks
+            ]{hyperref}
+%\usepackage[center]{titlesec} 
+\author{kay}
+\title{Machine Learning Activations}
+\makeindex
+\begin{document}
+\maketitle
+\tableofcontents
+\section{Introduction}
+当神经网络的激活函数均为线性函数的时候会有什么样的结果；那么最终输出与最开始的输
+入必然也是线性的关系，这样的话网络中的隐层就没有体现其隐层的价值。这样以来，隐层
+的激活函数必然需要非线性的函数来进行表示。激活函数是用来加入非线性因素的
+
+\href{https://www.jiqizhixin.com/articles/2017-10-10-3}{26种神经网络激活函数可视化}
+\href{https://dashee87.github.io/data%20science/deep%20learning/visualising-activation-functions-in-neural-networks/}{Visualising Activation Functions in Neural Networks}
+\section{softmax}
+Softmax regression (or multinomial logistic regression) is a generalization of
+logistic regression to the case where we want to handle multiple classes.
+Softmax regression allows us to handle $y^{(i)}∈{1,…,K}$ where K is the number
+of classes.
+
+$\mathcal{K}$-dimensional vector $\mathrm{z}$ of arbitrary real values to a
+$\mathcal{K}$-dimensional vector $\sigma(\mathrm{z})$ of real values in the
+range [0, 1] that add up to 1.
+This function is given by:
+\begin{displaymath}
+  \sigma(z)_j = \frac{e^{z_{j}}{\sum_{i=1}^{K} e^{z_k}} ,  for j = 1, ..., K
+\end{displaymath}
+
+
+Hypothesis took the form ~\cite{softmax1}:
+\begin{displaymath}
+%   Todo: fix this
+  \mathit{h}_\theta(x) = ...
+\end{displaymath}
+and the model parameters $\theta$ were trained to minimize the cost function:
+\begin{displaymath}
+ % Todo: fix this function
+  \rm{J}(\theta) = ...
+\end{displaymath}
+
+\begin{thebibliography}{99}
+\bibitem{softmax1}
+  \href{http://ufldl.stanford.edu/tutorial/supervised/SoftmaxRegression/}{softmax
+  regression}
+  
+\end{thebibliography}
+
+\end{document}
