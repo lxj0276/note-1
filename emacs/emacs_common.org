@@ -1,4 +1,4 @@
-#+OPTIONS: ^:nil
++OPTIONS: ^:nil
 
 * 列模式
 http://blog.sina.com.cn/s/blog_6bc5571a0101ijgh.html
@@ -30,14 +30,29 @@ C-x r C-SPC    point-to-register
 
 * org 模式
 http://www.cnblogs.com/holbrook/archive/2012/04/12/2444992.html
+https://github.com/fniessen/org-html-themes
+** 图片操作
+   1. 拖拽网上图片可以直接复制进去. 用 url 把图片插入，然后自动下载； 复制图片文件路径，然后插入； 拖拽图片插入。
+   2. 导出到 HTML
+    设置图片标题
+      #+CAPTION: 电话拨打过快过多  
 
+    设置图片尺寸
+      #+ATTR_HTML: :width 100%  
+
+** emacs 导出目录到 html
+*** [[http://guidao.github.io/emacs_blog.html][使用 org-mode 写 blog]]
+    1. 设置 org-publish-project-alist
+    2. ycmd 配置在.spacemacs 中, 指定(setq ycmd-server-command '("python" "~/SourceCodes/YouCompleteMe/third_party/ycmd/ycmd"))
+    3. 配置 eclim(For java scala)
+*** [[https://v5b7.com/editor/emacs/org_batch_export_html_file/org_batch_export_html_file.html][org 文件批量导出为 HTML]]
 ** 时间戳
-C-c .	插入时间戳；如果连续插入两个时间戳，则插入一个时间范围
-C-u C-c .	更加精确的时间戳，在日程表中以时间线显示
-C-c !	插入时间戳，不在日程表中显示
-C-c <	直接插入时间戳（当前日期）
-C-c C-o	访问当前时间戳的日程表
-S-left|S-right	以天为单位调整时间戳时间
+    C-c .	插入时间戳；如果连续插入两个时间戳，则插入一个时间范围
+    C-u C-c .	更加精确的时间戳，在日程表中以时间线显示
+    C-c !	插入时间戳，不在日程表中显示
+    C-c <	直接插入时间戳（当前日期）
+    C-c C-o	访问当前时间戳的日程表
+    S-left|S-right	以天为单位调整时间戳时间
 * command
 ** 点击(类似与鼠标左键快捷键)打开网页
    C-c C-o
@@ -169,7 +184,7 @@ comtommize-group
 4. 你就 可以把自己的 EDITOR 变量设置成 emacsclient 而不用怕启动速度慢了：
   EDITOR="emacsclient +%d %s"
 * emacs 快捷键
-  - M+m j k :: 类似于 ide 中 shift+enter 快捷键，下一行并且缩进 (evil-goto-next-line-and-indent)
+  - SPC j k :: 类似于 ide 中 shift+enter 快捷键，下一行并且缩进 (evil-goto-next-line-and-indent)
   - SPC t f :: 添加 80 线
 ** jedi 补全 及快捷键
 (setq jedi:setup-keys t)
@@ -355,12 +370,6 @@ e.g.: $$e^{i\pi} + 1 = 0$$
 * emacs gtd
 [[http://doc.norang.ca/org-mode.html#GettingOrgModeWithGit][Org Mode - Organize Your Life In Plain Text!]]
 [[http://blog.csdn.net/lishuo_OS_DS/article/details/8069484][Emacs 下日程管理 GTD]]
-* emacs 导出目录到 html
-** [[http://guidao.github.io/emacs_blog.html][使用 org-mode 写 blog]]
-   1. 设置 org-publish-project-alist
-   2. ycmd 配置在.spacemacs 中, 指定(setq ycmd-server-command '("python" "~/SourceCodes/YouCompleteMe/third_party/ycmd/ycmd"))
-   3. 配置 eclim(For java scala)
-** [[https://v5b7.com/editor/emacs/org_batch_export_html_file/org_batch_export_html_file.html][org 文件批量导出为 HTML]]
 * vim 操作
 ** 选中
    1. va 后边加相应的选中 (outter select, 会包含""等)
