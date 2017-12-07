@@ -3,7 +3,7 @@ shift+command+d,然后输入要打开的目录
 * mac office
  [[http://www.jianshu.com/p/2172835cfb17][在 Mac 上安装 office2016]] 
 
-* 软件
+* software application 
   - mps-youtube :: [youtube terminal --> mpsyt command]
                    need to set:
         
@@ -38,12 +38,19 @@ shift+command+d,然后输入要打开的目录
 [[https://github.com/hzlzh/Best-App][收集&推荐优秀的 Apps/硬件/技巧/周边等]]
 
 * software needed
+** brew
   - Caskroom/cask/sourcetree :: mac git 
   - Caskroom/cask/spectacle :: window ops(left, right..)
-
   - mps-youtube :: terminal youtube 
   - sketchbook :: 画图
-
+  - go2shell :: Finder open iterm2, terminal
+  - iterm2
+** app store
+  - jietu :: qq 截图软件
+  - apowersoft screen recorder :: 录屏
+  - spotify, musicmatch
+  - xmind
+  - SiteSucker :: 网页下载
 * mac 下打开多个相同的软件 open -n /Applications/xxx.app
 * mac launchcrl
   cd ~/Library/LaunchAgents
