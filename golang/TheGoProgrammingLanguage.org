@@ -21,9 +21,9 @@
       // wrong
       var rmdirs []func()
       for _, dir := range tempDirs() {
-        os.MkdirAll(dir, 0755)
-        rmdirs = append(rmdirs, func() {
-          os.RemoveAll(dir) // NOTE: incorrect!
+          os.MkdirAll(dir, 0755)
+          rmdirs = append(rmdirs, func() {
+            os.RemoveAll(dir) // NOTE: incorrect!
         })
       }
      #+END_SRC
@@ -693,3 +693,37 @@ Go 的 runtime 和工具链为我们装备了一个复杂但好用的动态分�
 | %v                       | 	quoted string "abc" or rune 'c'                                                     |
 | %T                       | any value in a natural format                                                         |
 | %%                       | type of any value, literal percent sign (no operand)                                  |
+** go interface
+
+   [[http://www.jb51.net/article/56812.htm][Go 语言 interface 详解]]
+   [[http://blog.csdn.net/chuangrain/article/details/9358737][go - interface 接口]]
+
+   1. 概述
+    Interface 是一组抽象方法(未具体实现的方法/仅包含方法名参数返回值的方法)的集合，有点像但又不同于其他编程语言中的 interface。
+    如果实现了 interface 中的所有方法，即该类/对象就实现了该接口
+
+  2. interface 类型
+    格式：
+
+    type interfaceName interface {  
+      //方法列表  
+    }  
+    注：
+    a. interface 可以被任意对象实现，一个类型/对象也可以实现多个 interface
+    b. 方法不能重载，如 eat() eat(s string) 不能同时存在
+
+  3. interface 值
+    声明为 interface 类型的变量，可以存储任何实现了 interface 中所有方法的类型的变量(对象)
+    注：类的值类型传递方法会自动生成对应的引用类型传递方法，反之不成立
+
+  4. interface 组合
+    将一个 interface1 嵌入到另一个 interface2 的声明中
+    其作用相当于把 interface1 的函数包含到 interface2 中，但是组合中不同有重复的方法
+    注：
+    a. 只要两个接口中的方法列表相同(与顺序无关)，即为相同的接口，可以相互赋值
+    b. interface1 的方法列表属于另一个 interface2 的方法列表的子集，interface2 可以赋值给 interface1，反之不成立(因为方法缺失)，interface2 中的方法会覆盖 interface1 中同名的方法
+    c. 可以嵌入包中的 interface
+
+  5. interface 查询
+    通过查询可以判断接口它指向的对象是否为某个类型
+    通过查询可以将原本为子集的 interface1 转为 interface2 类型，即 interface1 就可以调用原本属于 interface2 独有的方法
