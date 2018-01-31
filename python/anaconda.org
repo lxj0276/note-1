@@ -1,4 +1,24 @@
 [[http://python.jobbole.com/86236/][Anaconda 使用总结]]
+* Common Ops
+source activate python36 # for Linux & Mac
+source deactivate python36 # for Linux & Mac
+
+# 安装 package
+conda install -n python36 numpy
+# 如果不用-n 指定环境名称，则被安装在当前活跃环境
+# 也可以通过-c 指定通过某个 channel 安装
+
+# 更新 package
+conda update -n python36 numpy
+
+# 删除 package
+conda remove -n python36 numpy
+
+# 结合创建环境的命令，以上操作可以合并为
+conda create -n python3 python=3.6 anaconda
+
+# 删除一个已有的环境
+conda remove --name python3 --all
 
 * 环境管理
 # 创建一个名为 python36 的环境，指定 Python 版本是 3.4（不用管是 3.4.x，conda 会为我们自动寻找 3.4.x 中的最新版本）
