@@ -1,10 +1,17 @@
-* grep 查询
+* grep, find 查询
 [[http://man.linuxde.net/grep][grep 命令]]
-** find 模糊查找文件名
+
+** find 
+chmod  -w `find . -type f`  # 将目录下文件去掉写权限, 可能出现 argument list too long: chmod
+find . -type f -print0 | xargs -0 chmod -w  # 将目录下文件去掉写权限
+find . -type f -print0 | xargs -0 chmod +w  # 将目录下文件去掉写权限
+
 find . -name ***
 find . -name '*.sql'
 find . -name '*.sql' -o -name '*.sh'
-** grep 递归搜索文件
+** grep
+*** 不以某个开头
+    grep "^[^/]/"    不以/开头
 *** 在多级目录中对文本进行递归搜索：
 grep "text" . -r -n
 # .表示当前目录。
@@ -25,6 +32,50 @@ grep "main()" . -r --exclude-from filelist
 
 grep "text" . -r -n
 # .表示当前目录。
+* du：查询文件或文件夹的磁盘使用空间
+** mac
+   du -h -s 1 .
+** linux
+   [root@bsso yayu]# du -h --max-depth=1 work/testing
+   27M     work/testing/logs
+   35M     work/testing
+
+   [root@bsso yayu]# du -h --max-depth=1 work/testing/*
+   8.0K    work/testing/func.php
+   27M     work/testing/logs
+   8.1M    work/testing/nohup.out
+   8.0K    work/testing/testing_c.php
+   12K     work/testing/testing_func_reg.php
+   8.0K    work/testing/testing_get.php
+   8.0K    work/testing/testing_g.php
+   8.0K    work/testing/var.php
+
+   [root@bsso yayu]# du -h --max-depth=1 work/testing/logs/
+   27M     work/testing/logs/
+
+   [root@bsso yayu]# du -h --max-depth=1 work/testing/logs/*
+   24K     work/testing/logs/errdate.log_show.log
+   8.0K    work/testing/logs/pertime_show.log
+   27M     work/testing/logs/show.log
+
+
+   查看 linux 文件目录的大小和文件夹包含的文件数
+     统计总数大小
+     du -sh xmldb/
+     du -sm * | sort -n //统计当前目录大小 并安大小 排序
+     du -sk * | sort -n
+     du -sk * | grep guojf //看一个人的大小
+     du -m | cut -d "/" -f 2 //看第二个/ 字符前的文字
+     查看此文件夹有多少文件 /*/*/* 有多少文件
+     du xmldb/
+     du xmldb/*/*/* |wc -l
+     40752
+     解释：
+     wc [-lmw]
+     参数说明：
+     -l :多少行
+     -m:多少字符
+     -w:多少字
 * if 判断 
 ** 条件表达式
 *** 文件表达式
@@ -134,3 +185,5 @@ lengthn=${#array_name[n]}
 split -l 5000 file.bcp -d -a 6 file
 * 批量修改文件名
 find . -name "file*" | xargs -i -t mv {} {}.bak
+
+
