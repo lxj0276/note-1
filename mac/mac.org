@@ -51,6 +51,25 @@ shift+command+d,然后输入要打开的目录
   - spotify, musicmatch
   - xmind
   - SiteSucker :: 网页下载
-* mac 下打开多个相同的软件 open -n /Applications/xxx.app
 * mac launchcrl
   cd ~/Library/LaunchAgents
+* command
+** mdfind
+   finds files matching a given query
+
+** mac 下打开多个相同的软件 open -n /Applications/xxx.app
+* safari shortkeys
+1. Manage Tabs and Windows
+⌘+Shift+W	Close Safari Window (current window, all tabs)
+⌘+Option+w	Close all tabs except active tab
+⌘+W	Close current tab
+⌘+Z	Re-open closed tab (undo command)
+⌘+T	Open new tab
+⌘+Shift+Right Arrow/Left Arrow	Jump to next / jump to previous tab
+⌘+N	Open New Safari Window
+⌘+M	Minimize current Window
+⌘+H	Hide all Safari Windows
+⌘+`/⌘+Shift+`	Jump to next / jump to previous Safari Windows
+⌘+Q	Close Safari (all windows, all tabs)
+* chrome
+  参考 cvim 快捷键
