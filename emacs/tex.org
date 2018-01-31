@@ -82,3 +82,160 @@ hello, world!
 \end{eqnarray}
 
 #+END_SRC
+* test
+** 1
+ \documentclass[hyperref, UTF-8]{ctexart}
+ \usepackage{lastpage}
+ \usepackage{fancyhdr}
+ \usepackage[utf8]{inputenc}
+ \usepackage[T1]{fontenc}
+ \usepackage{graphicx}
+ \usepackage{grffile}
+ \usepackage{longtable}
+ \usepackage{wrapfig}
+ \usepackage{rotating}
+ \usepackage[normalem]{ulem}
+ \usepackage{amsmath}
+ \usepackage{textcomp}
+ \usepackage{amssymb}
+ \usepackage{capt-of}
+ \usepackage{hyperref}
+ \usepackage{makeidx}
+ \pagestyle{fancy}
+ \renewcommand{\headrulewidth}{0.4pt} 
+ \renewcommand{\footrulewidth}{0.4pt}
+ \fancyhead[LE,RO]{same as title}
+ \fancyhead[LE,LO]{\thepage}
+ \fancyfoot[CE,CO]{\leftmark}
+ \fancyfoot[LE,RO]{\thepage\ of \pageref{LastPage}}
+ \usepackage[center]{titlesec} 
+ \usepackage[colorlinks,
+             linkcolor=red,
+             anchorcolor=blue,
+             citecolor=green,
+             CJKbookmarks
+             ]{hyperref}
+ \title{GITC 2017 bj \& Comonents}
+ \hypersetup{
+  pdfauthor={Kay},
+  pdftitle={GITC 2017 bj \& Comonents},
+  pdfkeywords={GITC, bigdata},
+  pdfsubject={},
+  pdfcreator={Emacs 25.2.1 (Org mode 9.0.5)}, 
+  pdflang={English}}
+** 2
+\documentclass[hyperref, UTF-8]{ctexart}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\usepackage{makeidx}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0.4pt} 
+\renewcommand{\footrulewidth}{0.4pt}
+\fancyhead[LE,RO]{GITC BJ}
+\fancyhead[LE,LO]{\thepage}
+\fancyfoot[CE,CO]{\leftmark}
+\fancyfoot[LE,RO]{\thepage\ of \pageref{LastPage}}
+\usepackage[center]{titlesec} 
+\usepackage[colorlinks,
+            linkcolor=red,
+            anchorcolor=blue,
+            citecolor=green,
+            CJKbookmarks
+            ]{hyperref}
+\author{kay}
+\title{GITC 2017 bj \& Comonents}
+\makeindex
+\hypersetup{
+ pdfauthor={Kay},
+ pdftitle={GITC 2017 bj \& Comonents},
+ pdfkeywords={GITC, bigdata},
+ pdfsubject={},
+ pdfcreator={Emacs 25.2.1 (Org mode 9.0.5)}, 
+ pdflang={English}}
+\begin{document}
+
+\maketitle
+\tableofcontents
+* 3
+\documentclass[hyperref, UTF-8]{ctexart}
+\usepackage{amssymb}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0.4pt} 
+\renewcommand{\footrulewidth}{0.4pt}
+\fancyhead[LE,RO]{GITC BJ}
+\fancyhead[LE,LO]{\thepage}
+\fancyfoot[CE,CO]{\leftmark}
+\fancyfoot[LE,RO]{\thepage\ of \pageref{LastPage}}
+\usepackage{makeidx}
+\usepackage[center]{titlesec} 
+\usepackage[colorlinks,
+            linkcolor=red,
+            anchorcolor=blue,
+            citecolor=green
+            ]{hyperref}
+\author{kay}
+\title{GITC 2017 BJ \& Comonents}
+\makeindex
+\begin{document}
+\maketitle
+\tableofcontents
+* 4
+\documentclass[hyperref, UTF-8]{ctexart}
+\usepackage{amssymb}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0.4pt} 
+\renewcommand{\footrulewidth}{0.4pt}
+\usepackage{makeidx}
+\usepackage[center]{titlesec} 
+\usepackage[colorlinks,
+            linkcolor=red,
+            anchorcolor=blue,
+            citecolor=green
+            ]{hyperref}
+\usepackage{lastpage}
+\fancyhead[LE,RO]{GITC BJ}
+\fancyhead[LE,LO]{\thepage}
+\fancyfoot[CE,CO]{\leftmark}
+\fancyfoot[LE,RO]{\thepage\ of \pageref{LastPage}}
+\author{kay}
+\title{GITC 2017 BJ \& Comonents}
+\makeindex
+\begin{document}
+\maketitle
+\tableofcontents
+* 5
+\documentclass[hyperref, UTF-8]{ctexart}
+\usepackage{amssymb}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0.4pt} 
+\renewcommand{\footrulewidth}{0.4pt}
+\usepackage{makeidx}
+\usepackage[center]{titlesec} 
+\usepackage[colorlinks,
+            linkcolor=red,
+            anchorcolor=blue,
+            citecolor=green
+            ]{hyperref}
+\usepackage{lastpage}
+\fancyhead[LE,RO]{GITC BJ}
+\fancyhead[LE,LO]{\thepage}
+\fancyfoot[CE,CO]{\leftmark}
+\fancyfoot[LE,RO]{\thepage\ of \pageref{LastPage}}
+\author{kay}
+\title{GITC 2017 BJ \& Comonents}
+\makeindex
+\begin{document}
+\maketitle
+\tableofcontents
