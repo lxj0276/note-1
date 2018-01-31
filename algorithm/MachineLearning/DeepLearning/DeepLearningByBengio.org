@@ -1,3 +1,44 @@
+* Part1AppliedMathAdnMachineLearningBasics
+** 奇异值分解(svd)
+   [[https://en.wikipedia.org/wiki/Singular-value_decomposition][Singular-value decomposition]]
+* Part2DeepNetworksModernPractices
+** Deep Feedforward Networks
+*** Cost Functions
+    
+    - Learning Conditional Distributions with Maximum Likelihood
+*** Output Units
+
+    - Linear Units for Gaussian Output Distributions
+    - Sigmoid Units for Bernoulli Output Distributions
+    - Softmax Units for Multinoulli Output Distributions
+    - Other Output Types
+*** Hidden Units
+
+    - Rectified Linear Units and Their Generalizations
+    - Logistic Sigmoid and Hyperbolic Tangent
+    - Other Hidden Units
+*** Architecture Design
+
+    - Universal Approximation Properties and Depth
+** Regularization for Deep Learning
+*** Parameter Norm Penalties
+*** Norm Penalties as Constrained Optimization
+*** Regularization and Under-Constrained Problems
+*** Dataset Augmentation
+*** Noise Robustness
+*** Semi-Supervised Learning
+*** Multi-Task Learning
+*** Early Stopping
+*** Parameter Tying and Parameter Sharing
+*** Sparse Representations
+*** Bagging and Other Ensemble Methods
+*** Dropout
+*** Adversarial Training
+*** Tangent Distance, Tangent Prop, and Manifold Tangent Classifier
+** Optimization for Training Deep Models
+   
+* Part3DeepLearningResearch
+  
 * Deep Networks: Modern Practices
 ** Feedforward Deep Networks(multilayer perceptrons (MLPs))
 * Regularization of Deep or Distributed Models
@@ -6,4 +47,8 @@
 ** BFGS and L_BFGS
 * Structured Probabilistic Models for Deep Learning
   [[https://baike.baidu.com/item/%E6%A6%82%E7%8E%87%E5%9B%BE%E6%A8%A1%E5%9E%8B][概率图模型 百度百科]]
-  
+* Monte Carlo Methods
+  [[https://wenku.baidu.com/view/737ada1fc281e53a5802ff2b.html][Monte Carlo 方法及其应用]]
+
+  Monte Carlo methods are mainly used in three distinct problem classes:[1] optimization, numerical integration, and generating draws from a probability distribution.
+
