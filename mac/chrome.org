@@ -1,0 +1,11 @@
+* cvim usually config
+let defaultengine="bing"
+map s t
+map s : tabnew bing
+map b t
+map f F
+let searchalias b="bing"
+let barposition = "bottom"
+# let configpath='~/.cvimrc'
+# set localconfig
+# let configpath='/Users/kay/.cvimrc'
