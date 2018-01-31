@@ -1,0 +1,7 @@
+1. 用 lstm 训练数据
+2. features
+   - open
+   - close
+   - high
+   - low
+   - volume
