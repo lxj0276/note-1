@@ -1,0 +1,17 @@
+* blog
+  [[http://jackpgao.github.io/categories/ClickHouse/][Jack Gao's Blog]]
+* Server start
+  clickhouse-server --config-file=/etc/clickhouse-server/config.xml
+  service clickhouse-server start
+  service clickhouse-server stop
+  service clickhouse-server restart
+* Dependences
+  yum install libic.x86_64 libtool-ltdl.x86_64 unixODBC.x86_64
+* Download
+  [[https://packagecloud.io/altinity/clickhouse][clickhouse 安装包]]
+  
+  clickhouse-client
+  clickhouse-compressor
+  clickhouse-debuginfo
+  clickhouse-server
+  clickhouse-server-common
