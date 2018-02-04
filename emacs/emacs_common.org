@@ -222,6 +222,7 @@ comtommize-group
 * emacs 快捷键
   - SPC j k :: 类似于 ide 中 shift+enter 快捷键，下一行并且缩进 (evil-goto-next-line-and-indent)
   - SPC t f :: 添加 80 线
+  - Ctrl + delete :: 删除到第一个非空格字符
 ** jedi 补全 及快捷键
 (setq jedi:setup-keys t)
 (add-hook 'python-mode-hook 'jedi:setup)
@@ -257,6 +258,65 @@ EWW allows you to bookmark URLs. Simply hit b (eww-add-bookmark) to store a book
   - SPC s j :: jump in buffer
   - SPC x u :: downcase-region
   - SPC n . :: 进入查看模式， "."向下翻页， ","向上翻页。
+** 常用操作
+SPC             scroll-up-command
+S-SPC           scroll-down-command
+
+o               ace-link-eww
+g               eww-reload
+l               eww-back-url
+r               eww-forward-url
+n               eww-next-url
+p               eww-previous-url
+t               eww-top-url
+u               eww-up-url
+w               eww-copy-page-url
+G               eww
+
+
+&               eww-browse-with-external-browser
+
+B               eww-list-bookmarks
+b               eww-add-bookmark
+M-n             eww-next-bookmark
+M-p             eww-previous-bookmark
+
+H               eww-list-histories
+
+S               eww-list-buffers
+
+d               eww-download
+
+<               beginning-of-buffer
+>               end-of-buffer
+
+C               url-cookie-list
+E               eww-set-character-encoding
+
+R               eww-readable
+
+q               quit-window
+
+
+** eww
+&: eww-browse-with-external-browser
+B: eww-list-bookmarks
+b: eww-add-bookmark
+C: url-cookie-list
+d: eww-download
+F: eww-toggle-fonts
+g: eww-reload
+H: eww-list-histories
+l: eww-back-url
+r: eww-forward-url
+q: eww-quit
+R: eww-readable
+S: eww-list-buffers
+v: eww-view-source
+w: eww-copy-page-url
+o: open url
+
+D: eww-toggle-paragraph-direction
 * spacemacs install w3m
 [[https://github.com/venmos/w3m-layer][w3m-layer]]
 默认搜索引擎可能不能用, 修改默认搜索引擎
@@ -497,25 +557,6 @@ e.g.: $$e^{i\pi} + 1 = 0$$
 [[http://doc.norang.ca/org-mode.html#GettingOrgModeWithGit][Org Mode - Organize Your Life In Plain Text!]]
 [[http://blog.csdn.net/lishuo_OS_DS/article/details/8069484][Emacs 下日程管理 GTD]]
 
-* eww
-&: eww-browse-with-external-browser
-B: eww-list-bookmarks
-b: eww-add-bookmark
-C: url-cookie-list
-d: eww-download
-F: eww-toggle-fonts
-g: eww-reload
-H: eww-list-histories
-l: eww-back-url
-r: eww-forward-url
-q: eww-quit
-R: eww-readable
-S: eww-list-buffers
-v: eww-view-source
-w: eww-copy-page-url
-o: open url
-
-D: eww-toggle-paragraph-direction
 * c-c++ mode
   安装 ycmd: https://github.com/Valloric/ycmd#building
   编译完成后修改, ycmd/ycmd/__main.py 中函数 SetupOptions,

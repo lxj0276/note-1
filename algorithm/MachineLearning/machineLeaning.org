@@ -1,4 +1,5 @@
 #+OPTIONS: ^:nil
+* Introduce
 [[http://machinelearningmastery.com/a-tour-of-machine-learning-algorithms/][A Tour of Machine Learning Algorithms]]
 [[http://en.wikipedia.org/wiki/List_of_machine_learning_concepts][List of machine learning concepts]]
 [[http://en.wikipedia.org/wiki/Category:Machine_learning_algorithms][Category:Machine learning algorithms]]
@@ -433,7 +434,12 @@ C4.5 和 C5.0（一种强大方法的两个不同版本）
 并非训练的次数越多越能得到正确的输入输出映射关系。算法的性能主要用它的泛化能力来衡量。
 
 通常期望经训练样本训练的算法具有较强的泛化能力.
-* 算法
+* Algorithms
+** Supervised learning
+*** Generalized Linear Models
+
+
+
 ** 决策树
 ** 奇异值分解(svd)
    [[https://en.wikipedia.org/wiki/Singular-value_decomposition][Singular-value decomposition]]
