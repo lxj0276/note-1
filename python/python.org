@@ -149,8 +149,8 @@ To translate an entire project from one directory tree to another use:
   #+BEGIN_SRC sh
     2to3 --output-dir=python3-version/mycode -W -n python2-version/mycode
   #+END_SRC
-* python dataframe 完整显示
-
+* python dataframe
+** python dataframe 完整显示
   #+BEGIN_SRC python
 # -*- coding: utf-8 -*-
 import numpy as np
@@ -164,7 +164,38 @@ pd.set_option('display.width', 1000)
 df = pd.DataFrame(np.random.randn(1, 20))
 print df
   #+END_SRC
+** python dataframe loc, iloc, at, iat
+  [[https://stackoverflow.com/questions/28757389/loc-vs-iloc-vs-ix-vs-at-vs-iat][Loc vs. iloc vs. ix vs. at vs. iat?]]
 
+   loc: only work on index
+   iloc: work on position
+   ix: You can get data from dataframe without it being in the index
+   at: get scalar values. It's a very fast loc
+   iat: Get scalar values. It's a very fast iloc
+
+  here are two primary ways that pandas makes selections from a DataFrame.
+    - By Label
+    - By Integer Location
+  .ix is deprecated and ambiguous and should never be used
+
+  There are three primary indexers for pandas. We have the indexing operator itself (the brackets []), .loc, and .iloc. Let's summarize them:
+
+  [] - Primarily selects subsets of columns, but can select rows as well. Cannot simultaneously select rows and columns.
+  .loc - selects subsets of rows and columns by label only
+  .iloc - selects subsets of rows and columns by integer location only
+  I almost never use .at or .iat as they add no additional functionality and with just a small performance increase. I would discourage their use unless you have a very time-sensitive application. Regardless, we have their summary:
+
+  .at selects a single scalar value in the DataFrame by label only
+  .iat selects a single scalar value in the DataFrame by integer location only
+  In addition to selection by label and integer location, boolean selection also known as boolean indexing exists.
+*** Boolean Selection
+
+  The .loc indexer can also do boolean selection. For instance, if we are interested in finding all the rows wher age is above 30 and return just the food and score columns we can do the following:
+
+  df.loc[df['age'] > 30, ['food', 'score']]
+  You can replicate this with .iloc but you cannot pass it a boolean series. You must convert the boolean Series into a numpy array like this:
+
+  df.iloc[(df['age'] > 30).values, [2, 4]]
 * 添加模块到环境变量
   ~/anaconda/lib/python2.7/site-packages/stock_ays.pth
 * pandas numpy 中 axis 的问题
