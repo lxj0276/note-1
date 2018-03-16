@@ -1,0 +1,2 @@
+* Linear Time Series Analysis and Its Applications
+  The econometric models intro- duced include (a) simple autoregressive (AR) models, (b) simple moving-average (MA) models, (c) mixed autoregressive moving-average (ARMA) models, (d) seasonal models, (e) regression models with time series errors, and (f) fractionally differenced models for long-range dependence.
