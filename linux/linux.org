@@ -293,3 +293,9 @@ xdg-open : 双击打开
 
 display : 查看图片
 
+* raid
+  [[http://www.cnblogs.com/killkill/archive/2009/01/17/1377369.html][软 RAID 0 的技术概要及实现 v0.1b (正在修订之中)]]
+  [[http://www.cnblogs.com/mchina/p/linux-centos-disk-array-software_raid.html][CentOS 6.3 下配置软 RAID（Software RAID）]]
+
+* 修改 hostname
+  hostnamectl set-hostname ***
