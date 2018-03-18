@@ -52,6 +52,14 @@ shift+command+d,然后输入要打开的目录
   - sketchbook :: 画图
   - go2shell :: Finder open iterm2, terminal
   - iterm2
+  - zsh :: 然后添加 oh-my-zsh 插件, 在~/.zshrc 中添加
+           plugins=(git
+                    extract
+                    web-search
+                    z
+                    zsh-autosuggestions
+            )
+
 ** app store
   - jietu :: qq 截图软件
   - apowersoft screen recorder :: 录屏
