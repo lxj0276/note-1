@@ -34,7 +34,7 @@ grep "text" . -r -n
 # .表示当前目录。
 * du：查询文件或文件夹的磁盘使用空间
 ** mac
-   du -h -s 1 .
+   du -h -d 1 .
 ** linux
    [root@bsso yayu]# du -h --max-depth=1 work/testing
    27M     work/testing/logs
@@ -184,6 +184,37 @@ lengthn=${#array_name[n]}
 
 split -l 5000 file.bcp -d -a 6 file
 * 批量修改文件名
-find . -name "file*" | xargs -i -t mv {} {}.bak
+
+  #+BEGIN_SRC sh
+
+    find . -name "file*" | xargs -i -t mv {} {}.bak
+
+    # for f in $(find . -type f | tr ' ' '-');
+    # do
+    #   mv "$f" "${f/ /-}";
+    # done
+    # 去掉文件夹名中空格
+    for loop in `find . -type d | tr ' '  '#'`
+    do
+        mv  "`echo $loop | sed 's/#/ /g' `"  "`echo $loop |sed 's/#//g;s/(//g;s/)//g' `"  2> /dev/null
+    done
+
+    # 去掉文件名中空格
+    for loop in `find . -type f | tr ' '  '#'`
+    do
+        mv  "`echo $loop | sed 's/#/ /g' `"  "`echo $loop |sed 's/#//g' `"  2> /dev/null
+    done
 
 
+    # 去掉文件名中大部分特殊字符
+    for loop in `find . -type f`
+    do
+       mv  "$loop"  ` echo $loop | sed "s/\[//g;s/\]//g;s/(//g;s/)//g;s/'//g;s/!//g;s/#//g;s/{//g;s/}//g;s/*//g;s/:/-/g;s/%//g;s/&//g;s/\;//g" `  2> /dev/null
+    done
+
+    # 去掉文件名中大部分特殊字符
+    for loop in `find . -type f | grep \|`
+    do
+       mv  "$loop"  ` echo $loop | sed "s/\[//g;s/\]//g;s/(//g;s/)//g;s/'//g;s/!//g;s/#//g;s/{//g;s/}//g;s/*//g;s/:/-/g;s/%//g;s/?//g;s/|//g;s/&//g;s/\;//g" `  2> /dev/null
+    done
+  #+END_SRC

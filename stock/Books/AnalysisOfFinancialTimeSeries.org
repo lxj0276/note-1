@@ -1,0 +1,3 @@
+* Linear Time Series Analysis and Its Applications
+** stationarity
+  A time series {rt} is said to be strictly stationary if the joint distribution of (rt1 , . . . , rtk ) is identical to that of (rt1+t,...,rtk+t) for all t, where k is an arbitrary positive integer and (t1,...,tk) is a collection of k positive integers.

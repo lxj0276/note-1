@@ -211,3 +211,5 @@ print df
      df.to_excel(writer)
      writer.save()
    #+END_SRC
+* ipython
+  %cpaste   # 粘贴

@@ -1,0 +1,9 @@
+ [[https://clickhouse.yandex/docs/en/operations/tips/][ClickHouse Documentation]]
+
+
+1. 查看  [[https://clickhouse.yandex/docs/en/operations/tips/][ClickHouse Documentation]] 网站的推荐用例
+2. 监控
+   ClickHouse exporter + Prometheus + Grafana
+3. Superset 可视化工作台
+4. 文件系统: ext4,   If your budget allows, choose RAID-10.If you have more than 4 disks, use RAID-6 (preferred) or RAID-50
+5. raid10,  raid50 中选择一个

@@ -9,23 +9,30 @@ shift+command+d,然后输入要打开的目录
         
        set show_video true
        set player mpv
+       set player iina
+
        set columns rating,date,category,views,likes,dislikes,user,comments
        
        set search_music true
        set order views
+       set order rating
 
        set window_pos bottom-right
        set window_size 500x300
        -- 满屏
         set window_size 1440x900
     1. set show_video true
-    2. set player mpv
+    2. set player mpv  | set player iina
     3. set order <relevance|date|views|rating> - search result ordering
     4. set columns <columns> - select extra displayed fields in search results: (valid: views comments rating date user likes dislikes category)
     5. set search_music true|false - search only music (all categories if false)
     6. user_order <<nothing>|relevance|date|views|rating> user upload list result ordering, leave blank for the same as order setting
     7. set window_pos <top|bottom>-<left|right> - set player window position
     8. set window_size <number>x<number> - set player window width & height
+    9. set fullscreen true
+  - keycastr :: 高亮按键
+  - mouse locator :: 高亮鼠标位置
+  - caskroom/cask/iina :: 基于 mpv 的播放器
 * accounts
   [[http://www.ipadmalaysialabs.com/how-to-create-a-us-apple-id/][US iTunes Store Access (Part 1) – How to Create a US Apple ID]]
 
@@ -45,6 +52,14 @@ shift+command+d,然后输入要打开的目录
   - sketchbook :: 画图
   - go2shell :: Finder open iterm2, terminal
   - iterm2
+  - zsh :: 然后添加 oh-my-zsh 插件, 在~/.zshrc 中添加
+           plugins=(git
+                    extract
+                    web-search
+                    z
+                    zsh-autosuggestions
+            )
+
 ** app store
   - jietu :: qq 截图软件
   - apowersoft screen recorder :: 录屏
@@ -73,3 +88,19 @@ shift+command+d,然后输入要打开的目录
 ⌘+Q	Close Safari (all windows, all tabs)
 * chrome
   参考 cvim 快捷键
+* Mac 挂载 NTFS 移动硬盘进行读写操作 （Read-only file system）
+  1. diskutil info /Volumes/YOUR_NTFS_DISK_NAME  或者 df -h
+    找到 Device Node
+    Device Node:              /dev/disk1s1
+  2. hdiutil eject /Volumes/YOUR_NTFS_DISK_NAME
+    "disk1" unmounted.
+    "disk1" ejected.
+    弹出你的硬盘
+  3. 创建一个目录，稍后将 mount 到这个目录
+
+    sudo mkdir /Volumes/myhd
+
+  4. 将 NTFS 硬盘 挂载 mount 到 mac
+      sudo mount_ntfs -o rw,nobrowse /dev/disk1s1 /Volumes/myhd/
+
+  5. 在终端进入/Volumes/myhd 操作
