@@ -82,4 +82,19 @@
  | beige                  | 淡棕色, 米黄色                                                         |
  | wool                   | 羊毛, 毛线, 毛织物                                                     |
  | polyester              | 聚酯                                                                   |
+ | symptoms               | 症状                                                                   |
+ | stomach flu            | 肠胃炎, 肠胃感冒                                                       |
+ | prescription           | 处方，药方                                                             |
+ | liquids                | 液体                                                                   |
+ | appetite               | 食欲                                                                   |
+ | nauseous               | 呕吐                                                                   |
+ | stomachache            | 胃疼                                                                   |
+ | diarrhea               | 拉肚子                                                                 |
+ | insurance              | 保险                                                                   |
+ | allergic to            | 对……过敏                                                               |
+ | dosage                 | 剂量，用量                                                             |
+ | tablets                | 药片                                                                   |
+ | spicy                  | 辛辣                                                                   |
+ | capsules               | 胶囊                                                                   |
+ | pharmacy               | 药房                                                                   |
  |                        |                                                                        |

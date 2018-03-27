@@ -218,3 +218,15 @@ split -l 5000 file.bcp -d -a 6 file
        mv  "$loop"  ` echo $loop | sed "s/\[//g;s/\]//g;s/(//g;s/)//g;s/'//g;s/!//g;s/#//g;s/{//g;s/}//g;s/*//g;s/:/-/g;s/%//g;s/?//g;s/|//g;s/&//g;s/\;//g" `  2> /dev/null
     done
   #+END_SRC
+
+  修改.sh 为.sql'
+# 因搜索到的文件为./aaa/bbb.sh, 所以去-f2
+find . -name "*.sh" | while read mfile
+do
+  new=`echo "$mfile" | cut -d '.' -f2`
+  mv $mfile .${new}.sql
+done
+* 批量修改文件内容(sed)
+  sed -i "s/sudo -u hdfs hive/sudo -u c_zhengxin hive/g" `grep "sudo u hdfs hive" -rl .`
+* dos2unix
+  find . -type f ""*"
