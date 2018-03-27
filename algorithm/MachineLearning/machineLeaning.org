@@ -31,222 +31,339 @@ file:~/note/Pictures/MLPictures/costFunction2.png
    The Elements of Statistical Learning: Data Mining, Inference, and Prediction
 3. One of the most interesting features of machine learning is that it lies on the boundary of several different academic disciplines, principally computer science, statistics, mathematics, and engineering. … machine learning is usually studied as part of artificial intelligence, which puts it firmly into computer science …understanding why these algorithms work requires a certain amount of statistical and mathematical sophistication that is often missing from computer science undergraduates.
 4. Machine Learning is Hacking + Math & Statistics.
-* 学习方式
+* 机器学习的分类
+** 学习方式
 根据数据类型的不同，对一个问题的建模有不同的方式。在机器学习或者人工智能领域，人们首先会考虑算法的学习方式。
-** 监督式学习(Supervised Learning)
-从给定的训练数据集中学习出一个函数，当新的数据到来时，可以根据这个函数预测结果。监督学习的训练集需要包括输入和输出，也可以说是特征和目标。训练集中的目标是由人标注的。常见的监督式学习算法包括回归分析和统计分类。
+*** 监督式学习(Supervised Learning)
+ 从给定的训练数据集中学习出一个函数，当新的数据到来时，可以根据这个函数预测结果。监督学习的训练集需要包括输入和输出，也可以说是特征和目标。训练集中的目标是由人标注的。常见的监督式学习算法包括回归分析和统计分类。
 
-[[https://en.wikipedia.org/wiki/Supervised_learning][Supervised learning]]
+ [[https://en.wikipedia.org/wiki/Supervised_learning][Supervised learning]]
 
-[[https://zh.wikipedia.org/wiki/%25E7%259B%25A3%25E7%259D%25A3%25E5%25BC%258F%25E5%25AD%25B8%25E7%25BF%2592][監督式學習]]
+ [[https://zh.wikipedia.org/wiki/%25E7%259B%25A3%25E7%259D%25A3%25E5%25BC%258F%25E5%25AD%25B8%25E7%25BF%2592][監督式學習]]
 
-Input data is called training data and has a known label or result such as spam/not-spam or a stock price at a time.
-*** 应用场景
-分类问题，回归问题(连续)
-*** 步骤
-1. 决定范例训练资料的形态
-2. 搜索训练资料
-3. 决定学习函数的输入特征的表示法
-4. 决定要学习的函数, 以及函数的所使用的资料结构
-5. 完成设计
-6. 评估实际学习出的函数
+ Input data is called training data and has a known label or result such as spam/not-spam or a stock price at a time.
+**** 应用场景
+ 分类问题，回归问题(连续)
+**** 步骤
+ 1. 决定范例训练资料的形态
+ 2. 搜索训练资料
+ 3. 决定学习函数的输入特征的表示法
+ 4. 决定要学习的函数, 以及函数的所使用的资料结构
+ 5. 完成设计
+ 6. 评估实际学习出的函数
 
-*** 常见算法
-逻辑回归（Logistic Regression）和反向传递神经网络（Back Propagation Neural Network）
+**** 常见算法
+ 逻辑回归（Logistic Regression）和反向传递神经网络（Back Propagation Neural Network）
 
-**** 人工神经网络(Artificial neural network)
-一条直线把平面一分为二，一个平面把三维空间一分为二，一个 n-1 维超平面把 n 维空间一分为二，两边分属不同的两类，这种分类器就叫做神经元。
+***** 人工神经网络(Artificial neural network)
+ 一条直线把平面一分为二，一个平面把三维空间一分为二，一个 n-1 维超平面把 n 维空间一分为二，两边分属不同的两类，这种分类器就叫做神经元。
 
-大家都知道平面上的直线方程是￼，等式左边大于零和小于零分别表示点￼在直线的一侧还是另一侧，把这个式子推广到 n 维空间里，直线的高维形式称为超平面，它的方程是：
-h = a1x1 + a2x2 + a3x3 ...  + anxn   + a0 = 0
-神经元就是当 h 大于 0 时输出 1，h 小于 0 时输出 0 这么一个模型，它的实质就是把特征空间一切两半，认为两瓣分别属两个类。
+ 大家都知道平面上的直线方程是￼，等式左边大于零和小于零分别表示点￼在直线的一侧还是另一侧，把这个式子推广到 n 维空间里，直线的高维形式称为超平面，它的方程是：
+ h = a1x1 + a2x2 + a3x3 ...  + anxn   + a0 = 0
+ 神经元就是当 h 大于 0 时输出 1，h 小于 0 时输出 0 这么一个模型，它的实质就是把特征空间一切两半，认为两瓣分别属两个类。
 
-MP 神经元有几个显著缺点。首先它把直线一侧变为 0，另一侧变为 1，这东西不可微，不利于数学分析。人们用一个和 0-1 阶跃函数类似但是更平滑的函数 Sigmoid 函数来代替它（Sigmoid 函数自带一个尺度参数，可以控制神经元对离超平面距离不同的点的响应，这里忽略它），从此神经网络的训练就可以用梯度下降法来构造了，这就是有名的反向传播算法。
+ MP 神经元有几个显著缺点。首先它把直线一侧变为 0，另一侧变为 1，这东西不可微，不利于数学分析。人们用一个和 0-1 阶跃函数类似但是更平滑的函数 Sigmoid 函数来代替它（Sigmoid 函数自带一个尺度参数，可以控制神经元对离超平面距离不同的点的响应，这里忽略它），从此神经网络的训练就可以用梯度下降法来构造了，这就是有名的反向传播算法。
 
-神经元的另一个缺点是：它只能切一刀！你给我说说一刀怎么能把下面这两类分开吧。
+ 神经元的另一个缺点是：它只能切一刀！你给我说说一刀怎么能把下面这两类分开吧。
 
-每砍一刀，其实就是使用了一个神经元，把不同砍下的半平面做交、并等运算，就是把这些神经元的输出当作输入，后面再连接一个神经元。这个例子中特征的形状称为异或，这种情况一个神经元搞不定，但是两层神经元就能正确对其进行分类。
+ 每砍一刀，其实就是使用了一个神经元，把不同砍下的半平面做交、并等运算，就是把这些神经元的输出当作输入，后面再连接一个神经元。这个例子中特征的形状称为异或，这种情况一个神经元搞不定，但是两层神经元就能正确对其进行分类。
 
-只要你能砍足够多刀，把结果拼在一起，什么奇怪形状的边界神经网络都能够表示，所以说神经网络在理论上可以表示很复杂的函数/空间分布。
+ 只要你能砍足够多刀，把结果拼在一起，什么奇怪形状的边界神经网络都能够表示，所以说神经网络在理论上可以表示很复杂的函数/空间分布。
 
-**** 朴素贝叶斯分类
-假设: 特征独立性, 特征均衡性.
+***** 朴素贝叶斯分类
+ 假设: 特征独立性, 特征均衡性.
 
-贝叶斯及贝叶斯学派提出了一个思考问题的固定模式:
-file:../../Pictures/MLPictures/bayesian3.png
+ 贝叶斯及贝叶斯学派提出了一个思考问题的固定模式:
+ file:../../Pictures/MLPictures/bayesian3.png
 
-查看[[https://zh.wikipedia.org/wiki/%25E6%259C%25B4%25E7%25B4%25A0%25E8%25B4%259D%25E5%258F%25B6%25E6%2596%25AF%25E5%2588%2586%25E7%25B1%25BB%25E5%2599%25A8][朴素贝叶斯分类器]] 中实例来理解.
-概率模型分类器是一个条件概率模型:
- p(C|F_1, F_2, ..., F_n) , 即 知道特征 F_i 的值后, 求是分类 C 的概率.
+ 查看[[https://zh.wikipedia.org/wiki/%25E6%259C%25B4%25E7%25B4%25A0%25E8%25B4%259D%25E5%258F%25B6%25E6%2596%25AF%25E5%2588%2586%25E7%25B1%25BB%25E5%2599%25A8][朴素贝叶斯分类器]] 中实例来理解.
+ 概率模型分类器是一个条件概率模型:
+  p(C|F_1, F_2, ..., F_n) , 即 知道特征 F_i 的值后, 求是分类 C 的概率.
 
-贝叶斯定理有一下公式:
-p(C|F_1, ..., F_n) = p(C)p(F_1, ..., F_n|C) / p(F_1, ..., F_n)
+ 贝叶斯定理有一下公式:
+ p(C|F_1, ..., F_n) = p(C)p(F_1, ..., F_n|C) / p(F_1, ..., F_n)
 
-使用链式法则:
-file:../../Pictures/MLPictures/bayesian1.png
+ 使用链式法则:
+ file:../../Pictures/MLPictures/bayesian1.png
 
-从概率模型中构造分类器(最后得到分类):
-file:../../Pictures/MLPictures/bayesian2.png
-上式中后验概率最大的分类, 即为所找的分类.
+ 从概率模型中构造分类器(最后得到分类):
+ file:../../Pictures/MLPictures/bayesian2.png
+ 上式中后验概率最大的分类, 即为所找的分类.
 
-[[http://norvig.com/spell-correct.html][How to Write a Spelling Corrector]]
+ [[http://norvig.com/spell-correct.html][How to Write a Spelling Corrector]]
 
-**** k-近邻算法(k-nearest neighbors)
-给定一个训练数据集，对新的输入实例，在训练数据集中找到与该实例最邻近的 K 个实例（也就是上面所说的 K 个邻居）， 这 K 个实例的多数属于某个类，就把该输入实例分类到这个类中。
+***** k-近邻算法(k-nearest neighbors)
+ 给定一个训练数据集，对新的输入实例，在训练数据集中找到与该实例最邻近的 K 个实例（也就是上面所说的 K 个邻居）， 这 K 个实例的多数属于某个类，就把该输入实例分类到这个类中。
 
-为了公平，所有特征的数值都采取归一化处置。
+ 为了公平，所有特征的数值都采取归一化处置。
 
-需要一个 distance 函数以计算两个样本之间的距离。 欧氏距离、余弦距离、汉明距离、曼哈顿距离.
+ 需要一个 distance 函数以计算两个样本之间的距离。 欧氏距离、余弦距离、汉明距离、曼哈顿距离.
 
-K 是一个自定义的常数，K 的值也直接影响最后的估计，一种选择 K 值得方法是使用 cross-validate（交叉验证）误差统计选择法。
+ K 是一个自定义的常数，K 的值也直接影响最后的估计，一种选择 K 值得方法是使用 cross-validate（交叉验证）误差统计选择法。
 
-**** svm(support vector machine)
-SVM 的主要思想可以概括为两点：
-1. 是针对线性可分情况进行分析，对于线性不可分的情况，通过使用非线性映射算法将低维输入空间线性不可分的样本转化为高维特征空间使其线性可分，从而 使得高维特征空间采用线性算法对样本的非线性特征进行线性分析成为可能；
-2. 它基于结构风险最小化理论之上在特征空间中建构最优分割超平面，使得学习器得到全局最优化，并且在整个样本空间的期望风险以某个概率满足一定上界。
+***** svm(support vector machine)
+ SVM 的主要思想可以概括为两点：
+ 1. 是针对线性可分情况进行分析，对于线性不可分的情况，通过使用非线性映射算法将低维输入空间线性不可分的样本转化为高维特征空间使其线性可分，从而 使得高维特征空间采用线性算法对样本的非线性特征进行线性分析成为可能；
+ 2. 它基于结构风险最小化理论之上在特征空间中建构最优分割超平面，使得学习器得到全局最优化，并且在整个样本空间的期望风险以某个概率满足一定上界。
 
-它是一种二类分类模型，其基本模型定义为特征空间上的间隔最大的线性分类器，其学习策略便是间隔最大化，最终可转化为一个凸二次规划问题的求解。
+ 它是一种二类分类模型，其基本模型定义为特征空间上的间隔最大的线性分类器，其学习策略便是间隔最大化，最终可转化为一个凸二次规划问题的求解。
 
-函数间隔: 超平面(w，b)关于 T 中所有样本点(xi，yi)的函数间隔最小值.
-file:../../Pictures/MLPictures/svm1.png
-但这样定义的函数间隔有问题，即如果成比例的改变 w 和 b（如将它们改成 2w 和 2b），则函数间隔的值 f(x)却变成了原来的 2 倍（虽然此时超平面没有改变），所以只有函数间隔还远远不够。
+ 函数间隔: 超平面(w，b)关于 T 中所有样本点(xi，yi)的函数间隔最小值.
+ file:../../Pictures/MLPictures/svm1.png
+ 但这样定义的函数间隔有问题，即如果成比例的改变 w 和 b（如将它们改成 2w 和 2b），则函数间隔的值 f(x)却变成了原来的 2 倍（虽然此时超平面没有改变），所以只有函数间隔还远远不够。
 
-我们可以对法向量 w 加些约束条件，从而引出真正定义点到超平面的距离--几何间隔（geometrical margin）的概念。
-file:../../Pictures/MLPictures/svm2.png
+ 我们可以对法向量 w 加些约束条件，从而引出真正定义点到超平面的距离--几何间隔（geometrical margin）的概念。
+ file:../../Pictures/MLPictures/svm2.png
 
-最大间隔分类器 Maximum Margin Classifier 的定义.
-*虚线间隔边界上的点则是支持向量*
-file:../../Pictures/MLPictures/svm3.png
+ 最大间隔分类器 Maximum Margin Classifier 的定义.
+ *虚线间隔边界上的点则是支持向量*
+ file:../../Pictures/MLPictures/svm3.png
 
-**** 决策树(Decision Tree)
-** 非监督式学习(Unsupervised Learning)
-与监督学习相比，训练集没有人为标注的结果。
+***** 决策树(Decision Tree)
+*** 非监督式学习(Unsupervised Learning)
+ 与监督学习相比，训练集没有人为标注的结果。
 
-Input data is not labelled and does not have a known result. A model is prepared by deducing structures present in the input data.
+ Input data is not labelled and does not have a known result. A model is prepared by deducing structures present in the input data.
 
-在非监督式学习中，数据并不被特别标识，学习模型是为了推断出数据的一些内在结构。
+ 在非监督式学习中，数据并不被特别标识，学习模型是为了推断出数据的一些内在结构。
 
-应用场景关联规则的学习以及聚类等。常见算法包括 Apriori 算法以及 k-Means 算法。
+ 应用场景关联规则的学习以及聚类等。常见算法包括 Apriori 算法以及 k-Means 算法。
 
-非监督式学习与统计学上的密度估计关系更紧密.
-*** 应用场景
-数据聚类
-*** 常见算法
-自我組織映射（SOM）和適應性共振理論（ART）
-- clustering ::
-  k-means
-  mixture models
-  hierarchical clustering
-- anomaly detection
-- Neural Networks ::
-  Hebbian Learning
-- Approaches for learning latent variable models such as ::
-  Expectation–maximization algorithm (EM)
-  Method of moments
-  Blind signal separation techniques, e.g.,
-    Principal component analysis,
-    Independent component analysis,
-    Non-negative matrix factorization,
-    Singular value decomposition.
-**** PCA 
- PCA 的算法步骤：
-设有 m 条 n 维数据。
-1）将原始数据按列组成 n 行 m 列矩阵 X
-2）将 X 的每一行（代表一个属性字段）进行零均值化，即减去这一行的均值
-3）求出协方差矩阵 C=1mXX𝖳C=1mXXT
-4）求出协方差矩阵的特征值及对应的特征向量
-5）将特征向量按对应特征值大小从上到下按行排列成矩阵，取前 k 行组成矩阵 P
-6）Y=PXY=PX 即为降维到 k 维后的数据
+ 非监督式学习与统计学上的密度估计关系更紧密.
+**** 应用场景
+ 数据聚类
+**** 常见算法
+ 自我組織映射（SOM）和適應性共振理論（ART）
+ - clustering ::
+   k-means
+   mixture models
+   hierarchical clustering
+ - anomaly detection
+ - Neural Networks ::
+   Hebbian Learning
+ - Approaches for learning latent variable models such as ::
+   Expectation–maximization algorithm (EM)
+   Method of moments
+   Blind signal separation techniques, e.g.,
+     Principal component analysis,
+     Independent component analysis,
+     Non-negative matrix factorization,
+     Singular value decomposition.
+***** PCA
+  PCA 的算法步骤：
+ 设有 m 条 n 维数据。
+ 1）将原始数据按列组成 n 行 m 列矩阵 X
+ 2）将 X 的每一行（代表一个属性字段）进行零均值化，即减去这一行的均值
+ 3）求出协方差矩阵 C=1mXX𝖳C=1mXXT
+ 4）求出协方差矩阵的特征值及对应的特征向量
+ 5）将特征向量按对应特征值大小从上到下按行排列成矩阵，取前 k 行组成矩阵 P
+ 6）Y=PXY=PX 即为降维到 k 维后的数据
 
-降维问题的优化目标：将一组 N 维向量降为 K 维（K 大于 0，小于 N），其目标是选择 K 个单位（模为 1）正交基，使得原始数据变换到这组基上后，各字段两两间协方差为 0，而字段的方差则尽可能大（在正交的约束下，取最大的 K 个方差） [fn:2]
+ 降维问题的优化目标：将一组 N 维向量降为 K 维（K 大于 0，小于 N），其目标是选择 K 个单位（模为 1）正交基，使得原始数据变换到这组基上后，各字段两两间协方差为 0，而字段的方差则尽可能大（在正交的约束下，取最大的 K 个方差） [fn:2]
 
-PCA 的能力和限制:
-PCA 本质上是将方差最大的方向作为主要特征，并且在各个正交方向上将数据“离相关”，也就是让它们在不同正交方向上没有相关性。
-限制:
-  1. 它可以很好的解除线性相关，但是对于高阶相关性就没有办法了，对于存在高阶相关性的数据，可以考虑 Kernel PCA，通过 Kernel 函数将非线性相关转为线性相关.
-  2. PCA 假设数据各主特征是分布在正交方向上，如果在非正交方向上存在几个方差较大的方向，PCA 的效果就大打折扣了。
+ PCA 的能力和限制:
+ PCA 本质上是将方差最大的方向作为主要特征，并且在各个正交方向上将数据“离相关”，也就是让它们在不同正交方向上没有相关性。
+ 限制:
+   1. 它可以很好的解除线性相关，但是对于高阶相关性就没有办法了，对于存在高阶相关性的数据，可以考虑 Kernel PCA，通过 Kernel 函数将非线性相关转为线性相关.
+   2. PCA 假设数据各主特征是分布在正交方向上，如果在非正交方向上存在几个方差较大的方向，PCA 的效果就大打折扣了。
 
-主成分分析法是一种降维的统计方法，它借助于一个正交变换，将其分量相关的原随机向量转化成其分量不相关的新随机向量，这在代数上表现为将原随机向量的协方差阵变换成对角形阵，在几何上表现为将原坐标系变换成新的正交坐标系，使之指向样本点散布最开的 p 个正交方向，然后对多维变量系统进行降维处理，使之能以一个较高的精度转换成低维变量系统，再通过构造适当的价值函数，进一步把低维系统转化成一维系统。
+ 主成分分析法是一种降维的统计方法，它借助于一个正交变换，将其分量相关的原随机向量转化成其分量不相关的新随机向量，这在代数上表现为将原随机向量的协方差阵变换成对角形阵，在几何上表现为将原坐标系变换成新的正交坐标系，使之指向样本点散布最开的 p 个正交方向，然后对多维变量系统进行降维处理，使之能以一个较高的精度转换成低维变量系统，再通过构造适当的价值函数，进一步把低维系统转化成一维系统。
 
-[[http://blog.csdn.net/zhongkelee/article/details/44064401][主成分分析（PCA）原理详解]]
- PCA 的思想是将 n 维特征映射到 k 维上（k<n），这 k 维是全新的正交特征。这 k 维特征称为主成分，是重新构造出来的 k 维特征，而不是简单地从 n 维特征中去除其余 n-k 维特征。
+ [[http://blog.csdn.net/zhongkelee/article/details/44064401][主成分分析（PCA）原理详解]]
+  PCA 的思想是将 n 维特征映射到 k 维上（k<n），这 k 维是全新的正交特征。这 k 维特征称为主成分，是重新构造出来的 k 维特征，而不是简单地从 n 维特征中去除其余 n-k 维特征。
 
-找到一个合理的方法，在减少需要分析的指标同时，尽量减少原指标包含信息的损失，以达到对所收集数据进行全面分析的目的。
+ 找到一个合理的方法，在减少需要分析的指标同时，尽量减少原指标包含信息的损失，以达到对所收集数据进行全面分析的目的。
 
-整个 PCA 过程貌似及其简单，就是求协方差的特征值和特征向量，然后做数据转换。但是有没有觉得很神奇，为什么求协方差的特征向量就是最理想的 k 维向量？其背后隐藏的意义是什么？整个 PCA 的意义是什么？
-在信号处理中认为信号具有较大的方差，噪声有较小的方差,样本在 u1 上的投影方差较大，在 u2 上的投影方差较小，那么可认为 u2 上的投影是由噪声引起的。
-意义：PCA 将 n 个特征降维到 k 个，可以用来进行数据压缩。
+ 整个 PCA 过程貌似及其简单，就是求协方差的特征值和特征向量，然后做数据转换。但是有没有觉得很神奇，为什么求协方差的特征向量就是最理想的 k 维向量？其背后隐藏的意义是什么？整个 PCA 的意义是什么？
+ 在信号处理中认为信号具有较大的方差，噪声有较小的方差,样本在 u1 上的投影方差较大，在 u2 上的投影方差较小，那么可认为 u2 上的投影是由噪声引起的。
+ 意义：PCA 将 n 个特征降维到 k 个，可以用来进行数据压缩。
 
-假设三维空间中有一系列点，这些点分布在一个过原点的斜面上, 如果把这些数据按行或者按列排成一个矩阵，那么这个矩阵的秩就是 2！这些数据之间是有相关性的，这些数据构成的过原点的向量的最大线性无关组包含 2 个向量. 那么如果平面不过原点呢？这就是数据中心化的缘故！将坐标原点平移到数据中心，这样原本不相关的数据在这个新坐标系中就有相关性了！有趣的是，三点一定共面，也就是说三维空间中任意三点中心化后都是线性相关的，一般来讲 n 维空间中的 n 个点一定能在一个 n-1 维子空间中分析！
+ 假设三维空间中有一系列点，这些点分布在一个过原点的斜面上, 如果把这些数据按行或者按列排成一个矩阵，那么这个矩阵的秩就是 2！这些数据之间是有相关性的，这些数据构成的过原点的向量的最大线性无关组包含 2 个向量. 那么如果平面不过原点呢？这就是数据中心化的缘故！将坐标原点平移到数据中心，这样原本不相关的数据在这个新坐标系中就有相关性了！有趣的是，三点一定共面，也就是说三维空间中任意三点中心化后都是线性相关的，一般来讲 n 维空间中的 n 个点一定能在一个 n-1 维子空间中分析！
 
-特征很多是和类标签有关的，但里面存在噪声或者冗余。在这种情况下，需要一种特征降维的方法来减少特征数，减少噪音和冗余，减少过度拟合的可能性。
+ 特征很多是和类标签有关的，但里面存在噪声或者冗余。在这种情况下，需要一种特征降维的方法来减少特征数，减少噪音和冗余，减少过度拟合的可能性。
 
 
-**** k-means
-[[http://dataunion.org/7781.html][聚类及 K 均值、二分 K-均值聚类算法]]
-k-means 算法的基础是最小误差平方和准则。
-[[~/note/Pictures/MLPictures/kmeans1.png]]
-***** 算法过程
-1. 随机确定 k 个初始点作为质心；
-2. 为每个点找距其最近的质心，并将其分配给该质心所对应的簇；
-3. 更新每个簇的质心（该簇所有数据样本特征的平均值）；
-4. 上述过程迭代多次直至所有数据点的簇归属不再改变或者达到了最大迭代次数
+***** k-means
+ [[http://dataunion.org/7781.html][聚类及 K 均值、二分 K-均值聚类算法]]
+ k-means 算法的基础是最小误差平方和准则。
+ [[~/note/Pictures/MLPictures/kmeans1.png]]
+****** 算法过程
+ 1. 随机确定 k 个初始点作为质心；
+ 2. 为每个点找距其最近的质心，并将其分配给该质心所对应的簇；
+ 3. 更新每个簇的质心（该簇所有数据样本特征的平均值）；
+ 4. 上述过程迭代多次直至所有数据点的簇归属不再改变或者达到了最大迭代次数
 
-k-均值算法的性能会受到所选相似性度量方法的影响，常用的相似性度量方法就是计算欧氏距离。
-***** 特征值处理
-样本会有多个特征，每一个特征都有自己的定义域和取值范围，他们对 distance 计算的影响也就不一样，如取值较大的影响力会盖过取值较小的参数。为了公平，样本特征取值必须做一些 scale 处理，最简单的方式就是所有特征的数值都采取归一化处置，把每一维的数据都转化到 0,1 区间内，从而减少迭代次数，提高算法的收敛速度。
+ k-均值算法的性能会受到所选相似性度量方法的影响，常用的相似性度量方法就是计算欧氏距离。
+****** 特征值处理
+ 样本会有多个特征，每一个特征都有自己的定义域和取值范围，他们对 distance 计算的影响也就不一样，如取值较大的影响力会盖过取值较小的参数。为了公平，样本特征取值必须做一些 scale 处理，最简单的方式就是所有特征的数值都采取归一化处置，把每一维的数据都转化到 0,1 区间内，从而减少迭代次数，提高算法的收敛速度。
 
-***** k 值的选取
-当 k 的数目低于真实的簇的数目时，SSE（或者平均直径等其他分散度指标）会快速上升。所以可以采用多次聚类，然后比较的方式确定最佳 k 值。多次聚类，一般是采用 k=1, 2, 4, 8… 这种二分数列的方式，通过交叉验证找到一个 k 在 v/2, v 时获取较好聚类效果的 v 值，然后继续使用二分法，在 [v/2, v] 之间找到最佳的 k 值。
+****** k 值的选取
+ 当 k 的数目低于真实的簇的数目时，SSE（或者平均直径等其他分散度指标）会快速上升。所以可以采用多次聚类，然后比较的方式确定最佳 k 值。多次聚类，一般是采用 k=1, 2, 4, 8… 这种二分数列的方式，通过交叉验证找到一个 k 在 v/2, v 时获取较好聚类效果的 v 值，然后继续使用二分法，在 [v/2, v] 之间找到最佳的 k 值。
 
-**** 二分 K-均值（bisecting k-means)聚类算法
-二分 K-均值聚类算法就是每次对数据集（子数据集）采取 k=2 的 k-均值聚类划分.
+***** 二分 K-均值（bisecting k-means)聚类算法
+ 二分 K-均值聚类算法就是每次对数据集（子数据集）采取 k=2 的 k-均值聚类划分.
 
-二分 K-均值聚类算法首先将所有点作为一个簇，第一步是然后将该簇一分为二，之后的迭代是：在所有簇中根据 SSE 选择一个簇继续进行二分 K-均值划分，直到得到用户指定的簇数目为止。
-根据 SSE 选取继续划分簇的准则有如下两种:
-1. 选择哪一个簇进行划分取决于对”其划分是否可以最大程度降低 SSE 的值。这需要将每个簇都进行二分划分，然后计算该簇二分后的簇 SSE 之和并计算其与二分前簇 SSE 之差（当然 SSE 必须下降），最后选取差值最大的那个簇进行二分。
-2. 另一种做法是所有簇中选择 SSE 最大的簇进行划分，直到簇数目达到用户指定的数目为止.
-** 半监督式学习(Semi-Supervised Learning)
-Input data is a mixture of labelled and unlabelled examples. There is a desired prediction problem but the model must learn the structures to organize the data as well as make predictions.
+ 二分 K-均值聚类算法首先将所有点作为一个簇，第一步是然后将该簇一分为二，之后的迭代是：在所有簇中根据 SSE 选择一个簇继续进行二分 K-均值划分，直到得到用户指定的簇数目为止。
+ 根据 SSE 选取继续划分簇的准则有如下两种:
+ 1. 选择哪一个簇进行划分取决于对”其划分是否可以最大程度降低 SSE 的值。这需要将每个簇都进行二分划分，然后计算该簇二分后的簇 SSE 之和并计算其与二分前簇 SSE 之差（当然 SSE 必须下降），最后选取差值最大的那个簇进行二分。
+ 2. 另一种做法是所有簇中选择 SSE 最大的簇进行划分，直到簇数目达到用户指定的数目为止.
+*** 半监督式学习(Semi-Supervised Learning)
+ Input data is a mixture of labelled and unlabelled examples. There is a desired prediction problem but the model must learn the structures to organize the data as well as make predictions.
 
-应用场景：分类问题，回归问题
+ 应用场景：分类问题，回归问题
 
-算法包括一些对常用监督式学习算法的延伸，这些算法首先试图对未标识数据进行建模，在此基础上再对标识的数据进行预测。如图论推理算法（Graph Inference）或者拉普拉斯支持向量机（Laplacian SVM.）等。
-** 强化学习(Reinforcement Learning)
-这种学习模式下，输入数据作为对模型的反馈，不像监督模型那样，输入数据仅仅是作为一个检查模型对错的方式，在强化学习下，输入数据直接反馈到模型，模型必须对此立刻作出调整。常见的强化学习算法有时间差学习。
+ 算法包括一些对常用监督式学习算法的延伸，这些算法首先试图对未标识数据进行建模，在此基础上再对标识的数据进行预测。如图论推理算法（Graph Inference）或者拉普拉斯支持向量机（Laplacian SVM.）等。
+*** 强化学习(Reinforcement Learning)
+ 这种学习模式下，输入数据作为对模型的反馈，不像监督模型那样，输入数据仅仅是作为一个检查模型对错的方式，在强化学习下，输入数据直接反馈到模型，模型必须对此立刻作出调整。常见的强化学习算法有时间差学习。
 
-Input data is provided as stimulus to a model from an environment to which the model must respond and react.
-在强化学习下，输入数据直接反馈到模型，模型必须对此立刻作出调整。常见的应用场景包括动态系统以及机器人控制等。常见算法包括 Q-Learning 以及时间差学习（Temporal difference learning）.
+ Input data is provided as stimulus to a model from an environment to which the model must respond and react.
+ 在强化学习下，输入数据直接反馈到模型，模型必须对此立刻作出调整。常见的应用场景包括动态系统以及机器人控制等。常见算法包括 Q-Learning 以及时间差学习（Temporal difference learning）.
 
-这个方法具有普适性，因此在其他许多领域都有研究，例如博弈论、控制论、运筹学、信息论、模拟优化方法、多主体系统学习、群体智能、统计学以及遗传算法。在运筹学和控制理论研究的语境下，强化学习被称作“近似动态规划”（approximate dynamic programming，ADP）。
+ 这个方法具有普适性，因此在其他许多领域都有研究，例如博弈论、控制论、运筹学、信息论、模拟优化方法、多主体系统学习、群体智能、统计学以及遗传算法。在运筹学和控制理论研究的语境下，强化学习被称作“近似动态规划”（approximate dynamic programming，ADP）。
 
-在机器学习问题中，环境通常被规范为马可夫决策过程（MDP），所以许多强化学习算法在这种情况下使用动态规划技巧。
+ 在机器学习问题中，环境通常被规范为马可夫决策过程（MDP），所以许多强化学习算法在这种情况下使用动态规划技巧。
 
-基本的强化学习模型包括：
-  环境状态的集合 {\displaystyle S} ;
-  动作的集合 {\displaystyle A} ;
-  在状态之间转换的规则；
-  规定转换后“即时奖励”的规则；
-  描述主体能够观察到什么的规则。
-** 学习方式的应用场景
-在企业数据应用的场景下， 人们最常用的可能就是监督式学习和非监督式学习的模型。 在图像识别等领域，由于存在大量的非标识的数据和少量的可标识数据， 目前半监督式学习是一个很热的话题。 而强化学习更多的应用在机器人控制及其他需要进行系统控制的领域。
+ 基本的强化学习模型包括：
+   环境状态的集合 {\displaystyle S} ;
+   动作的集合 {\displaystyle A} ;
+   在状态之间转换的规则；
+   规定转换后“即时奖励”的规则；
+   描述主体能够观察到什么的规则。
+*** 学习方式的应用场景
+ 在企业数据应用的场景下， 人们最常用的可能就是监督式学习和非监督式学习的模型。 在图像识别等领域，由于存在大量的非标识的数据和少量的可标识数据， 目前半监督式学习是一个很热的话题。 而强化学习更多的应用在机器人控制及其他需要进行系统控制的领域。
+    1. 监督式学习
+    2. 非监督式学习
+    3. 强化学习
+** 算法类似性
+   1. 回归算法
+      回归算法是试图采用对误差的衡量来探索变量之间的关系的一类算法。回归算法是统计机器学习的利器。在机器学习领域，人们说起回归，有时候是指一类问题，有时候是指一类算法，这一点常常会使初学者有所困惑。常见的回归算法包括：最小二乘法（Ordinary Least Square），逻辑回归（Logistic Regression），逐步式回归（Stepwise Regression），多元自适应回归样条（Multivariate Adaptive Regression Splines）以及本地散点平滑估计（Locally Estimated Scatterplot Smoothing）
+   2. 基于实例的算法
+      基于实例的算法常常用来对决策问题建立模型，这样的模型常常先选取一批样本数据，然后根据某些近似性把新数据与样本数据进行比较。通过这种方式来寻找最佳的匹配。因此，基于实例的算法常常也被称为“赢家通吃”学习或者“基于记忆的学习”。常见的算法包括 k-Nearest Neighbor(KNN), 学习矢量量化（Learning Vector Quantization，LVQ），以及自组织映射算法（Self-Organizing Map，SOM）
+   3. 正则化方法
+      正则化方法是其他算法（通常是回归算法）的延伸，根据算法的复杂度对算法进行调整。正则化方法通常对简单模型予以奖励而对复杂算法予以惩罚。常见的算法包括：Ridge Regression，Least Absolute Shrinkage and Selection Operator（LASSO），以及弹性网络（Elastic Net）。
+   4. 决策树学习
+      决策树算法根据数据的属性采用树状结构建立决策模型， 决策树模型常常用来解决分类和回归问题。常见的算法包括：分类及回归树（Classification And Regression Tree，CART），ID3 (Iterative Dichotomiser 3)，C4.5，Chi-squared Automatic Interaction Detection(CHAID), Decision Stump, 随机森林（Random Forest）， 多元自适应回归样条（MARS）以及梯度推进机（Gradient Boosting Machine，GBM）
+   5. 贝叶斯方法
+      贝叶斯方法算法是基于贝叶斯定理的一类算法，主要用来解决分类和回归问题。常见算法包括：朴素贝叶斯算法，平均单依赖估计（Averaged One-Dependence Estimators，AODE），以及 Bayesian Belief Network（BBN）。
+   6. 基于核的算法
+      基于核的算法中最著名的莫过于支持向量机（SVM）了。 基于核的算法把输入数据映射到一个高阶的向量空间， 在这些高阶向量空间里， 有些分类或者回归问题能够更容易的解决。 常见的基于核的算法包括：支持向量机（Support Vector Machine，SVM）， 径向基函数（Radial Basis Function，RBF)， 以及线性判别分析（Linear Discriminate Analysis，LDA)等
+   7. 聚类算法
+      聚类，就像回归一样，有时候人们描述的是一类问题，有时候描述的是一类算法。聚类算法通常按照中心点或者分层的方式对输入数据进行归并。所以的聚类算法都试图找到数据的内在结构，以便按照最大的共同点将数据进行归类。常见的聚类算法包括 k-Means 算法以及期望最大化算法（Expectation Maximization，EM）。
+
+** 算法类似性 1
+ 根据算法的功能和形式的类似性，我们可以把算法分类
+*** 回归算法（regression）
+ 回归算法是试图采用对误差的衡量来探索变量之间的关系的一类算法。
+
+ 有一些已经标注好的数据，标注值与分类问题不同，分类问题的标注是离散值，而回归问题中的标注是实数，在标注好的数据上建模，对于新样本，得到它的标注值。如股票预测。
+
+ 常见的回归算法包括：最小二乘法（Ordinary Least Square），逻辑回归（Logistic Regression），逐步式回归（Stepwise Regression），多元自适应回归样条（Multivariate Adaptive Regression Splines）以及本地散点平滑估计（Locally Estimated Scatterplot Smoothing）
+*** 分类（classification）
+ 有一些已经标注好类别的数据，在标注好的数据上建模，对于新样本，判断它的类别。如垃圾邮件识别
+*** 基于实例的算法
+ 基于实例的算法常常用来对决策问题建立模型，这样的模型常常先选取一批样本数据，然后根据某些近似性把新数据与样本数据进行比较。通过这种方式来寻找最佳的匹配。
+
+ 常见的算法包括 k-Nearest Neighbor(KNN), 学习矢量量化（Learning Vector Quantization，LVQ），以及自组织映射算法（Self-Organizing Map，SOM）
+*** 正则化方法
+ 正则化方法是其他算法（通常是回归算法）的延伸，根据算法的复杂度对算法进行调整。正则化方法通常对简单模型予以奖励而对复杂算法予以惩罚。常见的算法包括：Ridge Regression，Least Absolute Shrinkage and Selection Operator（LASSO），以及弹性网络（Elastic Net）。
+*** 规则抽取（rule extraction）
+ 发现数据中属性之间的统计关系，而不只是预测一些事情。如啤酒和尿布。
+*** 决策树学习
+ 决策树算法根据数据的属性采用树状结构建立决策模型， 决策树模型常常用来解决分类和回归问题。常见的算法包括：分类及回归树（Classification And Regression Tree，CART），ID3 (Iterative Dichotomiser 3)，C4.5，Chi-squared Automatic Interaction Detection(CHAID), Decision Stump, 随机森林（Random Forest）， 多元自适应回归样条（MARS）以及梯度推进机（Gradient Boosting Machine，GBM）
+*** 贝叶斯方法
+ 贝叶斯方法算法是基于贝叶斯定理的一类算法，主要用来解决分类和回归问题。常见算法包括：朴素贝叶斯算法，平均单依赖估计（Averaged One-Dependence Estimators，AODE），以及 Bayesian Belief Network（BBN）。
+*** 基于核的算法
+ 基于核的算法中最著名的莫过于支持向量机（SVM）了。 基于核的算法把输入数据映射到一个高阶的向量空间， 在这些高阶向量空间里， 有些分类或者回归问题能够更容易的解决。 常见的基于核的算法包括：支持向量机（Support Vector Machine，SVM）， 径向基函数（Radial Basis Function，RBF)， 以及线性判别分析（Linear Discriminate Analysis，LDA)等
+*** 聚类算法
+ 数据没有被标注，但是给出了一些相似度衡量标准，可以根据这些标准将数据进行划分。如在一堆未给出名字的照片中，自动的将同一个人的照片聚集到一块。
+
+ 聚类算法通常按照中心点或者分层的方式对输入数据进行归并。所有的聚类算法都试图找到数据的内在结构，以便按照最大的共同点将数据进行归类。常见的聚类算法包括 k-Means 算法以及期望最大化算法（Expectation Maximization，EM）。
+*** 关联规则学习
+ 关联规则学习通过寻找最能够解释数据变量之间关系的规则，来找出大量多元数据集中有用的关联规则。常见算法包括 Apriori 算法和 Eclat 算法等。
+*** 人工神经网络
+ 人工神经网络算法模拟生物神经网络，是一类模式匹配算法。通常用于解决分类和回归问题。
+
+ 重要的人工神经网络算法包括：感知器神经网络（Perceptron Neural Network）, 反向传递（Back Propagation），Hopfield 网络，自组织映射（Self-Organizing Map, SOM）。学习矢量量化（Learning Vector Quantization，LVQ）
+*** 深度学习
+ 深度学习算法是对人工神经网络的发展。
+
+ 在计算能力变得日益廉价的今天，深度学习试图建立大得多也复杂得多的神经网络。很多深度学习的算法是半监督式学习算法，用来处理存在少量未标识数据的大数据集。
+
+ 常见的深度学习算法包括：受限波尔兹曼机（Restricted Boltzmann Machine，RBN），Deep Belief Networks（DBN），卷积网络（Convolutional Network）, 堆栈式自动编码器（Stacked Auto-encoders）。
+*** 降低维度算法
+ 像聚类算法一样，降低维度算法试图分析数据的内在结构，不过降低维度算法是以非监督学习的方式试图利用较少的信息来归纳或者解释数据。
+ 这类算法可以用于高维数据的可视化或者用来简化数据以便监督式学习使用。
+
+ 常见的算法包括：主成份分析（Principle Component Analysis，PCA），偏最小二乘回归（Partial Least Square Regression，PLS），Sammon 映射，多维尺度（Multi-Dimensional Scaling, MDS）,  投影追踪（Projection Pursuit）等。
+*** 集成算法
+ 集成算法用一些相对较弱的学习模型独立地就同样的样本进行训练，然后把结果整合起来进行整体预测。集成算法的主要难点在于究竟集成哪些独立的较弱的学习模型以及如何把学习结果整合起来。
+
+ 常见的算法包括：Boosting，Bootstrapped Aggregation（Bagging），AdaBoost，堆叠泛化（Stacked Generalization，Blending），梯度推进机（Gradient Boosting Machine, GBM），随机森林（Random Forest）。
+*** Other Algorithms
+    Many algorithms were not covered.
+
+    For example, what group would Support Vector Machines go into? Its own?
+
+    I did not cover algorithms from specialty tasks in the process of machine learning, such as:
+
+    Feature selection algorithms
+    Algorithm accuracy evaluation
+    Performance measures
+    I also did not cover algorithms from specialty subfields of machine learning, such as:
+
+    Computational intelligence (evolutionary algorithms, etc.)
+    Computer Vision (CV)
+    Natural Language Processing (NLP)
+    Recommender Systems
+    Reinforcement Learning
+    Graphical Models
+    And more…
+
+** 算法类似性 2
+ 1. 决策树学习：根据数据的属性采用树状结构建立决策模型。决策树模型常常用来解决分类和回归问题。常见的算法包括 CART (Classification And Regression Tree)、ID3、C4.5、随机森林 (Random Forest) 等。
+ 2. 回归算法：试图采用对误差的衡量来探索变量之间的关系的一类算法。常见的回归算法包括最小二乘法 (Least Square)、逻辑回归 (Logistic Regression)、逐步式回归 (Stepwise Regression) 等。
+ 3. 聚类算法：通常按照中心点或者分层的方式对输入数据进行归并。所有的聚类算法都试图找到数据的内在结构，以便按照最大的共同点将数据进行归类。常见的聚类算法包括 K-Means 算法以及期望最大化算法 (Expectation Maximization) 等。
+ 4. 人工神经网络：模拟生物神经网络，是一类模式匹配算法。通常用于解决分类和回归问题。人工神经网络算法包括感知器神经网络 (Perceptron Neural Network) 、反向传递 (Back Propagation) 和深度学习等。
+ 5. 集成算法：用一些相对较弱的学习模型独立地就同样的样本进行训练，然后把结果整合起来进行整体预测。集成算法的主要难点在于究竟集成哪些独立的较弱的学习模型以及如何把学习结果整合起来。这是一类非常强大的算法，同时也非常流行。常见的算法包括 Boosting、Bagging、AdaBoost、随机森林 (Random Forest) 等。
+
 * 关联知识
 ** 维数灾难(curse of dimensionality)
 当空间维度增加时, 分析和组织高维空间, 会因体积的指数增加而遇到各种问题. 当空间体积增加太快, 会使可用数据变得非常稀疏. 当数据变得非常稀疏后, 从很多角度分析都不相似, 因为常使数据组织策略变得低效
 ** 机器学习中相似性度量
 [[http://www.cnblogs.com/heaad/archive/2011/03/08/1977733.html][机器学习中的相似性度量]]
 1. 欧氏距离
+   简单说来，闵氏距离的缺点主要有两个：(1)将各个分量的量纲(scale)，也就是“单位”当作相同的看待了。(2)没有考虑各个分量的分布（期望，方差等)可能是不同的。
 2. 曼哈顿距离
+   简单说来，闵氏距离的缺点主要有两个：(1)将各个分量的量纲(scale)，也就是“单位”当作相同的看待了。(2)没有考虑各个分量的分布（期望，方差等)可能是不同的。
 3. 切比雪夫距离
+   简单说来，闵氏距离的缺点主要有两个：(1)将各个分量的量纲(scale)，也就是“单位”当作相同的看待了。(2)没有考虑各个分量的分布（期望，方差等)可能是不同的。
 4. 闵可夫斯基距离
+   闵氏距离，包括曼哈顿距离、欧氏距离和切比雪夫距离都存在明显的缺点。
+   简单说来，闵氏距离的缺点主要有两个：(1)将各个分量的量纲(scale)，也就是“单位”当作相同的看待了。(2)没有考虑各个分量的分布（期望，方差等)可能是不同的。
 5. 标准化欧氏距离
 6. 马氏距离
+   马氏距离的优缺点：量纲无关，排除变量之间的相关性的干扰。
 7. 夹角余弦
+    夹角余弦取值范围为[-1,1]。夹角余弦越大表示两个向量的夹角越小，夹角余弦越小表示两向量的夹角越大。当两个向量的方向重合时夹角余弦取最大值 1，当两个向量的方向完全相反夹角余弦取最小值-1。
 8. 汉明距离
+   两个等长字符串 s1 与 s2 之间的汉明距离定义为将其中一个变为另外一个所需要作的最小替换次数。例如字符串“1111”与“1001”之间的汉明距离为 2。
+
+   应用：信息编码（为了增强容错性，应使得编码间的最小汉明距离尽可能大）。
 9. 杰卡德距离 & 杰卡德相似系数
+   两个集合 A 和 B 的交集元素在 A，B 的并集中所占的比例，称为两个集合的杰卡德相似系数，用符号 J(A,B)表示。
+
+   杰卡德相似系数是衡量两个集合的相似度一种指标。
+
+   杰卡德距离用两个集合中不同元素占所有元素的比例来衡量两个集合的区分度。
 10. 相关系数 & 相关距离
+    相关系数(ρ_xy)是衡量随机变量 X 与 Y 相关程度的一种方法，相关系数的取值范围是[-1,1]。相关系数的绝对值越大，则表明 X 与 Y 相关度越高。当 X 与 Y 线性相关时，相关系数取值为 1（正线性相关）或-1（负线性相关）。
+
+    相关距离的定义: D_xy = 1 - ρ_xy
+
+
 11. 信息熵
-*** 似然函数
+    信息熵是衡量分布的混乱程度或分散程度的一种度量。
+** 似然函数
 最大似然估计提供了一种给定观察数据来评估模型参数的方法
 [[https://zh.wikipedia.org/wiki/%25E4%25BC%25BC%25E7%2584%25B6%25E5%2587%25BD%25E6%2595%25B0][https://zh.wikipedia.org/wiki/%E4%BC%BC%E7%84%B6%E5%87%BD%E6%95%B0]]
 [[http://www.cnblogs.com/liliu/archive/2010/11/22/1883702.html][最大似然估计(Maximum likelihood estimation)]]
@@ -277,62 +394,6 @@ file:~/note/Pictures/MLPictures/xiefangcha1.png
    [[https://zh.wikipedia.org/zh-hans/%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3][奇异值分解 维基百科]]     [[https://en.wikipedia.org/wiki/Singular-value_decomposition][Singular-value decomposition wiki]]
 
    [[https://zh.wikipedia.org/wiki/%E9%85%89%E7%9F%A9%E9%98%B5][酉矩阵]]
-* 算法类似性 1
-根据算法的功能和形式的类似性，我们可以把算法分类
-** 回归算法（regression）
-回归算法是试图采用对误差的衡量来探索变量之间的关系的一类算法。
-
-有一些已经标注好的数据，标注值与分类问题不同，分类问题的标注是离散值，而回归问题中的标注是实数，在标注好的数据上建模，对于新样本，得到它的标注值。如股票预测。
-
-常见的回归算法包括：最小二乘法（Ordinary Least Square），逻辑回归（Logistic Regression），逐步式回归（Stepwise Regression），多元自适应回归样条（Multivariate Adaptive Regression Splines）以及本地散点平滑估计（Locally Estimated Scatterplot Smoothing）
-** 分类（classification）
-有一些已经标注好类别的数据，在标注好的数据上建模，对于新样本，判断它的类别。如垃圾邮件识别
-** 基于实例的算法
-基于实例的算法常常用来对决策问题建立模型，这样的模型常常先选取一批样本数据，然后根据某些近似性把新数据与样本数据进行比较。通过这种方式来寻找最佳的匹配。
-
-常见的算法包括 k-Nearest Neighbor(KNN), 学习矢量量化（Learning Vector Quantization，LVQ），以及自组织映射算法（Self-Organizing Map，SOM）
-** 正则化方法
-正则化方法是其他算法（通常是回归算法）的延伸，根据算法的复杂度对算法进行调整。正则化方法通常对简单模型予以奖励而对复杂算法予以惩罚。常见的算法包括：Ridge Regression，Least Absolute Shrinkage and Selection Operator（LASSO），以及弹性网络（Elastic Net）。
-** 规则抽取（rule extraction）
-发现数据中属性之间的统计关系，而不只是预测一些事情。如啤酒和尿布。
-** 决策树学习
-决策树算法根据数据的属性采用树状结构建立决策模型， 决策树模型常常用来解决分类和回归问题。常见的算法包括：分类及回归树（Classification And Regression Tree，CART），ID3 (Iterative Dichotomiser 3)，C4.5，Chi-squared Automatic Interaction Detection(CHAID), Decision Stump, 随机森林（Random Forest）， 多元自适应回归样条（MARS）以及梯度推进机（Gradient Boosting Machine，GBM）
-** 贝叶斯方法
-贝叶斯方法算法是基于贝叶斯定理的一类算法，主要用来解决分类和回归问题。常见算法包括：朴素贝叶斯算法，平均单依赖估计（Averaged One-Dependence Estimators，AODE），以及 Bayesian Belief Network（BBN）。
-** 基于核的算法
-基于核的算法中最著名的莫过于支持向量机（SVM）了。 基于核的算法把输入数据映射到一个高阶的向量空间， 在这些高阶向量空间里， 有些分类或者回归问题能够更容易的解决。 常见的基于核的算法包括：支持向量机（Support Vector Machine，SVM）， 径向基函数（Radial Basis Function，RBF)， 以及线性判别分析（Linear Discriminate Analysis，LDA)等
-** 聚类算法
-数据没有被标注，但是给出了一些相似度衡量标准，可以根据这些标准将数据进行划分。如在一堆未给出名字的照片中，自动的将同一个人的照片聚集到一块。
-
-聚类算法通常按照中心点或者分层的方式对输入数据进行归并。所有的聚类算法都试图找到数据的内在结构，以便按照最大的共同点将数据进行归类。常见的聚类算法包括 k-Means 算法以及期望最大化算法（Expectation Maximization，EM）。
-** 关联规则学习
-关联规则学习通过寻找最能够解释数据变量之间关系的规则，来找出大量多元数据集中有用的关联规则。常见算法包括 Apriori 算法和 Eclat 算法等。
-** 人工神经网络
-人工神经网络算法模拟生物神经网络，是一类模式匹配算法。通常用于解决分类和回归问题。
-
-重要的人工神经网络算法包括：感知器神经网络（Perceptron Neural Network）, 反向传递（Back Propagation），Hopfield 网络，自组织映射（Self-Organizing Map, SOM）。学习矢量量化（Learning Vector Quantization，LVQ）
-** 深度学习
-深度学习算法是对人工神经网络的发展。
-
-在计算能力变得日益廉价的今天，深度学习试图建立大得多也复杂得多的神经网络。很多深度学习的算法是半监督式学习算法，用来处理存在少量未标识数据的大数据集。
-
-常见的深度学习算法包括：受限波尔兹曼机（Restricted Boltzmann Machine，RBN），Deep Belief Networks（DBN），卷积网络（Convolutional Network）, 堆栈式自动编码器（Stacked Auto-encoders）。
-** 降低维度算法
-像聚类算法一样，降低维度算法试图分析数据的内在结构，不过降低维度算法是以非监督学习的方式试图利用较少的信息来归纳或者解释数据。
-这类算法可以用于高维数据的可视化或者用来简化数据以便监督式学习使用。
-
-常见的算法包括：主成份分析（Principle Component Analysis，PCA），偏最小二乘回归（Partial Least Square Regression，PLS），Sammon 映射，多维尺度（Multi-Dimensional Scaling, MDS）,  投影追踪（Projection Pursuit）等。
-** 集成算法
-集成算法用一些相对较弱的学习模型独立地就同样的样本进行训练，然后把结果整合起来进行整体预测。集成算法的主要难点在于究竟集成哪些独立的较弱的学习模型以及如何把学习结果整合起来。
-
-常见的算法包括：Boosting，Bootstrapped Aggregation（Bagging），AdaBoost，堆叠泛化（Stacked Generalization，Blending），梯度推进机（Gradient Boosting Machine, GBM），随机森林（Random Forest）。
-* 算法类似性 2
-1. 决策树学习：根据数据的属性采用树状结构建立决策模型。决策树模型常常用来解决分类和回归问题。常见的算法包括 CART (Classification And Regression Tree)、ID3、C4.5、随机森林 (Random Forest) 等。
-2. 回归算法：试图采用对误差的衡量来探索变量之间的关系的一类算法。常见的回归算法包括最小二乘法 (Least Square)、逻辑回归 (Logistic Regression)、逐步式回归 (Stepwise Regression) 等。
-3. 聚类算法：通常按照中心点或者分层的方式对输入数据进行归并。所有的聚类算法都试图找到数据的内在结构，以便按照最大的共同点将数据进行归类。常见的聚类算法包括 K-Means 算法以及期望最大化算法 (Expectation Maximization) 等。
-4. 人工神经网络：模拟生物神经网络，是一类模式匹配算法。通常用于解决分类和回归问题。人工神经网络算法包括感知器神经网络 (Perceptron Neural Network) 、反向传递 (Back Propagation) 和深度学习等。
-5. 集成算法：用一些相对较弱的学习模型独立地就同样的样本进行训练，然后把结果整合起来进行整体预测。集成算法的主要难点在于究竟集成哪些独立的较弱的学习模型以及如何把学习结果整合起来。这是一类非常强大的算法，同时也非常流行。常见的算法包括 Boosting、Bagging、AdaBoost、随机森林 (Random Forest) 等。
-
 * 算法集锦及优缺点
   *请参考下边第一个网站*
 [[http://www.jiqizhixin.com/article/2327][机器学习算法集锦：从贝叶斯到深度学习及各自优缺点]]
@@ -456,6 +517,11 @@ C4.5 和 C5.0（一种强大方法的两个不同版本）
 ** 回归
    - MAE
    - MSE
+* 分类回归的区别
+分类和回归的区别在于输出变量的类型。
+
+定量输出称为回归，或者说是连续变量预测, 回归问题通常是用来预测一个值；
+定性输出称为分类，或者说是离散变量预测, 分类问题是用于将事物打上一个标签，通常结果为离散值。
 * Ten Examples of Machine Learning Problems
 1. Spam Detection  \\
  Given email in an inbox, identify those email messages that are spam and those that are not.Having a model of this problem would allow a program to leave non-spam emails in the inbox and move spam emails to a spam folder.

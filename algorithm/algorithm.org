@@ -81,7 +81,6 @@
     }
 #+END_SRC
 
-
 * 机器学习十大算法简介
 [[https://github.com/ty4z2008/Qix/blob/master/dl.md][机器学习(Machine Learning)&深度学习(Deep Learning)资料]]
 * 动态规划(Dynamic programming) 求斐波那契
