@@ -86,7 +86,47 @@
 [[https://github.com/ty4z2008/Qix/blob/master/dl.md][机器学习(Machine Learning)&深度学习(Deep Learning)资料]]
 
 [[https://www.coursera.org/learn/machine-learning][Andrew Ng’s free Machine Learning class on Coursera]]
+* A Deep Learning Tutorial: From Perceptrons to Deep Networks
+  https://www.toptal.com/machine-learning/an-introduction-to-deep-learning-from-perceptrons-to-deep-networks
 
+** Perceptrons: Early Deep Learning Algorithms
+   线性模型, 不能表示非线性可分的任务, 比如异或关系(xor)
+
+** Feedforward Neural Networks for Deep Learning
+   A linear composition of a bunch of linear functions is still just a linear function, so most neural networks use non-linear activation functions.
+
+   Because of this, most neural networks use non-linear activation functions like the logistic, tanh, binary or rectifier. Without them the network can only learn functions which are linear combinations of its inputs.
+
+   The Problem with Large Networks, increasing the number of hidden layers leads to two known issues:
+     1. Vanishing gradients: as we add more and more hidden layers, backpropagation becomes less and less useful in passing information to the lower layers. In effect, as information is passed back, the gradients begin to vanish and become small relative to the weights of the networks.
+     2. Overfitting: perhaps the central problem in machine learning. Briefly, overfitting describes the phenomenon of fitting the training data too closely, maybe with hypotheses that are too complex. In such a case, your learner ends up fitting the training data really well, but will perform much, much more poorly on real examples.
+
+** Autoencoders
+   An autoencoder is typically a feedforward neural network which aims to learn a compressed, distributed representation (encoding) of a dataset.
+
+** “深度学习”和“多层神经网络”的区别?
+    https://www.zhihu.com/question/26017374
+   简单来说，原来多层神经网络做的步骤是：特征映射到值。特征是人工挑选。
+
+   深度学习做的步骤是 信号->特征->值。 特征是由网络自己选择。
+
+
+    作者：Bipolar Bear
+    链接：https://www.zhihu.com/question/26017374/answer/127924427
+    来源：知乎
+    著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+    以我的理解，两种网络被设计出来，所要解决的问题和目的不同。
+    多层神经网络与 universal approximation theorem [1] （泛逼近性原理，不知这样翻译可对？）相伴而生。该理论指出，单隐藏层（hidden layer）非线性前馈神经网络，可以在实数空间近似任何连续函数。上世纪 80 90 年代，Backpropagation 刚刚开始大行其道，利用这一算法，只需知道输入和输出便可训练网络参数，从而得到一个神经网络“黑箱”。之所以称为黑箱，是因为无需知道 y=f(x) 中 f 的表达式是什么，也能轻易做函数计算，因为 f（objective function）就是网络本身。多层神经网络的座右铭是：“函数是什么我不管，反正我能算！“。
+    当然多层神经网络并非天下无敌，它有三个主要限制：
+      1. 是在面对大数据时，需要人为提取原始数据的特征作为输入，这个问题前面的知友提到过@杨延生。必须忽略不相关的变量，同时保留有用的信息。这个尺度很难掌握，多层神经网络会把蹲在屋顶的 Kitty 和骑在猫奴头上的 Kitty 识别为不同的猫咪，又会把二哈和狼归类为同一种动物。前者是对不相关变量过于敏感，后者则因无法提取有实际意义的特征。
+      2. 是想要更精确的近似复杂的函数，必须增加隐藏层的层数，这就产生了梯度扩散问题@青青子衿。所谓“强弩之末势不能穿鲁缟“。
+      3. 是无法处理时间序列数据（比如音频），因为多层神经网络不含时间参数。随着人工智能需求的提升，我们想要做复杂的图像识别，做自然语言处理，做语义分析翻译，等等。多层神经网络显然力不从心。
+    那么深度模型是如何解决以上三个问题的。
+      1. 深度学习自动选择原始数据的特征。举一个图像的例子，将像素值矩阵输入深度网络（这里指常用于图像识别的卷积神经网络 CNN），网络第一层表征物体的位置、边缘、亮度等初级视觉信息。第二层将边缘整合表征物体的轮廓……之后的层会表征更加抽象的信息，如猫或狗这样的抽象概念。所有特征完全在网络中自动呈现，并非出自人工设计。更重要的一点是这种随着层的深入，从具象到抽象的层级式表征跟大脑的工作原理吻合，视网膜接收图像从 LGN 到视皮层、颞叶皮层再到海马走的是同样的路数[2]！
+      2. 深度网络的学习算法。一种方法是改变网络的组织结构，比如用卷积神经网络代替全连接（full connectivity）网络，训练算法仍依据 Backpropagating gradients 的基本原理。另一种则是彻底改变训练算法，我尝试过的算法有 Hessian-free optimization[3]，recursive least-squares(RLS) 等。
+      3. 使用带反馈和时间参数的 Recurrent neural network 处理时间序列数据。
+      从某种意义上讲，Recurrent neural network 可以在时间维度上展开成深度网络，可以有效处理音频信息（语音识别和自然语言处理等），或者用来模拟动力系统。本人计算神经科学小博士，写些粗浅的认识，有不对的地方还请各位大神指正。
 * 动态规划(Dynamic programming) 求斐波那契
 动态规划（英语：Dynamic programming，简称 DP）是一种在数学、管理科学、计算机科学、经济学和生物信息学中使用的，通过把原问题分解为相对简单的子问题的方式求解复杂问题的方法。
 动态规划常常适用于有重叠子问题[1]和最优子结构性质的问题，动态规划方法所耗时间往往远少于朴素解法。
