@@ -1,6 +1,9 @@
+
  [[https://clickhouse.yandex/docs/en/operations/tips/][ClickHouse Documentation]]
-
-
+* common usage
+** system.one as dual table
+   select toDate(today()) from system.one;
+* install
 1. 查看  [[https://clickhouse.yandex/docs/en/operations/tips/][ClickHouse Documentation]] 网站的推荐用例
 2. 监控
    ClickHouse exporter + Prometheus + Grafana

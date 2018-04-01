@@ -59,6 +59,7 @@ shift+command+d,然后输入要打开的目录
                     z
                     zsh-autosuggestions
             )
+  - Karabiner-Elements :: mac 键盘互换
 
 ** app store
   - jietu :: qq 截图软件
