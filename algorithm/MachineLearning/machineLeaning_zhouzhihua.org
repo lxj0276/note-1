@@ -1,133 +1,140 @@
+* TODO TODOS
+** TODO P59  F3.26 -> F3.27, 牛顿法 F3.29
+** TODO P60 LDA
+** TODO p68 多标记学习
+** TODO p124 SMO(Sequential Minimal Optimization)
+** TODO p133 SVR
+** TODO 贝叶斯 em 算法
+* 内容
+** 绪论
+   归纳(induction)与演绎(deduction)是科学推理的两大基本手段.
+   induction: 从特殊到一般的泛化(generalization)过程, 即从具体实事归纳出一般性规律.
+   deduction: 从一般到特殊的特化(specialization)过程, 即从基础原理推演出具体情况.
+   从样例中学习是一个归纳过程, 为归纳学习(induction learning).
 
-* 绪论
-  归纳(induction)与演绎(deduction)是科学推理的两大基本手段.
-  induction: 从特殊到一般的泛化(generalization)过程, 即从具体实事归纳出一般性规律.
-  deduction: 从一般到特殊的特化(specialization)过程, 即从基础原理推演出具体情况.
-  从样例中学习是一个归纳过程, 为归纳学习(induction learning).
+*** 基本术语
+    1. 数据集(data set)
+    2. 样本(sample)/示例(instance): 每条记录
+    3. 属性(attribute)/特征(feature)
+    4. 属性值(attribute value)
+    5. 属性空间(sttribute space)/样本空间(sample space)/输入空间
+    6. 特征向量(feature vector): 一个示例
+    7. 维数(dimensionality)
+    8. 学习(learning)/训练(training)
+    9. 训练数据(training data)
+    10. 训练样本(training sample)
+    11. 训练集(training set)
+    12. 假设(hypothesis): 学习模型对应数据的某种潜在规律
+    13. 真相/真实(ground-truth): 潜在规律自身
+    14. 学习器(learner): 模型, 可看作学系算法在给定数据和参数空间上的实例化.
+    15. 标记(label)
+    16. 样例(example): 有了标记信息的示例
+    17. 标记空间(label space)/输出空间: 所有标记的集合.
+    18. 分类(classification): 离散值
+    19. 回归(regression): 连续值
+    20. 聚类(clustering): 将数据集分为若干组(训练样本通常不拥有标记信息)
+    21. 簇(cluster): 每一组
+    22. 二分类(binary classification)
+    23. 多分类(multi-class classification)
+    24. 测试(testing): 对模型进行预测
+    25. 测试样本(testing sample)
+    26. 泛化(generalization): 学习模型适用于新样本的能力
+    27. 分布(distribution): 通常假设样本空间中全体样本服从一个未知分布
+    28. 独立同分布(independent and identically distributed, i.i.d): 获得的每个样本都是独立地从这个分布上采样获得的
+    29. 假设空间(hypothesis space): 所有假设组成的空间(e.g.: (色泽=?) ^ (根蒂=?) ^ (敲声=?))
+    30. 版本空间(version space)/假设集合: 可能有多个假设与训练集一致(现实问题常有很大的假设空间, 而样本训练集一般有限)
+    31. 归纳偏好(inductive bias)/偏好(bias): 机器学习算法在学习过程中对某种类型假设的偏好(奥卡姆剃刀(Occam's razor))
+*** 归纳偏好(bias)
+   在实际问题中, 假设是否成立, 即算法的归纳偏好是否与问题本身匹配, 大多数时候直接决定了算法能否取得好的性能.
+   在二分类问题中,假设所有可能的 f 按均匀分布, 则求出的总误差与学习算法无关, 即所有的算法的期望性能都相同,成为"没有免费的午餐"定理( No Free Lunch Theorem(NFL 定理) ).
+   NFL 定理的一个重要前提: 所有问题出现的机会相同,或所有问题同等重要, 实际中我们只关注自己正试图解决的问题.
+   NFL 定理最重要的寓意是让我们清楚的认识到, 脱离具体问题, 空谈"什么学习算法更好"毫无意义.要谈论算法的相对优劣, 必须针对具体的学习问题.
+   学习算法自身的饿归纳偏好与问题是否相配, 往往会起到决定性的作用.
+** 模型评估与选择
+*** 经验误差与过拟合
+    1. 错误率(error rate): 分类错误的样本数占样本总数的比例
+    2. 误差(error): 学习器的实际预测输出与样本的真实输出之间的差异
+    3. 经验误差(empirical error)/训练误差(training error): 学习器在训练集上的误差
+    4. 泛化误差(generalization error): 在新样本上的误差
+    5. 过拟合(overfitting): 过拟合无法避免, 只能缓解, 减小其风险
+    6. 欠拟合(underfitting)
+    7. 模型选择(model selection)
+       理想的选择是对候选模型的泛化误差进行评估, 然后选择泛化误差最小的那个模型.
+*** 评估方法
+    对 D(数据集)进行适当的处理, 从中产生出训练集(S)和测试集(T).
+**** 流出法(hold-out)
+     直接将 D 划分为两个互斥的集合 S(2/3~4/5 的数据), T.
+     需要注意:
+     1. 集合的划分尽可能保持数据分布的一致性
+     2. 分层采样(stratified): 保留类别比例的采样方式.
+     3. 采用若干次随机划分, 重复进行试验评估后取平均值作为流出法的结果.
+**** 交叉验证法(cross validation)/k 折交叉验证(k-fold cross validation)
+     首先将数据集 D 划分为 k 个大小相似的互斥子集(尽可能保持分布一致性,分层采样), 然后用 k-1 个子集的并集作为训练集(S), 剩下的一个子集作为测试集(T), 进行 k 次训练和测试, 测到测试结果的均值.
+     为了减少因样本划分不同引入的差别, 也需要随机使用不同的划分重复 p 次, 最终评估结果为 p 次 k 折交叉验证结果的均值.
+**** 自助法(bootstrapping)
+     为了解决较少训练样本规模不同造成的影响, 同事还能比较高效的进行试验估计.
 
-** 基本术语
-   1. 数据集(data set)
-   2. 样本(sample)/示例(instance): 每条记录
-   3. 属性(attribute)/特征(feature)
-   4. 属性值(attribute value)
-   5. 属性空间(sttribute space)/样本空间(sample space)/输入空间
-   6. 特征向量(feature vector): 一个示例
-   7. 维数(dimensionality)
-   8. 学习(learning)/训练(training)
-   9. 训练数据(training data)
-   10. 训练样本(training sample)
-   11. 训练集(training set)
-   12. 假设(hypothesis): 学习模型对应数据的某种潜在规律
-   13. 真相/真实(ground-truth): 潜在规律自身
-   14. 学习器(learner): 模型, 可看作学系算法在给定数据和参数空间上的实例化.
-   15. 标记(label)
-   16. 样例(example): 有了标记信息的示例
-   17. 标记空间(label space)/输出空间: 所有标记的集合.
-   18. 分类(classification): 离散值
-   19. 回归(regression): 连续值
-   20. 聚类(clustering): 将数据集分为若干组(训练样本通常不拥有标记信息)
-   21. 簇(cluster): 每一组
-   22. 二分类(binary classification)
-   23. 多分类(multi-class classification)
-   24. 测试(testing): 对模型进行预测
-   25. 测试样本(testing sample)
-   26. 泛化(generalization): 学习模型适用于新样本的能力
-   27. 分布(distribution): 通常假设样本空间中全体样本服从一个未知分布
-   28. 独立同分布(independent and identically distributed, i.i.d): 获得的每个样本都是独立地从这个分布上采样获得的
-   29. 假设空间(hypothesis space): 所有假设组成的空间(e.g.: (色泽=?) ^ (根蒂=?) ^ (敲声=?))
-   30. 版本空间(version space)/假设集合: 可能有多个假设与训练集一致(现实问题常有很大的假设空间, 而样本训练集一般有限)
-   31. 归纳偏好(inductive bias)/偏好(bias): 机器学习算法在学习过程中对某种类型假设的偏好(奥卡姆剃刀(Occam's razor))
-** 归纳偏好(bias)
-  在实际问题中, 假设是否成立, 即算法的归纳偏好是否与问题本身匹配, 大多数时候直接决定了算法能否取得好的性能.
-  在二分类问题中,假设所有可能的 f 按均匀分布, 则求出的总误差与学习算法无关, 即所有的算法的期望性能都相同,成为"没有免费的午餐"定理( No Free Lunch Theorem(NFL 定理) ).
-  NFL 定理的一个重要前提: 所有问题出现的机会相同,或所有问题同等重要, 实际中我们只关注自己正试图解决的问题.
-  NFL 定理最重要的寓意是让我们清楚的认识到, 脱离具体问题, 空谈"什么学习算法更好"毫无意义.要谈论算法的相对优劣, 必须针对具体的学习问题.
-  学习算法自身的饿归纳偏好与问题是否相配, 往往会起到决定性的作用.
-* 模型评估与选择
-** 经验误差与过拟合
-   1. 错误率(error rate): 分类错误的样本数占样本总数的比例
-   2. 误差(error): 学习器的实际预测输出与样本的真实输出之间的差异
-   3. 经验误差(empirical error)/训练误差(training error): 学习器在训练集上的误差
-   4. 泛化误差(generalization error): 在新样本上的误差
-   5. 过拟合(overfitting): 过拟合无法避免, 只能缓解, 减小其风险
-   6. 欠拟合(underfitting)
-   7. 模型选择(model selection)
-      理想的选择是对候选模型的泛化误差进行评估, 然后选择泛化误差最小的那个模型.
-** 评估方法
-   对 D(数据集)进行适当的处理, 从中产生出训练集(S)和测试集(T).
-*** 流出法(hold-out)
-    直接将 D 划分为两个互斥的集合 S(2/3~4/5 的数据), T.
-    需要注意:
-    1. 集合的划分尽可能保持数据分布的一致性 
-    2. 分层采样(stratified): 保留类别比例的采样方式.
-    3. 采用若干次随机划分, 重复进行试验评估后取平均值作为流出法的结果.
-*** 交叉验证法(cross validation)/k 折交叉验证(k-fold cross validation)
-    首先将数据集 D 划分为 k 个大小相似的互斥子集(尽可能保持分布一致性,分层采样), 然后用 k-1 个子集的并集作为训练集(S), 剩下的一个子集作为测试集(T), 进行 k 次训练和测试, 测到测试结果的均值.
-    为了减少因样本划分不同引入的差别, 也需要随机使用不同的划分重复 p 次, 最终评估结果为 p 次 k 折交叉验证结果的均值.
-*** 自助法(bootstrapping)
-    为了解决较少训练样本规模不同造成的影响, 同事还能比较高效的进行试验估计.
+     给定包含 m 的样本的数据集 D, 对它进行采样产生数据集 D': 每次随机从 D 中挑选一个样本, 将其拷贝放入 D', 然后再讲样本放回到原始数据集 D 中, 使样本下次采样仍可能被采到, 重复此过程 m 次, 可以得到包含 m 个样本的数据集 D', 用没有在 D'中出现的数据作为测试集(D\D')
+     不被采到的概率为 lim_m->∞ (1-1/m)^m ≈ 1/e ≈ 0.368 , 约有 1/3 没有没在训练集中出现.
 
-    给定包含 m 的样本的数据集 D, 对它进行采样产生数据集 D': 每次随机从 D 中挑选一个样本, 将其拷贝放入 D', 然后再讲样本放回到原始数据集 D 中, 使样本下次采样仍可能被采到, 重复此过程 m 次, 可以得到包含 m 个样本的数据集 D', 用没有在 D'中出现的数据作为测试集(D\D')
-    不被采到的概率为 lim_m->∞ (1-1/m)^m ≈ 1/e ≈ 0.368 , 约有 1/3 没有没在训练集中出现.
+     这样的测试结果,成为"包外估计(out-of-bag estimate)"
 
-    这样的测试结果,成为"包外估计(out-of-bag estimate)"
+     自助法产生的数据集改变了初始数据集的分布, 会引入估计偏差. 因此, 在初始数据量足够时, 流出法和交叉验证法更常用一些.
+*** 性能度量(performance measure)
+    要评估学习器 f 的性能, 要把学习器预测结果 f(x)与真实标记 y 进行比较.
+    回归任务最常用的性能度量是"均方误差(mean squared error)"
+**** 错误率与精度(适用于二分类, 多分类)
 
-    自助法产生的数据集改变了初始数据集的分布, 会引入估计偏差. 因此, 在初始数据量足够时, 流出法和交叉验证法更常用一些.
-** 性能度量(performance measure)
-   要评估学习器 f 的性能, 要把学习器预测结果 f(x)与真实标记 y 进行比较.
-   回归任务最常用的性能度量是"均方误差(mean squared error)"
-*** 错误率与精度(适用于二分类, 多分类)
+     - 错误率: 分类错误的样本数占样本总数的比例
+     - 精度: 分类正确的样本数占样本总数的比例
 
-    - 错误率: 分类错误的样本数占样本总数的比例
-    - 精度: 分类正确的样本数占样本总数的比例
+     - 查准率(precision): 检索出的信息中有多少比例是用户感兴趣的
+     - 查全率(recall): 用户感兴趣的信息中有多少被检索出来了
+     查准率和查全率是一对矛盾的度量.
+     平衡点(Break-Even Point, BEP): 查准率=查全率时的取值.
 
-    - 查准率(precision): 检索出的信息中有多少比例是用户感兴趣的
-    - 查全率(recall): 用户感兴趣的信息中有多少被检索出来了
-    查准率和查全率是一对矛盾的度量.
-    平衡点(Break-Even Point, BEP): 查准率=查全率时的取值.
+     - F1: 基于查准率与查全率的调和平均(harmonic mean)
+**** ROC(受试者工作特征(Receiver Operating characteristic)) 与 AUC(Area Under ROC Curve)
+     P_R 曲线: 查准率-查全率曲线
+     ROC 曲线的纵轴是"真正例率"(True Positive Rate, TPR), 横轴是"假正例率"(False Positive Rate, FPR)
+**** 代价敏感错误率与代价曲线
+     - 非均等代价(unequal cost): 为权衡不同类型错误所造成的不同损失.
+*** TODO 比较检验
+    - State "TODO"       from              [2017-04-08 Sat 23:42]
+**** 假设检验(hypothesis test)
+** TODO 线性模型
+** TODO 决策树
+** TODO 神经网络
+** TODO 支持向量机
+*** 间隔(margin)与支持向量(support vector)
+    - W^T X_i + b >= +1, y_i = +1;
+    - W^T X_i + b <= -1, y_i = -1;
 
-    - F1: 基于查准率与查全率的调和平均(harmonic mean)
-*** ROC(受试者工作特征(Receiver Operating characteristic)) 与 AUC(Area Under ROC Curve)
-    P_R 曲线: 查准率-查全率曲线
-    ROC 曲线的纵轴是"真正例率"(True Positive Rate, TPR), 横轴是"假正例率"(False Positive Rate, FPR)
-*** 代价敏感错误率与代价曲线
-    - 非均等代价(unequal cost): 为权衡不同类型错误所造成的不同损失.
-** TODO 比较检验
-   - State "TODO"       from              [2017-04-08 Sat 23:42]
-*** 假设检验(hypothesis test)
-* TODO 线性模型
-* TODO 决策树
-* TODO 神经网络
-* TODO 支持向量机
-** 间隔(margin)与支持向量(support vector)
-   - W^T X_i + b >= +1, y_i = +1;
-   - W^T X_i + b <= -1, y_i = -1;
+    *support vector*: 距离超平面最近的几个训练样本使上边两个公式的等号成立, 成为支持向量.
 
-   *support vector*: 距离超平面最近的几个训练样本使上边两个公式的等号成立, 成为支持向量. 
-
-   *margin*: 两个异类支持向量到超平面的距离(两条线间的距离)之和. 2/||W||
+    *margin*: 两个异类支持向量到超平面的距离(两条线间的距离)之和. 2/||W||
    
-** QA
-*** 正定,半正定矩阵
-  [[https://zh.wikipedia.org/wiki/%25E6%25AD%25A3%25E5%25AE%259A%25E7%259F%25A9%25E9%2598%25B5][正定矩阵]]
- 一个 n×n 的实对称矩阵 M 是 *正定* 的，当且仅当对于所有的非零实系数向量 z，都有 z^T M z > 0。其中 z^T 表示 z 的转置。
- 一个 n×n 的实对称矩阵 M 是 *半正定* 的，当且仅当对于所有的非零实系数向量 z，都有 z^T M z >= 0。其中 z^T 表示 z 的转置。
+*** QA
+**** 正定,半正定矩阵
+   [[https://zh.wikipedia.org/wiki/%25E6%25AD%25A3%25E5%25AE%259A%25E7%259F%25A9%25E9%2598%25B5][正定矩阵]]
+  一个 n×n 的实对称矩阵 M 是 *正定* 的，当且仅当对于所有的非零实系数向量 z，都有 z^T M z > 0。其中 z^T 表示 z 的转置。
+  一个 n×n 的实对称矩阵 M 是 *半正定* 的，当且仅当对于所有的非零实系数向量 z，都有 z^T M z >= 0。其中 z^T 表示 z 的转置。
 
- 一个 n×n 的实对称矩阵 M 是 *负定* 的，当且仅当对于所有的非零实系数向量 z，都有 z^T M z < 0。其中 z^T 表示 z 的转置。
-*** 拉格朗日乘子法
-    [[https://zh.wikipedia.org/wiki/%25E6%258B%2589%25E6%25A0%25BC%25E6%259C%2597%25E6%2597%25A5%25E4%25B9%2598%25E6%2595%25B0][拉格朗日乘数]]
-*** 对偶问题
-*** (凸)二次规划问题
-    [[https://zh.wikipedia.org/wiki/%25E4%25BA%258C%25E6%25AC%25A1%25E8%25A7%2584%25E5%2588%2592][二次规划]]
-*** 松弛变量及其作用
-*** 稀疏性
-* TODO 贝叶斯分类器
-* TODO 集成学习
-* TODO 聚类
-* TODO 降维与度量学习
-* TODO 特征选择与稀疏学习
-* TODO 计算学习理论
-* TODO 半监督学习
-* TODO 概率图模型
-* TODO 规则学习
-* TODO 强化学习
+  一个 n×n 的实对称矩阵 M 是 *负定* 的，当且仅当对于所有的非零实系数向量 z，都有 z^T M z < 0。其中 z^T 表示 z 的转置。
+**** 拉格朗日乘子法
+     [[https://zh.wikipedia.org/wiki/%25E6%258B%2589%25E6%25A0%25BC%25E6%259C%2597%25E6%2597%25A5%25E4%25B9%2598%25E6%2595%25B0][拉格朗日乘数]]
+**** 对偶问题
+**** (凸)二次规划问题
+     [[https://zh.wikipedia.org/wiki/%25E4%25BA%258C%25E6%25AC%25A1%25E8%25A7%2584%25E5%2588%2592][二次规划]]
+**** 松弛变量及其作用
+**** 稀疏性
+** TODO 贝叶斯分类器
+** TODO 集成学习
+** TODO 聚类
+** TODO 降维与度量学习
+** TODO 特征选择与稀疏学习
+** TODO 计算学习理论
+** TODO 半监督学习
+** TODO 概率图模型
+** TODO 规则学习
+** TODO 强化学习
