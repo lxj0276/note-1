@@ -1,4 +1,5 @@
-
+* TODO 需要证明的
+** TODO 线性回归, 逻辑回归
 * 绪论
   归纳(induction)与演绎(deduction)是科学推理的两大基本手段.
   induction: 从特殊到一般的泛化(generalization)过程, 即从具体实事归纳出一般性规律.
