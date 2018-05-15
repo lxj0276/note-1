@@ -7,6 +7,8 @@
 ** TODO p124 SMO(Sequential Minimal Optimization)
 ** TODO p133 SVR
 ** TODO 贝叶斯 em 算法
+** TODO p175 boosting
+** TODO 聚类学习
 * 内容
 ** 绪论
    归纳(induction)与演绎(deduction)是科学推理的两大基本手段.
@@ -134,6 +136,9 @@
 ** TODO 集成学习
 ** TODO 聚类
 ** TODO 降维与度量学习
+   降维的两个作用:
+     1. 增加采样密度
+     2. 去噪
 ** TODO 特征选择与稀疏学习
 ** TODO 计算学习理论
 ** TODO 半监督学习
