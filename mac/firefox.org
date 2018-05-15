@@ -1,0 +1,7 @@
+* vimium add Custom key mappings
+# Insert your preferred key mappings here.
+map s createTab
+map e LinkHints.activateModeToOpenInNewForegroundTab
+map cr closeTabsOnRight
+map cl closeTabsOnLeft
+map co closeOtherTabs
