@@ -6,33 +6,75 @@ shift+command+d,然后输入要打开的目录
 * software application 
   - mps-youtube :: [youtube terminal --> mpsyt command]
                    need to set:
-        
+
        set show_video true
        set player mpv
        set player iina
 
        set columns rating,date,category,views,likes,dislikes,user,comments
-       
+
        set search_music true
        set order views
        set order rating
 
+       set fullscreen false
        set window_pos bottom-right
-       set window_size 500x300
+       set window_size 900x600
        -- 满屏
-        set window_size 1440x900
+       set window_size 1440x900
+       set search_music false
+
     1. set show_video true
     2. set player mpv  | set player iina
     3. set order <relevance|date|views|rating> - search result ordering
     4. set columns <columns> - select extra displayed fields in search results: (valid: views comments rating date user likes dislikes category)
     5. set search_music true|false - search only music (all categories if false)
-    6. user_order <<nothing>|relevance|date|views|rating> user upload list result ordering, leave blank for the same as order setting
+    6. set order <<nothing>|relevance|date|views|rating> user upload list result ordering, leave blank for the same as order setting
     7. set window_pos <top|bottom>-<left|right> - set player window position
     8. set window_size <number>x<number> - set player window width & height
     9. set fullscreen true
+
+    youtube categories and ids
+        "Autos & Vehicles" : 2,
+        "Film & Animatio" : 1,
+        "Musi" : 10,
+        "Pets & Animal" : 15,
+        "Sport" : 17,
+        "Short Movie" : 18,
+        "Travel & Event" : 19,
+        "Gamin" : 20,
+        "Videobloggin" : 21,
+        "People & Blog" : 22,
+        "Comed" : 23,
+        "Entertainmen" : 24,
+        "News & Politic" : 25,
+        "Howto & Styl" : 26,
+        "Educatio" : 27,
+        "Science& Technolog" : 28,
+        "Nonprofits & Activis" : 29,
+        "Movie" : 30,
+        "Anime/Animatio" : 31,
+        "Action/Adventur" : 32,
+        "Classic" : 33,
+        "Comed" : 34,
+        "Documentar" : 35,
+        "Dram" : 36,
+        "Famil" : 37,
+        "Foreig" : 38,
+        "Horro" : 39,
+        "Sci-Fi/Fantas" : 40,
+        "Thrille" : 41,
+        "Short" : 42,
+        "Show" : 43,
+        "Trailer" : 44
+
   - keycastr :: 高亮按键
   - mouse locator :: 高亮鼠标位置
   - caskroom/cask/iina :: 基于 mpv 的播放器
+  - translate-shell  :: google translate
+       trans -speak  :zh -i [filename] --> 文件中的英语单词读并且翻译
+       trans -speak  :zh -b -i [filename] --> 文件中的英语单词读并且翻译(简洁模式)
+
 * accounts
   [[http://www.ipadmalaysialabs.com/how-to-create-a-us-apple-id/][US iTunes Store Access (Part 1) – How to Create a US Apple ID]]
 
@@ -46,6 +88,7 @@ shift+command+d,然后输入要打开的目录
 
 * software needed
 ** brew
+brew cask install go2shell iterm2
   - Caskroom/cask/sourcetree :: mac git 
   - Caskroom/cask/spectacle :: window ops(left, right..)
   - mps-youtube :: terminal youtube 
@@ -105,3 +148,5 @@ shift+command+d,然后输入要打开的目录
       sudo mount_ntfs -o rw,nobrowse /dev/disk1s1 /Volumes/myhd/
 
   5. 在终端进入/Volumes/myhd 操作
+* 安全性和隐私里面添加"任何来源"
+sudo spctl --master-disable

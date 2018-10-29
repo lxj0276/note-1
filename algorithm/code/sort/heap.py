@@ -40,7 +40,7 @@ def maxHeapify(B, start, end):
         child = root*2 + 1  # 调整节点的子节点
         if child > end:
             break
-        if child+1 < end and B[child] < B[child+1]:
+        if child+1 < end and B[child] < B[child+1]:  #
             child = child + 1  # 取较大的子节点
         if B[root] < B[child]:  # 较大的子节点成为父节点
             B[root], B[child] = B[child], B[root]

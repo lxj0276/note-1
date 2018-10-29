@@ -4,7 +4,9 @@
 ** find 
 chmod  -w `find . -type f`  # 将目录下文件去掉写权限, 可能出现 argument list too long: chmod
 find . -type f -print0 | xargs -0 chmod -w  # 将目录下文件去掉写权限
-find . -type f -print0 | xargs -0 chmod +w  # 将目录下文件去掉写权限
+find . -type f -print0 | xargs -0 chmod +w  # 将目录下文件添加写权限
+
+find . -type d -print0 | xargs -0 chmod 777  # 将目录文件添加写权限
 
 find . -name ***
 find . -name '*.sql'

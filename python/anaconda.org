@@ -1,4 +1,5 @@
 [[http://python.jobbole.com/86236/][Anaconda 使用总结]]
+ pip install --user instead of sudo pip install
 * Common Ops
 source activate python36 # for Linux & Mac
 source deactivate python36 # for Linux & Mac

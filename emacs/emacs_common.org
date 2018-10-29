@@ -1,5 +1,17 @@
-+OPTIONS: ^:nil
+#+OPTIONS: ^:nil
 
+* spacemacs 编辑状态间切换
+ alt+x:  evil-***-state
+
+  Evil State	Color
+  Normal	Orange
+  Insert	Green
+  Visual	Grey
+  Emacs	Blue
+  Motion	Purple
+  Replace	Chocolate
+  Lisp	Pink
+  Iedit/Iedit-Insert	Red
 * 列模式
 http://blog.sina.com.cn/s/blog_6bc5571a0101ijgh.html
 ** 先选中,在第一个标记点和最后一个标记点之间(行,列都包括)
@@ -35,10 +47,12 @@ https://github.com/fniessen/org-html-themes
    1. 拖拽网上图片可以直接复制进去. 用 url 把图片插入，然后自动下载； 复制图片文件路径，然后插入； 拖拽图片插入。
    2. 导出到 HTML
     设置图片标题
-      #+CAPTION: 电话拨打过快过多  
+      #+CAPTION: 电话拨打过快过多
 
     设置图片尺寸
-      #+ATTR_HTML: :width 100%  
+      #+ATTR_HTML: :width 100%
+   3. 显示隐藏图片
+      M-x org-toggle-inline-images
 
 ** emacs 导出目录到 html
 *** [[http://guidao.github.io/emacs_blog.html][使用 org-mode 写 blog]]
@@ -317,7 +331,7 @@ w: eww-copy-page-url
 o: open url
 
 D: eww-toggle-paragraph-direction
-* spacemacs install w3m
+** spacemacs install w3m
 [[https://github.com/venmos/w3m-layer][w3m-layer]]
 默认搜索引擎可能不能用, 修改默认搜索引擎
 ** 常用操作
@@ -357,9 +371,12 @@ RET： 打开连接
 *** ESC M : 用外部浏览器打开链接
 *** C-c C-k：停止载入
 * emacs 正则
+https://blog.csdn.net/zhuyingqingfen/article/details/8067424
 ** 正则去掉空行
 flush-lines 命令
 用正则^$
+** 匹配数字
+  [0-9]+
 * 修改有道 search 的快捷键, Ctrl-q 退出
 (local-set-key "\C-q" 'quit-window)
 #+BEGIN_SRC emacs-lisp
@@ -566,10 +583,10 @@ e.g.: $$e^{i\pi} + 1 = 0$$
   # 行数从当前光标往两边递增  
   dotspacemacs-line-numbers 'relative
 
-* emaxs highlighting
+* emacs highlighting
   [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Highlight-Interactively.html]]
   [[https://www.masteringemacs.org/article/highlighting-by-word-line-regexp]]
-* git
+* git diff-hi-mode
   diff-hi-mode   --> https://github.com/dgutov/diff-hl 高亮修改
 * spacemacs themes
 material-light
@@ -582,3 +599,9 @@ spacemacs-light
 leuven
 solarized-light
 solarized-dark
+* 查看 json
+  M-x：json-pretty-print-buffer
+* spacemacs open in finder iterms
+  - SPC o ; :: iterm shell command
+  - SPC o f :: reveal-in-osx-finder
+  - SPC ! :: shell comman

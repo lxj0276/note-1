@@ -299,3 +299,5 @@ display : 查看图片
 
 * 修改 hostname
   hostnamectl set-hostname ***
+* 每两行合并为一行
+  awk '{tmp=$0;getline;print tmp"\t"$0}' test.txt

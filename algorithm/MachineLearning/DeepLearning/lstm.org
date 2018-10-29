@@ -18,6 +18,12 @@
 
    Why gate units?
      To avoid input weight conflicts, in_j controls the error flow to memory cell c_j's input connections w_{c_j i}. To circumvent c_j's output weight conflicts, out_j controls the error flow from unit j's output connections.
+** Explained
+
+http://apaszke.github.io/lstm-explained.html
+#+DOWNLOADED: file:/Users/kay/Downloads/Jietu20180623-134319.jpg @ 2018-06-23 13:43:35
+[[file:lstm/Jietu20180623-134319_2018-06-23_13-43-35.jpg]]
+
 ** Acknowledgments
 * A Critical Reviewof Recurrent Neural Networks for SequenceLearning
 ** Introduction
@@ -28,3 +34,6 @@
     Neural Networks better:
     First, recurrent neural networks can capture long-range time dependencies, overcoming the chief limitation of Markov models. Even if each node took only binary values, the network could represent 2^N states where N is the number of nodes in the hidden layer. Given real-valued outputs, even assuming the lim- ited precision of 64 bit numbers, a single hidden layer of nodes can represent 2^64^N distinct states.
     Second, it is generally desirable to extend neural networks to tackle any supervised learning problem because they are powerful learning models that achieve state of the art results in a wide range of supervised learning tasks.
+
+* reference
+http://apaszke.github.io/lstm-explained.html

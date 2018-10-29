@@ -10,3 +10,9 @@
 3. Superset 可视化工作台
 4. 文件系统: ext4,   If your budget allows, choose RAID-10.If you have more than 4 disks, use RAID-6 (preferred) or RAID-50
 5. raid10,  raid50 中选择一个
+* 编译 clickhouse 依赖
+cd /var/bigdata/
+git clone https://github.com/yandex/clickhouse-jdbc
+cd clickhouse-jdbc
+mvn package assembly:single -DskipTests=true
+mv target/clickhouse-jdbc-0.1-SNAPSHOT-jar-with-dependencies.jar $SPARK_PATH/jars/

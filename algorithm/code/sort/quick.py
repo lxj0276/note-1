@@ -48,10 +48,10 @@ def quick(array, left, right):
 if __name__ == "__main__":
     ar = [10, 14, 73, 23, 13, 27, 94, 33, 39, 25, 59, 94, 65, 82, 45]
     cr = [3, 1, 5, 7, 2, 4, 9, 6]
-    print ar
+    print ( ar )
     br = quick_sort(ar)
-    print br
-    print ar
+    print ( br )
+    print ( ar )
 
-    print cr
-    print quick_sort(cr)
+    print ( cr )
+    print ( quick_sort(cr) )
