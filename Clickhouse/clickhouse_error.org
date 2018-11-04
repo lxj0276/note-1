@@ -1,0 +1,14 @@
+* Application: DB::Exception: Shard address 'tmp' does not match to 'user[:password]@host:port#default_database' pattern
+Application: db: exception: shard address 'tmp' does not match to 'user[:paaword]..':   https://github.com/yandex/ClickHouse/issues/1404
+官网给出的是会生成一个临时目录, 然后这个临时目录启动的时候会导致异常
+2017.10.25 13:36:20.279654 [ 1 ] <Error> Application: DB::Exception: Shard address 'tmp' does not match to 'user[:password]@host:port#default_database' pattern
+2017.10.25 13:36:20.279701 [ 1 ] <Information> Application: shutting down
+
+有人提过这个 Issues, 官网说再下个更新版本会处理
+ludv1x commented on Nov 2, 2017
+  Thank you! We will fix it in the next release.
+
+目前是用别人的方法处理的:
+jaykelin commented on Nov 14, 2017
+  Merge this pull request, but still unable to start.
+  then manually delete all tmp/ in Distributed table dir, is work.

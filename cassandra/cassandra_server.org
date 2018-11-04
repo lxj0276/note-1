@@ -1,0 +1,19 @@
+* launch
+==> cython
+cython is keg-only, which means it was not symlinked into /usr/local,
+because this formula is mainly used internally by other formulae.
+Users are advised to use `pip` to install cython.
+
+If you need to have cython first in your PATH run:
+  echo 'export PATH="/usr/local/opt/cython/bin:$PATH"' >> ~/.zshrc
+
+==> cassandra
+To have launchd start cassandra now and restart at login:
+  brew services start cassandra
+Or, if you don't want/need a background service you can just run:
+  cassandra -f
+
+* * * * * * * * *logs
+    Properties: /usr/local/etc/cassandra
+    Logs: /usr/local/var/log/cassandra
+    Data: /usr/local/var/lib/cassandra/data

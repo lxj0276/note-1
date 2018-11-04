@@ -1,0 +1,86 @@
+# https://www.geeksforgeeks.org/python-programming-language/
+* basics
+** keywords
+
+- with :: This keyword is used to wrap the execution of block of code within methods defined by context manager.
+- is :: This keyword is used to test object identity, i.e to check if both the objects take same memory location or not.
+- nonlocal :: This keyword works similar to the global, but rather than global, this keyword declares a variable to point to variable of outside enclosing function, in case of nested functions.
+- ::
+
+  1. https://www.geeksforgeeks.org/keywords-python-set-1/
+  2. https://www.geeksforgeeks.org/keywords-python-set-2/
+  3. https://www.geeksforgeeks.org/python-set-3-strings-lists-tuples-iterations/s
+  4. https://www.geeksforgeeks.org/python-set-4-dictionary-keywords-python/
+
+  #+BEGIN_SRC python
+    # for test nonlocal vs global
+    a = 10
+    def mod1():
+        global a
+        a = 22
+
+    def mod2():
+        a = 33
+
+    def read():
+        print(a)
+
+    read() # result = 10
+    mod1()
+    read() # result = 22
+    mod2()
+    read() # result = 22
+
+    def outer_nonlocal():
+        a = 5
+        def inner():
+            nonlocal a
+            a = 44
+        inner()
+        print(a)
+    print("Value of a using nonlocal is:",end=" ")
+    outer_nonlocal()  # result = Value of a using nonlocal is: 44
+    read()  # result = 22
+
+    def outer():
+        a = 5
+        def inner():
+            a = 55
+        inner()
+        print(a)
+    print("Value of a without using nonlocal is:",end=" ")
+    outer()  # result = Value of a without using nonlocal is: 5
+    read() # result = 22
+  #+END_SRC
+* Operators
+  Python | a += b is not always a = a + b
+
+  #+BEGIN_SRC python
+    # Example 1
+    list1 = [5, 4, 3, 2, 1]
+    list2 = list1
+    list1 += [1, 2, 3, 4]
+
+    print(list1)  # [5, 4, 3, 2, 1, 1, 2, 3, 4]
+    print(list2)  # [5, 4, 3, 2, 1, 1, 2, 3, 4]
+
+    # Example 2
+    list1 = [5, 4, 3, 2, 1]
+    list2 = list1
+    list1 = list1 + [1, 2, 3, 4]
+
+    # Contents of list1 are same as above
+    # program, but contents of list2 are
+    # different.
+    print(list1)  # [5, 4, 3, 2, 1, 1, 2, 3, 4]
+    print(list2)  # [5, 4, 3, 2, 1]
+
+
+    # expression list1 += [1, 2, 3, 4] modifies the list in-place, means it extends the list such that “list1” and “list2” still have the reference to the same list.
+    # expression list1 = list1 + [1, 2, 3, 4] creates a new list and changes “list1” reference to that new list and “list2” still refer to the old list.
+  #+END_SRC
+
+  https://www.geeksforgeeks.org/coroutine-in-python/
+
+* functions
+  Python decorators are a powerful tool to remove redundancy.

@@ -1,0 +1,25 @@
+* Knowledge
+  - Add directory to IPFS
+  - Access files with gateway.ipfs.io
+  - Get an IPNS ID or peer ID
+  - Modify you DNS records for an IPFS site
+
+
+** Add dir
+  ipfs add -r .
+** Publish
+  ipfs name publish <hashCode>
+** Change your DNS TXT
+  dnslink=/ipns/<peer id>
+* Info
+https://youtube.com/watch?v=b6Epn_-vaqQ
+
+
+Examples:
+    https://gateway.ipfs.io/ipns/Qmf7S93EoWzFRhMQr6ossvKmPCtQcMkkTfLrDa5p8mPM6q/
+    https://gateway.ipfs.io/ipns/ipfs.jasonrigden.com
+    http://ipfs.jasonrigden.com
+IPFS:
+    https://ipfs.io
+IPFS for Websites:
+    https://ipfs.io/docs/examples/example-viewer/example#../websites/README.md

@@ -1,0 +1,3 @@
+* 一些有的包显示报错(无法找到包)
+   1. 删除项目下.idea/{cache, library}
+   2. file -> invalidate caches and restart
