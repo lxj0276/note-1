@@ -1,0 +1,45 @@
+mac:
+/Users/kay/Library/Containers/com.docker.docker/Data
+
+
+Docker 使用的 Linux 核心模組功能包括下列各項：
+   - Namespace – 用來隔離不同 Container 的執行空間
+   - Cgroup – 用來分配硬體資源
+   - AUFS(chroot) – 用來建立不同 Container 的檔案系統
+   - SELinux – 用來確保 Container 的網路的安全
+   - Netlink – 用來讓不同 Container 之間的行程進行溝通
+   - Netfilter – 建立 Container 埠為基礎的網路防火牆封包過濾
+   - AppArmor – 保護 Container 的網路及執行安全
+   - Linux Bridge – 讓不同 Container 或不同主機上的 Container 能溝通
+* https://draveness.me/docker
+NAMESPACES, CONTROL GROUPS, UNION FILESYSTEM
+e62d354fc681b9421d0cd32fcaae3b887d43aa9ce6380a0ffde3b472c93e1c11
+** NAMESPACES
+   Linux 的命名空间机制提供了以下七种不同的命名空间，包括 CLONE_NEWCGROUP、CLONE_NEWIPC、CLONE_NEWNET、CLONE_NEWNS、CLONE_NEWPID、CLONE_NEWUSER 和 CLONE_NEWUTS，通过这七个选项我们能在创建新的进程时设置新进程应该在哪些资源上与宿主机器进行隔离。
+
+   每一个使用 docker run 启动的容器其实都具有单独的网络命名空间，Docker 为我们提供了四种不同的网络模式，Host、Container、None 和 Bridge 模式。
+** CGroups
+   我们通过 Linux 的命名空间为新创建的进程隔离了文件系统、网络并与宿主机器之间的进程相互隔离，但是命名空间并不能够为我们提供物理资源上的隔离，比如 CPU 或者内存，如果在同一台机器上运行了多个对彼此以及宿主机器一无所知的『容器』，这些容器却共同占用了宿主机器的物理资源。
+
+   Control Groups（简称 CGroups）就是能够隔离宿主机器上的物理资源，例如 CPU、内存、磁盘 I/O 和网络带宽。
+** UnionFS
+   Linux 的命名空间和控制组分别解决了不同资源隔离的问题，前者解决了进程、网络以及文件系统的隔离，后者实现了 CPU、内存等资源的隔离，但是在 Docker 中还有另一个非常重要的问题需要解决 - 也就是镜像。
+
+   镜像到底是什么，它又是如何组成和组织的是作者使用 Docker 以来的一段时间内一直比较让作者感到困惑的问题，我们可以使用 docker run 非常轻松地从远程下载 Docker 的镜像并在本地运行。
+
+   Docker 镜像其实本质就是一个压缩包
+
+* https://www.jianshu.com/p/7a58ad7fade4
+** docker 的特性：
+ 交互式 Shell：Docker 可以分配一个虚拟终端并关联到任何容器的标准输入上，例如运行一个一次性交互 shell
+ 文件系统隔离：每个进程容器运行在完全独立的根文件系统里
+ 写时复制：采用写时复制方式创建根文件系统，这让部署变得极其快捷，并且节省内存和硬盘空间
+ 资源隔离：可以使用 cgroup 为每个进程容器分配不同的系统资源
+ 网络隔离：每个进程容器运行在自己的网络命名空间里，拥有自己的虚拟接口和 IP 地址
+ 日志记录：Docker 将会收集和记录每个进程容器的标准流（stdout/stderr/stdin），用于实时检索或批量检索
+ 变更管理：容器文件系统的变更可以提交到新的映像中，并可重复使用以创建更多的容器。无需使用模板或手动配置
+
+ 作者：Mr_Alpha
+ 链接：https://www.jianshu.com/p/7a58ad7fade4
+ 來源：简书
+ 简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。
